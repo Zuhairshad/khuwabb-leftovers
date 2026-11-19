@@ -708,7 +708,7 @@ function LookChooser({ pieces, onClose }: { pieces: Piece[]; onClose: () => void
           if (addToBag(items.map((p, i) => ({ slug: p.slug, ...picks[i] }))) === items.length) onClose()
         }}
       >
-        {sellable ? "Add to bag" : "Not available to order yet"}
+        {sellable ? "Add to bag" : "Sold out"}
       </button>
     </div>
   )

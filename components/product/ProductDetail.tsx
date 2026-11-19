@@ -108,12 +108,12 @@ export function ProductDetail({ slug }: { slug: string }) {
           data-add-to-bag
           onClick={() => setAdded(addToBag([{ slug: p.slug, colour, size }]) > 0)}
         >
-          {!orderableHere ? "Not available to order yet" : !size ? "Choose a size" : ready ? (added ? "Added — add another" : "Add to bag") : "This size can't be ordered"}
+          {!orderableHere ? "Sold out in this colour" : !size ? "Choose a size" : ready ? (added ? "Added — add another" : "Add to bag") : "Sold out in this size"}
         </button>
         {!orderableHere && (
           <p className={styles.note}>
-            Stock for this piece isn&rsquo;t confirmed online yet. Message{" "}
-            <a href="mailto:khuwabb@gmail.com">khuwabb@gmail.com</a> to ask about it.
+            This colour is sold out right now. Message{" "}
+            <a href="mailto:khuwabb@gmail.com">khuwabb@gmail.com</a> to ask about a restock.
           </p>
         )}
 
