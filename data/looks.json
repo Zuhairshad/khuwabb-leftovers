@@ -1,0 +1,74 @@
+[
+  {
+    "id": "daily-edit",
+    "slug": "daily-edit",
+    "name": "Daily edit",
+    "description": "A cropped puffer gilet over the ribbed drawstring trouser — easy layers for every day.",
+    "pieces": [
+      {
+        "slug": "womens-hooded-sleeveless-cropped-puffer-jacket",
+        "colour": "Beige"
+      },
+      {
+        "slug": "ribbed-drawstring-wide-leg-trouser",
+        "colour": "Black"
+      }
+    ],
+    "tint": "rgb(201, 210, 242)",
+    "image": "/brand/looks/daily-edit.jpg",
+    "imageAlt": "The Daily edit look: Hooded Sleeveless Cropped Puffer Jacket in Beige with Ribbed Drawstring Wide Leg Trouser in Black"
+  },
+  {
+    "id": "off-duty",
+    "slug": "off-duty",
+    "name": "Off duty",
+    "description": "The olive cropped puffer with our cream high-waist jogger. Soft, warm and weekend-ready.",
+    "pieces": [
+      {
+        "slug": "womens-hooded-full-sleeve-cropped-puffer-jacket",
+        "colour": "Olive"
+      },
+      {
+        "slug": "shape-high-waist-wide-leg-jogger",
+        "colour": "Cream"
+      }
+    ],
+    "tint": "rgb(246, 201, 207)",
+    "image": "/brand/looks/off-duty.jpg",
+    "imageAlt": "The Off duty look: Hooded Full Sleeve Cropped Puffer Jacket in Olive with Shape High Waist Wide Leg Jogger in Cream"
+  },
+  {
+    "id": "street-ready",
+    "slug": "street-ready",
+    "name": "Street ready",
+    "description": "High shine meets sporty stripes — the black vinyl puffer with the two-stripe wide-leg trouser.",
+    "pieces": [
+      {
+        "slug": "ladies-vinyl-jacket",
+        "colour": "Black"
+      },
+      {
+        "slug": "wide-leg-trouser-two-full-stripes",
+        "colour": "Blue"
+      }
+    ],
+    "tint": "rgb(213, 229, 190)",
+    "image": "/brand/looks/street-ready.jpg",
+    "imageAlt": "The Street ready look: Ladies Vinyl Jacket in Black with Wide Leg Trouser with Two Full Stripes in Blue"
+  },
+  {
+    "id": "brunch-dates",
+    "slug": "brunch-dates",
+    "name": "Brunch dates",
+    "description": "The boat-neck maxi in maroon: sleek, long-sleeved and made for long lunches.",
+    "pieces": [
+      {
+        "slug": "boat-neck-long-sleeve-maxi-dress",
+        "colour": "Maroon"
+      }
+    ],
+    "tint": "rgb(245, 231, 166)",
+    "image": "/brand/looks/brunch-dates.jpg",
+    "imageAlt": "The Brunch dates look: Boat Neck Long Sleeve Maxi Dress in Maroon"
+  }
+]

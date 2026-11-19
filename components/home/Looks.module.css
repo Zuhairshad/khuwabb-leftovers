@@ -1,0 +1,287 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  width: 100%;
+  padding: 120px 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+  max-width: 1280px;
+  padding: 0 32px;
+}
+
+.look {
+  position: sticky;
+  top: 96px;
+  display: flex;
+  gap: 40px;
+  width: 100%;
+  height: 640px;
+  padding: 24px;
+  overflow: clip;
+  border-radius: 32px;
+  box-shadow: 0 -12px 40px #17140f0f;
+}
+
+.photo {
+  position: relative;
+  flex: none;
+  width: 470px;
+  height: 100%;
+  border-radius: 22px;
+}
+
+.photo {
+  background: rgba(255, 255, 255, 0.42);
+  overflow: clip;
+}
+
+.lookPhoto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  border-radius: 22px;
+}
+
+/* Without a photo: the outfit, built from the product cut-outs. */
+.outfit {
+  position: absolute;
+  inset: 6% 8%;
+}
+
+.layer {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+}
+
+.layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 24px rgba(23, 20, 15, 0.14));
+}
+
+/* Jacket over trousers: the jacket overlaps the waistband. */
+.outfit[data-layout="stack"] .layer[data-role="top"] {
+  left: 10%;
+  right: 10%;
+  top: 0;
+  height: 44%;
+  z-index: 2;
+}
+
+.outfit[data-layout="stack"] .layer[data-role="top"] img {
+  object-position: 50% 100%;
+}
+
+.outfit[data-layout="stack"] .layer[data-role="bottom"] {
+  left: 18%;
+  right: 18%;
+  top: 38%;
+  bottom: 0;
+}
+
+.outfit[data-layout="stack"] .layer[data-role="bottom"] img {
+  object-position: 50% 0%;
+}
+
+/* Jacket beside a full-length piece. */
+.outfit[data-layout="beside"] .layer[data-role="full"] {
+  left: 36%;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.outfit[data-layout="beside"] .layer[data-role="top"] {
+  left: 0;
+  width: 44%;
+  top: 6%;
+  height: 40%;
+  z-index: 2;
+  transform: rotate(-5deg);
+}
+
+.total {
+  align-self: center;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex: 1 0 0;
+  width: 1px;
+  height: 100%;
+  padding: 24px 24px 16px 0;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 64px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.description {
+  max-width: 460px;
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--ink-62);
+}
+
+.pieces {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.piece {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  background: #ffffff8c;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.thumb {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: none;
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  background: var(--white);
+}
+
+.thumb img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 0 0;
+  width: 1px;
+}
+
+.pieceName,
+.price {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+  color: var(--ink);
+}
+
+.price {
+  white-space: pre;
+}
+
+.colour {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19.6px;
+  color: var(--ink-62);
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .photo {
+    width: 320px;
+  }
+
+  .description {
+    font-size: 19px;
+  }
+
+  .name {
+    font-size: 52px;
+    line-height: 52px;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .section {
+    gap: 36px;
+    padding: 80px 0;
+  }
+
+  .list {
+    gap: 24px;
+    padding: 0 20px;
+  }
+
+  .look {
+    flex-direction: column;
+    gap: 20px;
+    height: auto;
+    padding: 16px;
+  }
+
+  .photo {
+    width: 100%;
+    height: 360px;
+  }
+
+  .details {
+    flex: none;
+    justify-content: flex-start;
+    gap: 20px;
+    width: 100%;
+    height: auto;
+    padding: 0 8px 8px;
+  }
+
+  .name {
+    font-size: 38px;
+    line-height: 38px;
+  }
+
+  .description {
+    font-size: 17px;
+  }
+}
