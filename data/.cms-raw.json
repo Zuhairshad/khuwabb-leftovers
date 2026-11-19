@@ -1,0 +1,1944 @@
+{
+ "looks": {
+  "schema": {
+   "createdAt": {
+    "isNullable": true,
+    "type": "date"
+   },
+   "GiAtboIGG": {
+    "isNullable": true,
+    "type": "color"
+   },
+   "id": {
+    "isNullable": false,
+    "type": "string"
+   },
+   "KeOj9ZOgt": {
+    "definition": {
+     "isNullable": true,
+     "type": "string"
+    },
+    "isNullable": true,
+    "type": "array"
+   },
+   "ljDb5_lGl": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "nextItemId": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "Oj88RnpfP": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "previousItemId": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "SRSsOmIFz": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "updatedAt": {
+    "isNullable": true,
+    "type": "date"
+   },
+   "Vxntpiwcg": {
+    "isNullable": true,
+    "type": "responsiveimage"
+   }
+  },
+  "rows": [
+   {
+    "id": "pVU0D7UP5",
+    "createdAt": "2026-11-16T06:18:06.797Z",
+    "updatedAt": "2026-11-16T06:18:06.797Z",
+    "nextItemId": "P2mY7v5T0",
+    "SRSsOmIFz": "Blueberry",
+    "ljDb5_lGl": "blueberry-look",
+    "GiAtboIGG": "rgb(201, 210, 242)",
+    "Vxntpiwcg": {
+     "src": "https://framerusercontent.com/images/vG5yViQEjaV2ekVDiGGYl3xc.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/vG5yViQEjaV2ekVDiGGYl3xc.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/vG5yViQEjaV2ekVDiGGYl3xc.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "The Blueberry look"
+    },
+    "Oj88RnpfP": "Cool blue tailoring, a soft silk trouser and a polished derby.",
+    "KeOj9ZOgt": [
+     "oHTCv5WeJ",
+     "MM5Nnorob",
+     "TdMbiYQ5T"
+    ]
+   },
+   {
+    "id": "P2mY7v5T0",
+    "createdAt": "2026-11-16T06:18:06.799Z",
+    "updatedAt": "2026-11-16T06:18:06.799Z",
+    "previousItemId": "pVU0D7UP5",
+    "nextItemId": "S9KMBTeUL",
+    "SRSsOmIFz": "Strawberry",
+    "ljDb5_lGl": "strawberry-look",
+    "GiAtboIGG": "rgb(246, 201, 207)",
+    "Vxntpiwcg": {
+     "src": "https://framerusercontent.com/images/riFS5PazRA9y7PYvzmfjlafNmo.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/riFS5PazRA9y7PYvzmfjlafNmo.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/riFS5PazRA9y7PYvzmfjlafNmo.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "The Strawberry look"
+    },
+    "Oj88RnpfP": "Pink on pink, pearls on bouclé, and a slingback that clicks.",
+    "KeOj9ZOgt": [
+     "vDUdBhlUk",
+     "ccRIeb8tO",
+     "wwhNCqF85"
+    ]
+   },
+   {
+    "id": "S9KMBTeUL",
+    "createdAt": "2026-11-16T06:18:06.800Z",
+    "updatedAt": "2026-11-16T06:18:06.800Z",
+    "previousItemId": "P2mY7v5T0",
+    "nextItemId": "aymIAuQac",
+    "SRSsOmIFz": "Pistachio",
+    "ljDb5_lGl": "pistachio-look",
+    "GiAtboIGG": "rgb(213, 229, 190)",
+    "Vxntpiwcg": {
+     "src": "https://framerusercontent.com/images/2k483UoTtBzPPbKYanzGxJ1ubFE.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/2k483UoTtBzPPbKYanzGxJ1ubFE.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/2k483UoTtBzPPbKYanzGxJ1ubFE.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "The Pistachio look"
+    },
+    "Oj88RnpfP": "Corduroy, olive and a burgundy loafer. Autumn with a little sugar.",
+    "KeOj9ZOgt": [
+     "mgmvqVURs",
+     "W27B3Emoi",
+     "kpbtR4WzJ"
+    ]
+   },
+   {
+    "id": "aymIAuQac",
+    "createdAt": "2026-11-16T06:18:06.800Z",
+    "updatedAt": "2026-11-16T06:18:06.800Z",
+    "previousItemId": "S9KMBTeUL",
+    "SRSsOmIFz": "Lemon",
+    "ljDb5_lGl": "lemon-look",
+    "GiAtboIGG": "rgb(245, 231, 166)",
+    "Vxntpiwcg": {
+     "src": "https://framerusercontent.com/images/TqCn3UV0wf2771OR1NY5TfxUqg.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/TqCn3UV0wf2771OR1NY5TfxUqg.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/TqCn3UV0wf2771OR1NY5TfxUqg.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "The Lemon look"
+    },
+    "Oj88RnpfP": "A cable knit, ecru trousers and black patent. Bright, sharp, easy.",
+    "KeOj9ZOgt": [
+     "HT3R75yzD",
+     "xtR23yDcx",
+     "E34ceqDf9"
+    ]
+   }
+  ]
+ },
+ "products": {
+  "schema": {
+   "v-img2": {
+    "isNullable": true,
+    "type": "responsiveimage"
+   },
+   "v-img3": {
+    "isNullable": true,
+    "type": "responsiveimage"
+   },
+   "v-sizes": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "createdAt": {
+    "isNullable": true,
+    "type": "date"
+   },
+   "dzmWtEQHA": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "GDSBdR0X6": {
+    "isNullable": true,
+    "type": "responsiveimage"
+   },
+   "GEK_WaDXP": {
+    "isNullable": true,
+    "type": "link"
+   },
+   "h7LDBAo43": {
+    "isNullable": true,
+    "type": "enum"
+   },
+   "id": {
+    "isNullable": false,
+    "type": "string"
+   },
+   "nextItemId": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "previousItemId": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "pZFB4PDwU": {
+    "isNullable": true,
+    "type": "number"
+   },
+   "qHjyRUb0l": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "scGFVJTJQ": {
+    "isNullable": true,
+    "type": "color"
+   },
+   "SZU4Y5KW9": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "TwK2PLDmB": {
+    "isNullable": true,
+    "type": "string"
+   },
+   "uFYrUbD4n": {
+    "isNullable": true,
+    "type": "boolean"
+   },
+   "updatedAt": {
+    "isNullable": true,
+    "type": "date"
+   }
+  },
+  "rows": [
+   {
+    "id": "mgmvqVURs",
+    "createdAt": "2026-11-16T06:18:06.659Z",
+    "updatedAt": "2026-11-16T06:18:06.659Z",
+    "nextItemId": "oHTCv5WeJ",
+    "qHjyRUb0l": "Corduroy jacket",
+    "TwK2PLDmB": "corduroy-jacket",
+    "pZFB4PDwU": 260,
+    "h7LDBAo43": {
+     "enum": "yH66LfCCT",
+     "title": "Outerwear"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/xdPzBTPOlyAwNMuYx9p4OZoe2YM.png?width=787&height=965",
+     "srcSet": "https://framerusercontent.com/images/xdPzBTPOlyAwNMuYx9p4OZoe2YM.png?width=787&height=965 787w",
+     "pixelWidth": 787,
+     "pixelHeight": 965,
+     "alt": "Corduroy jacket"
+    },
+    "scGFVJTJQ": "rgb(213, 229, 190)",
+    "SZU4Y5KW9": "Tobacco",
+    "dzmWtEQHA": "Soft wale corduroy, cut boxy with patch pockets. Wears in like a favourite book.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/doU4OBGn9uEJiT0zgckvZsMNmQ.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/doU4OBGn9uEJiT0zgckvZsMNmQ.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/doU4OBGn9uEJiT0zgckvZsMNmQ.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/4wIIW4ZUzhOppaY8wwrKLJdW6t0.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/4wIIW4ZUzhOppaY8wwrKLJdW6t0.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/4wIIW4ZUzhOppaY8wwrKLJdW6t0.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "oHTCv5WeJ",
+    "createdAt": "2026-11-16T06:18:06.665Z",
+    "updatedAt": "2026-11-16T06:18:06.665Z",
+    "previousItemId": "mgmvqVURs",
+    "nextItemId": "FXORBaxsi",
+    "qHjyRUb0l": "Tailored blazer",
+    "TwK2PLDmB": "tailored-blazer",
+    "pZFB4PDwU": 240,
+    "h7LDBAo43": {
+     "enum": "WvHuD5Nh_",
+     "title": "Tailoring"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/kyCyzCebqycrO7ijocTIOgJaK0.png?width=743&height=1107",
+     "srcSet": "https://framerusercontent.com/images/kyCyzCebqycrO7ijocTIOgJaK0.png?scale-down-to=1024&width=743&height=1107 687w,https://framerusercontent.com/images/kyCyzCebqycrO7ijocTIOgJaK0.png?width=743&height=1107 743w",
+     "pixelWidth": 743,
+     "pixelHeight": 1107,
+     "alt": "Tailored blazer"
+    },
+    "scGFVJTJQ": "rgb(245, 231, 166)",
+    "SZU4Y5KW9": "Dusty blue",
+    "dzmWtEQHA": "A single-button blazer in light wool. Sharp shoulders, easy waist.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/1ohTvtw6qnBWxTOr5c8SiCxaRg.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/1ohTvtw6qnBWxTOr5c8SiCxaRg.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/1ohTvtw6qnBWxTOr5c8SiCxaRg.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/1DTNZBkBimzg0Jcjj3ZHuhFdIYE.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/1DTNZBkBimzg0Jcjj3ZHuhFdIYE.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/1DTNZBkBimzg0Jcjj3ZHuhFdIYE.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "FXORBaxsi",
+    "createdAt": "2026-11-16T06:18:06.666Z",
+    "updatedAt": "2026-11-16T06:18:06.666Z",
+    "previousItemId": "oHTCv5WeJ",
+    "nextItemId": "cYYOYAyjI",
+    "qHjyRUb0l": "Suede overshirt",
+    "TwK2PLDmB": "suede-overshirt",
+    "pZFB4PDwU": 220,
+    "h7LDBAo43": {
+     "enum": "yH66LfCCT",
+     "title": "Outerwear"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/JCzfwCzd2vc29cr1eNWQF1JyeY.png?width=635&height=841",
+     "srcSet": "https://framerusercontent.com/images/JCzfwCzd2vc29cr1eNWQF1JyeY.png?width=635&height=841 635w",
+     "pixelWidth": 635,
+     "pixelHeight": 841,
+     "alt": "Suede overshirt"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Chocolate",
+    "dzmWtEQHA": "Brushed suede overshirt with two flap pockets. Layer it, shirt it, live in it.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/8LcwFDgcAEf8bREOfNAreF7Stoo.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/8LcwFDgcAEf8bREOfNAreF7Stoo.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/8LcwFDgcAEf8bREOfNAreF7Stoo.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/S7xiQo7Z33VA1vk4iGrABu6n5vk.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/S7xiQo7Z33VA1vk4iGrABu6n5vk.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/S7xiQo7Z33VA1vk4iGrABu6n5vk.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "cYYOYAyjI",
+    "createdAt": "2026-11-16T06:18:06.667Z",
+    "updatedAt": "2026-11-16T06:18:06.667Z",
+    "previousItemId": "FXORBaxsi",
+    "nextItemId": "Oad1Qq8gA",
+    "qHjyRUb0l": "Cashmere cardigan",
+    "TwK2PLDmB": "cashmere-cardigan",
+    "pZFB4PDwU": 360,
+    "h7LDBAo43": {
+     "enum": "m71SH4KX7",
+     "title": "Knitwear & Tops"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/ZGkX0kCJy00VR21miochPtJZl0.png?width=729&height=991",
+     "srcSet": "https://framerusercontent.com/images/ZGkX0kCJy00VR21miochPtJZl0.png?width=729&height=991 729w",
+     "pixelWidth": 729,
+     "pixelHeight": 991,
+     "alt": "Cashmere cardigan"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Butter",
+    "dzmWtEQHA": "Pure cashmere cardigan with pearl buttons, in the colour of lemon sorbet.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/20Qn0W61ao9SpIo8bQqubGysDA.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/20Qn0W61ao9SpIo8bQqubGysDA.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/20Qn0W61ao9SpIo8bQqubGysDA.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/tplRvVljfCkLbCczL5in1XtSo.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/tplRvVljfCkLbCczL5in1XtSo.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/tplRvVljfCkLbCczL5in1XtSo.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "Oad1Qq8gA",
+    "createdAt": "2026-11-16T06:18:06.668Z",
+    "updatedAt": "2026-11-16T06:18:06.668Z",
+    "previousItemId": "cYYOYAyjI",
+    "nextItemId": "ajBLz4Hte",
+    "qHjyRUb0l": "Nappa zip jacket",
+    "TwK2PLDmB": "nappa-zip-jacket",
+    "pZFB4PDwU": 240,
+    "h7LDBAo43": {
+     "enum": "yH66LfCCT",
+     "title": "Outerwear"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/xGURVPw9k0NVvDsPcyYkFZimO9Y.png?width=797&height=1003",
+     "srcSet": "https://framerusercontent.com/images/xGURVPw9k0NVvDsPcyYkFZimO9Y.png?width=797&height=1003 797w",
+     "pixelWidth": 797,
+     "pixelHeight": 1003,
+     "alt": "Nappa zip jacket"
+    },
+    "scGFVJTJQ": "rgb(247, 210, 184)",
+    "SZU4Y5KW9": "Black",
+    "dzmWtEQHA": "Supple nappa leather with a clean zip front and a stand collar.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/TgLSda0L5ZonQKgkWeQIffc0m2g.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/TgLSda0L5ZonQKgkWeQIffc0m2g.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/TgLSda0L5ZonQKgkWeQIffc0m2g.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/hiyliSkpP3U8dOwVIyyaVG2WlE.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/hiyliSkpP3U8dOwVIyyaVG2WlE.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/hiyliSkpP3U8dOwVIyyaVG2WlE.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "ajBLz4Hte",
+    "createdAt": "2026-11-16T06:18:06.670Z",
+    "updatedAt": "2026-11-16T06:18:06.670Z",
+    "previousItemId": "Oad1Qq8gA",
+    "nextItemId": "vDUdBhlUk",
+    "qHjyRUb0l": "Velvet blazer",
+    "TwK2PLDmB": "velvet-blazer",
+    "pZFB4PDwU": 360,
+    "h7LDBAo43": {
+     "enum": "WvHuD5Nh_",
+     "title": "Tailoring"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/56XcHUgSPjQk6eeOtuZBpFUOLo.png?width=1089&height=1500",
+     "srcSet": "https://framerusercontent.com/images/56XcHUgSPjQk6eeOtuZBpFUOLo.png?scale-down-to=1024&width=1089&height=1500 743w,https://framerusercontent.com/images/56XcHUgSPjQk6eeOtuZBpFUOLo.png?width=1089&height=1500 1089w",
+     "pixelWidth": 1089,
+     "pixelHeight": 1500,
+     "alt": "Velvet blazer"
+    },
+    "scGFVJTJQ": "rgb(245, 231, 166)",
+    "SZU4Y5KW9": "Midnight",
+    "dzmWtEQHA": "Shawl-collar velvet blazer for nights that start early and end late.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/u1GYPUcS0Kvv3nuh3eFBY0ux0U4.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/u1GYPUcS0Kvv3nuh3eFBY0ux0U4.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/u1GYPUcS0Kvv3nuh3eFBY0ux0U4.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/n1LcRDIwJ262olafthOgwv25zSw.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/n1LcRDIwJ262olafthOgwv25zSw.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/n1LcRDIwJ262olafthOgwv25zSw.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "vDUdBhlUk",
+    "createdAt": "2026-11-16T06:18:06.671Z",
+    "updatedAt": "2026-11-16T06:18:06.671Z",
+    "previousItemId": "ajBLz4Hte",
+    "nextItemId": "svxr_Ycf9",
+    "qHjyRUb0l": "Bouclé jacket",
+    "TwK2PLDmB": "boucl-jacket",
+    "pZFB4PDwU": 240,
+    "h7LDBAo43": {
+     "enum": "yH66LfCCT",
+     "title": "Outerwear"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/ecJYCFKzr5OXIBPq29RxaQOszfY.png?width=1334&height=1500",
+     "srcSet": "https://framerusercontent.com/images/ecJYCFKzr5OXIBPq29RxaQOszfY.png?scale-down-to=1024&width=1334&height=1500 910w,https://framerusercontent.com/images/ecJYCFKzr5OXIBPq29RxaQOszfY.png?width=1334&height=1500 1334w",
+     "pixelWidth": 1334,
+     "pixelHeight": 1500,
+     "alt": "Bouclé jacket"
+    },
+    "scGFVJTJQ": "rgb(213, 229, 190)",
+    "SZU4Y5KW9": "Rose",
+    "dzmWtEQHA": "Cropped bouclé jacket with pearl buttons and four little pockets.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/6OPg2pFbNOx5ony3qQHv1kDsYhk.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/6OPg2pFbNOx5ony3qQHv1kDsYhk.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/6OPg2pFbNOx5ony3qQHv1kDsYhk.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/Zmw8R2mejhWcZaToMf4UKX9AM.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/Zmw8R2mejhWcZaToMf4UKX9AM.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/Zmw8R2mejhWcZaToMf4UKX9AM.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "svxr_Ycf9",
+    "createdAt": "2026-11-16T06:18:06.672Z",
+    "updatedAt": "2026-11-16T06:18:06.672Z",
+    "previousItemId": "vDUdBhlUk",
+    "nextItemId": "bkXhOwgoY",
+    "qHjyRUb0l": "Double-breasted jacket",
+    "TwK2PLDmB": "double-breasted-jacket",
+    "pZFB4PDwU": 260,
+    "h7LDBAo43": {
+     "enum": "WvHuD5Nh_",
+     "title": "Tailoring"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/jTlpl4onUFoGlIAl8DHltxXSis.png?width=1030&height=1500",
+     "srcSet": "https://framerusercontent.com/images/jTlpl4onUFoGlIAl8DHltxXSis.png?scale-down-to=1024&width=1030&height=1500 703w,https://framerusercontent.com/images/jTlpl4onUFoGlIAl8DHltxXSis.png?width=1030&height=1500 1030w",
+     "pixelWidth": 1030,
+     "pixelHeight": 1500,
+     "alt": "Double-breasted jacket"
+    },
+    "scGFVJTJQ": "rgb(246, 201, 207)",
+    "SZU4Y5KW9": "Taupe",
+    "dzmWtEQHA": "Double-breasted wool jacket with peak lapels and a softened shoulder.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/6gE2FLCJ383h2D8gHI24NpfUVs.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/6gE2FLCJ383h2D8gHI24NpfUVs.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/6gE2FLCJ383h2D8gHI24NpfUVs.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/OiEnuGg3RK60f2LwynJaGwGZ8hY.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/OiEnuGg3RK60f2LwynJaGwGZ8hY.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/OiEnuGg3RK60f2LwynJaGwGZ8hY.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "bkXhOwgoY",
+    "createdAt": "2026-11-16T06:18:06.673Z",
+    "updatedAt": "2026-11-16T06:18:06.673Z",
+    "previousItemId": "svxr_Ycf9",
+    "nextItemId": "HT3R75yzD",
+    "qHjyRUb0l": "Knit polo",
+    "TwK2PLDmB": "knit-polo",
+    "pZFB4PDwU": 240,
+    "h7LDBAo43": {
+     "enum": "m71SH4KX7",
+     "title": "Knitwear & Tops"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/E3GxOBDRm5H9AbsAGYOEXXEvvM.png?width=1065&height=1500",
+     "srcSet": "https://framerusercontent.com/images/E3GxOBDRm5H9AbsAGYOEXXEvvM.png?scale-down-to=1024&width=1065&height=1500 727w,https://framerusercontent.com/images/E3GxOBDRm5H9AbsAGYOEXXEvvM.png?width=1065&height=1500 1065w",
+     "pixelWidth": 1065,
+     "pixelHeight": 1500,
+     "alt": "Knit polo"
+    },
+    "scGFVJTJQ": "rgb(247, 210, 184)",
+    "SZU4Y5KW9": "Slate",
+    "dzmWtEQHA": "Fine-gauge knit polo with an open collar. Smart enough, soft always.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/U67EBwDR0VS1RQ5J3eH7fg8CrXg.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/U67EBwDR0VS1RQ5J3eH7fg8CrXg.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/U67EBwDR0VS1RQ5J3eH7fg8CrXg.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/mvnvkMm655ioxGY8UFYWvFgwc.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/mvnvkMm655ioxGY8UFYWvFgwc.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/mvnvkMm655ioxGY8UFYWvFgwc.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "HT3R75yzD",
+    "createdAt": "2026-11-16T06:18:06.674Z",
+    "updatedAt": "2026-11-16T06:18:06.674Z",
+    "previousItemId": "bkXhOwgoY",
+    "nextItemId": "vCM9FhL_d",
+    "qHjyRUb0l": "Cable crewneck",
+    "TwK2PLDmB": "cable-crewneck",
+    "pZFB4PDwU": 240,
+    "h7LDBAo43": {
+     "enum": "m71SH4KX7",
+     "title": "Knitwear & Tops"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/GarSVUmYRcFWvHHR75ts4L1fKE.png?width=809&height=931",
+     "srcSet": "https://framerusercontent.com/images/GarSVUmYRcFWvHHR75ts4L1fKE.png?width=809&height=931 809w",
+     "pixelWidth": 809,
+     "pixelHeight": 931,
+     "alt": "Cable crewneck"
+    },
+    "scGFVJTJQ": "rgb(246, 201, 207)",
+    "SZU4Y5KW9": "Ecru",
+    "dzmWtEQHA": "Chunky cable crewneck in undyed wool. The sweater you borrow and keep.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/VpIJMBTnQaBH5i0AWlumsvjcM.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/VpIJMBTnQaBH5i0AWlumsvjcM.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/VpIJMBTnQaBH5i0AWlumsvjcM.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/m7F2IAF4vBrvmaRpwI1ncUDWw.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/m7F2IAF4vBrvmaRpwI1ncUDWw.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/m7F2IAF4vBrvmaRpwI1ncUDWw.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "vCM9FhL_d",
+    "createdAt": "2026-11-16T06:18:06.675Z",
+    "updatedAt": "2026-11-16T06:18:06.675Z",
+    "previousItemId": "HT3R75yzD",
+    "nextItemId": "hI_4vBQ1v",
+    "qHjyRUb0l": "Silk bow blouse",
+    "TwK2PLDmB": "silk-bow-blouse",
+    "pZFB4PDwU": 190,
+    "h7LDBAo43": {
+     "enum": "m71SH4KX7",
+     "title": "Knitwear & Tops"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/GLnFxH8Vhvi9FBREGytBlmvJHc.png?width=769&height=1063",
+     "srcSet": "https://framerusercontent.com/images/GLnFxH8Vhvi9FBREGytBlmvJHc.png?scale-down-to=1024&width=769&height=1063 740w,https://framerusercontent.com/images/GLnFxH8Vhvi9FBREGytBlmvJHc.png?width=769&height=1063 769w",
+     "pixelWidth": 769,
+     "pixelHeight": 1063,
+     "alt": "Silk bow blouse"
+    },
+    "scGFVJTJQ": "rgb(213, 229, 190)",
+    "SZU4Y5KW9": "Cherry",
+    "dzmWtEQHA": "Fluid silk blouse with a long pussy-bow tie and gathered cuffs.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/6NI6K7Zueqa5aN6ZopZTFvTTuc.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/6NI6K7Zueqa5aN6ZopZTFvTTuc.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/6NI6K7Zueqa5aN6ZopZTFvTTuc.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/BokHyo0QWYDEQRQHiG05rwktQk.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/BokHyo0QWYDEQRQHiG05rwktQk.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/BokHyo0QWYDEQRQHiG05rwktQk.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "hI_4vBQ1v",
+    "createdAt": "2026-11-16T06:18:06.676Z",
+    "updatedAt": "2026-11-16T06:18:06.676Z",
+    "previousItemId": "vCM9FhL_d",
+    "nextItemId": "bVFwkNhA1",
+    "qHjyRUb0l": "Suede bomber",
+    "TwK2PLDmB": "suede-bomber",
+    "pZFB4PDwU": 240,
+    "h7LDBAo43": {
+     "enum": "yH66LfCCT",
+     "title": "Outerwear"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/Q2tFF5v3bEls7XbBYKJSvM.png?width=1124&height=1500",
+     "srcSet": "https://framerusercontent.com/images/Q2tFF5v3bEls7XbBYKJSvM.png?scale-down-to=1024&width=1124&height=1500 767w,https://framerusercontent.com/images/Q2tFF5v3bEls7XbBYKJSvM.png?width=1124&height=1500 1124w",
+     "pixelWidth": 1124,
+     "pixelHeight": 1500,
+     "alt": "Suede bomber"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Rust",
+    "dzmWtEQHA": "Suede bomber with ribbed trims and deep flap pockets.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/Hcm3S1NCTA2qHnTPbxOztxYtM1Q.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/Hcm3S1NCTA2qHnTPbxOztxYtM1Q.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/Hcm3S1NCTA2qHnTPbxOztxYtM1Q.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/YrmUeSsquRXX0Yd3XIaEmHViPtc.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/YrmUeSsquRXX0Yd3XIaEmHViPtc.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/YrmUeSsquRXX0Yd3XIaEmHViPtc.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "bVFwkNhA1",
+    "createdAt": "2026-11-16T06:18:06.677Z",
+    "updatedAt": "2026-11-16T06:18:06.677Z",
+    "previousItemId": "hI_4vBQ1v",
+    "nextItemId": "SruYju89V",
+    "qHjyRUb0l": "Wide wool trousers",
+    "TwK2PLDmB": "wide-wool-trousers",
+    "pZFB4PDwU": 180,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/TJsia5VG0GDOQESYUhqMOTJZYfY.png?width=469&height=1265",
+     "srcSet": "https://framerusercontent.com/images/TJsia5VG0GDOQESYUhqMOTJZYfY.png?width=469&height=1265 469w",
+     "pixelWidth": 469,
+     "pixelHeight": 1265,
+     "alt": "Wide wool trousers"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Cream",
+    "dzmWtEQHA": "Wide-leg wool trousers with a high waist and a long, clean line.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/E4l8AQJKt0JsSrwOLKEdw3kQ.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/E4l8AQJKt0JsSrwOLKEdw3kQ.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/E4l8AQJKt0JsSrwOLKEdw3kQ.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/iVNvgre6FtY0xSsgpiSt5Do58.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/iVNvgre6FtY0xSsgpiSt5Do58.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/iVNvgre6FtY0xSsgpiSt5Do58.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "SruYju89V",
+    "createdAt": "2026-11-16T06:18:06.678Z",
+    "updatedAt": "2026-11-16T06:18:06.678Z",
+    "previousItemId": "bVFwkNhA1",
+    "nextItemId": "LCc64OqiP",
+    "qHjyRUb0l": "Pleated trousers",
+    "TwK2PLDmB": "pleated-trousers",
+    "pZFB4PDwU": 195,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/aB0M91VYl9fvsLs72AnYo8UoGog.png?width=572&height=1500",
+     "srcSet": "https://framerusercontent.com/images/aB0M91VYl9fvsLs72AnYo8UoGog.png?width=572&height=1500 572w",
+     "pixelWidth": 572,
+     "pixelHeight": 1500,
+     "alt": "Pleated trousers"
+    },
+    "scGFVJTJQ": "rgb(246, 201, 207)",
+    "SZU4Y5KW9": "Stone",
+    "dzmWtEQHA": "Double-pleated trousers with a relaxed leg and side adjusters.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/Td3PuiT2d05Ah57tNz9kk4uofU.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/Td3PuiT2d05Ah57tNz9kk4uofU.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/Td3PuiT2d05Ah57tNz9kk4uofU.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/kqEPyM8YRevbi9rFDrda06Jsc.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/kqEPyM8YRevbi9rFDrda06Jsc.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/kqEPyM8YRevbi9rFDrda06Jsc.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "LCc64OqiP",
+    "createdAt": "2026-11-16T06:18:06.678Z",
+    "updatedAt": "2026-11-16T06:18:06.678Z",
+    "previousItemId": "SruYju89V",
+    "nextItemId": "EyuhVFf6Q",
+    "qHjyRUb0l": "Flannel trousers",
+    "TwK2PLDmB": "flannel-trousers",
+    "pZFB4PDwU": 140,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/h6PK8hijaIEwUrkQJH8vvJvX8PI.png?width=431&height=1221",
+     "srcSet": "https://framerusercontent.com/images/h6PK8hijaIEwUrkQJH8vvJvX8PI.png?width=431&height=1221 431w",
+     "pixelWidth": 431,
+     "pixelHeight": 1221,
+     "alt": "Flannel trousers"
+    },
+    "scGFVJTJQ": "rgb(245, 231, 166)",
+    "SZU4Y5KW9": "Grey melange",
+    "dzmWtEQHA": "Classic flannel trousers, straight and slightly cropped.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/eTMYuKoNDSeXt2SnLkpL4H3hHGE.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/eTMYuKoNDSeXt2SnLkpL4H3hHGE.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/eTMYuKoNDSeXt2SnLkpL4H3hHGE.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/6QbJD3JeQkVMV7vBj2Padnwk.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/6QbJD3JeQkVMV7vBj2Padnwk.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/6QbJD3JeQkVMV7vBj2Padnwk.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "EyuhVFf6Q",
+    "createdAt": "2026-11-16T06:18:06.679Z",
+    "updatedAt": "2026-11-16T06:18:06.679Z",
+    "previousItemId": "LCc64OqiP",
+    "nextItemId": "GwEHOuDVw",
+    "qHjyRUb0l": "Tuxedo trousers",
+    "TwK2PLDmB": "tuxedo-trousers",
+    "pZFB4PDwU": 195,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/rAdlNXYTG88V7SIEDDsYYosVSq4.png?width=542&height=1500",
+     "srcSet": "https://framerusercontent.com/images/rAdlNXYTG88V7SIEDDsYYosVSq4.png?width=542&height=1500 542w",
+     "pixelWidth": 542,
+     "pixelHeight": 1500,
+     "alt": "Tuxedo trousers"
+    },
+    "scGFVJTJQ": "rgb(213, 229, 190)",
+    "SZU4Y5KW9": "Black",
+    "dzmWtEQHA": "Pleated evening trousers with a satin waistband feel.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/AWZbYoVWAXZCQCzkkKXo9c2qQ.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/AWZbYoVWAXZCQCzkkKXo9c2qQ.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/AWZbYoVWAXZCQCzkkKXo9c2qQ.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/qBlI5PXz2ZYQGUl9mPITt4aY7g.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/qBlI5PXz2ZYQGUl9mPITt4aY7g.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/qBlI5PXz2ZYQGUl9mPITt4aY7g.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "GwEHOuDVw",
+    "createdAt": "2026-11-16T06:18:06.680Z",
+    "updatedAt": "2026-11-16T06:18:06.680Z",
+    "previousItemId": "EyuhVFf6Q",
+    "nextItemId": "W27B3Emoi",
+    "qHjyRUb0l": "Cuffed suit trousers",
+    "TwK2PLDmB": "cuffed-suit-trousers",
+    "pZFB4PDwU": 140,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/zqq2DHfzGPgRCNGkBj9w24yA5o.png?width=445&height=1251",
+     "srcSet": "https://framerusercontent.com/images/zqq2DHfzGPgRCNGkBj9w24yA5o.png?width=445&height=1251 445w",
+     "pixelWidth": 445,
+     "pixelHeight": 1251,
+     "alt": "Cuffed suit trousers"
+    },
+    "scGFVJTJQ": "rgb(247, 210, 184)",
+    "SZU4Y5KW9": "Charcoal",
+    "dzmWtEQHA": "Suit trousers with turn-ups and a sharp front crease.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/n1Ynwp0pOHFNGlLpbiMH2ztMnY.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/n1Ynwp0pOHFNGlLpbiMH2ztMnY.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/n1Ynwp0pOHFNGlLpbiMH2ztMnY.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/MPiL1mlbjWhvr3x0aiwFawVdUk.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/MPiL1mlbjWhvr3x0aiwFawVdUk.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/MPiL1mlbjWhvr3x0aiwFawVdUk.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "W27B3Emoi",
+    "createdAt": "2026-11-16T06:18:06.681Z",
+    "updatedAt": "2026-11-16T06:18:06.681Z",
+    "previousItemId": "GwEHOuDVw",
+    "nextItemId": "o6NbYLAs2",
+    "qHjyRUb0l": "Fluid wide trousers",
+    "TwK2PLDmB": "fluid-wide-trousers",
+    "pZFB4PDwU": 210,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/fw4KEaql1EZ4FkmgGhNrIwuWUeU.png?width=457&height=1265",
+     "srcSet": "https://framerusercontent.com/images/fw4KEaql1EZ4FkmgGhNrIwuWUeU.png?width=457&height=1265 457w",
+     "pixelWidth": 457,
+     "pixelHeight": 1265,
+     "alt": "Fluid wide trousers"
+    },
+    "scGFVJTJQ": "rgb(245, 231, 166)",
+    "SZU4Y5KW9": "Petrol",
+    "dzmWtEQHA": "Fluid wide trousers that move like water when you walk.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/69tweQvPNuNcxrN2t8ItXG8X3HE.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/69tweQvPNuNcxrN2t8ItXG8X3HE.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/69tweQvPNuNcxrN2t8ItXG8X3HE.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/FDiNG9G1MhCncLEdWwlT9kIQ00A.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/FDiNG9G1MhCncLEdWwlT9kIQ00A.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/FDiNG9G1MhCncLEdWwlT9kIQ00A.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "o6NbYLAs2",
+    "createdAt": "2026-11-16T06:18:06.681Z",
+    "updatedAt": "2026-11-16T06:18:06.681Z",
+    "previousItemId": "W27B3Emoi",
+    "nextItemId": "xtR23yDcx",
+    "qHjyRUb0l": "Pleated cream trousers",
+    "TwK2PLDmB": "pleated-cream-trousers",
+    "pZFB4PDwU": 160,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/7kwybQd0cAlO1ABqHDTAEJwIun8.png?width=449&height=1167",
+     "srcSet": "https://framerusercontent.com/images/7kwybQd0cAlO1ABqHDTAEJwIun8.png?width=449&height=1167 449w",
+     "pixelWidth": 449,
+     "pixelHeight": 1167,
+     "alt": "Pleated cream trousers"
+    },
+    "scGFVJTJQ": "rgb(246, 201, 207)",
+    "SZU4Y5KW9": "Cream",
+    "dzmWtEQHA": "Pleated trousers with turn-ups in a crisp cotton twill.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/F8FuKVq0QHUxm7RTyNYcOb3HVyA.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/F8FuKVq0QHUxm7RTyNYcOb3HVyA.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/F8FuKVq0QHUxm7RTyNYcOb3HVyA.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/D8hUge8cPFuBpIz2TnpcG0I4odo.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/D8hUge8cPFuBpIz2TnpcG0I4odo.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/D8hUge8cPFuBpIz2TnpcG0I4odo.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "xtR23yDcx",
+    "createdAt": "2026-11-16T06:18:06.682Z",
+    "updatedAt": "2026-11-16T06:18:06.682Z",
+    "previousItemId": "o6NbYLAs2",
+    "nextItemId": "ccRIeb8tO",
+    "qHjyRUb0l": "Ecru wide trousers",
+    "TwK2PLDmB": "ecru-wide-trousers",
+    "pZFB4PDwU": 160,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/fETSgSpJRledYHqB8ERgCE0.png?width=451&height=1181",
+     "srcSet": "https://framerusercontent.com/images/fETSgSpJRledYHqB8ERgCE0.png?width=451&height=1181 451w",
+     "pixelWidth": 451,
+     "pixelHeight": 1181,
+     "alt": "Ecru wide trousers"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Ecru",
+    "dzmWtEQHA": "Wide trousers in a soft wool blend with a single pleat.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/H8Z1STZcrSCUir9seaitI48rndg.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/H8Z1STZcrSCUir9seaitI48rndg.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/H8Z1STZcrSCUir9seaitI48rndg.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/VintIkzOjPAs8TByVqW61JEVao.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/VintIkzOjPAs8TByVqW61JEVao.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/VintIkzOjPAs8TByVqW61JEVao.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "ccRIeb8tO",
+    "createdAt": "2026-11-16T06:18:06.682Z",
+    "updatedAt": "2026-11-16T06:18:06.682Z",
+    "previousItemId": "xtR23yDcx",
+    "nextItemId": "MM5Nnorob",
+    "qHjyRUb0l": "Tweed mini skirt",
+    "TwK2PLDmB": "tweed-mini-skirt",
+    "pZFB4PDwU": 240,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/TH23NQOUHHMfJEZZmR9vLvLhfYM.png?width=995&height=941",
+     "srcSet": "https://framerusercontent.com/images/TH23NQOUHHMfJEZZmR9vLvLhfYM.png?scale-down-to=512&width=995&height=941 512w,https://framerusercontent.com/images/TH23NQOUHHMfJEZZmR9vLvLhfYM.png?width=995&height=941 995w",
+     "pixelWidth": 995,
+     "pixelHeight": 941,
+     "alt": "Tweed mini skirt"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Blush",
+    "dzmWtEQHA": "A-line tweed mini skirt with a hidden side zip.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/TdpBSW0l2RMvK43Y7pbtBMko5w.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/TdpBSW0l2RMvK43Y7pbtBMko5w.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/TdpBSW0l2RMvK43Y7pbtBMko5w.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/qov4WDyEDWfexZpyQj0exZ86ywA.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/qov4WDyEDWfexZpyQj0exZ86ywA.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/qov4WDyEDWfexZpyQj0exZ86ywA.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "MM5Nnorob",
+    "createdAt": "2026-11-16T06:18:06.683Z",
+    "updatedAt": "2026-11-16T06:18:06.683Z",
+    "previousItemId": "ccRIeb8tO",
+    "nextItemId": "fdASJ8aaq",
+    "qHjyRUb0l": "Silk wide trousers",
+    "TwK2PLDmB": "silk-wide-trousers",
+    "pZFB4PDwU": 180,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/Kl2g23gPjLqU4TuKqBqDJRdIA.png?width=523&height=1344",
+     "srcSet": "https://framerusercontent.com/images/Kl2g23gPjLqU4TuKqBqDJRdIA.png?width=523&height=1344 523w",
+     "pixelWidth": 523,
+     "pixelHeight": 1344,
+     "alt": "Silk wide trousers"
+    },
+    "scGFVJTJQ": "rgb(247, 210, 184)",
+    "SZU4Y5KW9": "Dove",
+    "dzmWtEQHA": "Silk wide trousers with a drawstring and a gentle drape.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/zqtCW6yXhkNe2mpbLb3Q7QcivRg.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/zqtCW6yXhkNe2mpbLb3Q7QcivRg.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/zqtCW6yXhkNe2mpbLb3Q7QcivRg.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/LJJwPLLrcdAUn8IUWM4awR6Fmy4.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/LJJwPLLrcdAUn8IUWM4awR6Fmy4.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/LJJwPLLrcdAUn8IUWM4awR6Fmy4.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "fdASJ8aaq",
+    "createdAt": "2026-11-16T06:18:06.683Z",
+    "updatedAt": "2026-11-16T06:18:06.683Z",
+    "previousItemId": "MM5Nnorob",
+    "nextItemId": "BnBW6nKXh",
+    "qHjyRUb0l": "Satin drawstring trousers",
+    "TwK2PLDmB": "satin-drawstring-trousers",
+    "pZFB4PDwU": 180,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/pqhjCUxE3cBYyWE3iPyAwsgNqk8.png?width=497&height=1227",
+     "srcSet": "https://framerusercontent.com/images/pqhjCUxE3cBYyWE3iPyAwsgNqk8.png?width=497&height=1227 497w",
+     "pixelWidth": 497,
+     "pixelHeight": 1227,
+     "alt": "Satin drawstring trousers"
+    },
+    "scGFVJTJQ": "rgb(213, 229, 190)",
+    "SZU4Y5KW9": "Champagne",
+    "dzmWtEQHA": "Satin drawstring trousers. Pyjama ease, party shine.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/FXhnSs2odNCkEMA8asyOXCu2BqY.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/FXhnSs2odNCkEMA8asyOXCu2BqY.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/FXhnSs2odNCkEMA8asyOXCu2BqY.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/CmoNDjN2QBzbSR0DW1FEgKnIs.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/CmoNDjN2QBzbSR0DW1FEgKnIs.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/CmoNDjN2QBzbSR0DW1FEgKnIs.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "BnBW6nKXh",
+    "createdAt": "2026-11-16T06:18:06.683Z",
+    "updatedAt": "2026-11-16T06:18:06.683Z",
+    "previousItemId": "fdASJ8aaq",
+    "nextItemId": "U7hLhVzA7",
+    "qHjyRUb0l": "Pleated maxi skirt",
+    "TwK2PLDmB": "pleated-maxi-skirt",
+    "pZFB4PDwU": 240,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/yVrDFnBe6F9QNbXKzDUoM2TeicU.png?width=779&height=1500",
+     "srcSet": "https://framerusercontent.com/images/yVrDFnBe6F9QNbXKzDUoM2TeicU.png?scale-down-to=1024&width=779&height=1500 531w,https://framerusercontent.com/images/yVrDFnBe6F9QNbXKzDUoM2TeicU.png?width=779&height=1500 779w",
+     "pixelWidth": 779,
+     "pixelHeight": 1500,
+     "alt": "Pleated maxi skirt"
+    },
+    "scGFVJTJQ": "rgb(245, 231, 166)",
+    "SZU4Y5KW9": "Sky",
+    "dzmWtEQHA": "Sunray-pleated maxi skirt that swishes with every step.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "XS, S, M, L, XL",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/ab7TYWzw0dIG1tTAYHGPS9OD4s0.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/ab7TYWzw0dIG1tTAYHGPS9OD4s0.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/ab7TYWzw0dIG1tTAYHGPS9OD4s0.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/Cs8K0cQHPt4qip1ehxt2qMftRPc.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/Cs8K0cQHPt4qip1ehxt2qMftRPc.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/Cs8K0cQHPt4qip1ehxt2qMftRPc.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "U7hLhVzA7",
+    "createdAt": "2026-11-16T06:18:06.684Z",
+    "updatedAt": "2026-11-16T06:18:06.684Z",
+    "previousItemId": "BnBW6nKXh",
+    "nextItemId": "JqCE9FY2S",
+    "qHjyRUb0l": "Cigarette trousers",
+    "TwK2PLDmB": "cigarette-trousers",
+    "pZFB4PDwU": 210,
+    "h7LDBAo43": {
+     "enum": "u0Zo2KavG",
+     "title": "Trousers & Skirts"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/wnyS7dawBofsuguSJ2H5lhGYfcQ.png?width=463&height=1217",
+     "srcSet": "https://framerusercontent.com/images/wnyS7dawBofsuguSJ2H5lhGYfcQ.png?width=463&height=1217 463w",
+     "pixelWidth": 463,
+     "pixelHeight": 1217,
+     "alt": "Cigarette trousers"
+    },
+    "scGFVJTJQ": "rgb(246, 201, 207)",
+    "SZU4Y5KW9": "Black",
+    "dzmWtEQHA": "Slim cigarette trousers with a seam down the front.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "24, 26, 28, 30, 32",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/qquKIVHVQTR6OgRLzMH30RLlA.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/qquKIVHVQTR6OgRLzMH30RLlA.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/qquKIVHVQTR6OgRLzMH30RLlA.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/4syxyLg2XVuep9cfM8KRxNSTwmE.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/4syxyLg2XVuep9cfM8KRxNSTwmE.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/4syxyLg2XVuep9cfM8KRxNSTwmE.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "JqCE9FY2S",
+    "createdAt": "2026-11-16T06:18:06.685Z",
+    "updatedAt": "2026-11-16T06:18:06.685Z",
+    "previousItemId": "U7hLhVzA7",
+    "nextItemId": "BX08FvK8Z",
+    "qHjyRUb0l": "Ballet flat",
+    "TwK2PLDmB": "ballet-flat",
+    "pZFB4PDwU": 290,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/OtWYv2rCLipJs5CRS93qIsA7IDU.png?width=1163&height=403",
+     "srcSet": "https://framerusercontent.com/images/OtWYv2rCLipJs5CRS93qIsA7IDU.png?scale-down-to=512&width=1163&height=403 512w,https://framerusercontent.com/images/OtWYv2rCLipJs5CRS93qIsA7IDU.png?scale-down-to=1024&width=1163&height=403 1024w,https://framerusercontent.com/images/OtWYv2rCLipJs5CRS93qIsA7IDU.png?width=1163&height=403 1163w",
+     "pixelWidth": 1163,
+     "pixelHeight": 403,
+     "alt": "Ballet flat"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Ivory",
+    "dzmWtEQHA": "Soft nappa ballet flats with a tiny bow and a bendy sole.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/gajcb6PpQ1jai7Y8b32DKLJcDn0.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/gajcb6PpQ1jai7Y8b32DKLJcDn0.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/gajcb6PpQ1jai7Y8b32DKLJcDn0.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/0LKK4QpAoyaZqjtWQY4cBDVZw.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/0LKK4QpAoyaZqjtWQY4cBDVZw.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/0LKK4QpAoyaZqjtWQY4cBDVZw.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "BX08FvK8Z",
+    "createdAt": "2026-11-16T06:18:06.685Z",
+    "updatedAt": "2026-11-16T06:18:06.685Z",
+    "previousItemId": "JqCE9FY2S",
+    "nextItemId": "wCqljKSKY",
+    "qHjyRUb0l": "Satin pump",
+    "TwK2PLDmB": "satin-pump",
+    "pZFB4PDwU": 210,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/Zz0zJBGiix21GMQTvtnTaofmbDw.png?width=1500&height=903",
+     "srcSet": "https://framerusercontent.com/images/Zz0zJBGiix21GMQTvtnTaofmbDw.png?scale-down-to=512&width=1500&height=903 512w,https://framerusercontent.com/images/Zz0zJBGiix21GMQTvtnTaofmbDw.png?scale-down-to=1024&width=1500&height=903 1024w,https://framerusercontent.com/images/Zz0zJBGiix21GMQTvtnTaofmbDw.png?width=1500&height=903 1500w",
+     "pixelWidth": 1500,
+     "pixelHeight": 903,
+     "alt": "Satin pump"
+    },
+    "scGFVJTJQ": "rgb(246, 201, 207)",
+    "SZU4Y5KW9": "Black",
+    "dzmWtEQHA": "Pointed satin pumps on a slim 90 mm heel.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/4S9xMmhadgz7Q3WVb3bubAXo.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/4S9xMmhadgz7Q3WVb3bubAXo.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/4S9xMmhadgz7Q3WVb3bubAXo.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/kNESd3nWlZsExuE6DcYxjB2lm4U.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/kNESd3nWlZsExuE6DcYxjB2lm4U.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/kNESd3nWlZsExuE6DcYxjB2lm4U.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "wCqljKSKY",
+    "createdAt": "2026-11-16T06:18:06.686Z",
+    "updatedAt": "2026-11-16T06:18:06.686Z",
+    "previousItemId": "BX08FvK8Z",
+    "nextItemId": "N89oPjlWl",
+    "qHjyRUb0l": "Mary Jane flat",
+    "TwK2PLDmB": "mary-jane-flat",
+    "pZFB4PDwU": 180,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/xckF2niD5qvuxEFO5ine2XwM78.png?width=1500&height=531",
+     "srcSet": "https://framerusercontent.com/images/xckF2niD5qvuxEFO5ine2XwM78.png?scale-down-to=512&width=1500&height=531 512w,https://framerusercontent.com/images/xckF2niD5qvuxEFO5ine2XwM78.png?scale-down-to=1024&width=1500&height=531 1024w,https://framerusercontent.com/images/xckF2niD5qvuxEFO5ine2XwM78.png?width=1500&height=531 1500w",
+     "pixelWidth": 1500,
+     "pixelHeight": 531,
+     "alt": "Mary Jane flat"
+    },
+    "scGFVJTJQ": "rgb(213, 229, 190)",
+    "SZU4Y5KW9": "Burgundy",
+    "dzmWtEQHA": "Glossy Mary Jane flats with a single buckled strap.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/E1qbwVwBbaLaZdK1eoY6Y4GbM.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/E1qbwVwBbaLaZdK1eoY6Y4GbM.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/E1qbwVwBbaLaZdK1eoY6Y4GbM.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/b0TsdJYWf8xbDgskEmQz9pq4Or4.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/b0TsdJYWf8xbDgskEmQz9pq4Or4.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/b0TsdJYWf8xbDgskEmQz9pq4Or4.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": ""
+    }
+   },
+   {
+    "id": "N89oPjlWl",
+    "createdAt": "2026-11-16T06:18:06.687Z",
+    "updatedAt": "2026-11-16T06:18:06.687Z",
+    "previousItemId": "wCqljKSKY",
+    "nextItemId": "Lkj5kYfKs",
+    "qHjyRUb0l": "Penny loafer",
+    "TwK2PLDmB": "penny-loafer",
+    "pZFB4PDwU": 240,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/i4uDOrvJkX7RPna7euwLHugskCU.png?width=1177&height=717",
+     "srcSet": "https://framerusercontent.com/images/i4uDOrvJkX7RPna7euwLHugskCU.png?scale-down-to=512&width=1177&height=717 512w,https://framerusercontent.com/images/i4uDOrvJkX7RPna7euwLHugskCU.png?scale-down-to=1024&width=1177&height=717 1024w,https://framerusercontent.com/images/i4uDOrvJkX7RPna7euwLHugskCU.png?width=1177&height=717 1177w",
+     "pixelWidth": 1177,
+     "pixelHeight": 717,
+     "alt": "Penny loafer"
+    },
+    "scGFVJTJQ": "rgb(245, 231, 166)",
+    "SZU4Y5KW9": "Oxblood",
+    "dzmWtEQHA": "Hand-finished penny loafers on a leather sole.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/wktIX4k3fp5DOAFIeYQQhOG9SFA.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/wktIX4k3fp5DOAFIeYQQhOG9SFA.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/wktIX4k3fp5DOAFIeYQQhOG9SFA.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Penny loafer — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/YntSEboXfP4URyKZTskkq0aBGk.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/YntSEboXfP4URyKZTskkq0aBGk.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/YntSEboXfP4URyKZTskkq0aBGk.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Penny loafer — pair"
+    }
+   },
+   {
+    "id": "Lkj5kYfKs",
+    "createdAt": "2026-11-16T06:18:06.687Z",
+    "updatedAt": "2026-11-16T06:18:06.687Z",
+    "previousItemId": "N89oPjlWl",
+    "nextItemId": "m2fBQ2IZx",
+    "qHjyRUb0l": "Chelsea boot",
+    "TwK2PLDmB": "chelsea-boot",
+    "pZFB4PDwU": 290,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/j6ZOQr3fKYNUmDy2K2fQXlj9Vs.png?width=1021&height=679",
+     "srcSet": "https://framerusercontent.com/images/j6ZOQr3fKYNUmDy2K2fQXlj9Vs.png?scale-down-to=512&width=1021&height=679 512w,https://framerusercontent.com/images/j6ZOQr3fKYNUmDy2K2fQXlj9Vs.png?width=1021&height=679 1021w",
+     "pixelWidth": 1021,
+     "pixelHeight": 679,
+     "alt": "Chelsea boot"
+    },
+    "scGFVJTJQ": "rgb(247, 210, 184)",
+    "SZU4Y5KW9": "Black",
+    "dzmWtEQHA": "Classic Chelsea boots with elastic gussets and a stacked heel.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/VhlvV9cKXUZUWRtCbUb5DnbozFE.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/VhlvV9cKXUZUWRtCbUb5DnbozFE.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/VhlvV9cKXUZUWRtCbUb5DnbozFE.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Chelsea boot — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/MLHSizg9JeFH7MSSqaFgN0a75Cs.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/MLHSizg9JeFH7MSSqaFgN0a75Cs.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/MLHSizg9JeFH7MSSqaFgN0a75Cs.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Chelsea boot — pair"
+    }
+   },
+   {
+    "id": "m2fBQ2IZx",
+    "createdAt": "2026-11-16T06:18:06.688Z",
+    "updatedAt": "2026-11-16T06:18:06.688Z",
+    "previousItemId": "Lkj5kYfKs",
+    "nextItemId": "TdMbiYQ5T",
+    "qHjyRUb0l": "Kitten slingback",
+    "TwK2PLDmB": "kitten-slingback",
+    "pZFB4PDwU": 290,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/DP1WtRfde9Tdz2vgYX8gFdqbA.png?width=935&height=465",
+     "srcSet": "https://framerusercontent.com/images/DP1WtRfde9Tdz2vgYX8gFdqbA.png?scale-down-to=512&width=935&height=465 512w,https://framerusercontent.com/images/DP1WtRfde9Tdz2vgYX8gFdqbA.png?width=935&height=465 935w",
+     "pixelWidth": 935,
+     "pixelHeight": 465,
+     "alt": "Kitten slingback"
+    },
+    "scGFVJTJQ": "rgb(213, 229, 190)",
+    "SZU4Y5KW9": "Black",
+    "dzmWtEQHA": "Pointed kitten-heel slingbacks in soft leather.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/I5P1oq1owRzxJd974gzQwcmPVbU.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/I5P1oq1owRzxJd974gzQwcmPVbU.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/I5P1oq1owRzxJd974gzQwcmPVbU.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Kitten slingback — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/qTgEQrwzqMojCXhb1GlNVAZ2Azg.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/qTgEQrwzqMojCXhb1GlNVAZ2Azg.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/qTgEQrwzqMojCXhb1GlNVAZ2Azg.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Kitten slingback — pair"
+    }
+   },
+   {
+    "id": "TdMbiYQ5T",
+    "createdAt": "2026-11-16T06:18:06.688Z",
+    "updatedAt": "2026-11-16T06:18:06.688Z",
+    "previousItemId": "m2fBQ2IZx",
+    "nextItemId": "bVuAlWXmh",
+    "qHjyRUb0l": "Polished derby",
+    "TwK2PLDmB": "polished-derby",
+    "pZFB4PDwU": 260,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/O6Nnrj79qWSQDwpXixjbtKgc.png?width=1153&height=531",
+     "srcSet": "https://framerusercontent.com/images/O6Nnrj79qWSQDwpXixjbtKgc.png?scale-down-to=512&width=1153&height=531 512w,https://framerusercontent.com/images/O6Nnrj79qWSQDwpXixjbtKgc.png?scale-down-to=1024&width=1153&height=531 1024w,https://framerusercontent.com/images/O6Nnrj79qWSQDwpXixjbtKgc.png?width=1153&height=531 1153w",
+     "pixelWidth": 1153,
+     "pixelHeight": 531,
+     "alt": "Polished derby"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Black",
+    "dzmWtEQHA": "Polished derbies with a rounded toe and waxed laces.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/jjFAUBnESLVRm8L169umIRHcF9w.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/jjFAUBnESLVRm8L169umIRHcF9w.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/jjFAUBnESLVRm8L169umIRHcF9w.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Polished derby — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/Yz5UVnL6qmHqWnGXhynmm63tXjg.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/Yz5UVnL6qmHqWnGXhynmm63tXjg.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/Yz5UVnL6qmHqWnGXhynmm63tXjg.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Polished derby — pair"
+    }
+   },
+   {
+    "id": "bVuAlWXmh",
+    "createdAt": "2026-11-16T06:18:06.689Z",
+    "updatedAt": "2026-11-16T06:18:06.689Z",
+    "previousItemId": "TdMbiYQ5T",
+    "nextItemId": "csZpjGpLj",
+    "qHjyRUb0l": "Satin mule",
+    "TwK2PLDmB": "satin-mule",
+    "pZFB4PDwU": 260,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/2VJOMoNLWWlUggP7VPgiq0CUwjE.png?width=1500&height=447",
+     "srcSet": "https://framerusercontent.com/images/2VJOMoNLWWlUggP7VPgiq0CUwjE.png?scale-down-to=512&width=1500&height=447 512w,https://framerusercontent.com/images/2VJOMoNLWWlUggP7VPgiq0CUwjE.png?scale-down-to=1024&width=1500&height=447 1024w,https://framerusercontent.com/images/2VJOMoNLWWlUggP7VPgiq0CUwjE.png?width=1500&height=447 1500w",
+     "pixelWidth": 1500,
+     "pixelHeight": 447,
+     "alt": "Satin mule"
+    },
+    "scGFVJTJQ": "rgb(213, 229, 190)",
+    "SZU4Y5KW9": "Pink",
+    "dzmWtEQHA": "Satin kitten-heel mules in the softest strawberry pink.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/AaXB97LO4d2xCkXftfnsTkelQ.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/AaXB97LO4d2xCkXftfnsTkelQ.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/AaXB97LO4d2xCkXftfnsTkelQ.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Satin mule — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/IAtBdCnexogJfyEvwpRoLZiayKw.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/IAtBdCnexogJfyEvwpRoLZiayKw.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/IAtBdCnexogJfyEvwpRoLZiayKw.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Satin mule — pair"
+    }
+   },
+   {
+    "id": "csZpjGpLj",
+    "createdAt": "2026-11-16T06:18:06.689Z",
+    "updatedAt": "2026-11-16T06:18:06.689Z",
+    "previousItemId": "bVuAlWXmh",
+    "nextItemId": "E34ceqDf9",
+    "qHjyRUb0l": "Tassel loafer",
+    "TwK2PLDmB": "tassel-loafer",
+    "pZFB4PDwU": 210,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/BcGGu7O0W4hVv9ZYHL3yEYJsZ8Y.png?width=953&height=441",
+     "srcSet": "https://framerusercontent.com/images/BcGGu7O0W4hVv9ZYHL3yEYJsZ8Y.png?scale-down-to=512&width=953&height=441 512w,https://framerusercontent.com/images/BcGGu7O0W4hVv9ZYHL3yEYJsZ8Y.png?width=953&height=441 953w",
+     "pixelWidth": 953,
+     "pixelHeight": 441,
+     "alt": "Tassel loafer"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Cognac",
+    "dzmWtEQHA": "Tassel loafers in burnished leather, built to be resoled.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/EPfhFSGPamhzQun706h2yswlA.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/EPfhFSGPamhzQun706h2yswlA.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/EPfhFSGPamhzQun706h2yswlA.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Tassel loafer — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/09NSifL39XKuvBJF0jFwlZhk.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/09NSifL39XKuvBJF0jFwlZhk.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/09NSifL39XKuvBJF0jFwlZhk.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Tassel loafer — pair"
+    }
+   },
+   {
+    "id": "E34ceqDf9",
+    "createdAt": "2026-11-16T06:18:06.690Z",
+    "updatedAt": "2026-11-16T06:18:06.690Z",
+    "previousItemId": "csZpjGpLj",
+    "nextItemId": "XW1Aa4x88",
+    "qHjyRUb0l": "Patent loafer",
+    "TwK2PLDmB": "patent-loafer",
+    "pZFB4PDwU": 180,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/vbcePxXnuAfo5xArFgBhvSQWvcM.png?width=1500&height=485",
+     "srcSet": "https://framerusercontent.com/images/vbcePxXnuAfo5xArFgBhvSQWvcM.png?scale-down-to=512&width=1500&height=485 512w,https://framerusercontent.com/images/vbcePxXnuAfo5xArFgBhvSQWvcM.png?scale-down-to=1024&width=1500&height=485 1024w,https://framerusercontent.com/images/vbcePxXnuAfo5xArFgBhvSQWvcM.png?width=1500&height=485 1500w",
+     "pixelWidth": 1500,
+     "pixelHeight": 485,
+     "alt": "Patent loafer"
+    },
+    "scGFVJTJQ": "rgb(246, 201, 207)",
+    "SZU4Y5KW9": "Black",
+    "dzmWtEQHA": "Patent evening loafers. Dinner, dancing, done.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/mBYqiYU8zXQnPnjIxk88BPCChg.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/mBYqiYU8zXQnPnjIxk88BPCChg.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/mBYqiYU8zXQnPnjIxk88BPCChg.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Patent loafer — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/2iwZZwR9coTOj7I6HPQWhRzhuI.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/2iwZZwR9coTOj7I6HPQWhRzhuI.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/2iwZZwR9coTOj7I6HPQWhRzhuI.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Patent loafer — pair"
+    }
+   },
+   {
+    "id": "XW1Aa4x88",
+    "createdAt": "2026-11-16T06:18:06.690Z",
+    "updatedAt": "2026-11-16T06:18:06.690Z",
+    "previousItemId": "E34ceqDf9",
+    "nextItemId": "mvlm12LTN",
+    "qHjyRUb0l": "Strappy sandal",
+    "TwK2PLDmB": "strappy-sandal",
+    "pZFB4PDwU": 260,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/PWGSTm2XSsl8QaDVbb9zS1Zh8.png?width=1413&height=955",
+     "srcSet": "https://framerusercontent.com/images/PWGSTm2XSsl8QaDVbb9zS1Zh8.png?scale-down-to=512&width=1413&height=955 512w,https://framerusercontent.com/images/PWGSTm2XSsl8QaDVbb9zS1Zh8.png?scale-down-to=1024&width=1413&height=955 1024w,https://framerusercontent.com/images/PWGSTm2XSsl8QaDVbb9zS1Zh8.png?width=1413&height=955 1413w",
+     "pixelWidth": 1413,
+     "pixelHeight": 955,
+     "alt": "Strappy sandal"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Gold",
+    "dzmWtEQHA": "Strappy sandals that wrap the ankle on a slim heel.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/OkzmgFkyJXXtWo9f3QZuUn8uI.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/OkzmgFkyJXXtWo9f3QZuUn8uI.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/OkzmgFkyJXXtWo9f3QZuUn8uI.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Strappy sandal — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/xLnSIMyoNQ58XH9MDdHkl0A0cQ.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/xLnSIMyoNQ58XH9MDdHkl0A0cQ.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/xLnSIMyoNQ58XH9MDdHkl0A0cQ.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Strappy sandal — pair"
+    }
+   },
+   {
+    "id": "mvlm12LTN",
+    "createdAt": "2026-11-16T06:18:06.690Z",
+    "updatedAt": "2026-11-16T06:18:06.690Z",
+    "previousItemId": "XW1Aa4x88",
+    "nextItemId": "wwhNCqF85",
+    "qHjyRUb0l": "Nude pump",
+    "TwK2PLDmB": "nude-pump",
+    "pZFB4PDwU": 290,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/DmZMPUmQZLnl2WBPT0iSjURNo.png?width=1500&height=888",
+     "srcSet": "https://framerusercontent.com/images/DmZMPUmQZLnl2WBPT0iSjURNo.png?scale-down-to=512&width=1500&height=888 512w,https://framerusercontent.com/images/DmZMPUmQZLnl2WBPT0iSjURNo.png?scale-down-to=1024&width=1500&height=888 1024w,https://framerusercontent.com/images/DmZMPUmQZLnl2WBPT0iSjURNo.png?width=1500&height=888 1500w",
+     "pixelWidth": 1500,
+     "pixelHeight": 888,
+     "alt": "Nude pump"
+    },
+    "scGFVJTJQ": "rgb(213, 229, 190)",
+    "SZU4Y5KW9": "Nude",
+    "dzmWtEQHA": "Almond-toe pumps on a 70 mm heel. Goes with everything.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/rukCosYD5VmYofPZ57b4bhm0RY.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/rukCosYD5VmYofPZ57b4bhm0RY.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/rukCosYD5VmYofPZ57b4bhm0RY.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Nude pump — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/HWIuZD6RrpfeChNydxj2yqaPZU.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/HWIuZD6RrpfeChNydxj2yqaPZU.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/HWIuZD6RrpfeChNydxj2yqaPZU.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Nude pump — pair"
+    }
+   },
+   {
+    "id": "wwhNCqF85",
+    "createdAt": "2026-11-16T06:18:06.691Z",
+    "updatedAt": "2026-11-16T06:18:06.691Z",
+    "previousItemId": "mvlm12LTN",
+    "nextItemId": "kp7LojRj2",
+    "qHjyRUb0l": "Bow ballet flat",
+    "TwK2PLDmB": "bow-ballet-flat",
+    "pZFB4PDwU": 260,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/8un1Y4ez4ATG339nhnANRq2F0MI.png?width=1500&height=671",
+     "srcSet": "https://framerusercontent.com/images/8un1Y4ez4ATG339nhnANRq2F0MI.png?scale-down-to=512&width=1500&height=671 512w,https://framerusercontent.com/images/8un1Y4ez4ATG339nhnANRq2F0MI.png?scale-down-to=1024&width=1500&height=671 1024w,https://framerusercontent.com/images/8un1Y4ez4ATG339nhnANRq2F0MI.png?width=1500&height=671 1500w",
+     "pixelWidth": 1500,
+     "pixelHeight": 671,
+     "alt": "Bow ballet flat"
+    },
+    "scGFVJTJQ": "rgb(246, 201, 207)",
+    "SZU4Y5KW9": "Ivory",
+    "dzmWtEQHA": "Bow ballet flats with a contrast black ribbon.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/EWb3TBqZYG3jCX2Ds9WiHG531M4.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/EWb3TBqZYG3jCX2Ds9WiHG531M4.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/EWb3TBqZYG3jCX2Ds9WiHG531M4.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Bow ballet flat — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/GAU1vINCSNpq3Q4NbBovD6EJaHg.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/GAU1vINCSNpq3Q4NbBovD6EJaHg.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/GAU1vINCSNpq3Q4NbBovD6EJaHg.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Bow ballet flat — pair"
+    }
+   },
+   {
+    "id": "kp7LojRj2",
+    "createdAt": "2026-11-16T06:18:06.691Z",
+    "updatedAt": "2026-11-16T06:18:06.691Z",
+    "previousItemId": "wwhNCqF85",
+    "nextItemId": "kpbtR4WzJ",
+    "qHjyRUb0l": "Suede chelsea",
+    "TwK2PLDmB": "suede-chelsea",
+    "pZFB4PDwU": 210,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/zxFVRHFG9RT0ZeBwMvUCnjj5EU.png?width=1495&height=887",
+     "srcSet": "https://framerusercontent.com/images/zxFVRHFG9RT0ZeBwMvUCnjj5EU.png?scale-down-to=512&width=1495&height=887 512w,https://framerusercontent.com/images/zxFVRHFG9RT0ZeBwMvUCnjj5EU.png?scale-down-to=1024&width=1495&height=887 1024w,https://framerusercontent.com/images/zxFVRHFG9RT0ZeBwMvUCnjj5EU.png?width=1495&height=887 1495w",
+     "pixelWidth": 1495,
+     "pixelHeight": 887,
+     "alt": "Suede chelsea"
+    },
+    "scGFVJTJQ": "rgb(245, 231, 166)",
+    "SZU4Y5KW9": "Tan suede",
+    "dzmWtEQHA": "Suede Chelsea boots with a crepe-feel sole.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/WDCFEVVgDp65c8AVc91UHR9xNjo.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/WDCFEVVgDp65c8AVc91UHR9xNjo.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/WDCFEVVgDp65c8AVc91UHR9xNjo.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Suede chelsea — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/37ieVk706FngYbry3LNlEtriVs.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/37ieVk706FngYbry3LNlEtriVs.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/37ieVk706FngYbry3LNlEtriVs.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Suede chelsea — pair"
+    }
+   },
+   {
+    "id": "kpbtR4WzJ",
+    "createdAt": "2026-11-16T06:18:06.692Z",
+    "updatedAt": "2026-11-16T06:18:06.692Z",
+    "previousItemId": "kp7LojRj2",
+    "nextItemId": "DgLnEziuS",
+    "qHjyRUb0l": "Burgundy loafer",
+    "TwK2PLDmB": "burgundy-loafer",
+    "pZFB4PDwU": 180,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/K6QPl0jxT03KsitwbUdPjIKN4A.png?width=1145&height=433",
+     "srcSet": "https://framerusercontent.com/images/K6QPl0jxT03KsitwbUdPjIKN4A.png?scale-down-to=512&width=1145&height=433 512w,https://framerusercontent.com/images/K6QPl0jxT03KsitwbUdPjIKN4A.png?scale-down-to=1024&width=1145&height=433 1024w,https://framerusercontent.com/images/K6QPl0jxT03KsitwbUdPjIKN4A.png?width=1145&height=433 1145w",
+     "pixelWidth": 1145,
+     "pixelHeight": 433,
+     "alt": "Burgundy loafer"
+    },
+    "scGFVJTJQ": "rgb(245, 231, 166)",
+    "SZU4Y5KW9": "Burgundy",
+    "dzmWtEQHA": "Glossy penny loafers in a deep cherry burgundy.",
+    "uFYrUbD4n": true,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/JhS8LABl4ku57YaJbibpHo7PE8.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/JhS8LABl4ku57YaJbibpHo7PE8.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/JhS8LABl4ku57YaJbibpHo7PE8.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Burgundy loafer — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/17Qt6daokhzSXP99iGmOQgmWCs.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/17Qt6daokhzSXP99iGmOQgmWCs.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/17Qt6daokhzSXP99iGmOQgmWCs.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Burgundy loafer — pair"
+    }
+   },
+   {
+    "id": "DgLnEziuS",
+    "createdAt": "2026-11-16T06:18:06.693Z",
+    "updatedAt": "2026-11-16T06:18:06.693Z",
+    "previousItemId": "kpbtR4WzJ",
+    "nextItemId": "DdOAGJVcB",
+    "qHjyRUb0l": "Suede loafer",
+    "TwK2PLDmB": "suede-loafer",
+    "pZFB4PDwU": 260,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/QUf7dIUxBpBMyNA6QAwje1AHDGk.png?width=1500&height=747",
+     "srcSet": "https://framerusercontent.com/images/QUf7dIUxBpBMyNA6QAwje1AHDGk.png?scale-down-to=512&width=1500&height=747 512w,https://framerusercontent.com/images/QUf7dIUxBpBMyNA6QAwje1AHDGk.png?scale-down-to=1024&width=1500&height=747 1024w,https://framerusercontent.com/images/QUf7dIUxBpBMyNA6QAwje1AHDGk.png?width=1500&height=747 1500w",
+     "pixelWidth": 1500,
+     "pixelHeight": 747,
+     "alt": "Suede loafer"
+    },
+    "scGFVJTJQ": "rgb(247, 210, 184)",
+    "SZU4Y5KW9": "Black suede",
+    "dzmWtEQHA": "Suede penny loafers with a soft, unlined feel.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/hYQkEsZWxmtKsTbXl57RDrU5UI.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/hYQkEsZWxmtKsTbXl57RDrU5UI.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/hYQkEsZWxmtKsTbXl57RDrU5UI.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Suede loafer — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/e7eVSvPhKJyrjIyBBSjcJc8.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/e7eVSvPhKJyrjIyBBSjcJc8.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/e7eVSvPhKJyrjIyBBSjcJc8.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Suede loafer — pair"
+    }
+   },
+   {
+    "id": "DdOAGJVcB",
+    "createdAt": "2026-11-16T06:18:06.693Z",
+    "updatedAt": "2026-11-16T06:18:06.693Z",
+    "previousItemId": "DgLnEziuS",
+    "qHjyRUb0l": "Satin slingback",
+    "TwK2PLDmB": "satin-slingback",
+    "pZFB4PDwU": 240,
+    "h7LDBAo43": {
+     "enum": "KAczEC940",
+     "title": "Shoes"
+    },
+    "GDSBdR0X6": {
+     "src": "https://framerusercontent.com/images/aB6REojtvKGo4qS2JYqy62GIs.png?width=1500&height=917",
+     "srcSet": "https://framerusercontent.com/images/aB6REojtvKGo4qS2JYqy62GIs.png?scale-down-to=512&width=1500&height=917 512w,https://framerusercontent.com/images/aB6REojtvKGo4qS2JYqy62GIs.png?scale-down-to=1024&width=1500&height=917 1024w,https://framerusercontent.com/images/aB6REojtvKGo4qS2JYqy62GIs.png?width=1500&height=917 1500w",
+     "pixelWidth": 1500,
+     "pixelHeight": 917,
+     "alt": "Satin slingback"
+    },
+    "scGFVJTJQ": "rgb(201, 210, 242)",
+    "SZU4Y5KW9": "Blush",
+    "dzmWtEQHA": "Satin slingbacks on a slim heel, softly pointed.",
+    "uFYrUbD4n": false,
+    "GEK_WaDXP": "https://buy.stripe.com/test",
+    "v-sizes": "36, 37, 38, 39, 40, 41",
+    "v-img2": {
+     "src": "https://framerusercontent.com/images/UvM4oda181BF83s7EHeAsTMSGqQ.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/UvM4oda181BF83s7EHeAsTMSGqQ.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/UvM4oda181BF83s7EHeAsTMSGqQ.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Satin slingback — side"
+    },
+    "v-img3": {
+     "src": "https://framerusercontent.com/images/k7zOAShYhbKBOWoJI7u8RKki0k.png?width=1024&height=1280",
+     "srcSet": "https://framerusercontent.com/images/k7zOAShYhbKBOWoJI7u8RKki0k.png?scale-down-to=1024&width=1024&height=1280 819w,https://framerusercontent.com/images/k7zOAShYhbKBOWoJI7u8RKki0k.png?width=1024&height=1280 1024w",
+     "pixelWidth": 1024,
+     "pixelHeight": 1280,
+     "alt": "Satin slingback — pair"
+    }
+   }
+  ]
+ }
+}

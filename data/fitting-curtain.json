@@ -1,0 +1,20 @@
+{
+  "delay": 0.15,
+  "duration": 2.2,
+  "edge": 56,
+  "edgeMobile": 16,
+  "height": "100%",
+  "id": "hBkqHGCMJ",
+  "layoutId": "hBkqHGCMJ",
+  "leftColor": "rgb(213, 229, 190)",
+  "pleat": 56,
+  "replay": true,
+  "rightColor": "rgb(246, 201, 207)",
+  "rod": true,
+  "style": {
+    "height": "100%",
+    "width": "100%"
+  },
+  "threshold": 0.3,
+  "width": "100%"
+}

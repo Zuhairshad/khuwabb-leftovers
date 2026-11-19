@@ -1,0 +1,32 @@
+[
+  {
+    "order": "Order G-2041 · 12 Oct 2026",
+    "lines": [
+      { "name": "Corduroy jacket", "price": 260 },
+      { "name": "Wide wool trousers", "price": 180 }
+    ],
+    "quote": "“The jacket fits like it was made for me. I’ve worn it four days in a row and nobody has noticed. Yet.”",
+    "by": "Amira, Lisbon",
+    "tilt": -3
+  },
+  {
+    "order": "Order G-2117 · 28 Oct 2026",
+    "lines": [
+      { "name": "Bouclé jacket", "price": 240 },
+      { "name": "Bow ballet flat", "price": 260 }
+    ],
+    "quote": "“Pressed shuffle six times, bought the seventh look. The flats are softer than my slippers.”",
+    "by": "Jonah, Copenhagen",
+    "tilt": 2
+  },
+  {
+    "order": "Order G-2190 · 4 Nov 2026",
+    "lines": [
+      { "name": "Cable crewneck", "price": 240 },
+      { "name": "Patent loafer", "price": 180 }
+    ],
+    "quote": "“Arrived in two days, wrapped like a present. The knit is thick, warm and properly cosy.”",
+    "by": "Sofia, Milan",
+    "tilt": -1.5
+  }
+]

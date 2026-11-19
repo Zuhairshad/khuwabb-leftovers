@@ -1,0 +1,23 @@
+{
+  "borderColor": "rgba(247, 243, 236, 0.16)",
+  "button": "Subscribe",
+  "buttonColor": "rgb(213, 229, 190)",
+  "buttonText": "rgb(23, 20, 15)",
+  "email": "hello@scoop.store",
+  "endpoint": "",
+  "error": "That email doesn’t look right",
+  "fieldColor": "rgba(247, 243, 236, 0.08)",
+  "font": "Satoshi",
+  "height": "100%",
+  "id": "RLuc3zum4",
+  "layoutId": "RLuc3zum4",
+  "placeholder": "Your email",
+  "style": {
+    "maxWidth": "100%",
+    "width": "100%"
+  },
+  "subject": "Sign me up",
+  "success": "You’re in. See you in your inbox.",
+  "textColor": "rgb(247, 243, 236)",
+  "width": "100%"
+}

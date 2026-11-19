@@ -1,0 +1,58 @@
+[
+  {
+    "id": "pVU0D7UP5",
+    "slug": "blueberry-look",
+    "name": "Blueberry",
+    "tint": "rgb(201, 210, 242)",
+    "description": "Cool blue tailoring, a soft silk trouser and a polished derby.",
+    "image": "/framer/images/vG5yViQEjaV2ekVDiGGYl3xc.1i1xfkl.png",
+    "imageAlt": "The Blueberry look",
+    "pieces": [
+      "tailored-blazer",
+      "silk-wide-trousers",
+      "polished-derby"
+    ]
+  },
+  {
+    "id": "P2mY7v5T0",
+    "slug": "strawberry-look",
+    "name": "Strawberry",
+    "tint": "rgb(246, 201, 207)",
+    "description": "Pink on pink, pearls on bouclé, and a slingback that clicks.",
+    "image": "/framer/images/riFS5PazRA9y7PYvzmfjlafNmo.1i1xfkl.png",
+    "imageAlt": "The Strawberry look",
+    "pieces": [
+      "boucl-jacket",
+      "tweed-mini-skirt",
+      "bow-ballet-flat"
+    ]
+  },
+  {
+    "id": "S9KMBTeUL",
+    "slug": "pistachio-look",
+    "name": "Pistachio",
+    "tint": "rgb(213, 229, 190)",
+    "description": "Corduroy, olive and a burgundy loafer. Autumn with a little sugar.",
+    "image": "/framer/images/2k483UoTtBzPPbKYanzGxJ1ubFE.1i1xfkl.png",
+    "imageAlt": "The Pistachio look",
+    "pieces": [
+      "corduroy-jacket",
+      "fluid-wide-trousers",
+      "burgundy-loafer"
+    ]
+  },
+  {
+    "id": "aymIAuQac",
+    "slug": "lemon-look",
+    "name": "Lemon",
+    "tint": "rgb(245, 231, 166)",
+    "description": "A cable knit, ecru trousers and black patent. Bright, sharp, easy.",
+    "image": "/framer/images/TqCn3UV0wf2771OR1NY5TfxUqg.1i1xfkl.png",
+    "imageAlt": "The Lemon look",
+    "pieces": [
+      "cable-crewneck",
+      "ecru-wide-trousers",
+      "patent-loafer"
+    ]
+  }
+]

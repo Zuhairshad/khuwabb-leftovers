@@ -1,0 +1,364 @@
+{
+  "accent": "rgb(23, 20, 15)",
+  "accentText": "rgb(251, 248, 242)",
+  "autoShuffle": 7,
+  "bottoms": [
+    {
+      "fit": "any",
+      "id": "gCcZ7u3s6",
+      "image": "/framer/images/TJsia5VG0GDOQESYUhqMOTJZYfY.07ci9kk.png",
+      "name": "Wide wool trousers",
+      "price": 180
+    },
+    {
+      "fit": "any",
+      "id": "gIjtm0l7o",
+      "image": "/framer/images/aB0M91VYl9fvsLs72AnYo8UoGog.1v10me7.png",
+      "name": "Pleated trousers",
+      "price": 195
+    },
+    {
+      "fit": "men",
+      "id": "z6ouDrOVL",
+      "image": "/framer/images/h6PK8hijaIEwUrkQJH8vvJvX8PI.1ovqnh1.png",
+      "name": "Flannel trousers",
+      "price": 140
+    },
+    {
+      "fit": "any",
+      "id": "F67geHjYG",
+      "image": "/framer/images/rAdlNXYTG88V7SIEDDsYYosVSq4.1ufe1vc.png",
+      "name": "Tuxedo trousers",
+      "price": 195
+    },
+    {
+      "fit": "men",
+      "id": "uWYVNtIFZ",
+      "image": "/framer/images/zqq2DHfzGPgRCNGkBj9w24yA5o.0im4br9.png",
+      "name": "Cuffed suit trousers",
+      "price": 140
+    },
+    {
+      "fit": "any",
+      "id": "vhQxDwZJk",
+      "image": "/framer/images/fw4KEaql1EZ4FkmgGhNrIwuWUeU.04gzuyx.png",
+      "name": "Fluid wide trousers",
+      "price": 210
+    },
+    {
+      "fit": "any",
+      "id": "NaTfrGMFs",
+      "image": "/framer/images/7kwybQd0cAlO1ABqHDTAEJwIun8.1m1173p.png",
+      "name": "Pleated cream trousers",
+      "price": 160
+    },
+    {
+      "fit": "any",
+      "id": "zInIjiSXq",
+      "image": "/framer/images/fETSgSpJRledYHqB8ERgCE0.1hcx2lg.png",
+      "name": "Ecru wide trousers",
+      "price": 160
+    },
+    {
+      "fit": "women",
+      "id": "eVCRouKYV",
+      "image": "/framer/images/TH23NQOUHHMfJEZZmR9vLvLhfYM.03c7kvu.png",
+      "name": "Tweed mini skirt",
+      "price": 240
+    },
+    {
+      "fit": "any",
+      "id": "jM0HEnY7x",
+      "image": "/framer/images/Kl2g23gPjLqU4TuKqBqDJRdIA.1tcgt53.png",
+      "name": "Silk wide trousers",
+      "price": 180
+    },
+    {
+      "fit": "women",
+      "id": "NkLE8WQIL",
+      "image": "/framer/images/pqhjCUxE3cBYyWE3iPyAwsgNqk8.07gce3v.png",
+      "name": "Satin drawstring trousers",
+      "price": 180
+    },
+    {
+      "fit": "women",
+      "id": "i1TPGPnuF",
+      "image": "/framer/images/yVrDFnBe6F9QNbXKzDUoM2TeicU.1toi4cs.png",
+      "name": "Pleated maxi skirt",
+      "price": 240
+    },
+    {
+      "fit": "women",
+      "id": "t1QSGqFGq",
+      "image": "/framer/images/wnyS7dawBofsuguSJ2H5lhGYfcQ.1n5h7ab.png",
+      "name": "Cigarette trousers",
+      "price": 210
+    }
+  ],
+  "ctaAction": "bag",
+  "ctaLabel": "Add the look",
+  "ctaLink": "#",
+  "currency": "€",
+  "curve": 1,
+  "flavourFont": "Clash Display",
+  "flavours": [
+    {
+      "color": "rgb(213, 229, 190)",
+      "id": "default-item-0",
+      "name": "Pistachio"
+    },
+    {
+      "color": "rgb(246, 201, 207)",
+      "id": "default-item-1",
+      "name": "Strawberry"
+    },
+    {
+      "color": "rgb(245, 231, 166)",
+      "id": "default-item-2",
+      "name": "Lemon"
+    },
+    {
+      "color": "rgb(201, 210, 242)",
+      "id": "default-item-3",
+      "name": "Blueberry"
+    },
+    {
+      "color": "rgb(247, 210, 184)",
+      "id": "default-item-4",
+      "name": "Peach"
+    }
+  ],
+  "flavourWeight": 600,
+  "height": "100%",
+  "hint": "Drag any row to restyle",
+  "id": "EjdwGOzPx",
+  "intro": true,
+  "introDelay": 2.9,
+  "layoutId": "EjdwGOzPx",
+  "lookScale": 1,
+  "name": "Gelato Reels",
+  "shoes": [
+    {
+      "fit": "women",
+      "id": "zryVMZM5A",
+      "image": "/framer/images/OtWYv2rCLipJs5CRS93qIsA7IDU.1349wp5.png",
+      "name": "Ballet flat",
+      "price": 290
+    },
+    {
+      "fit": "women",
+      "id": "KStVZlIJ2",
+      "image": "/framer/images/Zz0zJBGiix21GMQTvtnTaofmbDw.08xlbgn.png",
+      "name": "Satin pump",
+      "price": 210
+    },
+    {
+      "fit": "women",
+      "id": "s8FgFtpMs",
+      "image": "/framer/images/xckF2niD5qvuxEFO5ine2XwM78.11e036i.png",
+      "name": "Mary Jane flat",
+      "price": 180
+    },
+    {
+      "fit": "any",
+      "id": "vT00vxZnz",
+      "image": "/framer/images/i4uDOrvJkX7RPna7euwLHugskCU.0ymizea.png",
+      "name": "Penny loafer",
+      "price": 240
+    },
+    {
+      "fit": "men",
+      "id": "aFZZpBc5N",
+      "image": "/framer/images/j6ZOQr3fKYNUmDy2K2fQXlj9Vs.1gjg0xl.png",
+      "name": "Chelsea boot",
+      "price": 290
+    },
+    {
+      "fit": "women",
+      "id": "DZUtSL9B3",
+      "image": "/framer/images/DP1WtRfde9Tdz2vgYX8gFdqbA.0926991.png",
+      "name": "Kitten slingback",
+      "price": 290
+    },
+    {
+      "fit": "men",
+      "id": "cgQQjMN8B",
+      "image": "/framer/images/O6Nnrj79qWSQDwpXixjbtKgc.0rrxaj2.png",
+      "name": "Polished derby",
+      "price": 260
+    },
+    {
+      "fit": "women",
+      "id": "djkF58Goc",
+      "image": "/framer/images/2VJOMoNLWWlUggP7VPgiq0CUwjE.0pwubwg.png",
+      "name": "Satin mule",
+      "price": 260
+    },
+    {
+      "fit": "any",
+      "id": "BkyTKcliU",
+      "image": "/framer/images/BcGGu7O0W4hVv9ZYHL3yEYJsZ8Y.0j34fs7.png",
+      "name": "Tassel loafer",
+      "price": 210
+    },
+    {
+      "fit": "any",
+      "id": "AK8dIO2JJ",
+      "image": "/framer/images/vbcePxXnuAfo5xArFgBhvSQWvcM.1py8evm.png",
+      "name": "Patent loafer",
+      "price": 180
+    },
+    {
+      "fit": "women",
+      "id": "cduWoHv9K",
+      "image": "/framer/images/PWGSTm2XSsl8QaDVbb9zS1Zh8.1s7m11d.png",
+      "name": "Strappy sandal",
+      "price": 260
+    },
+    {
+      "fit": "women",
+      "id": "iIk3Xis4S",
+      "image": "/framer/images/DmZMPUmQZLnl2WBPT0iSjURNo.024ze9x.png",
+      "name": "Nude pump",
+      "price": 290
+    },
+    {
+      "fit": "women",
+      "id": "HjZuGdZE_",
+      "image": "/framer/images/8un1Y4ez4ATG339nhnANRq2F0MI.065jbqf.png",
+      "name": "Bow ballet flat",
+      "price": 260
+    },
+    {
+      "fit": "men",
+      "id": "Et7d2um0O",
+      "image": "/framer/images/zxFVRHFG9RT0ZeBwMvUCnjj5EU.164n0ib.png",
+      "name": "Suede chelsea",
+      "price": 210
+    },
+    {
+      "fit": "any",
+      "id": "iM6TsO7BS",
+      "image": "/framer/images/K6QPl0jxT03KsitwbUdPjIKN4A.0i7mrsa.png",
+      "name": "Burgundy loafer",
+      "price": 180
+    },
+    {
+      "fit": "any",
+      "id": "sToSZrjD2",
+      "image": "/framer/images/QUf7dIUxBpBMyNA6QAwje1AHDGk.0azq1yp.png",
+      "name": "Suede loafer",
+      "price": 260
+    },
+    {
+      "fit": "women",
+      "id": "DJX4XGVM9",
+      "image": "/framer/images/aB6REojtvKGo4qS2JYqy62GIs.03dwf36.png",
+      "name": "Satin slingback",
+      "price": 240
+    }
+  ],
+  "showBar": true,
+  "showFlavourName": true,
+  "showTags": true,
+  "shuffleLabel": "Shuffle",
+  "sideBlur": 2.4,
+  "spacing": 1,
+  "style": {
+    "height": "100%",
+    "width": "100%"
+  },
+  "textColor": "rgb(23, 20, 15)",
+  "topInset": 0.11,
+  "tops": [
+    {
+      "fit": "any",
+      "id": "e3cnCjfD5",
+      "image": "/framer/images/xdPzBTPOlyAwNMuYx9p4OZoe2YM.1eykv53.png",
+      "name": "Corduroy jacket",
+      "price": 260
+    },
+    {
+      "fit": "any",
+      "id": "wC7FHpm5Q",
+      "image": "/framer/images/kyCyzCebqycrO7ijocTIOgJaK0.04bbsls.png",
+      "name": "Tailored blazer",
+      "price": 240
+    },
+    {
+      "fit": "men",
+      "id": "UIjQGy6dW",
+      "image": "/framer/images/JCzfwCzd2vc29cr1eNWQF1JyeY.1n9vio0.png",
+      "name": "Suede overshirt",
+      "price": 220
+    },
+    {
+      "fit": "women",
+      "id": "pp52fchti",
+      "image": "/framer/images/ZGkX0kCJy00VR21miochPtJZl0.0d9x1ms.png",
+      "name": "Cashmere cardigan",
+      "price": 360
+    },
+    {
+      "fit": "any",
+      "id": "fmOZwLUhA",
+      "image": "/framer/images/xGURVPw9k0NVvDsPcyYkFZimO9Y.0qp0d7i.png",
+      "name": "Nappa zip jacket",
+      "price": 240
+    },
+    {
+      "fit": "any",
+      "id": "rlcpl83VS",
+      "image": "/framer/images/56XcHUgSPjQk6eeOtuZBpFUOLo.1e4o6sx.png",
+      "name": "Velvet blazer",
+      "price": 360
+    },
+    {
+      "fit": "women",
+      "id": "RZhNWwYZZ",
+      "image": "/framer/images/ecJYCFKzr5OXIBPq29RxaQOszfY.1ayfyxk.png",
+      "name": "Bouclé jacket",
+      "price": 240
+    },
+    {
+      "fit": "men",
+      "id": "HBnSZME1U",
+      "image": "/framer/images/jTlpl4onUFoGlIAl8DHltxXSis.18d31i1.png",
+      "name": "Double-breasted jacket",
+      "price": 260
+    },
+    {
+      "fit": "men",
+      "id": "R8jxHP938",
+      "image": "/framer/images/E3GxOBDRm5H9AbsAGYOEXXEvvM.1ezzh3n.png",
+      "name": "Knit polo",
+      "price": 240
+    },
+    {
+      "fit": "any",
+      "id": "ExKUniHZB",
+      "image": "/framer/images/GarSVUmYRcFWvHHR75ts4L1fKE.14dzmnf.png",
+      "name": "Cable crewneck",
+      "price": 240
+    },
+    {
+      "fit": "women",
+      "id": "pZzDGNs_Y",
+      "image": "/framer/images/GLnFxH8Vhvi9FBREGytBlmvJHc.1wibd4h.png",
+      "name": "Silk bow blouse",
+      "price": 190
+    },
+    {
+      "fit": "men",
+      "id": "zEmD6u7W9",
+      "image": "/framer/images/Q2tFF5v3bEls7XbBYKJSvM.1jvdlez.png",
+      "name": "Suede bomber",
+      "price": 240
+    }
+  ],
+  "topSpace": 112,
+  "topSpaceMobile": 92,
+  "totalLabel": "The look",
+  "uiFont": "Satoshi",
+  "width": "100%"
+}

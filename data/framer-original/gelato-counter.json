@@ -1,0 +1,87 @@
+{
+  "cta": "Shop the look",
+  "cycle": 4,
+  "display": "Clash Display",
+  "flavours": [
+    {
+      "color": "rgb(213, 229, 190)",
+      "id": "RyxbkFXBH",
+      "image1": "/framer/images/xdPzBTPOlyAwNMuYx9p4OZoe2YM.1eykv53.png",
+      "image2": "/framer/images/fw4KEaql1EZ4FkmgGhNrIwuWUeU.04gzuyx.png",
+      "image3": "/framer/images/K6QPl0jxT03KsitwbUdPjIKN4A.0i7mrsa.png",
+      "link": "/looks",
+      "name": "Pistachio",
+      "note": "Corduroy, olive and a burgundy loafer.",
+      "price": "€650",
+      "x": 38.5,
+      "y": 81.5
+    },
+    {
+      "color": "rgb(246, 201, 207)",
+      "id": "IeoMKzOiG",
+      "image1": "/framer/images/ecJYCFKzr5OXIBPq29RxaQOszfY.1ayfyxk.png",
+      "image2": "/framer/images/TH23NQOUHHMfJEZZmR9vLvLhfYM.03c7kvu.png",
+      "image3": "/framer/images/8un1Y4ez4ATG339nhnANRq2F0MI.065jbqf.png",
+      "link": "/looks",
+      "name": "Strawberry",
+      "note": "Pink on pink and pearls on bouclé.",
+      "price": "€740",
+      "x": 50,
+      "y": 81.5
+    },
+    {
+      "color": "rgb(245, 231, 166)",
+      "id": "Ydq53ijQ_",
+      "image1": "/framer/images/GarSVUmYRcFWvHHR75ts4L1fKE.14dzmnf.png",
+      "image2": "/framer/images/fETSgSpJRledYHqB8ERgCE0.1hcx2lg.png",
+      "image3": "/framer/images/vbcePxXnuAfo5xArFgBhvSQWvcM.1py8evm.png",
+      "link": "/looks",
+      "name": "Lemon",
+      "note": "A cable knit, ecru trousers and black patent.",
+      "price": "€580",
+      "x": 61.5,
+      "y": 81.5
+    },
+    {
+      "color": "rgb(201, 210, 242)",
+      "id": "XI2fVrjXK",
+      "image1": "/framer/images/kyCyzCebqycrO7ijocTIOgJaK0.04bbsls.png",
+      "image2": "/framer/images/Kl2g23gPjLqU4TuKqBqDJRdIA.1tcgt53.png",
+      "image3": "/framer/images/O6Nnrj79qWSQDwpXixjbtKgc.0rrxaj2.png",
+      "link": "/looks",
+      "name": "Blueberry",
+      "note": "Cool blue tailoring and a polished derby.",
+      "price": "€680",
+      "x": 73.5,
+      "y": 82
+    },
+    {
+      "color": "rgb(247, 210, 184)",
+      "id": "WENLisW3v",
+      "image1": "/framer/images/xGURVPw9k0NVvDsPcyYkFZimO9Y.0qp0d7i.png",
+      "image2": "/framer/images/zqq2DHfzGPgRCNGkBj9w24yA5o.0im4br9.png",
+      "image3": "/framer/images/QUf7dIUxBpBMyNA6QAwje1AHDGk.0azq1yp.png",
+      "link": "/shop",
+      "name": "Apricot",
+      "note": "Warm nappa, easy trousers, suede underfoot.",
+      "price": "€640",
+      "x": 86,
+      "y": 82
+    }
+  ],
+  "focusX": 50,
+  "font": "Satoshi",
+  "height": "100%",
+  "id": "qmzM9NhOv",
+  "image": "/framer/images/7b9LsGZQK0i9Yxqz8hu6EDLKCnI.0xbbe94.png",
+  "ink": "rgb(23, 20, 15)",
+  "layoutId": "qmzM9NhOv",
+  "name": "Gelato Counter",
+  "paper": "rgb(247, 243, 236)",
+  "radius": 32,
+  "style": {
+    "height": "100%",
+    "width": "100%"
+  },
+  "width": "100%"
+}

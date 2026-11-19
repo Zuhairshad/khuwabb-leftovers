@@ -1,0 +1,47 @@
+{
+  "background": "rgb(247, 243, 236)",
+  "brand": "scoop",
+  "colors": [
+    "rgb(213, 229, 190)",
+    "rgb(246, 201, 207)",
+    "rgb(245, 231, 166)",
+    "rgb(201, 210, 242)",
+    "rgb(247, 210, 184)"
+  ],
+  "font": "Clash Display",
+  "height": "100%",
+  "id": "kqpfko5Tq",
+  "images": [
+    "/framer/images/xdPzBTPOlyAwNMuYx9p4OZoe2YM.1eykv53.png",
+    "/framer/images/jTlpl4onUFoGlIAl8DHltxXSis.18d31i1.png",
+    "/framer/images/h6PK8hijaIEwUrkQJH8vvJvX8PI.1ovqnh1.png",
+    "/framer/images/Kl2g23gPjLqU4TuKqBqDJRdIA.1tcgt53.png",
+    "/framer/images/i4uDOrvJkX7RPna7euwLHugskCU.0ymizea.png",
+    "/framer/images/PWGSTm2XSsl8QaDVbb9zS1Zh8.1s7m11d.png",
+    "/framer/images/xdPzBTPOlyAwNMuYx9p4OZoe2YM.1eykv53.png",
+    "/framer/images/jTlpl4onUFoGlIAl8DHltxXSis.18d31i1.png",
+    "/framer/images/h6PK8hijaIEwUrkQJH8vvJvX8PI.1ovqnh1.png",
+    "/framer/images/Kl2g23gPjLqU4TuKqBqDJRdIA.1tcgt53.png",
+    "/framer/images/i4uDOrvJkX7RPna7euwLHugskCU.0ymizea.png",
+    "/framer/images/PWGSTm2XSsl8QaDVbb9zS1Zh8.1s7m11d.png",
+    "/framer/images/xdPzBTPOlyAwNMuYx9p4OZoe2YM.1eykv53.png",
+    "/framer/images/jTlpl4onUFoGlIAl8DHltxXSis.18d31i1.png",
+    "/framer/images/h6PK8hijaIEwUrkQJH8vvJvX8PI.1ovqnh1.png",
+    "/framer/images/Kl2g23gPjLqU4TuKqBqDJRdIA.1tcgt53.png",
+    "/framer/images/i4uDOrvJkX7RPna7euwLHugskCU.0ymizea.png",
+    "/framer/images/PWGSTm2XSsl8QaDVbb9zS1Zh8.1s7m11d.png",
+    "/framer/images/xdPzBTPOlyAwNMuYx9p4OZoe2YM.1eykv53.png",
+    "/framer/images/jTlpl4onUFoGlIAl8DHltxXSis.18d31i1.png"
+  ],
+  "ink": "rgb(23, 20, 15)",
+  "layoutId": "kqpfko5Tq",
+  "lockScroll": true,
+  "speed": 1,
+  "spins": 7,
+  "style": {
+    "height": "100%",
+    "width": "100%"
+  },
+  "weight": 600,
+  "width": "100%"
+}
