@@ -1,0 +1,64 @@
+{
+  "accent": "rgb(23, 20, 15)",
+  "accentText": "rgb(251, 248, 242)",
+  "autoShuffle": 0,
+  "ctaAction": "bag",
+  "ctaLabel": "Add the look",
+  "ctaLink": "#",
+  "currency": "Rs.",
+  "curve": 1,
+  "flavourFont": "Clash Display",
+  "flavours": [
+    {
+      "name": "Campus",
+      "color": "rgb(213, 229, 190)",
+      "id": "mood-0"
+    },
+    {
+      "name": "Weekend",
+      "color": "rgb(246, 201, 207)",
+      "id": "mood-1"
+    },
+    {
+      "name": "Brunch",
+      "color": "rgb(245, 231, 166)",
+      "id": "mood-2"
+    },
+    {
+      "name": "Work",
+      "color": "rgb(201, 210, 242)",
+      "id": "mood-3"
+    },
+    {
+      "name": "Winter",
+      "color": "rgb(247, 210, 184)",
+      "id": "mood-4"
+    }
+  ],
+  "flavourWeight": 600,
+  "height": "100%",
+  "hint": "Drag any row to restyle",
+  "id": "EjdwGOzPx",
+  "intro": true,
+  "introDelay": 2.9,
+  "layoutId": "EjdwGOzPx",
+  "lookScale": 1,
+  "name": "Gelato Reels",
+  "showBar": true,
+  "showFlavourName": true,
+  "showTags": true,
+  "shuffleLabel": "Shuffle",
+  "sideBlur": 2.4,
+  "spacing": 1,
+  "style": {
+    "height": "100%",
+    "width": "100%"
+  },
+  "textColor": "rgb(23, 20, 15)",
+  "topInset": 0.11,
+  "topSpace": 112,
+  "topSpaceMobile": 92,
+  "totalLabel": "The look",
+  "uiFont": "Satoshi",
+  "width": "100%"
+}
