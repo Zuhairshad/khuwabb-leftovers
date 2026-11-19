@@ -85,7 +85,7 @@ const products = [
     category: "Trousers",
     price: 2500,
     sizes: UK_4_16,
-    colours: [["Black", "black"], ["Off White", "off-white"], ["Pink", "pink"], ["Olive", "olive"]],
+    colours: [["Black", "black"], ["White", "off-white"], ["Pink", "pink"], ["Olive", "olive"]],
     tint: "rgb(246, 201, 207)",
     description:
       "A soft ribbed trouser with an elasticated drawstring waist, side pockets and a relaxed wide leg that falls straight to the ankle. Easy enough for lounging, neat enough for class or errands.",
