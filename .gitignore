@@ -29,3 +29,6 @@ framer-snapshot
 Khuwableftovers-baseline
 
 .DS_Store
+.vercel
+.env*
+!.env.example
