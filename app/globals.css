@@ -1,0 +1,145 @@
+:root {
+  --paper: #f7f3ec;
+  --ink: #17140f;
+  --ink-62: rgba(23, 20, 15, 0.62);
+  --ink-soft: #17140f9e;
+  --ink-line: #17140f1f;
+  --white: #fff;
+  --pistachio: #d5e5be;
+  --strawberry: #f6c9cf;
+  --lemon: #f5e7a6;
+  --blueberry: #c9d2f2;
+  --peach: #f7d2b8;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --font-display: var(--font-clash-display), sans-serif;
+  --font-body: var(--font-satoshi), sans-serif;
+  /* OpenType features every text style in the original turns on. */
+  --text-features: "blwf" on, "cv03" on, "cv04" on, "cv09" on, "cv11" on;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+  font-weight: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Native sections use the original's text styles (with their OpenType
+   features); the ported code components set their own type and don't. */
+[data-section] {
+  font-feature-settings: var(--text-features);
+}
+
+[data-code-component] {
+  font-feature-settings: normal;
+}
+
+/* Intro keyframes (referenced from inline animation shorthands). */
+@keyframes siIn {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes siSpin {
+  0% {
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+  12% {
+    filter: blur(7px);
+  }
+  70% {
+    filter: blur(3px);
+  }
+  86% {
+    transform: translateY(var(--spin-overshoot));
+    filter: blur(0px);
+  }
+  100% {
+    transform: translateY(var(--spin-end));
+    filter: blur(0px);
+  }
+}
+
+@keyframes siUp {
+  to {
+    transform: translateY(-115vh);
+  }
+}
+
+@keyframes siDown {
+  to {
+    transform: translateY(115vh);
+  }
+}
+
+@keyframes siOut {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  99% {
+    opacity: 0;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes siBg {
+  to {
+    background-color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-intro] {
+    animation: siOut 0.8s ease forwards !important;
+  }
+  [data-intro] * {
+    animation: none !important;
+    filter: none !important;
+  }
+}
