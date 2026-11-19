@@ -29,16 +29,32 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 48px;
+  height: 64px;
 }
 
+/* Logo image with "leftover" in small letters underneath. */
 .logo {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 28px;
-  letter-spacing: -0.42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   color: var(--ink);
+}
+
+.logo img {
+  display: block;
+  width: auto;
+  height: 54px;
+}
+
+.logo span {
+  margin-top: -1px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 10px;
+  letter-spacing: 0.34em;
+  text-transform: lowercase;
+  color: var(--ink-62);
 }
 
 .links {
