@@ -1,0 +1,87 @@
+{
+  "cta": "Shop the look",
+  "cycle": 4,
+  "display": "Clash Display",
+  "flavours": [
+    {
+      "color": "rgb(213, 229, 190)",
+      "id": "RyxbkFXBH",
+      "name": "Campus days",
+      "note": "Easy wide trousers and a cropped gilet for early lectures.",
+      "x": 9,
+      "y": 89,
+      "pieces": [
+        "ribbed-drawstring-wide-leg-trouser",
+        "womens-hooded-sleeveless-cropped-puffer-jacket",
+        "wide-leg-trouser-three-half-stripes"
+      ]
+    },
+    {
+      "color": "rgb(246, 201, 207)",
+      "id": "IeoMKzOiG",
+      "name": "Weekend plans",
+      "note": "Off-duty, on point — a soft jogger and a glossy puffer.",
+      "x": 20,
+      "y": 89,
+      "pieces": [
+        "shape-high-waist-wide-leg-jogger",
+        "ladies-vinyl-jacket",
+        "wide-leg-trouser-two-full-stripes"
+      ]
+    },
+    {
+      "color": "rgb(245, 231, 166)",
+      "id": "Ydq53ijQ_",
+      "name": "Brunch dates",
+      "note": "Two easy maxis and a statement panelled trouser.",
+      "x": 31,
+      "y": 89,
+      "pieces": [
+        "womens-side-pocket-cotton-maxi-dress",
+        "boat-neck-long-sleeve-maxi-dress",
+        "women-trouser-two-full-panels"
+      ]
+    },
+    {
+      "color": "rgb(201, 210, 242)",
+      "id": "XI2fVrjXK",
+      "name": "Work mode",
+      "note": "Sharp seams and clean wide-leg trousers.",
+      "x": 42,
+      "y": 89,
+      "pieces": [
+        "seam-detail-co-ords-set",
+        "cargo-pocket-trouser-for-women",
+        "women-trouser-two-full-panels"
+      ]
+    },
+    {
+      "color": "rgb(247, 210, 184)",
+      "id": "WENLisW3v",
+      "name": "Winter layers",
+      "note": "Cropped puffers for chilly days.",
+      "x": 84,
+      "y": 89,
+      "pieces": [
+        "womens-hooded-full-sleeve-cropped-puffer-jacket",
+        "ladies-vinyl-jacket",
+        "ribbed-drawstring-wide-leg-trouser"
+      ]
+    }
+  ],
+  "focusX": 50,
+  "font": "Satoshi",
+  "height": "100%",
+  "id": "qmzM9NhOv",
+  "image": "/brand/wear-the-dream.jpg",
+  "ink": "rgb(23, 20, 15)",
+  "layoutId": "qmzM9NhOv",
+  "name": "Gelato Counter",
+  "paper": "rgb(247, 243, 236)",
+  "radius": 32,
+  "style": {
+    "height": "100%",
+    "width": "100%"
+  },
+  "width": "100%"
+}

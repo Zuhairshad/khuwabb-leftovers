@@ -1,0 +1,81 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  padding: 40px 0 140px;
+  overflow: clip;
+}
+
+.words {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  padding: 0 32px;
+}
+
+.word {
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  white-space: pre;
+}
+
+.campaign {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  max-width: 1280px;
+  padding: 0 32px;
+}
+
+.counter {
+  position: relative;
+  flex: 1 0 0;
+  width: 1px;
+  height: 700px;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .word {
+    font-size: 84px;
+  }
+
+  .counter {
+    height: 600px;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .section {
+    padding: 24px 0 96px;
+  }
+
+  .words {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 0 20px;
+  }
+
+  .word {
+    font-size: 54px;
+  }
+
+  .campaign {
+    padding: 0 20px;
+  }
+
+  .counter {
+    height: 900px;
+  }
+}
