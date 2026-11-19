@@ -1,0 +1,135 @@
+.nav {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 16px;
+}
+
+.pill {
+  width: min(100vw - 32px, 1240px);
+  display: flex;
+  flex-direction: column;
+  padding: 8px 8px 8px 24px;
+  overflow: clip;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 32px;
+  box-shadow:
+    0 1px 2px rgba(23, 20, 15, 0.06),
+    0 10px 30px rgba(23, 20, 15, 0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 28px;
+  letter-spacing: -0.42px;
+  color: var(--ink);
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.links a {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--ink-62);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(23, 20, 15, 0.06);
+  color: #000;
+}
+
+.menu {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(23, 20, 15, 0.06);
+  cursor: pointer;
+}
+
+.line {
+  position: absolute;
+  left: 13px;
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+}
+
+.drawer {
+  overflow: hidden;
+}
+
+.drawerInner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 28px 0 20px;
+}
+
+.drawerInner a {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 46px;
+  letter-spacing: -0.6px;
+  color: var(--ink-62);
+}
+
+@media (max-width: 809.98px) {
+  .pill {
+    padding: 6px 6px 6px 20px;
+  }
+
+  .links,
+  .search {
+    display: none;
+  }
+
+  .menu {
+    display: block;
+  }
+}
+
+@media (min-width: 810px) {
+  .drawer {
+    display: none;
+  }
+}
