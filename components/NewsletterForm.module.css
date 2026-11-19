@@ -1,0 +1,109 @@
+.root {
+  width: 100%;
+  max-width: 100%;
+  font-family: var(--font-body);
+  color: var(--paper);
+}
+
+.form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 22px;
+  border-radius: 999px;
+  background: rgba(247, 243, 236, 0.08);
+  border: 1px solid rgba(247, 243, 236, 0.16);
+  transition: border-color 0.3s ease;
+  overflow: hidden;
+}
+
+.form[data-state="bad"] {
+  border-color: #f3a0a0;
+}
+
+.form input {
+  flex: 1;
+  min-width: 0;
+  height: 50px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--paper);
+  font: inherit;
+  font-size: 16px;
+  transition: opacity 0.4s ease;
+}
+
+.form input::placeholder {
+  color: rgba(247, 243, 236, 0.5);
+}
+
+.form button {
+  flex-shrink: 0;
+  height: 50px;
+  padding: 0 24px;
+  border-radius: 999px;
+  border: none;
+  background: var(--pistachio);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transform: scale(1);
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease;
+}
+
+.form button:hover {
+  transform: scale(1.04);
+}
+
+.form[data-state="sending"] button {
+  opacity: 0.6;
+}
+
+.form[data-state="done"] input,
+.form[data-state="done"] button {
+  opacity: 0;
+}
+
+.form[data-state="done"] button:hover {
+  transform: scale(1);
+}
+
+.done {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--pistachio);
+  color: var(--ink);
+  border-radius: 999px;
+  clip-path: circle(0% at 90% 50%);
+  transition: clip-path 1s cubic-bezier(0.65, 0, 0.35, 1);
+  pointer-events: none;
+}
+
+.form[data-state="done"] .done {
+  clip-path: circle(150% at 90% 50%);
+}
+
+.error {
+  height: 22px;
+  padding: 8px 0 0 22px;
+  font-size: 13px;
+  color: #f3a0a0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.error[data-show] {
+  opacity: 1;
+}
