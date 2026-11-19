@@ -167,12 +167,14 @@ for (const width of WIDTHS) {
     await page.click("[data-add-look]")
     await wait(300)
     const add = page.locator("[data-look-add]")
-    check(`${tag} look chooser: unconfirmed look can't be added`, (await add.isDisabled()) && /Not available/.test(await add.textContent()))
+    const selects = await page.locator("[data-look-chooser] select").count()
+    check(`${tag} look chooser asks colour + size per piece; add waits for sizes`, selects >= 2 && (await add.isDisabled()), `${selects} selects, button "${await add.textContent()}"`)
     await shot(page, width, "look-chooser")
     await ctx.close()
   }
 
-  // Product page: colours and sizes switch; nothing orderable is unconfirmed.
+  // Product page: colours and sizes switch; in-stock sizes go to Shopify
+  // checkout; sold-out products can't be added.
   {
     const { ctx, page } = await open(URL_REAL, PRODUCT, width)
     await wait(4500)
@@ -185,8 +187,17 @@ for (const width of WIDTHS) {
     check(`${tag} colour switch keeps the chosen view`, (await img.getAttribute("src")).endsWith("/cherry/back.webp"), await img.getAttribute("src"))
     await page.getByRole("button", { name: "M", exact: true }).click()
     const add = page.locator("[data-add-to-bag]")
-    check(`${tag} unconfirmed variant can't be added`, (await add.isDisabled()) && /Not available/.test(await add.textContent()), await add.textContent())
+    check(`${tag} in-stock size can be added`, (await add.isEnabled()) && /Add to bag/.test(await add.textContent()), await add.textContent())
     await shot(page, width, "product-real", true)
+    await add.click()
+    await wait(900)
+    const href = await page.locator("[data-checkout]").getAttribute("href")
+    check(`${tag} checkout hands the bag to Shopify`, /^https:\/\/[a-z0-9-]+\.myshopify\.com\/cart\/\d+:1$/.test(href ?? ""), href ?? "no link")
+    await shot(page, width, "bag-real")
+    await page.goto(URL_REAL + "/products/gym-co-ords-set", { waitUntil: "networkidle" })
+    await wait(800)
+    const gym = page.locator("[data-add-to-bag]")
+    check(`${tag} sold-out product can't be added`, (await gym.isDisabled()) && /Sold out/.test(await gym.textContent()), await gym.textContent())
     await ctx.close()
   }
 
