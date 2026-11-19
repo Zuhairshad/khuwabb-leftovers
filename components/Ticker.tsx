@@ -27,7 +27,10 @@ export function Ticker({
   const [copies, setCopies] = useState(1)
   const offset = useMotionValue(0)
   const factor = useRef(1)
-  const drag = useRef<{ x: number; id: number } | null>(null)
+  // A press only becomes a drag after it moves a few pixels; until then the
+  // pointer is left alone so clicks reach the product links inside.
+  const drag = useRef<{ x: number; id: number; startX: number; dragging: boolean } | null>(null)
+  const justDragged = useRef(false)
 
   useEffect(() => {
     const measure = () => {
@@ -58,16 +61,33 @@ export function Ticker({
       onMouseEnter={() => (factor.current = hoverFactor)}
       onMouseLeave={() => (factor.current = 1)}
       onPointerDown={(e) => {
-        drag.current = { x: e.clientX, id: e.pointerId }
-        ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+        drag.current = { x: e.clientX, id: e.pointerId, startX: e.clientX, dragging: false }
+        justDragged.current = false
       }}
       onPointerMove={(e) => {
-        if (!drag.current || drag.current.id !== e.pointerId) return
-        offset.set(offset.get() + (e.clientX - drag.current.x))
-        drag.current.x = e.clientX
+        const d = drag.current
+        if (!d || d.id !== e.pointerId) return
+        if (!d.dragging) {
+          if (Math.abs(e.clientX - d.startX) < 6) return
+          d.dragging = true
+          ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+        }
+        offset.set(offset.get() + (e.clientX - d.x))
+        d.x = e.clientX
       }}
-      onPointerUp={() => (drag.current = null)}
+      onPointerUp={() => {
+        justDragged.current = !!drag.current?.dragging
+        drag.current = null
+      }}
       onPointerCancel={() => (drag.current = null)}
+      // After a real drag, swallow the click so it doesn't open a product.
+      onClickCapture={(e) => {
+        if (justDragged.current) {
+          e.preventDefault()
+          e.stopPropagation()
+          justDragged.current = false
+        }
+      }}
     >
       <m.ul style={{ x: rendered, display: "flex", gap, margin: 0, padding: 0, listStyle: "none" }}>
         <li>
