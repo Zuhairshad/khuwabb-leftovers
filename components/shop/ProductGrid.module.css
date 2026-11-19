@@ -1,0 +1,106 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 48px 24px;
+  justify-content: start;
+  width: 100%;
+  max-width: 1216px;
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  justify-self: start;
+  width: 100%;
+  cursor: pointer;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 360px;
+  padding: 56px 24px 24px;
+  overflow: clip;
+  border-radius: 999px 999px 28px 28px;
+}
+
+.cutout {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.cutout img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 50%;
+  pointer-events: none;
+}
+
+.info {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 4px 0;
+}
+
+.name,
+.price {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+  color: var(--ink);
+}
+
+/* Khuwabb names run long, so they show in full and wrap. */
+.name {
+  flex: 1 0 0;
+  width: 1px;
+  overflow-wrap: break-word;
+}
+
+.price {
+  white-space: pre;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+
+  .card {
+    height: 320px;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    gap: 28px 12px;
+  }
+
+  .card {
+    height: 220px;
+    padding: 36px 12px 12px;
+  }
+
+  .info {
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 4px 0;
+  }
+
+  .name {
+    flex: none;
+    width: 100%;
+  }
+}
