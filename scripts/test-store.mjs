@@ -66,7 +66,16 @@ for (const width of WIDTHS) {
     })
     await page.waitForLoadState("networkidle")
     const imgs = await page.evaluate(() =>
-      [...document.images].filter((i) => i.currentSrc && (!i.complete || i.naturalWidth === 0)).map((i) => i.currentSrc),
+      // Lazy images far off screen (e.g. ticker cards still to scroll in)
+      // haven't been requested yet; only judge the rest.
+      [...document.images]
+        .filter((i) => {
+          if (i.loading !== "lazy") return true
+          const r = i.getBoundingClientRect()
+          return r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight
+        })
+        .filter((i) => i.currentSrc && (!i.complete || i.naturalWidth === 0))
+        .map((i) => i.currentSrc),
     )
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
     check(`${tag} ${route} loads`, status === 200, `HTTP ${status}`)
