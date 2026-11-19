@@ -1,0 +1,205 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 72px;
+  width: 100%;
+  padding: 120px 32px 160px;
+  overflow: clip;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  gap: 48px;
+  width: 100%;
+  max-width: 1216px;
+}
+
+.photo {
+  position: relative;
+  flex: none;
+  width: 360px;
+  height: 460px;
+  overflow: clip;
+  border-radius: 999px 999px 28px 28px;
+}
+
+.photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1 0 0;
+  width: 1px;
+  padding: 0 0 12px;
+}
+
+.title h1 {
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.title p {
+  width: 100%;
+  max-width: 440px;
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--ink-62);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 64px 28px;
+  justify-content: start;
+  width: 100%;
+  max-width: 1216px;
+}
+
+.hanger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: start;
+  justify-self: start;
+  width: 100%;
+  cursor: pointer;
+}
+
+.hanger svg {
+  display: block;
+  flex: none;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 300px;
+  padding: 22px;
+  overflow: clip;
+  border-radius: 24px;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.info {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 4px 0;
+}
+
+.name,
+.price {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+  color: var(--ink);
+}
+
+/* Khuwabb names run long, so they show in full and wrap. */
+.name {
+  flex: 1 0 0;
+  width: 1px;
+  overflow-wrap: break-word;
+}
+
+.price {
+  white-space: pre;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .photo {
+    width: 300px;
+    height: 400px;
+  }
+
+  .title h1 {
+    font-size: 84px;
+  }
+
+  .title p {
+    font-size: 19px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 809.98px) {
+  .page {
+    gap: 44px;
+    padding: 100px 16px 96px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+
+  .photo {
+    width: 100%;
+    height: 380px;
+  }
+
+  .title {
+    flex: none;
+    width: 100%;
+  }
+
+  .title h1 {
+    font-size: 54px;
+  }
+
+  .title p {
+    font-size: 17px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    gap: 40px 12px;
+  }
+}
+
+/* Two narrow columns on phones: price goes under the name so long Khuwabb
+   names keep a readable width. */
+@media (max-width: 809.98px) {
+  .info {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .name {
+    flex: none;
+    width: 100%;
+  }
+}
