@@ -1,0 +1,31 @@
+# Dependencies and builds
+node_modules
+.next
+.next-*
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# Local env
+.env
+.env*.local
+
+# Generated output (screenshots, benchmarks)
+screenshots
+screenshots-*
+perf
+
+# Archives and raw source material kept out of the repo
+*.zip
+Khuwabb_Color_Variants
+Khuwabb_Gymwear
+Khuwabb_Lookbook_and_Vinyl_Jacket
+WhatsApp Image *.jpeg
+work .png
+lookbook and shop image .png
+headless-shopify-setup-prompt.md
+
+# Reference copies (third-party Framer export, frozen baseline)
+framer-snapshot
+Khuwableftovers-baseline
+
+.DS_Store
