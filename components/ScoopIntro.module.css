@@ -1,0 +1,62 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  overflow: hidden;
+  background-color: var(--paper);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  gap: min(1.4vw, 16px);
+  align-items: center;
+}
+
+.arch {
+  position: relative;
+  width: var(--arch-w);
+  height: calc(var(--arch-w) * 1.38);
+  border-radius: 999px 999px 22px 22px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.reel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  will-change: transform, filter;
+}
+
+.cell {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Spin frames are CSS backgrounds (same box and fit as the old <img>), so
+   they never compete as the page's largest contentful paint. */
+.frame {
+  width: 78%;
+  height: 78%;
+  background: center / contain no-repeat;
+}
+
+.letter {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: calc(var(--arch-w) * 1.05);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  transform: translateY(4%);
+}
