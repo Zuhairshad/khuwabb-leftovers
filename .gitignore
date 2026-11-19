@@ -10,8 +10,8 @@ tsconfig.tsbuildinfo
 .env*.local
 
 # Generated output (screenshots, benchmarks)
-screenshots
-screenshots-*
+/screenshots
+/screenshots-*
 perf
 
 # Archives and raw source material kept out of the repo

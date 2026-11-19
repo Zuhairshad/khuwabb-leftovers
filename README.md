@@ -6,6 +6,8 @@ motion and layout of the original design kept intact.
 
 **Live:** https://khuwabb-leftovers.vercel.app
 
+![Khuwabb home page: outfit reels with a black vinyl puffer over a ribbed wide-leg trouser](docs/screenshots/home-hero.webp)
+
 ---
 
 ## Contents
@@ -41,6 +43,33 @@ motion and layout of the original design kept intact.
   read `data/products.json`; nothing is duplicated.
 - Responsive from 390 px phones to wide desktops; respects
   `prefers-reduced-motion`.
+
+### Screenshots
+
+**Find your fit** — category cards that open on hover
+
+![Find your fit category cards: Gym wear, Trousers, Jackets, Dresses, New in](docs/screenshots/find-your-fit.webp)
+
+**Shop the look** — complete outfits from the catalog, with the lookbook photo
+
+![Shop the look card: Daily edit, a beige cropped puffer gilet over a black ribbed trouser](docs/screenshots/shop-the-look.webp)
+
+**Shop** and **product page**
+
+![Shop page header: Khuwabb pieces on a clothes rail above "All collections"](docs/screenshots/shop.webp)
+
+![Gym Co-ords Set product page in Light Pink with colour and size options](docs/screenshots/product.webp)
+
+**On a phone**
+
+<p>
+  <img src="docs/screenshots/mobile-hero.webp" alt="Home page outfit reels on a phone" width="300">
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/mobile-product.webp" alt="Ladies Vinyl Jacket product page in red on a phone" width="300">
+</p>
+
+Screenshots are taken from the live site with
+`node scripts/readme-screenshots.mjs`.
 
 ## Tech stack
 
@@ -180,6 +209,7 @@ sets are sold as one listing (top and bottom together).
 | `node scripts/lighthouse-bench.mjs` | Local Lighthouse benchmark |
 | `node scripts/psi-bench.mjs` | PageSpeed Insights against a public URL |
 | `node scripts/compare-pages.mjs` | Paired screenshots between two servers |
+| `node scripts/readme-screenshots.mjs` | Refresh the README screenshots from the live site |
 
 ## Testing
 
