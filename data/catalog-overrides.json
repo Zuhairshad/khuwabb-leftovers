@@ -1,0 +1,3 @@
+{
+  "_readme": "Confirmed store details per product slug. Add only facts confirmed by Khuwabb (Shopify admin or the owner). Example: \"seek-unisex-co-ords-set\": { \"description\": \"...\", \"fabric\": \"...\", \"care\": \"...\", \"sizeChart\": \"...\", \"variants\": { \"Green / S\": { \"shopifyId\": \"1234567890\", \"available\": true } } }. Then run: node scripts/build-khuwabb-data.mjs"
+}

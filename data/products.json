@@ -1,0 +1,1364 @@
+[
+  {
+    "id": "ribbed-drawstring-wide-leg-trouser",
+    "slug": "ribbed-drawstring-wide-leg-trouser",
+    "name": "Ribbed Drawstring Wide Leg Trouser",
+    "category": "Trousers",
+    "soldAs": "single",
+    "price": 2500,
+    "compareAt": null,
+    "sizes": [
+      "4",
+      "6",
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "colours": [
+      {
+        "name": "Black",
+        "image": "/products/ribbed-drawstring-wide-leg-trouser/black/front.webp",
+        "views": {
+          "front": "/products/ribbed-drawstring-wide-leg-trouser/black/front.webp",
+          "side": "/products/ribbed-drawstring-wide-leg-trouser/black/side.webp",
+          "back": "/products/ribbed-drawstring-wide-leg-trouser/black/back.webp"
+        },
+        "ratio": 0.4113
+      },
+      {
+        "name": "Off White",
+        "image": "/products/ribbed-drawstring-wide-leg-trouser/off-white/front.webp",
+        "views": {
+          "front": "/products/ribbed-drawstring-wide-leg-trouser/off-white/front.webp",
+          "side": "/products/ribbed-drawstring-wide-leg-trouser/off-white/side.webp",
+          "back": "/products/ribbed-drawstring-wide-leg-trouser/off-white/back.webp"
+        },
+        "ratio": 0.404
+      },
+      {
+        "name": "Pink",
+        "image": "/products/ribbed-drawstring-wide-leg-trouser/pink/front.webp",
+        "views": {
+          "front": "/products/ribbed-drawstring-wide-leg-trouser/pink/front.webp",
+          "side": "/products/ribbed-drawstring-wide-leg-trouser/pink/side.webp",
+          "back": "/products/ribbed-drawstring-wide-leg-trouser/pink/back.webp"
+        },
+        "ratio": 0.4073
+      },
+      {
+        "name": "Olive",
+        "image": "/products/ribbed-drawstring-wide-leg-trouser/olive/front.webp",
+        "views": {
+          "front": "/products/ribbed-drawstring-wide-leg-trouser/olive/front.webp",
+          "side": "/products/ribbed-drawstring-wide-leg-trouser/olive/side.webp",
+          "back": "/products/ribbed-drawstring-wide-leg-trouser/olive/back.webp"
+        },
+        "ratio": 0.3673
+      }
+    ],
+    "variants": {
+      "Black / 4": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 6": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 8": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 10": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 12": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 14": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 16": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Off White / 4": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Off White / 6": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Off White / 8": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Off White / 10": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Off White / 12": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Off White / 14": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Off White / 16": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pink / 4": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pink / 6": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pink / 8": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pink / 10": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pink / 12": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pink / 14": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pink / 16": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / 4": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / 6": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / 8": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / 10": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / 12": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / 14": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / 16": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "A soft ribbed trouser with an elasticated drawstring waist, side pockets and a relaxed wide leg that falls straight to the ankle. Easy enough for lounging, neat enough for class or errands.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(246, 201, 207)",
+    "newIn": true,
+    "sourceUrl": "https://khuwabb.com/products/ribbed-drawstring-wide-leg-trouser"
+  },
+  {
+    "id": "wide-leg-trouser-three-half-stripes",
+    "slug": "wide-leg-trouser-three-half-stripes",
+    "name": "Wide Leg Trouser with Three Half Stripes and Panel",
+    "category": "Trousers",
+    "soldAs": "single",
+    "price": 2500,
+    "compareAt": null,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colours": [
+      {
+        "name": "Black",
+        "image": "/products/wide-leg-trouser-three-half-stripes/black/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-three-half-stripes/black/front.webp",
+          "side": "/products/wide-leg-trouser-three-half-stripes/black/side.webp",
+          "back": "/products/wide-leg-trouser-three-half-stripes/black/back.webp"
+        },
+        "ratio": 0.4818
+      },
+      {
+        "name": "Blue",
+        "image": "/products/wide-leg-trouser-three-half-stripes/blue/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-three-half-stripes/blue/front.webp",
+          "side": "/products/wide-leg-trouser-three-half-stripes/blue/side.webp",
+          "back": "/products/wide-leg-trouser-three-half-stripes/blue/back.webp"
+        },
+        "ratio": 0.4391
+      },
+      {
+        "name": "Sky Blue",
+        "image": "/products/wide-leg-trouser-three-half-stripes/sky-blue/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-three-half-stripes/sky-blue/front.webp",
+          "side": "/products/wide-leg-trouser-three-half-stripes/sky-blue/side.webp",
+          "back": "/products/wide-leg-trouser-three-half-stripes/sky-blue/back.webp"
+        },
+        "ratio": 0.5027
+      },
+      {
+        "name": "Pink",
+        "image": "/products/wide-leg-trouser-three-half-stripes/pink/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-three-half-stripes/pink/front.webp",
+          "side": "/products/wide-leg-trouser-three-half-stripes/pink/side.webp",
+          "back": "/products/wide-leg-trouser-three-half-stripes/pink/back.webp"
+        },
+        "ratio": 0.4718
+      },
+      {
+        "name": "Cherry",
+        "image": "/products/wide-leg-trouser-three-half-stripes/cherry/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-three-half-stripes/cherry/front.webp",
+          "side": "/products/wide-leg-trouser-three-half-stripes/cherry/side.webp",
+          "back": "/products/wide-leg-trouser-three-half-stripes/cherry/back.webp"
+        },
+        "ratio": 0.4936
+      },
+      {
+        "name": "Peppercorn",
+        "image": "/products/wide-leg-trouser-three-half-stripes/peppercorn/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-three-half-stripes/peppercorn/front.webp",
+          "side": "/products/wide-leg-trouser-three-half-stripes/peppercorn/side.webp",
+          "back": "/products/wide-leg-trouser-three-half-stripes/peppercorn/back.webp"
+        },
+        "ratio": 0.4855
+      },
+      {
+        "name": "Brown",
+        "image": "/products/wide-leg-trouser-three-half-stripes/brown/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-three-half-stripes/brown/front.webp",
+          "side": "/products/wide-leg-trouser-three-half-stripes/brown/side.webp",
+          "back": "/products/wide-leg-trouser-three-half-stripes/brown/back.webp"
+        },
+        "ratio": 0.4809
+      },
+      {
+        "name": "Mocha",
+        "image": "/products/wide-leg-trouser-three-half-stripes/mocha/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-three-half-stripes/mocha/front.webp",
+          "side": "/products/wide-leg-trouser-three-half-stripes/mocha/side.webp",
+          "back": "/products/wide-leg-trouser-three-half-stripes/mocha/back.webp"
+        },
+        "ratio": 0.4836
+      }
+    ],
+    "variants": {
+      "Black / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Blue / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Blue / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Blue / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Sky Blue / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Sky Blue / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Sky Blue / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pink / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pink / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pink / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Cherry / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Cherry / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Cherry / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Peppercorn / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Peppercorn / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Peppercorn / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Mocha / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Mocha / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Mocha / L": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "Our sporty wide-leg trouser with three contrast stripes that sweep down from the hip and a matching side panel. Drawstring waist, roomy wide leg and eight colours to pick from.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(201, 210, 242)",
+    "newIn": true,
+    "sourceUrl": "https://khuwabb.com/products/wide-leg-trouser-three-half-stripes"
+  },
+  {
+    "id": "wide-leg-trouser-two-full-stripes",
+    "slug": "wide-leg-trouser-two-full-stripes",
+    "name": "Wide Leg Trouser with Two Full Stripes",
+    "category": "Trousers",
+    "soldAs": "single",
+    "price": 2500,
+    "compareAt": null,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colours": [
+      {
+        "name": "Blue",
+        "image": "/products/wide-leg-trouser-two-full-stripes/blue/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-two-full-stripes/blue/front.webp",
+          "side": "/products/wide-leg-trouser-two-full-stripes/blue/side.webp",
+          "back": "/products/wide-leg-trouser-two-full-stripes/blue/back.webp"
+        },
+        "ratio": 0.5691
+      },
+      {
+        "name": "Cherry",
+        "image": "/products/wide-leg-trouser-two-full-stripes/cherry/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-two-full-stripes/cherry/front.webp",
+          "side": "/products/wide-leg-trouser-two-full-stripes/cherry/side.webp",
+          "back": "/products/wide-leg-trouser-two-full-stripes/cherry/back.webp"
+        },
+        "ratio": 0.5907
+      },
+      {
+        "name": "Peppercorn",
+        "image": "/products/wide-leg-trouser-two-full-stripes/peppercorn/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-two-full-stripes/peppercorn/front.webp",
+          "side": "/products/wide-leg-trouser-two-full-stripes/peppercorn/side.webp",
+          "back": "/products/wide-leg-trouser-two-full-stripes/peppercorn/back.webp"
+        },
+        "ratio": 0.6045
+      },
+      {
+        "name": "Brown",
+        "image": "/products/wide-leg-trouser-two-full-stripes/brown/front.webp",
+        "views": {
+          "front": "/products/wide-leg-trouser-two-full-stripes/brown/front.webp",
+          "side": "/products/wide-leg-trouser-two-full-stripes/brown/side.webp",
+          "back": "/products/wide-leg-trouser-two-full-stripes/brown/back.webp"
+        },
+        "ratio": 0.6192
+      }
+    ],
+    "variants": {
+      "Blue / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Blue / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Blue / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Cherry / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Cherry / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Cherry / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Peppercorn / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Peppercorn / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Peppercorn / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / L": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "Two crisp contrast stripes run the full length of each leg on this clean, wide-leg trouser. An elasticated waist keeps it comfortable; the stripes keep it sharp.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(245, 231, 166)",
+    "newIn": true,
+    "sourceUrl": "https://khuwabb.com/products/wide-leg-trouser-two-full-stripes"
+  },
+  {
+    "id": "shape-high-waist-wide-leg-jogger",
+    "slug": "shape-high-waist-wide-leg-jogger",
+    "name": "Shape High Waist Wide Leg Jogger",
+    "category": "Trousers",
+    "soldAs": "single",
+    "price": 2500,
+    "compareAt": null,
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L"
+    ],
+    "colours": [
+      {
+        "name": "Cream",
+        "image": "/products/shape-high-waist-wide-leg-jogger/cream/front.webp",
+        "views": {
+          "front": "/products/shape-high-waist-wide-leg-jogger/cream/front.webp",
+          "side": "/products/shape-high-waist-wide-leg-jogger/cream/side.webp",
+          "back": "/products/shape-high-waist-wide-leg-jogger/cream/back.webp"
+        },
+        "ratio": 0.4573
+      }
+    ],
+    "variants": {
+      "Cream / XS": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Cream / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Cream / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Cream / L": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "A high-waisted jogger with a tie-front drawstring and a wide, fluid leg. Soft cream that pairs with everything — dress it up with a jacket or keep it easy with a tee.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(213, 229, 190)",
+    "newIn": true,
+    "sourceUrl": "https://khuwabb.com/products/shape-high-waist-wide-leg-jogger"
+  },
+  {
+    "id": "women-trouser-two-full-panels",
+    "slug": "women-trouser-two-full-panels",
+    "name": "Women Trouser with Two Full Panels",
+    "category": "Trousers",
+    "soldAs": "single",
+    "price": 2500,
+    "compareAt": null,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colours": [
+      {
+        "name": "White with red stripes",
+        "image": "/products/women-trouser-two-full-panels/white-red/front.webp",
+        "views": {
+          "front": "/products/women-trouser-two-full-panels/white-red/front.webp",
+          "side": "/products/women-trouser-two-full-panels/white-red/side.webp",
+          "back": "/products/women-trouser-two-full-panels/white-red/back.webp"
+        },
+        "ratio": 0.4209
+      },
+      {
+        "name": "Black with white stripes",
+        "image": "/products/women-trouser-two-full-panels/black-white/front.webp",
+        "views": {
+          "front": "/products/women-trouser-two-full-panels/black-white/front.webp",
+          "side": "/products/women-trouser-two-full-panels/black-white/side.webp",
+          "back": "/products/women-trouser-two-full-panels/black-white/back.webp"
+        },
+        "ratio": 0.4528
+      }
+    ],
+    "variants": {
+      "White with red stripes / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "White with red stripes / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "White with red stripes / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black with white stripes / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black with white stripes / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black with white stripes / L": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "Bold contrast panels run down both sides of this straight wide-leg trouser — white with red, or black with white. An elasticated waist for all-day comfort.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(247, 210, 184)",
+    "newIn": true,
+    "sourceUrl": "https://khuwabb.com/products/women-trouser-two-full-panels"
+  },
+  {
+    "id": "cargo-pocket-trouser-for-women",
+    "slug": "cargo-pocket-trouser-for-women",
+    "name": "Cargo Pocket Trouser for Women",
+    "category": "Trousers",
+    "soldAs": "single",
+    "price": 2500,
+    "compareAt": null,
+    "sizes": [
+      "M",
+      "L"
+    ],
+    "colours": [
+      {
+        "name": "White",
+        "image": "/products/cargo-pocket-trouser-for-women/white/front.webp",
+        "views": {
+          "front": "/products/cargo-pocket-trouser-for-women/white/front.webp",
+          "side": "/products/cargo-pocket-trouser-for-women/white/side.webp",
+          "back": "/products/cargo-pocket-trouser-for-women/white/back.webp"
+        },
+        "ratio": 0.4018
+      }
+    ],
+    "variants": {
+      "White / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "White / L": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "A clean white cargo trouser with flap pockets on each leg and a straight, relaxed fit. Utility details, softened for everyday wear.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(201, 210, 242)",
+    "newIn": true,
+    "sourceUrl": "https://khuwabb.com/products/cargo-pocket-trouser-for-women"
+  },
+  {
+    "id": "seam-detail-co-ords-set",
+    "slug": "seam-detail-co-ords-set",
+    "name": "Seam Detail Co-ords Set",
+    "category": "Co-ord Set",
+    "soldAs": "set",
+    "price": 3500,
+    "compareAt": null,
+    "sizes": [
+      "4",
+      "6",
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "colours": [
+      {
+        "name": "Black",
+        "image": "/products/seam-detail-co-ords-set/black/front.webp",
+        "views": {
+          "front": "/products/seam-detail-co-ords-set/black/front.webp",
+          "side": "/products/seam-detail-co-ords-set/black/side.webp",
+          "back": "/products/seam-detail-co-ords-set/black/back.webp"
+        },
+        "ratio": 0.9754
+      }
+    ],
+    "variants": {
+      "Black / 4": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 6": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 8": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 10": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 12": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 14": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "A fitted long-sleeve crew-neck top with a matching wide-leg trouser finished with sharp front seams. Sold together as a set — one easy outfit, top to toe.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(213, 229, 190)",
+    "newIn": true,
+    "sourceUrl": "https://khuwabb.com/products/seam-detail-co-ords-set"
+  },
+  {
+    "id": "womens-side-pocket-cotton-maxi-dress",
+    "slug": "womens-side-pocket-cotton-maxi-dress",
+    "name": "Women's Side Pocket Cotton Maxi Dress",
+    "category": "Dresses",
+    "soldAs": "single",
+    "price": 3500,
+    "compareAt": null,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colours": [
+      {
+        "name": "Black",
+        "image": "/products/womens-side-pocket-cotton-maxi-dress/black/front.webp",
+        "views": {
+          "front": "/products/womens-side-pocket-cotton-maxi-dress/black/front.webp",
+          "side": "/products/womens-side-pocket-cotton-maxi-dress/black/side.webp",
+          "back": "/products/womens-side-pocket-cotton-maxi-dress/black/back.webp"
+        },
+        "ratio": 0.5109
+      },
+      {
+        "name": "Khaki",
+        "image": "/products/womens-side-pocket-cotton-maxi-dress/khaki/front.webp",
+        "views": {
+          "front": "/products/womens-side-pocket-cotton-maxi-dress/khaki/front.webp",
+          "side": "/products/womens-side-pocket-cotton-maxi-dress/khaki/side.webp",
+          "back": "/products/womens-side-pocket-cotton-maxi-dress/khaki/back.webp"
+        },
+        "ratio": 0.4864
+      },
+      {
+        "name": "Burgundy",
+        "image": "/products/womens-side-pocket-cotton-maxi-dress/burgundy/front.webp",
+        "views": {
+          "front": "/products/womens-side-pocket-cotton-maxi-dress/burgundy/front.webp",
+          "side": "/products/womens-side-pocket-cotton-maxi-dress/burgundy/side.webp",
+          "back": "/products/womens-side-pocket-cotton-maxi-dress/burgundy/back.webp"
+        },
+        "ratio": 0.4986
+      }
+    ],
+    "variants": {
+      "Black / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Khaki / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Khaki / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Khaki / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Burgundy / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Burgundy / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Burgundy / L": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "A relaxed T-shirt maxi with short sleeves, a round neck and handy side pockets. It skims the body and flares gently to the ankle — pull on and go.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(245, 231, 166)",
+    "newIn": true,
+    "sourceUrl": "https://khuwabb.com/products/womens-side-pocket-cotton-maxi-dress"
+  },
+  {
+    "id": "boat-neck-long-sleeve-maxi-dress",
+    "slug": "boat-neck-long-sleeve-maxi-dress",
+    "name": "Boat Neck Long Sleeve Maxi Dress",
+    "category": "Dresses",
+    "soldAs": "single",
+    "price": 3800,
+    "compareAt": null,
+    "sizes": [
+      "4",
+      "6",
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "colours": [
+      {
+        "name": "Black",
+        "image": "/products/boat-neck-long-sleeve-maxi-dress/black/front.webp",
+        "views": {
+          "front": "/products/boat-neck-long-sleeve-maxi-dress/black/front.webp",
+          "side": "/products/boat-neck-long-sleeve-maxi-dress/black/side.webp",
+          "back": "/products/boat-neck-long-sleeve-maxi-dress/black/back.webp"
+        },
+        "ratio": 0.42
+      },
+      {
+        "name": "Brown",
+        "image": "/products/boat-neck-long-sleeve-maxi-dress/brown/front.webp",
+        "views": {
+          "front": "/products/boat-neck-long-sleeve-maxi-dress/brown/front.webp",
+          "side": "/products/boat-neck-long-sleeve-maxi-dress/brown/side.webp",
+          "back": "/products/boat-neck-long-sleeve-maxi-dress/brown/back.webp"
+        },
+        "ratio": 0.4182
+      },
+      {
+        "name": "Maroon",
+        "image": "/products/boat-neck-long-sleeve-maxi-dress/maroon/front.webp",
+        "views": {
+          "front": "/products/boat-neck-long-sleeve-maxi-dress/maroon/front.webp",
+          "side": "/products/boat-neck-long-sleeve-maxi-dress/maroon/side.webp",
+          "back": "/products/boat-neck-long-sleeve-maxi-dress/maroon/back.webp"
+        },
+        "ratio": 0.3964
+      }
+    ],
+    "variants": {
+      "Black / 4": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 6": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 8": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 10": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 12": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / 14": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / 4": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / 6": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / 8": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / 10": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / 12": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Brown / 14": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Maroon / 4": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Maroon / 6": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Maroon / 8": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Maroon / 10": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Maroon / 12": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Maroon / 14": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "A sleek, body-skimming maxi with a wide boat neckline and long fitted sleeves. Ankle length and quietly elegant — for dinners, events and evenings out.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(246, 201, 207)",
+    "newIn": true,
+    "sourceUrl": null
+  },
+  {
+    "id": "ladies-vinyl-jacket",
+    "slug": "ladies-vinyl-jacket",
+    "name": "Ladies Vinyl Jacket",
+    "category": "Jackets",
+    "soldAs": "single",
+    "price": 4500,
+    "compareAt": null,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colours": [
+      {
+        "name": "Black",
+        "image": "/products/ladies-vinyl-jacket/black/front.webp",
+        "views": {
+          "front": "/products/ladies-vinyl-jacket/black/front.webp",
+          "side": "/products/ladies-vinyl-jacket/black/side.webp",
+          "back": "/products/ladies-vinyl-jacket/black/back.webp"
+        },
+        "ratio": 0.8668
+      },
+      {
+        "name": "Red",
+        "image": "/products/ladies-vinyl-jacket/red/front.webp",
+        "views": {
+          "front": "/products/ladies-vinyl-jacket/red/front.webp",
+          "side": "/products/ladies-vinyl-jacket/red/side.webp",
+          "back": "/products/ladies-vinyl-jacket/red/back.webp"
+        },
+        "ratio": 0.8466
+      },
+      {
+        "name": "Dark Green",
+        "image": "/products/ladies-vinyl-jacket/dark-green/front.webp",
+        "views": {
+          "front": "/products/ladies-vinyl-jacket/dark-green/front.webp",
+          "side": "/products/ladies-vinyl-jacket/dark-green/side.webp",
+          "back": "/products/ladies-vinyl-jacket/dark-green/back.webp"
+        },
+        "ratio": 0.816
+      }
+    ],
+    "variants": {
+      "Black / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / XL": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Red / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Red / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Red / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Red / XL": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Dark Green / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Dark Green / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Dark Green / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Dark Green / XL": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "A cropped, high-shine puffer with a stand-up funnel collar, zip front and elasticated cuffs and hem. Glossy, warm and impossible to miss.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(247, 210, 184)",
+    "newIn": true,
+    "sourceUrl": null
+  },
+  {
+    "id": "womens-hooded-sleeveless-cropped-puffer-jacket",
+    "slug": "womens-hooded-sleeveless-cropped-puffer-jacket",
+    "name": "Hooded Sleeveless Cropped Puffer Jacket",
+    "category": "Jackets",
+    "soldAs": "single",
+    "price": 3500,
+    "compareAt": null,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colours": [
+      {
+        "name": "Beige",
+        "image": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/beige/front.webp",
+        "views": {
+          "front": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/beige/front.webp",
+          "side": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/beige/side.webp",
+          "back": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/beige/back.webp"
+        },
+        "ratio": 0.5927
+      },
+      {
+        "name": "Olive",
+        "image": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/olive/front.webp",
+        "views": {
+          "front": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/olive/front.webp",
+          "side": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/olive/side.webp",
+          "back": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/olive/back.webp"
+        },
+        "ratio": 0.6027
+      },
+      {
+        "name": "Black",
+        "image": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/black/front.webp",
+        "views": {
+          "front": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/black/front.webp",
+          "side": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/black/side.webp",
+          "back": "/products/womens-hooded-sleeveless-cropped-puffer-jacket/black/back.webp"
+        },
+        "ratio": 0.604
+      }
+    ],
+    "variants": {
+      "Beige / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Beige / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Beige / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / L": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "A cropped, hooded puffer gilet with a zip front and toggle drawcord hem. Layer it over hoodies and long sleeves when the weather can't decide.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(213, 229, 190)",
+    "newIn": true,
+    "sourceUrl": "https://khuwabb.com/products/womens-hooded-sleeveless-cropped-puffer-jacket"
+  },
+  {
+    "id": "womens-hooded-full-sleeve-cropped-puffer-jacket",
+    "slug": "womens-hooded-full-sleeve-cropped-puffer-jacket",
+    "name": "Hooded Full Sleeve Cropped Puffer Jacket",
+    "category": "Jackets",
+    "soldAs": "single",
+    "price": 4000,
+    "compareAt": null,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colours": [
+      {
+        "name": "Olive",
+        "image": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/olive/front.webp",
+        "views": {
+          "front": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/olive/front.webp",
+          "side": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/olive/side.webp",
+          "back": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/olive/back.webp"
+        },
+        "ratio": 0.7491
+      },
+      {
+        "name": "Beige",
+        "image": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/beige/front.webp",
+        "views": {
+          "front": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/beige/front.webp",
+          "side": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/beige/side.webp",
+          "back": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/beige/back.webp"
+        },
+        "ratio": 0.7636
+      },
+      {
+        "name": "Black",
+        "image": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/black/front.webp",
+        "views": {
+          "front": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/black/front.webp",
+          "side": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/black/side.webp",
+          "back": "/products/womens-hooded-full-sleeve-cropped-puffer-jacket/black/back.webp"
+        },
+        "ratio": 0.7606
+      }
+    ],
+    "variants": {
+      "Olive / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Olive / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Beige / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Beige / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Beige / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / L": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "A cropped puffer with a drawcord hood, zip and snap front, two flap chest pockets and an elasticated hem. Warm, light and made to sit just above the waist.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(245, 231, 166)",
+    "newIn": true,
+    "sourceUrl": "https://khuwabb.com/products/womens-hooded-full-sleeve-cropped-puffer-jacket"
+  },
+  {
+    "id": "gym-co-ords-set",
+    "slug": "gym-co-ords-set",
+    "name": "Gym Co-ords Set",
+    "category": "Gymwear",
+    "soldAs": "set",
+    "price": 4200,
+    "compareAt": null,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colours": [
+      {
+        "name": "Black",
+        "image": "/products/gym-co-ords-set/black/front.webp",
+        "views": {
+          "front": "/products/gym-co-ords-set/black/front.webp",
+          "back": "/products/gym-co-ords-set/black/back.webp"
+        },
+        "ratio": 0.8373
+      },
+      {
+        "name": "Warm Brown",
+        "image": "/products/gym-co-ords-set/warm-brown/front.webp",
+        "views": {
+          "front": "/products/gym-co-ords-set/warm-brown/front.webp",
+          "back": "/products/gym-co-ords-set/warm-brown/back.webp"
+        },
+        "ratio": 0.9091
+      },
+      {
+        "name": "Light Pink",
+        "image": "/products/gym-co-ords-set/light-pink/front.webp",
+        "views": {
+          "front": "/products/gym-co-ords-set/light-pink/front.webp",
+          "back": "/products/gym-co-ords-set/light-pink/back.webp"
+        },
+        "ratio": 0.8582
+      },
+      {
+        "name": "Pale Yellow",
+        "image": "/products/gym-co-ords-set/pale-yellow/front.webp",
+        "views": {
+          "front": "/products/gym-co-ords-set/pale-yellow/front.webp",
+          "back": "/products/gym-co-ords-set/pale-yellow/back.webp"
+        },
+        "ratio": 0.8264
+      }
+    ],
+    "variants": {
+      "Black / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Black / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Warm Brown / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Warm Brown / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Warm Brown / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Light Pink / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Light Pink / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Light Pink / L": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pale Yellow / S": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pale Yellow / M": {
+        "shopifyId": null,
+        "available": null
+      },
+      "Pale Yellow / L": {
+        "shopifyId": null,
+        "available": null
+      }
+    },
+    "details": {
+      "description": "A cropped scoop-neck sports top with a wide banded hem, paired with matching high-waisted leggings. Sold together as a set — move, stretch and head out in one easy outfit.",
+      "fabric": null,
+      "care": null,
+      "sizeChart": null
+    },
+    "tint": "rgb(201, 210, 242)",
+    "newIn": true,
+    "sourceUrl": null
+  }
+]
