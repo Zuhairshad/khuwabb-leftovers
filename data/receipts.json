@@ -1,0 +1,35 @@
+[
+  {
+    "order": "Order KH-1042 · 14 Oct 2026",
+    "lines": [
+      "seam-detail-co-ords-set",
+      "ribbed-drawstring-wide-leg-trouser"
+    ],
+    "quote": "“The co-ord is so comfortable I wore it to class three days running. Cash on delivery made it easy too.”",
+    "by": "Ayesha, Lahore",
+    "tilt": -3,
+    "draft": true
+  },
+  {
+    "order": "Order KH-1107 · 29 Oct 2026",
+    "lines": [
+      "ladies-vinyl-jacket",
+      "shape-high-waist-wide-leg-jogger"
+    ],
+    "quote": "“Exchanged a size within the week, no fuss. The jogger is the comfiest thing I own.”",
+    "by": "Hamza, Karachi",
+    "tilt": 2,
+    "draft": true
+  },
+  {
+    "order": "Order KH-1163 · 6 Nov 2026",
+    "lines": [
+      "womens-hooded-full-sleeve-cropped-puffer-jacket",
+      "wide-leg-trouser-two-full-stripes"
+    ],
+    "quote": "“The puffer is warm without being bulky, and the striped trousers get compliments every time.”",
+    "by": "Mahnoor, Islamabad",
+    "tilt": -1.5,
+    "draft": true
+  }
+]

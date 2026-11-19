@@ -1,0 +1,64 @@
+.section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 40px 32px 140px;
+}
+
+.label {
+  display: flex;
+  flex: none;
+  width: min-content;
+  padding: 6px;
+  border-radius: 6px;
+  background: var(--ink);
+}
+
+.stitch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min-content;
+  padding: 14px 20px;
+  border-radius: 3px;
+  color: var(--paper);
+}
+
+/* Stitching drawn over the box, so it takes no layout space. */
+.stitch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1.5px dashed #f7f3ec73;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.stitch svg {
+  display: block;
+  flex: none;
+}
+
+.stitch p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+  white-space: pre;
+}
+
+@media (max-width: 809.98px) {
+  .section {
+    gap: 12px;
+    padding: 24px 20px 96px;
+  }
+
+  .label {
+    max-width: 100%;
+  }
+}
