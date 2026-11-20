@@ -16,7 +16,7 @@ Severity: **critical** = page broken / wrong content / blocks a task · **major*
 
 | Area | Critical | Major | Minor | Status |
 |---|---|---|---|---|
-| A parity | 0 | 0 | 4 (1 not applicable) | ✅ reported |
+| A parity | 0 | 0 | 4 (P1–P4; 1 not applicable) | ✅ reported |
 | B functions | 0 | 1 (B1) | 5 (B2–B6) | ✅ reported |
 | C accessibility | 0 | 6 (A1–A6) | 13 (A7–A19) | ✅ reported |
 | D performance + editor | 0 | 0 | 9 perf/editor (M1–M7, E1–E3, E5) | ✅ reported |
@@ -31,10 +31,10 @@ Result: no missing or wrong values. 22 flagged declarations are all accounted fo
 
 | # | Sev | Where | Expected vs actual | Decision |
 |---|---|---|---|---|
-| A1 | minor | Footer legal, all | Reference hard-codes "© 2026 Khuwabb. Born in Lahore."; theme prints the current year | **Keep** — identical in 2026, correct afterwards |
-| A2 | minor | `<title>` on /collections/new-in | Reference literal "New arrivals · Khuwabb"; theme uses `page_title · shop.name` | **No change** — `tools/store-setup` titles the collection "New arrivals"; verify shop name = "Khuwabb" in Stage B |
-| A3 | minor | Product `<title>` | Reference catalog name; theme Shopify title (G24) | **Data** — store titles are canonical (approved G24) |
-| A4 | minor | Footer payment icons | Not ported (hidden in reference too, G16) | **Keep** |
+| P1 | minor | Footer legal, all | Reference hard-codes "© 2026 Khuwabb. Born in Lahore."; theme prints the current year | **Keep** — identical in 2026, correct afterwards |
+| P2 | minor | `<title>` on /collections/new-in | Reference literal "New arrivals · Khuwabb"; theme uses `page_title · shop.name` | **No change** — `tools/store-setup` titles the collection "New arrivals"; verify shop name = "Khuwabb" in Stage B |
+| P3 | minor | Product `<title>` | Reference catalog name; theme Shopify title (G24) | **Data** — store titles are canonical (approved G24) |
+| P4 | minor | Footer payment icons | Not ported (hidden in reference too, G16) | **Keep** |
 
 ---
 
