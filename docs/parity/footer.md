@@ -139,3 +139,12 @@ Class mapping: `.footer`->`.footer`, `.newsletter`->`.footer__newsletter`, `.tit
 - Curtain gradients are only recomputed on section render (editor reloads the section on setting change), not live in JS.
 - `data-show` attribute on the error element replaced by `[data-state="bad"]` on the parent.
 - Not verified visually (Stage A).
+
+## QA Q3 additions (A1, A3)
+
+| Requirement | Theme location |
+|---|---|
+| Footer focus ring on ink (A1) | `assets/section-footer.css`: `.footer a:focus-visible, .footer button:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px }`. Newsletter pill keeps `.newsletter-form__form:focus-within`. |
+| Error id + description (A3) | `snippets/newsletter-form.liquid`: error `id="FooterNewsletterError"`, input `aria-describedby` to it; `aria-invalid="true"` when server state is bad. |
+| Error exposure (A3) | Error has `role="alert"`, `aria-hidden="true"` unless bad (layout/22px height and opacity fade untouched). |
+| Client state (A3) | `assets/footer.js` `setState()` toggles `data-state`, input `aria-invalid`, error `aria-hidden`, and re-inserts the text so the alert announces each time. |

@@ -261,6 +261,13 @@
   outline-offset: 2px;
 }
 
+/* Footer sits on ink: the global focus ring must be paper to be visible (QA A1). The pill keeps its own ring above. */
+.footer a:focus-visible,
+.footer button:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+}
+
 .newsletter-form__button {
   flex-shrink: 0;
   height: 50px;

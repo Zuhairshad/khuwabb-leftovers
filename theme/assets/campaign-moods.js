@@ -35,6 +35,8 @@
       this.eased = 0;
       this.active = 0;
       this.hovering = false;
+      this.focusIn = false;
+      this.editorPaused = false;
       this.onScreen = false;
       this.narrow = false;
       this.revealed = false;
@@ -76,6 +78,31 @@
           this.syncCycle();
         });
       });
+      // Keyboard focus inside tags or cards pauses the cycle like hover (improvement).
+      on(this, 'focusin', () => {
+        this.focusIn = true;
+        this.syncCycle();
+      });
+      on(this, 'focusout', (e) => {
+        if (e.relatedTarget && this.contains(e.relatedTarget)) return;
+        this.focusIn = false;
+        this.syncCycle();
+      });
+
+      // Theme editor: selecting a mood block shows that mood and pauses cycling until deselect.
+      on(document, 'shopify:block:select', (e) => {
+        const i = this.tags.indexOf(e.target);
+        if (i < 0) return;
+        this.editorPaused = true;
+        this.select(i);
+        this.syncCycle();
+      });
+      on(document, 'shopify:block:deselect', () => {
+        if (!this.editorPaused) return;
+        this.editorPaused = false;
+        this.syncCycle();
+      });
+
       // Root onMouseLeave resumes.
       on(this, 'mouseleave', () => {
         this.hovering = false;
@@ -268,6 +295,7 @@
       this.tags.forEach((tag, i) => {
         const on = i === this.active;
         tag.toggleAttribute('data-on', on);
+        tag.setAttribute('aria-pressed', on ? 'true' : 'false');
         if (this.narrow) {
           tag.style.transform = '';
           tag.style.left = '';
@@ -284,13 +312,17 @@
       });
       this.floats.forEach((f, i) => {
         // Narrow mode always shows the single active card; wide mode waits for the reveal.
-        f.toggleAttribute('data-shown', i === this.active && (this.narrow || this.revealed));
+        const shown = i === this.active && (this.narrow || this.revealed);
+        f.toggleAttribute('data-shown', shown);
+        // Inactive cards leave the tab order and accessibility tree (CSS hides them after the fade).
+        if (shown) f.removeAttribute('inert');
+        else f.setAttribute('inert', '');
       });
     }
 
     // Auto-cycle while revealed, on screen and not hovered.
     syncCycle() {
-      const should = !this.hovering && this.revealed && this.onScreen && this.tags.length >= 2;
+      const should = !this.hovering && !this.focusIn && !this.editorPaused && this.revealed && this.onScreen && this.tags.length >= 2;
       if (should && !this.timer) {
         this.timer = setInterval(() => this.select((this.active + 1) % this.tags.length), Math.max(2, this.cycle) * 1000);
       } else if (!should && this.timer) {

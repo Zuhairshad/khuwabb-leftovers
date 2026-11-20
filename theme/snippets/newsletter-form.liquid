@@ -31,6 +31,10 @@
         required
         autocomplete="email"
         aria-label="{{ 'newsletter.label' | t }}"
+        aria-describedby="FooterNewsletterError"
+        {% if state == 'bad' %}
+          aria-invalid="true"
+        {% endif %}
         placeholder="{{ placeholder }}"
         value="{{ form.email }}"
         {% if state == 'done' %}
@@ -43,6 +47,6 @@
         {%- if state == 'done' -%}{{ success_text }}{%- endif -%}
       </div>
     </div>
-    <div class="newsletter-form__error">{{ error_text }}</div>
+    <div class="newsletter-form__error" id="FooterNewsletterError" role="alert"{% unless state == 'bad' %} aria-hidden="true"{% endunless %}>{{ error_text }}</div>
   </newsletter-form>
 {%- endform -%}

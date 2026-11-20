@@ -121,3 +121,13 @@ No locale keys are needed: all copy is section settings.
 - Card layout in narrow mode moves the same DOM nodes instead of re-rendering one card (visually identical); a focused tag loses focus if the viewport crosses the 700px threshold.
 - The placeholder `clip-path` before JS (`.js .campaign-moods__clip`) uses `round 50% 50% 32px 32px`, not the exact per-frame pixel values (they depend on measured width).
 - Pre-hydration SSR state in the source is a fully clipped photo; without JS the theme shows the same placeholder only if `html.js` is set, otherwise the full photo.
+
+## QA Q3 additions (A6, E3, E2)
+
+| Requirement | Theme location |
+|---|---|
+| Inactive cards inert + hidden after fade (A6) | `assets/campaign-moods.js` `updateActive()` sets/removes `inert` on `[data-float]`; `assets/section-campaign-moods.css` `.campaign-moods__float` `visibility: hidden` with `visibility 0s linear 0.9s` delay, `[data-shown]` `visibility: visible` with 0s delay. Narrow mode unchanged (`display:none`/`transition:none`). |
+| Focus pauses cycle (A6) | `campaign-moods.js` `focusin`/`focusout` on the root set `focusIn`; `syncCycle()` requires `!focusIn`. |
+| Tag `aria-pressed` (A6) | `sections/campaign-moods.liquid` initial value; `updateActive()` keeps it in sync. |
+| Editor block select (E3) | `campaign-moods.js` listens for `shopify:block:select` (tag carries `block.shopify_attributes`), selects that mood, sets `editorPaused`; `shopify:block:deselect` resumes. |
+| Schema info (E2) | `product_1..3` `info`: "Pick products after adding the section; the preset has none." |

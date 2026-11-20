@@ -14,23 +14,43 @@
         this.form = this.closest('form');
         if (!this.input || !this.form) return;
 
+        this.error = this.querySelector('.newsletter-form__error');
+        // Single place for state: also mirrors it to aria-invalid / the alert's exposure.
+        this.setState = (state) => {
+          this.setAttribute('data-state', state);
+          var bad = state === 'bad';
+          if (bad) this.input.setAttribute('aria-invalid', 'true');
+          else this.input.removeAttribute('aria-invalid');
+          if (this.error) {
+            if (bad) {
+              // Re-insert the text so role="alert" announces it each time it appears.
+              var text = this.error.textContent;
+              this.error.textContent = '';
+              this.error.removeAttribute('aria-hidden');
+              this.error.textContent = text;
+            } else {
+              this.error.setAttribute('aria-hidden', 'true');
+            }
+          }
+        };
+
         this.onSubmit = (event) => {
           var value = this.input.value.trim();
           if (!IS_EMAIL.test(value)) {
             event.preventDefault();
-            this.setAttribute('data-state', 'bad');
+            this.setState('bad');
             return;
           }
           this.input.value = value;
-          this.setAttribute('data-state', 'sending');
+          this.setState('sending');
         };
         this.onInput = () => {
-          if (this.getAttribute('data-state') === 'bad') this.setAttribute('data-state', 'idle');
+          if (this.getAttribute('data-state') === 'bad') this.setState('idle');
         };
         this.onPageShow = (event) => {
           // Back/forward cache: never leave the button stuck in "sending".
           if (event.persisted && this.getAttribute('data-state') === 'sending') {
-            this.setAttribute('data-state', 'idle');
+            this.setState('idle');
           }
         };
 

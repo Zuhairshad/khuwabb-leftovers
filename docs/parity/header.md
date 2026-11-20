@@ -64,3 +64,10 @@ Source: `components/Nav.tsx`, `components/Nav.module.css`, `components/Bag.tsx` 
 - Entrance wrapper is the inner `.site-header` (the `data-section="nav"` root) rather than a separate `__wrap` element.
 - Bag button is a `<button>` that does nothing without JS (no fallback link to /cart); the source has the same limitation. Decision: keep per mapping 1.1.
 - Fallback menu labels (Shop / New in / Lookbook) are hardcoded English, not locale keys (none exist in en.default.json).
+
+## QA Q3 additions (A2, A15)
+
+| Source / requirement | Theme location |
+|---|---|
+| Banner landmark (QA A2) | `sections/header.liquid`: the `data-section="nav"` element is now `<header class="site-header">` (was `div`); same class and data hook, CSS unchanged. |
+| Bag button popup semantics (QA A15) | `sections/header.liquid` `.bag-button`: `aria-haspopup="dialog"`. `aria-controls` NOT added: the drawer panel in `sections/cart-drawer.liquid` (`role="dialog"`) has no id. |

@@ -79,3 +79,7 @@ Strings: "New arrivals", "Shop new in" are section settings defaults (schema); n
 - Breakpoints: `min-width:810px and max-width:1199.98px` -> 3 columns `minmax(200px,1fr)`; `max-width:809.98px` rules (read NewInPage.module.css:157+ for the phone columns/gaps).
 - Pass `sizes` suited to the column width if different from the default `(max-width: 809.98px) 90vw, 280px`.
 - No ticker.js, no rail.
+
+## QA Q3 addition (M6): ticker.js
+
+`assets/ticker.js` `syncLoop()`: the rAF loop starts only while the ticker is on screen (IntersectionObserver), the tab is visible (`visibilitychange`) and reduced motion is off; it is cancelled otherwise and re-armed on each of those changes. `tick()` is unchanged while running, so visible behaviour is identical. Drag still renders directly.

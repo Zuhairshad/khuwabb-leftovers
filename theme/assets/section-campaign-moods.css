@@ -183,15 +183,24 @@
   opacity: 0;
   transform: translateY(24px) scale(0.96);
   filter: blur(8px);
+  pointer-events: none;
+  z-index: 1;
+  /* Hidden from sight and AT only after the fade-out finishes (QA A6). */
+  visibility: hidden;
   transition:
     opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-  z-index: 1;
+    filter 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.9s;
 }
 
 .campaign-moods__float[data-shown] {
+  visibility: visible;
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s;
   opacity: 1;
   transform: translateY(0) scale(1);
   filter: blur(0px);

@@ -27,7 +27,7 @@
   data-label-open="{{ 'accessibility.open_menu' | t | escape }}"
   data-label-close="{{ 'accessibility.close_menu' | t | escape }}"
 >
-  <div class="site-header" data-section="nav" style="--site-header-delay: {{ delay }}s">
+  <header class="site-header" data-section="nav" style="--site-header-delay: {{ delay }}s">
     <div class="site-header__pill" data-pill>
       <div class="site-header__bar">
         <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ section.settings.logo_aria | escape }}">
@@ -55,7 +55,7 @@
             </a>
           {%- endif -%}
 
-          <button type="button" class="bag-button" data-code-component data-bag-button aria-label="{{ 'bag.button_label' | t: count: cart.item_count }}"><span>{{ 'bag.button' | t }}</span><span class="bag-button__badge" data-bag-count>{{ cart.item_count }}</span></button>
+          <button type="button" class="bag-button" data-code-component data-bag-button aria-haspopup="dialog" aria-label="{{ 'bag.button_label' | t: count: cart.item_count }}"><span>{{ 'bag.button' | t }}</span><span class="bag-button__badge" data-bag-count>{{ cart.item_count }}</span></button>
 
           <button
             type="button"
@@ -79,7 +79,7 @@
         </div>
       </nav>
     </div>
-  </div>
+  </header>
 </site-header>
 
 {% schema %}

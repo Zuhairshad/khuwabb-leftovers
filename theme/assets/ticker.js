@@ -32,10 +32,10 @@ class MarqueeTicker extends HTMLElement {
     // Improvements over the React source: reduced motion, off-screen / hidden-tab pause, keyboard pause.
     this.motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     this.reduced = this.motionQuery.matches;
-    this._onMotion = (e) => { this.reduced = e.matches; this.last = null; };
+    this._onMotion = (e) => { this.reduced = e.matches; this.last = null; this.syncLoop(); };
     this.motionQuery.addEventListener('change', this._onMotion);
 
-    this._onVisibility = () => { this.last = null; };
+    this._onVisibility = () => { this.last = null; this.syncLoop(); };
     document.addEventListener('visibilitychange', this._onVisibility);
 
     if ('IntersectionObserver' in window) {
@@ -43,6 +43,7 @@ class MarqueeTicker extends HTMLElement {
         const entry = entries[entries.length - 1];
         this.onScreen = entry.isIntersecting;
         this.last = null;
+        this.syncLoop();
       });
       this.io.observe(this);
     }
@@ -99,13 +100,14 @@ class MarqueeTicker extends HTMLElement {
     });
 
     this.render();
-    this.raf = requestAnimationFrame((t) => this.tick(t));
+    this.syncLoop();
   }
 
   disconnectedCallback() {
     if (!this._ready) return;
     this._ready = false;
     cancelAnimationFrame(this.raf);
+    this.raf = 0;
     if (this.ro) this.ro.disconnect();
     if (this.io) this.io.disconnect();
     this.motionQuery.removeEventListener('change', this._onMotion);
@@ -154,6 +156,19 @@ class MarqueeTicker extends HTMLElement {
     if (r.left < rootRect.left) this.offset += rootRect.left - r.left;
     else if (r.right > rootRect.right) this.offset -= r.right - rootRect.right;
     this.render();
+  }
+
+  // rAF runs only while on screen, the tab is visible and motion is allowed.
+  syncLoop() {
+    const should = this._ready && this.onScreen && !document.hidden && !this.reduced;
+    if (should && !this.raf) {
+      this.last = null;
+      this.raf = requestAnimationFrame((t) => this.tick(t));
+    } else if (!should && this.raf) {
+      cancelAnimationFrame(this.raf);
+      this.raf = 0;
+      this.last = null;
+    }
   }
 
   tick(now) {
