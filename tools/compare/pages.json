@@ -1,0 +1,118 @@
+[
+  {
+    "name": "home",
+    "ref": "/",
+    "theme": "/",
+    "keySelectors": [
+      "[data-section=\"nav\"]",
+      "[data-section=\"hero\"]",
+      "[data-section=\"flavours\"] h2",
+      "[data-section=\"new-in\"] h2",
+      {
+        "name": "fresh-daily heading",
+        "ref": "[data-section=\"fresh-daily\"] h1",
+        "theme": "[data-section=\"fresh-daily\"] h2"
+      },
+      "[data-section=\"looks\"]",
+      "[data-section=\"receipts\"]",
+      "[data-section=\"care-labels\"]",
+      "[data-section=\"footer\"]",
+      "[data-bag-button]"
+    ]
+  },
+  {
+    "name": "shop",
+    "ref": "/shop",
+    "theme": "/collections/all",
+    "keySelectors": [
+      "[data-section=\"intro\"] h1",
+      "[data-section=\"products\"]",
+      {
+        "name": "first product card",
+        "ref": "[data-section=\"products\"] a",
+        "theme": "[data-section=\"products\"] a"
+      }
+    ]
+  },
+  {
+    "name": "new-in",
+    "ref": "/new-in",
+    "theme": "/collections/new-in",
+    "keySelectors": [
+      "[data-section=\"new-in-page\"] h1",
+      "[data-section=\"new-in-grid\"]"
+    ]
+  },
+  {
+    "name": "product",
+    "ref": "/products/wide-leg-trouser-two-full-stripes",
+    "theme": "/products/wide-leg-trouser-two-full-stripes",
+    "keySelectors": [
+      "[data-section=\"product\"] h1",
+      "[data-add-to-bag]",
+      "[data-section=\"product\"] fieldset button"
+    ]
+  },
+  {
+    "name": "product-variant",
+    "ref": "/products/wide-leg-trouser-two-full-stripes",
+    "theme": "/products/wide-leg-trouser-two-full-stripes",
+    "actions": [
+      {
+        "type": "selectVariant",
+        "colour": "Peppercorn",
+        "size": "M"
+      }
+    ],
+    "keySelectors": [
+      "[data-section=\"product\"] h1",
+      "[data-add-to-bag]",
+      "[data-section=\"product\"] fieldset button"
+    ]
+  },
+  {
+    "name": "cart-drawer",
+    "ref": "/",
+    "theme": "/",
+    "actions": [
+      {
+        "type": "openDrawer"
+      }
+    ],
+    "keySelectors": [
+      "[data-bag-drawer]",
+      "[data-checkout]"
+    ],
+    "sections": []
+  },
+  {
+    "name": "mobile-menu",
+    "ref": "/",
+    "theme": "/",
+    "viewports": [
+      "mobile"
+    ],
+    "actions": [
+      {
+        "type": "click",
+        "selector": "[data-menu-toggle]"
+      }
+    ],
+    "keySelectors": [
+      "[data-section=\"nav\"]"
+    ],
+    "sections": []
+  },
+  {
+    "name": "search",
+    "ref": null,
+    "theme": "/search?q=trouser",
+    "keySelectors": []
+  },
+  {
+    "name": "404",
+    "ref": "/this-page-does-not-exist",
+    "theme": "/this-page-does-not-exist",
+    "keySelectors": []
+  }
+]

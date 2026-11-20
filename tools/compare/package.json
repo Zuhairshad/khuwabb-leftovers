@@ -1,0 +1,16 @@
+{
+  "name": "khuwabb-compare",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Visual compare: Next.js reference vs Shopify theme",
+  "scripts": {
+    "compare": "node run.mjs",
+    "selftest": "node selftest.mjs"
+  },
+  "dependencies": {
+    "pixelmatch": "^6.0.0",
+    "playwright": "^1.65.1",
+    "pngjs": "^7.0.0"
+  }
+}

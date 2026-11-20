@@ -8,7 +8,8 @@
     "build": "node scripts/sync-shopify.mjs && next build",
     "start": "next start -p 3000",
     "snapshot": "node scripts/serve-snapshot.mjs",
-    "compare": "node scripts/compare-pages.mjs",
+    "compare": "node tools/compare/run.mjs",
+    "compare:framer": "node scripts/compare-pages.mjs",
     "catalog:build": "node scripts/build-khuwabb-data.mjs && node scripts/build-khuwabb-content.mjs",
     "catalog:gaps": "node scripts/catalog-gaps.mjs --md",
     "shopify:sync": "node scripts/sync-shopify.mjs"
