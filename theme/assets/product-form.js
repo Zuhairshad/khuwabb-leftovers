@@ -86,6 +86,8 @@
       this.form = this.querySelector('[data-add-form]')
       this.idInput = this.querySelector('[data-variant-id]')
       this.errorEl = this.querySelector('[data-error]')
+      this.live = this.querySelector('[data-live]')
+      this.announce = false
       this.note = this.querySelector('[data-restock]')
       this.showThumbs = this.getAttribute('data-show-thumbs') !== 'false'
 
@@ -122,6 +124,7 @@
         this.view = t.getAttribute('data-view')
       } else return
       this.setError('')
+      this.announce = true
       this.render()
     }
 
@@ -150,9 +153,22 @@
         .then(
           function () {
             this.busy = false
+            this.announce = true
             this.render()
           }.bind(this)
         )
+    }
+
+    // Visually-hidden " - sold out" suffix inside option buttons (buttons stay clickable).
+    markSoldOut(b, out) {
+      var el = b.querySelector('[data-sold-out-text]')
+      if (out && !el) {
+        el = document.createElement('span')
+        el.className = 'visually-hidden'
+        el.setAttribute('data-sold-out-text', '')
+        el.textContent = ' \u2013 ' + String(this.t.sold_out || 'Sold out').toLowerCase()
+        b.appendChild(el)
+      } else if (!out && el) el.remove()
     }
 
     setError(msg) {
@@ -170,13 +186,16 @@
       this.querySelectorAll('[data-option-colour]').forEach(
         function (b) {
           b.setAttribute('aria-pressed', String(b.getAttribute('data-option-colour') === this.colour))
+          this.markSoldOut(b, !logic.state(p, b.getAttribute('data-option-colour'), '', false).orderableHere)
         }.bind(this)
       )
       this.querySelectorAll('[data-option-size]').forEach(
         function (b) {
           var sz = b.getAttribute('data-option-size')
           b.setAttribute('aria-pressed', String(sz === this.size))
-          b.toggleAttribute('data-unavailable', !logic.canOrder(p, this.colour, sz))
+          var out = !logic.canOrder(p, this.colour, sz)
+          b.toggleAttribute('data-unavailable', out)
+          this.markSoldOut(b, out)
         }.bind(this)
       )
 
@@ -184,10 +203,19 @@
       this.renderThumbs(colour)
 
       if (this.addBtn) {
-        this.addLabel.textContent = this.t[s.labelKey] || ''
-        this.addBtn.disabled = !s.ready
+        var label = this.t[s.labelKey] || ''
+        var changed = this.addLabel.textContent !== label
+        this.addLabel.textContent = label
+        // aria-disabled (not disabled) keeps the button in the tab order; onSubmit ignores clicks.
+        this.addBtn.removeAttribute('disabled')
+        this.addBtn.setAttribute('aria-disabled', String(!s.ready))
+        if (this.live && this.announce && (changed || s.labelKey === 'added')) {
+          this.live.textContent = ''
+          this.live.textContent = label
+        }
         this.addBtn.removeAttribute('data-inactive')
       }
+      this.announce = false
       if (this.note) this.note.hidden = s.orderableHere
 
       // Theme improvement: reflect a full colour + size choice in the URL / no-JS form field.

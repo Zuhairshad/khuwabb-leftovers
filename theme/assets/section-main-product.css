@@ -183,6 +183,7 @@ product-form {
 }
 
 .product__add:disabled,
+.product__add[aria-disabled='true'],
 .product__add[data-inactive] {
   opacity: 0.4;
   cursor: not-allowed;

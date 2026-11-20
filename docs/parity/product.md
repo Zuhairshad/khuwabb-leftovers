@@ -87,6 +87,13 @@ All from `locales/en.default.json`: `product.colour|size|sizes_coming_soon|choos
 ## Added (not in source)
 Product JSON-LD (G19) in the section; `?variant=` write-back; hidden `id` form field; colour fieldset hidden if the product has no Color option.
 
+## QA fixes (Q2: A5)
+| Change | Where |
+|---|---|
+| Sold-out size and sold-out colour buttons stay clickable; visually-hidden " - sold out" text inside the button | main-product.liquid (`span.visually-hidden[data-sold-out-text]`, server-rendered), product-form.js `markSoldOut()` keeps it in sync on every render; string `sold_out` in `data-strings` |
+| Add button uses `aria-disabled="true"` (not `disabled`) so it stays in the tab order; submit is prevented in `onSubmit` when not ready | product-form.js `render()`; CSS `.product__add[aria-disabled='true']` shares the disabled rule (same 0.4 opacity, not-allowed). No-JS `disabled` for a sold-out product stays in Liquid; JS removes it |
+| Polite live region announcing the add-label when it changes after a user action (not on load) | `p.visually-hidden[role=status][data-live]`; product-form.js sets `announce` in onClick / after add resolves, cleared at end of render |
+
 ## Not matched
 - `.price s` / compare-at: G13.
 - `?colour=` is applied by product-form.js after the inline script holds the first paint (`visibility: hidden`), not by rendering the DOM inline (avoids duplicating render code); worst case 3 s hidden if the script fails.

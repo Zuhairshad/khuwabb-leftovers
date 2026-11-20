@@ -521,12 +521,17 @@
         if (chooser) chooser.remove()
         chooser = null
       }
+      // Close (x) returns focus to the CTA, like Escape.
+      var closeToCta = function () {
+        closeChooser()
+        if (ctaEl) ctaEl.focus({ preventScroll: true })
+      }
       var onCtaClick = function (e) {
         if (!lookNow().length) return // nothing centred: the link goes to empty_cta_link
         e.preventDefault()
         if (chooser) return
         chooser = document.createElement('look-chooser')
-        chooser.setup({ look: lookNow(), products: products, strings: strings, onClose: closeChooser })
+        chooser.setup({ look: lookNow(), products: products, strings: strings, onClose: closeToCta, removeOnly: closeChooser, focusOpener: function () { if (ctaEl) ctaEl.focus({ preventScroll: true }) } })
         el.appendChild(chooser)
         // Keyboard: Escape closes and returns focus to the CTA; on open focus moves to the first
         // select (the colour select, always visible) so keyboard users land on the first control.
@@ -540,6 +545,16 @@
         if (firstSelect) firstSelect.focus({ preventScroll: true })
       }
       if (ctaEl) ctaEl.addEventListener('click', onCtaClick)
+
+      // Theme editor: selecting a Flavour block shows that backdrop and word (no spin).
+      var onBlockSelect = function (ev) {
+        var t = ev.target
+        var i = words.indexOf(t)
+        if (i < 0 || !flavours.length) return
+        flavourIndex = i
+        ui()
+      }
+      document.addEventListener('shopify:block:select', onBlockSelect)
 
       // ---- start (:477-497)
       lastInteraction = performance.now() + introDelayMs
@@ -578,6 +593,7 @@
         ro.disconnect()
         document.removeEventListener('visibilitychange', onVisibility)
         window.removeEventListener('load', whenIdle)
+        document.removeEventListener('shopify:block:select', onBlockSelect)
         if (shuffleBtn) shuffleBtn.removeEventListener('click', onShuffleClick)
         if (ctaEl) ctaEl.removeEventListener('click', onCtaClick)
         if (window.cancelIdleCallback) window.cancelIdleCallback(idle)
@@ -746,6 +762,9 @@
         busy = true
         error.hidden = true
         update()
+        // Focus the CTA first: Khuwabb.cart.add opens the drawer, which records document.activeElement
+        // as its opener, so closing the drawer later lands focus on the CTA (the chooser is removed).
+        if (opts.focusOpener) opts.focusOpener()
         var lines = items.map(function (it) {
           return { id: variantFor(it.p, it.colour, it.size).id, quantity: 1 }
         })
@@ -753,13 +772,16 @@
         K.cart
           .add(lines)
           .then(function () {
-            onClose()
+            // Remove the chooser without moving focus: the drawer has taken it.
+            if (opts.removeOnly) opts.removeOnly()
+            else onClose()
           })
           .catch(function (err) {
             busy = false
             error.textContent = (err && err.message) || strings.error || ''
             error.hidden = false
             update()
+            add.focus({ preventScroll: true })
           })
       })
     }

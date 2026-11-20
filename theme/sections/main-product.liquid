@@ -155,7 +155,17 @@
           <legend>{{ 'product.colour' | t }} <b data-colour-label>{{ mp_colour }}</b></legend>
           <div class="product__options">
             {%- for mp_c in mp_colours -%}
-              <button type="button" class="product__option" aria-pressed="{% if mp_c == mp_colour %}true{% else %}false{% endif %}" data-option-colour="{{ mp_c | escape }}">{{ mp_c }}</button>
+              {%- assign mp_c_ok = false -%}
+              {%- for mp_s in mp_sizes -%}
+                {%- for mp_v in product.variants -%}
+                  {%- if mp_v.options[mp_ci] == mp_c and mp_v.options[mp_si] == mp_s and mp_v.available -%}
+                    {%- assign mp_c_ok = true -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if mp_c_ok -%}{%- break -%}{%- endif -%}
+              {%- endfor -%}
+              <button type="button" class="product__option" aria-pressed="{% if mp_c == mp_colour %}true{% else %}false{% endif %}" data-option-colour="{{ mp_c | escape }}">{{ mp_c }}{% unless mp_c_ok %}<span class="visually-hidden" data-sold-out-text> &ndash; {{ 'product.sold_out' | t | downcase }}</span>{% endunless %}</button>
             {%- endfor -%}
           </div>
         </fieldset>
@@ -169,7 +179,7 @@
         <div class="product__options">
           {%- for mp_s in mp_sizes -%}
             {%- assign mp_key = '|' | append: mp_s | append: '|' -%}
-            <button type="button" class="product__option" aria-pressed="{% if mp_s == mp_size %}true{% else %}false{% endif %}"{% unless mp_ok contains mp_key %} data-unavailable{% endunless %} data-option-size="{{ mp_s | escape }}">{{ mp_s }}</button>
+            <button type="button" class="product__option" aria-pressed="{% if mp_s == mp_size %}true{% else %}false{% endif %}"{% unless mp_ok contains mp_key %} data-unavailable{% endunless %} data-option-size="{{ mp_s | escape }}">{{ mp_s }}{% unless mp_ok contains mp_key %}<span class="visually-hidden" data-sold-out-text> &ndash; {{ 'product.sold_out' | t | downcase }}</span>{% endunless %}</button>
           {%- endfor -%}
         </div>
       </fieldset>
@@ -197,6 +207,7 @@
           </span>
         </button>
         <p class="product__error" role="alert" data-error hidden></p>
+        <p class="visually-hidden" role="status" aria-live="polite" data-live></p>
       </form>
       <p class="product__note" data-restock{% if mp_orderable_here %} hidden{% endif %}>{{ mp_note_html }}</p>
 
@@ -226,6 +237,7 @@
         "choose_size": {{ 'product.choose_size' | t | json }},
         "add_to_bag": {{ 'product.add_to_bag' | t | json }},
         "added": {{ 'product.added' | t | json }},
+        "sold_out": {{ 'product.sold_out' | t | json }},
         "sold_out_colour": {{ 'product.sold_out_colour' | t | json }},
         "sold_out_size": {{ 'product.sold_out_size' | t | json }},
         "view_label": {{ mp_view_label | json }},

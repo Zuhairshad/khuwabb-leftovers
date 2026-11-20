@@ -138,3 +138,9 @@ Hooks kept: `data-section="hero"`, `data-code-component`, `data-shuffle`, `data-
 - **Tag `visibility`:** hidden before first JS tick (see CSS table).
 - **Hit zone initial position:** set on first `measure()`, source used React's initial 1200x800 until measured.
 - **Runtime rendering:** the Liquid piece builder (string records, interleave, fill) is unverified against live data in Stage A.
+
+## QA fixes (Q2: A7/B4, M4, E3, E2)
+- **A7/B4 focus:** the x button now closes via `closeToCta` (chooser removed, focus to CTA, like Escape). On Add, the CTA is focused before `Khuwabb.cart.add` is called, so the drawer records the CTA as its opener (cart-drawer.js `open()` stores `document.activeElement`); on success the chooser is removed without moving focus (the drawer owns it) and on close the drawer restores focus to the CTA. On error focus returns to the chooser's Add button.
+- **M4:** the centre piece (idx 0) of each row gets `fetchpriority="high"` in the server render (hero-reels.liquid); others unchanged.
+- **E3:** hero-reels.js listens for `shopify:block:select`; selecting a Flavour block sets the backdrop/word to that block without spinning (`words` index = flavour index). `shopify:section:load` replaces the element, so `connectedCallback` re-inits and `disconnectedCallback` disposes (listener removed).
+- **E2:** schema `info` on tops_collection, bottoms_collection, set_product: pick after adding the section (presets cannot preset products/collections).

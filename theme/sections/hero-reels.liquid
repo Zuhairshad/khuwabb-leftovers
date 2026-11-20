@@ -324,6 +324,10 @@
           {%- if hr_d0 <= 1 -%}
             {%- assign hr_load = true -%}
           {%- endif -%}
+          {%- assign hr_fp = '' -%}
+          {%- if hr_idx == 0 -%}
+            {%- assign hr_fp = 'high' -%}
+          {%- endif -%}
           {%- if hr_intro and hr_load == false -%}
             {%- assign hr_d1 = hr_idx | minus: hr_park | modulo: hr_n | plus: hr_n | modulo: hr_n -%}
             {%- assign hr_r1 = hr_d1 | times: 2 -%}
@@ -348,6 +352,7 @@
                 alt="{{ hr_f[2] | escape }}"
                 draggable="false"
                 decoding="async"
+                {% if hr_fp != blank %}fetchpriority="high"{% endif %}
               >
             {%- else -%}
               <img
@@ -480,18 +485,20 @@
     {
       "type": "collection",
       "id": "tops_collection",
-      "label": "Tops collection"
+      "label": "Tops collection",
+      "info": "Pick this after adding the section: presets cannot include collections."
     },
     {
       "type": "collection",
       "id": "bottoms_collection",
-      "label": "Bottoms collection"
+      "label": "Bottoms collection",
+      "info": "Pick this after adding the section: presets cannot include collections."
     },
     {
       "type": "product",
       "id": "set_product",
       "label": "Set product",
-      "info": "Its piece-top and piece-bottom images join the top and bottom rows as one set."
+      "info": "Pick this after adding the section: presets cannot include products. Its piece-top and piece-bottom images join the top and bottom rows as one set."
     },
     {
       "type": "header",
