@@ -1,0 +1,117 @@
+{{ 'component-form.css' | asset_url | stylesheet_tag }}
+{{ 'section-customer.css' | asset_url | stylesheet_tag }}
+
+<div class="page-width">
+  <div class="customer customer--wide" data-section="main-order">
+    {%- assign placed_on = order.created_at | date: '%-d %B %Y' -%}
+    {%- assign cancelled_on = order.cancelled_at | date: '%-d %B %Y' -%}
+    <h1 class="customer__title">{{ 'customer.order.title' | t: name: order.name }}</h1>
+    <p class="order__meta">{{ 'customer.order.date' | t: date: placed_on }}</p>
+
+    {%- if order.cancelled -%}
+      <p class="form-message form-message--error" role="status">
+        {{ 'customer.order.cancelled' | t: date: cancelled_on }}
+        {%- if order.cancel_reason_label != blank %} {{ 'customer.order.cancel_reason' | t: reason: order.cancel_reason_label }}{% endif -%}
+      </p>
+    {%- endif -%}
+
+    <ul class="order__statuses">
+      <li class="order__status">{{ 'customer.account.payment' | t }}: {{ order.financial_status_label }}</li>
+      <li class="order__status">{{ 'customer.account.fulfillment' | t }}: {{ order.fulfillment_status_label }}</li>
+    </ul>
+
+    <table class="order__lines">
+      <thead>
+        <tr>
+          <th scope="col">{{ 'customer.order.product' | t }}</th>
+          <th scope="col" class="orders__num">{{ 'customer.order.quantity' | t }}</th>
+          <th scope="col" class="orders__num">{{ 'customer.order.price' | t }}</th>
+          <th scope="col" class="orders__num">{{ 'customer.order.total' | t }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%- for line_item in order.line_items -%}
+          <tr>
+            <td>
+              <div class="order__product">
+                {%- if line_item.image != blank -%}
+                  {{ line_item.image | image_url: width: 160 | image_tag: class: 'order__thumb', width: 72, height: 90, alt: line_item.image.alt, loading: 'lazy' }}
+                {%- endif -%}
+                <div>
+                  {%- if line_item.url != blank -%}
+                    <a class="order__product-title" href="{{ line_item.url }}">{{ line_item.title | escape }}</a>
+                  {%- else -%}
+                    <span class="order__product-title">{{ line_item.title | escape }}</span>
+                  {%- endif -%}
+                  {%- unless line_item.variant.title == 'Default Title' or line_item.variant.title == blank -%}
+                    <div class="order__variant">{{ line_item.variant.title | escape }}</div>
+                  {%- endunless -%}
+                  {%- for allocation in line_item.line_level_discount_allocations -%}
+                    <div class="order__discount">{{ allocation.discount_application.title | escape }} (-{% render 'price', price: allocation.amount %})</div>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </td>
+            <td class="orders__num" data-label="{{ 'customer.order.quantity' | t }}">{{ line_item.quantity }}</td>
+            <td class="orders__num" data-label="{{ 'customer.order.price' | t }}">{% render 'price', price: line_item.final_price %}</td>
+            <td class="orders__num" data-label="{{ 'customer.order.total' | t }}">{% render 'price', price: line_item.final_line_price %}</td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+
+    <dl class="order__totals">
+      <div>
+        <dt>{{ 'customer.order.subtotal' | t }}</dt>
+        <dd>{% render 'price', price: order.line_items_subtotal_price %}</dd>
+      </div>
+      {%- if order.total_discounts > 0 -%}
+        <div>
+          <dt>{{ 'customer.order.discount' | t }}</dt>
+          <dd>-{% render 'price', price: order.total_discounts %}</dd>
+        </div>
+      {%- endif -%}
+      {%- if order.shipping_methods.size > 0 -%}
+        <div>
+          <dt>{{ 'customer.order.shipping' | t }}</dt>
+          <dd>{% render 'price', price: order.shipping_price %}</dd>
+        </div>
+      {%- endif -%}
+      {%- if order.tax_price > 0 -%}
+        <div>
+          <dt>{{ 'customer.order.tax' | t }}</dt>
+          <dd>{% render 'price', price: order.tax_price %}</dd>
+        </div>
+      {%- endif -%}
+      <div class="order__grand">
+        <dt>{{ 'customer.order.total' | t }}</dt>
+        <dd>{% render 'price', price: order.total_price %}</dd>
+      </div>
+    </dl>
+
+    <div class="order__addresses">
+      {%- if order.billing_address != blank -%}
+        <div>
+          <h2 class="customer__heading">{{ 'customer.order.billing_address' | t }}</h2>
+          <address>{{ order.billing_address | format_address }}</address>
+        </div>
+      {%- endif -%}
+      {%- if order.shipping_address != blank -%}
+        <div>
+          <h2 class="customer__heading">{{ 'customer.order.shipping_address' | t }}</h2>
+          <address>{{ order.shipping_address | format_address }}</address>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="order__back">
+      <a class="button button--secondary button--small" href="{{ routes.account_url }}">{{ 'customer.order.back' | t }}</a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Order"
+}
+{% endschema %}

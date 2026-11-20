@@ -1,0 +1,93 @@
+{{ 'component-form.css' | asset_url | stylesheet_tag }}
+{{ 'section-customer.css' | asset_url | stylesheet_tag }}
+
+<div class="page-width">
+  <div class="customer customer--form" data-section="main-register">
+    <h1 class="customer__title">{{ 'customer.register.title' | t }}</h1>
+
+    {%- form 'create_customer', novalidate: 'novalidate' -%}
+      {%- if form.errors -%}
+        <div class="form-message form-message--error" id="RegisterErrors" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="customer__name-row">
+        <div class="field">
+          <label class="field__label" for="RegisterFirstName">{{ 'customer.register.first_name' | t }}</label>
+          <input
+            class="field__input"
+            type="text"
+            id="RegisterFirstName"
+            name="customer[first_name]"
+            value="{{ form.first_name }}"
+            autocomplete="given-name"
+            {% if form.errors contains 'first_name' %}
+              aria-invalid="true" aria-describedby="RegisterErrors"
+            {% endif %}
+          >
+        </div>
+        <div class="field">
+          <label class="field__label" for="RegisterLastName">{{ 'customer.register.last_name' | t }}</label>
+          <input
+            class="field__input"
+            type="text"
+            id="RegisterLastName"
+            name="customer[last_name]"
+            value="{{ form.last_name }}"
+            autocomplete="family-name"
+            {% if form.errors contains 'last_name' %}
+              aria-invalid="true" aria-describedby="RegisterErrors"
+            {% endif %}
+          >
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="RegisterEmail">{{ 'customer.register.email' | t }}</label>
+        <input
+          class="field__input"
+          type="email"
+          id="RegisterEmail"
+          name="customer[email]"
+          value="{{ form.email }}"
+          autocomplete="email"
+          autocapitalize="off"
+          spellcheck="false"
+          required
+          {% if form.errors contains 'email' %}
+            aria-invalid="true" aria-describedby="RegisterErrors"
+          {% endif %}
+        >
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="RegisterPassword">{{ 'customer.register.password' | t }}</label>
+        <input
+          class="field__input"
+          type="password"
+          id="RegisterPassword"
+          name="customer[password]"
+          autocomplete="new-password"
+          required
+          {% if form.errors contains 'password' %}
+            aria-invalid="true" aria-describedby="RegisterErrors"
+          {% endif %}
+        >
+      </div>
+
+      <button type="submit" class="button button--full">{{ 'customer.register.submit' | t }}</button>
+    {%- endform -%}
+
+    <div class="customer__links">
+      <span>{{ 'customer.register.have_account' | t }}</span>
+      <a class="customer__link" href="{{ routes.account_login_url }}">{{ 'customer.login.title' | t }}</a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Register"
+}
+{% endschema %}

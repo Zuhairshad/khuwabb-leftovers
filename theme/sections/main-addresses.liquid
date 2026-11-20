@@ -1,0 +1,195 @@
+{{ 'component-form.css' | asset_url | stylesheet_tag }}
+{{ 'section-customer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'customer-addresses.js' | asset_url }}" defer></script>
+
+<div class="page-width">
+  <customer-addresses class="customer customer--wide" data-section="main-addresses" data-confirm="{{ 'customer.addresses.delete_confirm' | t | escape }}">
+    <div class="customer__header">
+      <h1 class="customer__title">{{ 'customer.addresses.title' | t }}</h1>
+      <a class="button button--secondary button--small" href="{{ routes.account_url }}">{{ 'customer.order.back' | t }}</a>
+    </div>
+
+    {%- paginate customer.addresses by 10 -%}
+      {%- if customer.addresses.size > 0 -%}
+        <ul class="addresses__list">
+          {%- for address in customer.addresses -%}
+            <li class="address-card" data-address="{{ address.id }}">
+              {%- if address == customer.default_address -%}
+                <span class="address-card__badge">{{ 'customer.addresses.default' | t }}</span>
+              {%- endif -%}
+              <address>{{ address | format_address }}</address>
+
+              <div class="address-card__actions">
+                <details class="address-edit" data-address-edit>
+                  <summary class="button button--secondary button--small">{{ 'customer.addresses.edit' | t }}</summary>
+                  <div class="address-edit__form">
+                    <h2 class="customer__heading">{{ 'customer.addresses.edit_title' | t }}</h2>
+                    {%- form 'customer_address', address, novalidate: 'novalidate', class: 'address-form' -%}
+      {%- if form.errors -%}
+        <span data-has-errors hidden></span>
+        <div class="form-message form-message--error" id="AddressErrors_{{ form.id }}" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+      <div class="customer__name-row">
+        <div class="field">
+          <label class="field__label" for="AddressFirstName_{{ form.id }}">{{ 'customer.addresses.first_name' | t }}</label>
+          <input class="field__input" type="text" id="AddressFirstName_{{ form.id }}" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name"{% if form.errors contains 'first_name' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressLastName_{{ form.id }}">{{ 'customer.addresses.last_name' | t }}</label>
+          <input class="field__input" type="text" id="AddressLastName_{{ form.id }}" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name"{% if form.errors contains 'last_name' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+      </div>
+        <div class="field">
+          <label class="field__label" for="AddressCompany_{{ form.id }}">{{ 'customer.addresses.company' | t }}</label>
+          <input class="field__input" type="text" id="AddressCompany_{{ form.id }}" name="address[company]" value="{{ form.company }}" autocomplete="organization"{% if form.errors contains 'company' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressAddress1_{{ form.id }}">{{ 'customer.addresses.address1' | t }}</label>
+          <input class="field__input" type="text" id="AddressAddress1_{{ form.id }}" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" required{% if form.errors contains 'address1' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressAddress2_{{ form.id }}">{{ 'customer.addresses.address2' | t }}</label>
+          <input class="field__input" type="text" id="AddressAddress2_{{ form.id }}" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2"{% if form.errors contains 'address2' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressCity_{{ form.id }}">{{ 'customer.addresses.city' | t }}</label>
+          <input class="field__input" type="text" id="AddressCity_{{ form.id }}" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" required{% if form.errors contains 'city' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressCountry_{{ form.id }}">{{ 'customer.addresses.country' | t }}</label>
+          <select class="field__input" id="AddressCountry_{{ form.id }}" name="address[country]" autocomplete="country" data-country data-default="{{ form.country }}">
+            {{ all_country_option_tags }}
+          </select>
+        </div>
+        <div class="field" data-province-field hidden>
+          <label class="field__label" for="AddressProvince_{{ form.id }}">{{ 'customer.addresses.province' | t }}</label>
+          <select class="field__input" id="AddressProvince_{{ form.id }}" name="address[province]" autocomplete="address-level1" data-province data-default="{{ form.province }}"></select>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressZip_{{ form.id }}">{{ 'customer.addresses.zip' | t }}</label>
+          <input class="field__input" type="text" id="AddressZip_{{ form.id }}" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code"{% if form.errors contains 'zip' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressPhone_{{ form.id }}">{{ 'customer.addresses.phone' | t }}</label>
+          <input class="field__input" type="tel" id="AddressPhone_{{ form.id }}" name="address[phone]" value="{{ form.phone }}" autocomplete="tel"{% if form.errors contains 'phone' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field field--checkbox">
+          <input type="checkbox" id="AddressDefault_{{ form.id }}" name="address[default]" value="1"{% if form.id != 'new' and form.id == customer.default_address.id %} checked{% endif %}>
+          <label for="AddressDefault_{{ form.id }}">{{ 'customer.addresses.set_default' | t }}</label>
+        </div>
+        <div class="customer__actions">
+          <button type="submit" class="button button--small">{{ 'customer.addresses.save' | t }}</button>
+          <button type="button" class="button button--secondary button--small" data-address-cancel>{{ 'customer.addresses.cancel' | t }}</button>
+        </div>
+      {%- endform -%}
+                  </div>
+                </details>
+                <form method="post" action="{{ address.url }}" data-address-delete>
+                  <input type="hidden" name="_method" value="delete">
+                  <button type="submit" class="button button--secondary button--small">{{ 'customer.addresses.delete' | t }}</button>
+                </form>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="customer__pagination" aria-label="{{ 'general.pagination.page' | t: number: paginate.current_page }}">
+            {%- if paginate.previous -%}
+              <a class="customer__page" href="{{ paginate.previous.url }}" rel="prev">{{ 'general.pagination.previous' | t }}</a>
+            {%- endif -%}
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a class="customer__page" href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+              {%- elsif part.title == paginate.current_page -%}
+                <span class="customer__page" aria-current="page">{{ part.title }}</span>
+              {%- else -%}
+                <span class="customer__page">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}
+              <a class="customer__page" href="{{ paginate.next.url }}" rel="next">{{ 'general.pagination.next' | t }}</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <p class="account__empty">{{ 'customer.addresses.empty' | t }}</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+
+    <details class="address-new" data-address-edit>
+      <summary class="button button--small">{{ 'customer.addresses.add' | t }}</summary>
+      <div class="address-edit__form">
+        <h2 class="customer__heading">{{ 'customer.addresses.new_title' | t }}</h2>
+        {%- form 'customer_address', customer.new_address, novalidate: 'novalidate', class: 'address-form' -%}
+      {%- if form.errors -%}
+        <span data-has-errors hidden></span>
+        <div class="form-message form-message--error" id="AddressErrors_{{ form.id }}" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+      <div class="customer__name-row">
+        <div class="field">
+          <label class="field__label" for="AddressFirstName_{{ form.id }}">{{ 'customer.addresses.first_name' | t }}</label>
+          <input class="field__input" type="text" id="AddressFirstName_{{ form.id }}" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name"{% if form.errors contains 'first_name' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressLastName_{{ form.id }}">{{ 'customer.addresses.last_name' | t }}</label>
+          <input class="field__input" type="text" id="AddressLastName_{{ form.id }}" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name"{% if form.errors contains 'last_name' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+      </div>
+        <div class="field">
+          <label class="field__label" for="AddressCompany_{{ form.id }}">{{ 'customer.addresses.company' | t }}</label>
+          <input class="field__input" type="text" id="AddressCompany_{{ form.id }}" name="address[company]" value="{{ form.company }}" autocomplete="organization"{% if form.errors contains 'company' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressAddress1_{{ form.id }}">{{ 'customer.addresses.address1' | t }}</label>
+          <input class="field__input" type="text" id="AddressAddress1_{{ form.id }}" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" required{% if form.errors contains 'address1' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressAddress2_{{ form.id }}">{{ 'customer.addresses.address2' | t }}</label>
+          <input class="field__input" type="text" id="AddressAddress2_{{ form.id }}" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2"{% if form.errors contains 'address2' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressCity_{{ form.id }}">{{ 'customer.addresses.city' | t }}</label>
+          <input class="field__input" type="text" id="AddressCity_{{ form.id }}" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" required{% if form.errors contains 'city' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressCountry_{{ form.id }}">{{ 'customer.addresses.country' | t }}</label>
+          <select class="field__input" id="AddressCountry_{{ form.id }}" name="address[country]" autocomplete="country" data-country data-default="{{ form.country }}">
+            {{ all_country_option_tags }}
+          </select>
+        </div>
+        <div class="field" data-province-field hidden>
+          <label class="field__label" for="AddressProvince_{{ form.id }}">{{ 'customer.addresses.province' | t }}</label>
+          <select class="field__input" id="AddressProvince_{{ form.id }}" name="address[province]" autocomplete="address-level1" data-province data-default="{{ form.province }}"></select>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressZip_{{ form.id }}">{{ 'customer.addresses.zip' | t }}</label>
+          <input class="field__input" type="text" id="AddressZip_{{ form.id }}" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code"{% if form.errors contains 'zip' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="AddressPhone_{{ form.id }}">{{ 'customer.addresses.phone' | t }}</label>
+          <input class="field__input" type="tel" id="AddressPhone_{{ form.id }}" name="address[phone]" value="{{ form.phone }}" autocomplete="tel"{% if form.errors contains 'phone' %} aria-invalid="true" aria-describedby="AddressErrors_{{ form.id }}"{% endif %}>
+        </div>
+        <div class="field field--checkbox">
+          <input type="checkbox" id="AddressDefault_{{ form.id }}" name="address[default]" value="1"{% if form.id != 'new' and form.id == customer.default_address.id %} checked{% endif %}>
+          <label for="AddressDefault_{{ form.id }}">{{ 'customer.addresses.set_default' | t }}</label>
+        </div>
+        <div class="customer__actions">
+          <button type="submit" class="button button--small">{{ 'customer.addresses.save' | t }}</button>
+          <button type="button" class="button button--secondary button--small" data-address-cancel>{{ 'customer.addresses.cancel' | t }}</button>
+        </div>
+      {%- endform -%}
+      </div>
+    </details>
+  </customer-addresses>
+</div>
+
+{% schema %}
+{
+  "name": "Addresses"
+}
+{% endschema %}

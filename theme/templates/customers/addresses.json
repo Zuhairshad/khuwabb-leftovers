@@ -1,4 +1,11 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "main": {
+      "type": "main-addresses",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
 }

@@ -1,0 +1,110 @@
+{{ 'component-form.css' | asset_url | stylesheet_tag }}
+{{ 'section-customer.css' | asset_url | stylesheet_tag }}
+
+<div class="page-width">
+  <div class="customer customer--form" data-section="main-login">
+    <div class="customer__login" id="login">
+      <h1 class="customer__title">{{ 'customer.login.title' | t }}</h1>
+
+      {%- form 'customer_login', novalidate: 'novalidate' -%}
+        {%- if form.errors -%}
+          <div class="form-message form-message--error" id="LoginErrors" role="alert">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="field">
+          <label class="field__label" for="CustomerEmail">{{ 'customer.login.email' | t }}</label>
+          <input
+            class="field__input"
+            type="email"
+            id="CustomerEmail"
+            name="customer[email]"
+            value="{{ form.email }}"
+            autocomplete="email"
+            autocapitalize="off"
+            spellcheck="false"
+            required
+            {% if form.errors %}
+              aria-invalid="true" aria-describedby="LoginErrors"
+            {% endif %}
+          >
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="CustomerPassword">{{ 'customer.login.password' | t }}</label>
+          <input
+            class="field__input"
+            type="password"
+            id="CustomerPassword"
+            name="customer[password]"
+            autocomplete="current-password"
+            required
+            {% if form.errors %}
+              aria-invalid="true" aria-describedby="LoginErrors"
+            {% endif %}
+          >
+        </div>
+
+        <button type="submit" class="button button--full">{{ 'customer.login.submit' | t }}</button>
+      {%- endform -%}
+
+      <div class="customer__links">
+        <a class="customer__link" href="#recover">{{ 'customer.login.forgot' | t }}</a>
+        <a class="customer__link" href="{{ routes.account_register_url }}">{{ 'customer.login.create' | t }}</a>
+      </div>
+
+      {%- if shop.checkout.guest_login -%}
+        <div class="customer__guest">
+          {%- form 'guest_login' -%}
+            <button type="submit" class="button button--secondary button--full">{{ 'customer.login.guest' | t }}</button>
+          {%- endform -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- form 'recover_customer_password', id: 'recover', class: 'customer__recover' -%}
+      {%- if form.posted_successfully? or form.errors -%}<span data-recover-open hidden></span>{%- endif -%}
+      <h2 class="customer__title">{{ 'customer.recover.title' | t }}</h2>
+      <p class="customer__lead">{{ 'customer.recover.text' | t }}</p>
+
+      {%- if form.posted_successfully? -%}
+        <p class="form-message form-message--success" role="status">{{ 'customer.recover.success' | t }}</p>
+      {%- endif -%}
+      {%- if form.errors -%}
+        <div class="form-message form-message--error" id="RecoverErrors" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="field">
+        <label class="field__label" for="RecoverEmail">{{ 'customer.login.email' | t }}</label>
+        <input
+          class="field__input"
+          type="email"
+          id="RecoverEmail"
+          name="email"
+          value="{{ form.email }}"
+          autocomplete="email"
+          autocapitalize="off"
+          spellcheck="false"
+          required
+          {% if form.errors %}
+            aria-invalid="true" aria-describedby="RecoverErrors"
+          {% endif %}
+        >
+      </div>
+
+      <div class="customer__actions">
+        <button type="submit" class="button">{{ 'customer.recover.submit' | t }}</button>
+        <a class="button button--secondary" href="{{ routes.account_login_url }}#login">{{ 'customer.recover.cancel' | t }}</a>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Login"
+}
+{% endschema %}

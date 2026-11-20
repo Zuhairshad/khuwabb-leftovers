@@ -118,7 +118,8 @@
       "last_name": "Last name",
       "email": "Email",
       "password": "Password",
-      "submit": "Create"
+      "submit": "Create",
+      "have_account": "Already have an account?"
     },
     "account": {
       "title": "Your account",
@@ -145,7 +146,10 @@
       "total": "Total",
       "billing_address": "Billing address",
       "shipping_address": "Delivery address",
-      "back": "Back to your account"
+      "back": "Back to your account",
+      "discount": "Discount",
+      "cancelled": "This order was cancelled on {{ date }}.",
+      "cancel_reason": "Reason: {{ reason }}."
     },
     "addresses": {
       "title": "Addresses",
@@ -166,7 +170,10 @@
       "country": "Country",
       "province": "Province",
       "zip": "Postal code",
-      "phone": "Phone"
+      "phone": "Phone",
+      "empty": "You haven’t saved any addresses yet.",
+      "edit_title": "Edit address",
+      "new_title": "New address"
     },
     "activate": {
       "title": "Activate your account",

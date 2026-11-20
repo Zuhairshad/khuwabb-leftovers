@@ -1,0 +1,58 @@
+{{ 'component-form.css' | asset_url | stylesheet_tag }}
+{{ 'section-customer.css' | asset_url | stylesheet_tag }}
+
+<div class="page-width">
+  <div class="customer customer--form" data-section="main-activate-account">
+    <h1 class="customer__title">{{ 'customer.activate.title' | t }}</h1>
+    <p class="customer__lead">{{ 'customer.activate.text' | t }}</p>
+
+    {%- form 'activate_customer_password', novalidate: 'novalidate' -%}
+      {%- if form.errors -%}
+        <div class="form-message form-message--error" id="ActivateErrors" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="field">
+        <label class="field__label" for="ActivatePassword">{{ 'customer.activate.password' | t }}</label>
+        <input
+          class="field__input"
+          type="password"
+          id="ActivatePassword"
+          name="customer[password]"
+          autocomplete="new-password"
+          required
+          {% if form.errors %}
+            aria-invalid="true" aria-describedby="ActivateErrors"
+          {% endif %}
+        >
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="ActivatePasswordConfirm">{{ 'customer.activate.password_confirm' | t }}</label>
+        <input
+          class="field__input"
+          type="password"
+          id="ActivatePasswordConfirm"
+          name="customer[password_confirmation]"
+          autocomplete="new-password"
+          required
+          {% if form.errors %}
+            aria-invalid="true" aria-describedby="ActivateErrors"
+          {% endif %}
+        >
+      </div>
+
+      <div class="customer__actions">
+        <button type="submit" class="button">{{ 'customer.activate.submit' | t }}</button>
+        <button type="submit" name="decline" value="true" class="button button--secondary" formnovalidate>{{ 'customer.activate.decline' | t }}</button>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Activate account"
+}
+{% endschema %}

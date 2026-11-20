@@ -1,0 +1,173 @@
+/*
+ * Shared form + button components (Shopify-only pages: customer, search, password, gift card).
+ * No React source — built from the design system (assets/tokens.css). Pill look borrowed from
+ * section-footer.css (.newsletter-form__input/__button) and the PDP buttons (section-main-product.css);
+ * error colour #a8321e / 13px from section-cart-drawer.css (.cart-line__error).
+ *
+ * Classes
+ *   .field                 column wrapper (gap 8, margin-bottom 16)
+ *   .field__label          14px/500 label, --ink-62
+ *   .field__input          input / select / textarea: pill, h50, white, 1px --ink-line border
+ *                          (textarea: min-height 120, radius 24). Invalid: [aria-invalid="true"]
+ *   .field__error          13px #a8321e message (link with aria-describedby)
+ *   .field--checkbox       row layout (checkbox + label), gap 10, 15px
+ *   .button                primary pill, h56, ink bg / paper text, 16px/600
+ *   .button--secondary     white bg, ink text, 1px --ink-line border
+ *   .button--small         h44, padding 0 20px, 15px
+ *   .button--full          width 100%
+ *   .form-message          14px/1.5 notice box (radius 18)
+ *   .form-message--error   #a8321e text on rgba(168,50,30,.06)
+ *   .form-message--success pistachio bg
+ */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.field__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-62);
+}
+
+.field__input {
+  width: 100%;
+  height: 50px;
+  padding: 0 22px;
+  border: 1px solid var(--ink-line);
+  border-radius: 999px;
+  background-color: var(--white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: normal;
+  appearance: none;
+  transition: border-color 0.3s ease;
+}
+
+.field__input::placeholder {
+  color: var(--ink-62);
+}
+
+.field__input:focus {
+  border-color: var(--ink);
+}
+
+.field__input[aria-invalid="true"] {
+  border-color: #a8321e;
+}
+
+textarea.field__input {
+  height: auto;
+  min-height: 120px;
+  padding: 14px 22px;
+  border-radius: 24px;
+  resize: vertical;
+}
+
+select.field__input {
+  padding-right: 46px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8' fill='none'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%2317140f' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 22px center;
+}
+
+.field__error {
+  font-size: 13px;
+  color: #a8321e;
+}
+
+.field--checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.field--checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--ink);
+  flex-shrink: 0;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  padding: 0 28px;
+  border: none;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+.button:disabled,
+.button[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.button--secondary {
+  background: var(--white);
+  color: var(--ink);
+  border: 1px solid var(--ink-line);
+}
+
+.button--small {
+  height: 44px;
+  padding: 0 20px;
+  font-size: 15px;
+}
+
+.button--full {
+  width: 100%;
+}
+
+.form-message {
+  margin: 0 0 16px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: rgba(23, 20, 15, 0.04);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.form-message ul,
+.form-message p {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.form-message--error {
+  color: #a8321e;
+  background: rgba(168, 50, 30, 0.06);
+}
+
+.form-message--success {
+  background: var(--pistachio);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field__input,
+  .button {
+    transition: none;
+  }
+}

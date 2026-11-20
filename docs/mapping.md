@@ -378,14 +378,24 @@ Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `
 | 3C product page | `sections/main-product.liquid`, `assets/section-main-product.css`, `assets/product-form.js` | ProductDetail.tsx/.module.css, lib/catalog | colour/view/size switching, `?colour=`/`?variant=`, 4 button states, sold-out colour note, facts, sticky info, phone layout, add → drawer |
 | 3D collections | `sections/collection-intro.liquid`, `sections/main-collection-grid.liquid`, `snippets/product-card.liquid`, `sections/new-in-header.liquid`, `sections/main-collection-hangers.liquid`, `assets/section-collection-intro.css`, `assets/section-main-collection-grid.css`, `assets/section-new-in.css`, `assets/collections.jpg`, `assets/new-in-header.png` | ShopIntro, ProductGrid, NewInPage (+css); uses `hanger-card` from 2C read-only | entrances, card hover, 4/3/2 columns, pagination |
 
-### Batch 4 — Shopify-only templates (depends on 1; parallel with 2/3 if slots allow)
+### Batch 4 — Shopify-only templates (depends on 1; parallel with 2/3 if slots allow) — ✅ done (Stage A), plus follow-ups F1–F3
 | Task | Owns | Covers |
 |---|---|---|
 | 4A search/404/pages | `sections/main-search.liquid`, `main-404.liquid`, `main-page.liquid`, `main-list-collections.liquid`, `main-blog.liquid`, `main-article.liquid`, `assets/section-shopify-pages.css` | search results/empty, 404, rich text page |
 | 4B customer | `sections/main-login.liquid`, `main-register.liquid`, `main-account.liquid`, `main-order.liquid`, `main-addresses.liquid`, `main-activate-account.liquid`, `main-reset-password.liquid`, `assets/section-customer.css` | forms, errors, order table |
 | 4C password + gift card | `sections/main-password.liquid`, `templates/gift_card.liquid` (exception to A12: Liquid template owned by this task), `assets/section-password.css` | password page, gift card |
 
+**Batch 4 (compare pages `search`, `404`; the rest by hand — no reference design):**
+- Decorative images: `image_tag` with `alt: ''` really outputs `alt=""` (hanger card, shop card, campaign tiles, category cards, PDP thumbs).
+- Hero chooser: Escape closes and focus returns to "Add the look"; focus lands on the first select on open.
+- Search: empty query, results (product cards then page/article rows), no results, page 2. 404 with "Back to the shop".
+- Page, collections list, blog list + pagination, article with/without comments (comment success / moderated).
+- Customer: login errors, forgot-password panel (works with JS off via #recover), register, account with/without orders (table stacks on phone), order detail incl. cancelled, addresses add/edit/delete/default with country → province, activate, reset. (Only if the store uses classic customer accounts.)
+- Password page: arches, newsletter success/error, wrong password opens the disclosure with the error. Gift card: active with QR + copy, partially used, disabled/expired, print layout.
+- Shared form styles (`component-form.css`) look consistent across search, customer, password, gift card, article comments.
+
 ### Follow-ups (small, assign to the owner of the file in a later batch)
+- ✅ F1–F3 done in Batch 4 (decorative cut-outs everywhere the name is visible text; chooser Escape/focus).
 - F1 `cutout-image`: add a `decorative: true` param that renders `alt=""`; then drop the `hc-decorative` placeholder swap in `hanger-card.liquid` and the `-cm-` swap in `campaign-moods.liquid`; use it in `product-card.liquid` too (shop card image alt duplicates the visible product name in the same link).
 - F2 `hero-reels.js` look chooser: close on Escape and return focus to the CTA (a11y, G15; source closes only via ×).
 - Note: `spacing` / `look_scale` ranges use step 0.1 (theme check rejects 0.05); defaults unchanged.
@@ -423,4 +433,4 @@ Shad runs `tools/store-setup` → Opus starts `shopify theme dev --path theme` �
 - Seen on you / care labels: staggered spring entrances that replay on scroll; receipt drag with momentum (touch: horizontal only, page still scrolls); label hover straighten + scale.
 - Shop (`/collections/all`): title "All collections", photo + entrances, 4/3/2-column arch grid, card reveal, cut-out hover spring, pagination styling; other collections use the same template with their own title.
 - New In (`/collections/new-in`): arch header, hanger grid 4/3/2 columns, hanger swing.
-- Product: default state, colour/view/size switching (test-store flow: Peppercorn → back view → Cherry keeps back → M enables "Add to bag"), gym set "Sold out in this colour", restock note, facts, sticky info column, phone layout, add → drawer + "Added — add another", 422 message, `?variant=` reload restores colour+size, `?colour=` links briefly hide the page until JS applies the colour (3s failsafe), no-JS add form, product JSON-LD valid.
+- Product (see also below): default state, colour/view/size switching (test-store flow: Peppercorn → back view → Cherry keeps back → M enables "Add to bag"), gym set "Sold out in this colour", restock note, facts, sticky info column, phone layout, add → drawer + "Added — add another", 422 message, `?variant=` reload restores colour+size, `?colour=` links briefly hide the page until JS applies the colour (3s failsafe), no-JS add form, product JSON-LD valid.
