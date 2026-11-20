@@ -1,0 +1,145 @@
+{%- comment -%}
+  Gift card page (Shopify-only, no React reference; docs/parity/password-gift-card.md).
+  Standalone document ({% layout none %}) like Shopify's reference theme: the
+  gift card page must not depend on the storefront header/footer, and it has its
+  own print stylesheet. Owned by task 4C (exception to the "templates are Opus-owned" rule, G18).
+{%- endcomment -%}
+{%- layout none -%}
+{%- liquid
+  assign gc_code = gift_card.code | format_code
+  assign show_initial = false
+  if gift_card.initial_value != gift_card.balance
+    assign show_initial = true
+  endif
+  assign gc_state = 'active'
+  if gift_card.enabled == false
+    assign gc_state = 'disabled'
+  elsif gift_card.expired
+    assign gc_state = 'expired'
+  endif
+-%}
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    {%- render 'head-meta' -%}
+    {%- render 'head-config' -%}
+    {%- render 'head-fonts' -%}
+    {{ 'tokens.css' | asset_url | stylesheet_tag }}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'component-form.css' | asset_url | stylesheet_tag }}
+    {{ 'section-gift-card.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-gift-card">
+    <main id="MainContent" class="gift-card" data-section="gift-card" data-state="{{ gc_state }}" tabindex="-1">
+      <div class="gift-card__logo">
+        <img src="{{ 'logo.png' | asset_url }}" alt="" width="365" height="256">
+        <span>leftover</span>
+      </div>
+
+      <h1 class="gift-card__title">{{ 'gift_card.title' | t }}</h1>
+
+      <div class="gift-card__card">
+        {%- if gc_state == 'disabled' -%}
+          <p class="gift-card__badge gift-card__badge--disabled">{{ 'gift_card.disabled' | t }}</p>
+        {%- elsif gc_state == 'expired' -%}
+          <p class="gift-card__badge gift-card__badge--expired">{{ 'gift_card.expired' | t }}</p>
+        {%- endif -%}
+
+        <p class="gift-card__balance-label">{{ 'gift_card.balance' | t: default: 'Balance' }}</p>
+        <p class="gift-card__balance">{%- render 'price', price: gift_card.balance -%}</p>
+
+        {%- if show_initial -%}
+          <p class="gift-card__initial">
+            {{- 'gift_card.initial_value' | t: default: 'Original value' }}:
+            {% render 'price', price: gift_card.initial_value -%}
+          </p>
+        {%- endif -%}
+
+        {%- if gift_card.expires_on and gc_state != 'expired' -%}
+          <p class="gift-card__expiry">{{ 'gift_card.expires' | t: date: gift_card.expires_on | date: '%-d %B %Y' }}</p>
+        {%- endif -%}
+
+        <div class="gift-card__code-row">
+          <p class="gift-card__code-label" id="GiftCardCodeLabel">{{ 'gift_card.code' | t }}</p>
+          <div class="gift-card__code" aria-labelledby="GiftCardCodeLabel">
+            <code id="GiftCardCode" class="gift-card__code-value">{{ gc_code }}</code>
+          </div>
+          <button type="button" class="button button--secondary button--small gift-card__copy" data-copy-button data-copied-label="{{ 'gift_card.copied' | t | escape }}" data-label="{{ 'gift_card.copy' | t | escape }}">
+            <span data-copy-label>{{ 'gift_card.copy' | t }}</span>
+          </button>
+          <span class="visually-hidden" role="status" aria-live="polite" data-copy-status></span>
+        </div>
+
+        {%- if gc_state == 'active' -%}
+          <div class="gift-card__qr" id="GiftCardQr" data-identifier="{{ gift_card.qr_identifier }}"></div>
+        {%- endif -%}
+      </div>
+
+      <div class="gift-card__actions">
+        {%- if gift_card.pass_url -%}
+          <a class="button button--secondary" href="{{ gift_card.pass_url }}">{{ 'gift_card.add_to_wallet' | t: default: 'Add to Apple Wallet' }}</a>
+        {%- endif -%}
+        <button type="button" class="button button--secondary gift-card__print" onclick="window.print()">{{ 'gift_card.print' | t }}</button>
+        <a class="button" href="{{ shop.url }}">{{ 'gift_card.shop' | t }}</a>
+      </div>
+    </main>
+
+    {%- if gc_state == 'active' -%}
+      <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
+    {%- endif -%}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var qr = document.getElementById('GiftCardQr');
+        if (qr && window.QRCode) {
+          new QRCode(qr, {
+            text: qr.getAttribute('data-identifier'),
+            width: 120,
+            height: 120,
+            correctLevel: QRCode.CorrectLevel.H
+          });
+        }
+
+        var button = document.querySelector('[data-copy-button]');
+        if (!button) return;
+        var label = button.querySelector('[data-copy-label]');
+        var status = document.querySelector('[data-copy-status]');
+        var code = document.getElementById('GiftCardCode');
+        var timer;
+
+        function done() {
+          label.textContent = button.getAttribute('data-copied-label');
+          status.textContent = button.getAttribute('data-copied-label');
+          button.setAttribute('data-copied', '');
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            label.textContent = button.getAttribute('data-label');
+            status.textContent = '';
+            button.removeAttribute('data-copied');
+          }, 2000);
+        }
+
+        function fallback() {
+          var range = document.createRange();
+          range.selectNodeContents(code);
+          var selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          try {
+            if (document.execCommand('copy')) done();
+          } catch (e) {}
+        }
+
+        button.addEventListener('click', function () {
+          var text = code.textContent.trim();
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, fallback);
+          } else {
+            fallback();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

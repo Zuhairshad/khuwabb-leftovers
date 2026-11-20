@@ -1,0 +1,247 @@
+/*
+ * Gift card page (templates/gift_card.liquid). Shopify-only, built from the design system.
+ * Title scale per the 4A/4B/4C brief: 64/64 -> 52/52 (max 1199.98) -> 38/38 (max 809.98), -0.01em.
+ * Lead 20px/1.45 --ink-62 (19/17). Breakpoints: tablet 810-1199.98, phone max 809.98.
+ */
+body.template-gift-card {
+  background: var(--paper);
+}
+
+.gift-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 32px var(--page-gutter) 80px;
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+.gift-card__logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gift-card__logo img {
+  display: block;
+  width: auto;
+  height: 54px;
+}
+
+.gift-card__logo span {
+  margin-top: -1px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 10px;
+  letter-spacing: 0.34em;
+  text-transform: lowercase;
+  color: var(--ink-62);
+}
+
+.gift-card__title {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 64px;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.gift-card__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 520px;
+  padding: 40px 32px;
+  border-radius: 999px 999px 22px 22px / 220px 220px 22px 22px;
+  background: var(--pistachio);
+  text-align: center;
+}
+
+.gift-card[data-state="disabled"] .gift-card__card,
+.gift-card[data-state="expired"] .gift-card__card {
+  background: var(--white);
+  border: 1px solid var(--ink-line);
+}
+
+.gift-card[data-state="disabled"] .gift-card__balance,
+.gift-card[data-state="expired"] .gift-card__balance {
+  color: var(--ink-62);
+  text-decoration: line-through;
+}
+
+.gift-card__badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19.6px;
+  background: var(--strawberry);
+  color: var(--ink);
+}
+
+.gift-card__balance-label {
+  margin-top: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+  color: var(--ink-62);
+}
+
+.gift-card__balance {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.gift-card__initial,
+.gift-card__expiry {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--ink-62);
+}
+
+.gift-card__code-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.gift-card__code-label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19.6px;
+  color: var(--ink-62);
+}
+
+.gift-card__code {
+  max-width: 100%;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid var(--ink-line);
+}
+
+.gift-card__code-value {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.gift-card__copy[data-copied] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.gift-card__qr {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--white);
+}
+
+.gift-card__qr img,
+.gift-card__qr canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.gift-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .gift-card__title {
+    font-size: 52px;
+    line-height: 52px;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .gift-card {
+    gap: 24px;
+  }
+
+  .gift-card__title {
+    font-size: 38px;
+    line-height: 38px;
+  }
+
+  .gift-card__balance {
+    font-size: 48px;
+  }
+
+  .gift-card__card {
+    padding: 32px 20px;
+    border-radius: 999px 999px 22px 22px / 160px 160px 22px 22px;
+  }
+
+  .gift-card__code-value {
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  .gift-card__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 520px;
+  }
+}
+
+@media print {
+  body.template-gift-card,
+  .gift-card[data-state] {
+    background: #fff;
+    color: #000;
+  }
+
+  .gift-card {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .gift-card__actions,
+  .gift-card__copy {
+    display: none;
+  }
+
+  .gift-card__card {
+    border: 1px solid #000;
+    background: #fff;
+    border-radius: 22px;
+    print-color-adjust: exact;
+  }
+
+  .gift-card__balance-label,
+  .gift-card__initial,
+  .gift-card__expiry,
+  .gift-card__code-label {
+    color: #000;
+  }
+}

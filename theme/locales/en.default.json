@@ -192,6 +192,9 @@
     "disabled": "Disabled",
     "expired": "Expired",
     "print": "Print",
-    "shop": "Start shopping"
+    "shop": "Start shopping",
+    "balance": "Balance",
+    "initial_value": "Original value",
+    "add_to_wallet": "Add to Apple Wallet"
   }
 }
