@@ -8,7 +8,7 @@ import { clashDisplay, satoshi } from "./fonts"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Khuwabb — Women's pret & couture",
+  title: "Khuwabb · Women's pret & couture",
   description: "Clothes that feel like a dream you never want to wake up from. Born in Lahore.",
 }
 

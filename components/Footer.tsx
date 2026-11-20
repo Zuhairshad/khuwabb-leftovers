@@ -47,8 +47,8 @@ export function Footer() {
   return (
     <footer className={styles.footer} data-section="footer">
       <div className={styles.newsletter}>
-        <h1 className={styles.title}>Dressed in dreams</h1>
-        <p className={styles.lede}>Clothes that feel like a dream you never want to wake up from. New drops every week — hear about them first.</p>
+        <h1 className={styles.title}>Wear your Dreams</h1>
+        <p className={styles.lede}>Clothes that feel like a dream you never want to wake up from. New drops every week. Hear about them first.</p>
         <div className={styles.form}>
           <NewsletterForm />
         </div>

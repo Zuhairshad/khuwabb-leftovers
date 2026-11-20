@@ -9,7 +9,7 @@ import { atLeast } from "@/lib/img"
 
 // No free-delivery threshold published yet; the meter shows when this is set.
 const FREE_OVER = 0
-const EMPTY_IMAGE = "/framer/images/YiUnZTXr74PD1drE1Th6MZvyUj4.1i1xfkl.png"
+const EMPTY_IMAGE = "/products/ladies-vinyl-jacket/black/front.webp"
 
 export function BagButton() {
   const items = useBag()

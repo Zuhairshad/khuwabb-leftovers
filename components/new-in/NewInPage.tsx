@@ -20,14 +20,14 @@ export function NewInPage() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 1.4, ease }}
         >
-          <img {...responsive("/framer/images/YiUnZTXr74PD1drE1Th6MZvyUj4.0cgnl3i.png")} sizes="(max-width: 809px) calc(100vw - 32px), 360px" fetchPriority="high" alt="" />
+          <img {...responsive("/brand/looks/street-ready.jpg")} sizes="(max-width: 809px) calc(100vw - 32px), 360px" fetchPriority="high" alt="Khuwabb black vinyl puffer jacket with blue two-stripe wide-leg trousers" />
         </m.div>
         <div className={styles.title}>
           <m.h1 initial={{ opacity: 0.001, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 1.2, ease }}>
             New arrivals
           </m.h1>
           <m.p initial={{ opacity: 0.001, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 1.2, ease }}>
-            Just dropped — fresh, easy co-ords and statement fits. New drops every week.
+            Just dropped: fresh, easy co-ords and statement fits. New drops every week.
           </m.p>
         </div>
       </div>

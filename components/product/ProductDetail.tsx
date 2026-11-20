@@ -108,7 +108,7 @@ export function ProductDetail({ slug }: { slug: string }) {
           data-add-to-bag
           onClick={() => setAdded(addToBag([{ slug: p.slug, colour, size }]) > 0)}
         >
-          {!orderableHere ? "Sold out in this colour" : !size ? "Choose a size" : ready ? (added ? "Added — add another" : "Add to bag") : "Sold out in this size"}
+          {!orderableHere ? "Sold out in this colour" : !size ? "Choose a size" : ready ? (added ? "Added. Add another" : "Add to bag") : "Sold out in this size"}
         </button>
         {!orderableHere && (
           <p className={styles.note}>

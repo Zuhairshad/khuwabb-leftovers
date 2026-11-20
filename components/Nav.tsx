@@ -31,7 +31,7 @@ export function Nav({ delay = 3.3 }: { delay?: number }) {
     >
       <m.div className={styles.pill} data-open={open || undefined} layout transition={SPRING}>
         <div className={styles.bar}>
-          <a href="/" className={styles.logo} aria-label="Khuwabb leftover — home">
+          <a href="/" className={styles.logo} aria-label="Khuwabb leftover, home">
             <img src="/brand/logo-162h.webp" alt="" width={231} height={162} />
             <span>leftover</span>
           </a>

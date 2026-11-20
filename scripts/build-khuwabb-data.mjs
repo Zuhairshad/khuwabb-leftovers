@@ -121,7 +121,7 @@ const products = [
     colours: [["Cream", "cream"]],
     tint: "rgb(213, 229, 190)",
     description:
-      "A high-waisted jogger with a tie-front drawstring and a wide, fluid leg. Soft cream that pairs with everything — dress it up with a jacket or keep it easy with a tee.",
+      "A high-waisted jogger with a tie-front drawstring and a wide, fluid leg. Soft cream that pairs with everything. Dress it up with a jacket or keep it easy with a tee.",
   }),
   P({
     slug: "women-trouser-two-full-panels",
@@ -132,7 +132,7 @@ const products = [
     colours: [["White with red stripes", "white-red"], ["Black with white stripes", "black-white"]],
     tint: "rgb(247, 210, 184)",
     description:
-      "Bold contrast panels run down both sides of this straight wide-leg trouser — white with red, or black with white. An elasticated waist for all-day comfort.",
+      "Bold contrast panels run down both sides of this straight wide-leg trouser, in white with red or black with white. An elasticated waist for all-day comfort.",
   }),
   P({
     slug: "cargo-pocket-trouser-for-women",
@@ -154,7 +154,7 @@ const products = [
     colours: [["Black", "black"]],
     tint: "rgb(213, 229, 190)",
     description:
-      "A fitted long-sleeve crew-neck top with a matching wide-leg trouser finished with sharp front seams. Sold together as a set — one easy outfit, top to toe.",
+      "A fitted long-sleeve crew-neck top with a matching wide-leg trouser finished with sharp front seams. Sold together as a set: one easy outfit, top to toe.",
   }),
   P({
     slug: "womens-side-pocket-cotton-maxi-dress",
@@ -165,7 +165,7 @@ const products = [
     colours: [["Black", "black"], ["Khaki", "khaki"], ["Burgundy", "burgundy"]],
     tint: "rgb(245, 231, 166)",
     description:
-      "A relaxed T-shirt maxi with short sleeves, a round neck and handy side pockets. It skims the body and flares gently to the ankle — pull on and go.",
+      "A relaxed T-shirt maxi with short sleeves, a round neck and handy side pockets. It skims the body and flares gently to the ankle. Pull on and go.",
   }),
   P({
     slug: "boat-neck-long-sleeve-maxi-dress",
@@ -177,7 +177,7 @@ const products = [
     tint: "rgb(246, 201, 207)",
     onSite: false,
     description:
-      "A sleek, body-skimming maxi with a wide boat neckline and long fitted sleeves. Ankle length and quietly elegant — for dinners, events and evenings out.",
+      "A sleek, body-skimming maxi with a wide boat neckline and long fitted sleeves. Ankle length and quietly elegant, for dinners, events and evenings out.",
   }),
   P({
     slug: "ladies-vinyl-jacket",
@@ -231,7 +231,7 @@ products.push(
     tint: "rgb(201, 210, 242)",
     onSite: false,
     description:
-      "A cropped scoop-neck sports top with a wide banded hem, paired with matching high-waisted leggings. Sold together as a set — move, stretch and head out in one easy outfit.",
+      "A cropped scoop-neck sports top with a wide banded hem, paired with matching high-waisted leggings. Sold together as a set: move, stretch and head out in one easy outfit.",
   }),
 )
 
