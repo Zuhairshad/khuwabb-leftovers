@@ -184,7 +184,7 @@ Settings: `heading` `New arrivals`; `cta_label` `Shop new in`; `cta_link` `/coll
 | Setting | Type | Default |
 |---|---|---|
 | `word_1` / `word_2` | text | `Wear the` / `dream` |
-| `image` | image_picker | blank → `assets/wear-the-dream.jpg` |
+| `image` | image_picker | blank → srcset of `assets/wear-the-dream-{640,960,1280,1672}w.webp` (fallback assets keep the source's responsive WebPs) |
 | `image_alt` | text | `Khuwabb campaign photo` |
 | `radius` | range 0–64 | 32 |
 | `focus_x` / `focus_x_mobile` | range 0–100 % | 50 / 62 |
@@ -317,7 +317,7 @@ globals.css rules (audit §1.2) verbatim; `[data-section]` font features; `.visu
 | G3 | Network: this web session can't reach `citbkj-yj.myshopify.com` | Stage A builds without store access; nothing is verified against live data until Stage B. Allow the host in the environment's Network access if live reads are wanted here. **[Shad]** |
 | G4 | Intro replays on every page load and every non-product route | Keep (`play_on = all_but_product`). Setting allows `home_only` / `once_per_session`. **[Shad]** (default = current behaviour) |
 | G5 | Newsletter is a `mailto:` | Shopify customer form (`contact[tags]=newsletter`), same UI states; success detected via `form.posted_successfully?` + `#` anchor. [default] |
-| G6 | Duplicate `<h1>`s (footer, "Wear the dream") | Render as `<h2>` with identical styles; home gets a visually-hidden `<h1>{{ shop.name }}</h1>`. [default] |
+| G6 | Duplicate `<h1>`s (footer, "Wear the dream") | Render as `<h2>` with identical styles; home gets a visually-hidden `<h1>{{ shop.name }}</h1>` rendered by `hero-reels`. [default] |
 | G7 | Category cards & mood CTAs link to `/shop` | Keep `/collections/all` defaults; `link` setting per card lets Shad point them at collections. **[Shad]** |
 | G8 | Draft reviews | Port as-is (parity), clearly flagged in the editor block info text. **[Shad]**: keep, hide (`disabled: true`), or swap for a reviews app |
 | G9 | Every product `newIn` | `new-in` collection contains all 13 (parity). **[Shad]** |
@@ -362,13 +362,13 @@ Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `
 | 1C intro | `sections/scoop-intro.liquid`, `assets/section-scoop-intro.css`, `assets/scoop-intro.js`, `assets/intro-1.webp`…`intro-6.webp` | ScoopIntro.tsx/.module.css, globals.css keyframes, data/scoop-intro.json, lib/intro | full sequence timings, skip on product, scroll lock, reduced motion, `play_on` modes |
 | 1D store setup | `tools/store-setup/**` (no theme files) | scripts/build-khuwabb-data.mjs, data/products.json, data/shopify.json, lib/shopify-config.mjs, this file §3 | dry-run output listing every mutation; not run in Stage A |
 
-### Batch 2 — Home page I (depends on 1)
+### Batch 2 — Home page I (depends on 1) — 🔄 in progress
 | Task | Owns | Reads | Covers |
 |---|---|---|---|
 | 2A hero reels | `sections/hero-reels.liquid`, `assets/section-hero-reels.css`, `assets/hero-reels.js` | Hero.tsx, ScoopReels.tsx/.module.css, data/reels.json | intro spin, drag/flick/tap, shuffle (seeded), tags, total, chooser (open, colour/size, sold out, add → cart), phone layout, reduced motion |
 | 2B category cards | `sections/category-cards.liquid`, `assets/section-category-cards.css`, `assets/category-cards.js` | Flavours.tsx/.module.css | first card open, hover each card (desktop), stacked < 1200, counts |
 | 2C new arrivals | `sections/new-arrivals.liquid`, `snippets/hanger-card.liquid`, `assets/component-hanger-card.css`, `assets/section-new-arrivals.css`, `assets/ticker.js` | NewIn.tsx/.module.css, Ticker.tsx | marquee speed, pause on hover, drag + click suppression, hanger swing |
-| 2D campaign moods | `sections/campaign-moods.liquid`, `assets/section-campaign-moods.css`, `assets/campaign-moods.js`, `assets/wear-the-dream.jpg` | FreshDaily.tsx/.module.css, GelatoCounter.tsx/.module.css, data/gelato-counter.json | scroll words, clip reveal, tags fade, auto-cycle, hover/focus/tap, narrow (<700) chips mode |
+| 2D campaign moods | `sections/campaign-moods.liquid`, `assets/section-campaign-moods.css`, `assets/campaign-moods.js`, `assets/wear-the-dream-{640,960,1280,1672}w.webp` | FreshDaily.tsx/.module.css, GelatoCounter.tsx/.module.css, data/gelato-counter.json | scroll words, clip reveal, tags fade, auto-cycle, hover/focus/tap, narrow (<700) chips mode |
 
 ### Batch 3 — Home page II, product, collections (depends on 1; 3D depends on 2C)
 | Task | Owns | Reads | Covers |
