@@ -60,4 +60,13 @@ Work through "Stage B — must be verified on the real store" at the end of docs
 - `npm run compare` key-selector tables clean on every page × viewport (or each remaining difference listed with a reason in docs/qa.md);
 - every Stage B item ticked in docs/qa.md;
 - theme check clean;
-- then `shopify theme push --unpublished` for Shad's review in the real theme editor.
+- then upload for Shad's review in the real theme editor (below).
+
+## 6. Branch and upload
+
+- The theme code lives **only on branch `themecode`** — never merged to `main`.
+- The theme is in the `theme/` folder (the Next.js reference stays at the repo root), so:
+  - **CLI (recommended):** `shopify theme push --path theme --store citbkj-yj.myshopify.com --unpublished` → preview, then publish from admin.
+  - **Zip:** zip the *contents* of `theme/` (`cd theme && zip -r ../khuwabb-theme.zip . && cd ..`) and upload in Online Store → Themes → Add theme → Upload zip file.
+  - Shopify's GitHub integration does not apply as-is (it needs the theme folders at the branch root).
+- Run `tools/store-setup` (`--dry-run`, then `--apply`) before or right after the upload — the theme expects the cut-out media, metafields, collections and menus it creates.
