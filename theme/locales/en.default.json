@@ -211,7 +211,8 @@
     "shop": "Start shopping",
     "balance": "Balance",
     "initial_value": "Original value",
-    "add_to_wallet": "Add to Apple Wallet"
+    "add_to_wallet": "Add to Apple Wallet",
+    "qr_code": "Gift card QR code"
   },
   "blog": {
     "read_more": "Read more",

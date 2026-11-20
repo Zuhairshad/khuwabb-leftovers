@@ -47,3 +47,9 @@ Strings: `gift_card.title/code/copy/copied/expires/disabled/expired/print/shop`;
 ## Not matched / notes
 - Newsletter on password page is a light-variant built in the section (footer snippet is dark and footer.js is not loaded in the password layout), so there is no sending/animated "done" state, only server-rendered states.
 - Theme check: only `TranslationKeyExists` for the three new gift_card keys until locales are merged.
+
+## Q4 QA fixes (A13, A19)
+- Code row is `role="group"` labelled by "Code" (aria-labelledby moved off the plain div).
+- QR container `role="img"` with `aria-label` = `gift_card.qr_code` (default "Gift card QR code"). Proposed locale key: `gift_card.qr_code`.
+- "Copied" is announced once via the `role="status"` live region; the button label no longer changes (still gets `data-copied` styling).
+- component-form.css: `.field__input` and `.button--secondary` borders `rgba(23, 20, 15, 0.45)` (~3.3:1) for WCAG 1.4.11. PDP option borders untouched (parity).

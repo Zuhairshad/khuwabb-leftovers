@@ -83,3 +83,6 @@ Class mapping: `.x` -> `.reviews-receipts__x` (`lineName` -> `line-name`).
 
 - Touch drag: keep `pan-y` (recommended) or switch to `touch-action: none` for full 2D touch drag with scroll lock over receipts.
 - G8: keep, hide or replace draft reviews.
+
+## Q4 QA fixes (E2)
+Product/collection picker settings now carry info "Pick after adding the section — presets can't include products/collections." (schema text only).

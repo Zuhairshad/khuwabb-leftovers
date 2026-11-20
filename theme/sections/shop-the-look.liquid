@@ -107,11 +107,9 @@
               {%- if cur_p -%}
                 {%- liquid
                   assign piece_href = cur_p.url
-                  assign piece_alt = cur_p.title
                   if cur_c != blank
                     assign piece_colour_enc = cur_c | url_encode
                     assign piece_href = cur_p.url | append: '?colour=' | append: piece_colour_enc
-                    assign piece_alt = cur_p.title | append: ' in ' | append: cur_c
                   endif
                 -%}
                 <a href="{{ piece_href }}" class="shop-the-look__piece">
@@ -123,7 +121,7 @@
                       widths: '120,240,360',
                       sizes: '60px',
                       loading: 'lazy',
-                      alt: piece_alt
+                      decorative: true
                     -%}
                   </div>
                   <div class="shop-the-look__text">
@@ -183,11 +181,11 @@
           "default": "none"
         },
         { "type": "text", "id": "image_alt", "label": "Photo alt text" },
-        { "type": "product", "id": "product_1", "label": "Piece 1" },
+        { "type": "product", "id": "product_1", "label": "Piece 1", "info": "Pick after adding the section — presets can't include products/collections." },
         { "type": "text", "id": "colour_1", "label": "Piece 1 colour" },
-        { "type": "product", "id": "product_2", "label": "Piece 2" },
+        { "type": "product", "id": "product_2", "label": "Piece 2", "info": "Pick after adding the section — presets can't include products/collections." },
         { "type": "text", "id": "colour_2", "label": "Piece 2 colour" },
-        { "type": "product", "id": "product_3", "label": "Piece 3" },
+        { "type": "product", "id": "product_3", "label": "Piece 3", "info": "Pick after adding the section — presets can't include products/collections." },
         { "type": "text", "id": "colour_3", "label": "Piece 3 colour" }
       ]
     }

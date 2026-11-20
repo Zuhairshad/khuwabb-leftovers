@@ -49,3 +49,6 @@ All via `customer.*` (existing) plus `bag.start_shopping`, `general.pagination.*
 ## Not matched
 - Per-field error text (`.field__error`) is defined in CSS but unused: Shopify exposes a form-level `default_errors` summary; each field links to it with `aria-describedby`.
 - No-JS: province select stays hidden; errors on edit forms are not auto-reopened.
+
+## Q4 QA fixes (A19)
+Customer forms share component-form.css: `.field__input` / `.button--secondary` borders now `rgba(23, 20, 15, 0.45)` for 3:1 contrast. Deliberate deviation from the React `--ink-line` hairline.

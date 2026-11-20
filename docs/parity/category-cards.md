@@ -76,3 +76,6 @@ Spring `{bounce .15, duration .9}` = `.9s var(--spring-cards)` (tokens.css).
 - Spring is the shared `linear()` approximation (token), not a true physics spring; the flex-grow overshoot is therefore approximate.
 - Aspect ratio comes from the image's original size at render time; source used precomputed catalog ratios (same data, different origin).
 - Section wrapper uses `tag: div` plus inner `<section>`, so the section root `data-section="flavours"` is on the inner element per contract 1.1.
+
+## Q4 QA fixes (E2)
+Product/collection picker settings now carry info "Pick after adding the section — presets can't include products/collections." (schema text only).

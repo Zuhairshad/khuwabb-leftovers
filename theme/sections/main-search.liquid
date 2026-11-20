@@ -28,7 +28,7 @@
       <button type="submit" class="button button--small">{{ 'search.submit' | t }}</button>
     </form>
 
-    {%- if search.performed -%}
+    {%- if search.performed and search.terms != blank -%}
       {%- if search.results_count > 0 -%}
         <p class="sp-count" role="status">{{ 'search.results' | t: count: search.results_count, terms: search.terms }}</p>
 
@@ -55,7 +55,7 @@
         </ul>
 
         {%- if paginate.pages > 1 -%}
-          <nav class="sp-pagination" aria-label="{{ 'general.pagination.page' | t: number: paginate.current_page }}">
+          <nav class="sp-pagination" aria-label="{{ 'general.pagination.label' | t }}">
             {%- if paginate.previous -%}
               <a class="sp-pagination__page" href="{{ paginate.previous.url }}" rel="prev">{{ 'general.pagination.previous' | t }}</a>
             {%- endif -%}

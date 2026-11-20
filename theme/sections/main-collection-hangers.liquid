@@ -10,7 +10,7 @@
         {%- endfor -%}
       </div>
       {%- if paginate.pages > 1 -%}
-        <nav class="new-in__pagination" aria-label="{{ 'general.pagination.page' | t: number: paginate.current_page }}">
+        <nav class="new-in__pagination" aria-label="{{ 'general.pagination.label' | t }}">
           {%- if paginate.previous -%}
             <a class="new-in__page" href="{{ paginate.previous.url }}" rel="prev">{{ 'general.pagination.previous' | t }}</a>
           {%- endif -%}
@@ -38,6 +38,7 @@
 {
   "name": "New in grid",
   "tag": "div",
+  "enabled_on": { "templates": ["collection"] },
   "settings": [
     { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 48 },
     { "type": "text", "id": "empty_text", "label": "Empty collection message", "default": "Nothing here yet. New pieces land every week." }

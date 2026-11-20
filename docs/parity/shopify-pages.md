@@ -56,3 +56,7 @@ No React source exists (G18). This documents which design-system value each elem
 ## Not matched
 - No reference screenshots exist; values are inferred from the design brief.
 - Search results other than products have no thumbnails (brief: simple rows).
+
+## Q4 QA fixes (A11, A12, B note)
+- main-search: pagination nav uses `general.pagination.label`; results/no-results block renders only when `search.terms` is non-blank (empty `q` shows only the form).
+- main-list-collections: tile images are decorative (`alt=""`, cutout-image `decorative: true`) because the collection title is visible in the same link.

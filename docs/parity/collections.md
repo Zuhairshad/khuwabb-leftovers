@@ -76,3 +76,9 @@ Breakpoints as source: tablet `min-width:810px and max-width:1199.98px`, phone `
 - framer spring approximated by `--spring-cutout` linear(); card reveal uses ease-out as source.
 - `.js` class required for the card hidden state (no-JS shows all cards).
 - Shop page title/heading for non-`all` collections reuses the Shop design with the collection title.
+
+## Q4 QA fixes (E1, A12, A11)
+| Change | Where |
+|---|---|
+| Sections limited to collection template (E1) | `enabled_on.templates: ["collection"]` in main-collection-grid, main-collection-hangers, collection-intro, new-in-header schemas |
+| Pagination nav label (A12) | `general.pagination.label` in main-collection-grid, main-collection-hangers |

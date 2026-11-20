@@ -16,12 +16,12 @@
           <a class="sp-tile" href="{{ collection.url }}">
             {%- if lc_image -%}
               <div class="sp-tile__card sp-tile__card--cover">
-                {{ lc_image | image_url: width: 640 | image_tag: widths: '360, 480, 640', sizes: '(max-width: 809.98px) 45vw, 290px', loading: 'lazy', alt: collection.title }}
+                {{ lc_image | image_url: width: 640 | image_tag: widths: '360, 480, 640', sizes: '(max-width: 809.98px) 45vw, 290px', loading: 'lazy', alt: '' }}
               </div>
             {%- else -%}
               <div class="sp-tile__card"{% if lc_first.metafields.custom.tint.value != blank %} style="background: {{ lc_first.metafields.custom.tint.value | escape }}"{% endif %}>
                 {%- if lc_first -%}
-                  {% render 'cutout-image', product: lc_first, view: 'front', widths: '360,480,640', sizes: '(max-width: 809.98px) 45vw, 290px', loading: 'lazy', alt: collection.title %}
+                  {% render 'cutout-image', product: lc_first, view: 'front', widths: '360,480,640', sizes: '(max-width: 809.98px) 45vw, 290px', loading: 'lazy', decorative: true %}
                 {%- endif -%}
               </div>
             {%- endif -%}

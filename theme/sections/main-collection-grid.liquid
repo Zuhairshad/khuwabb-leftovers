@@ -15,7 +15,7 @@
         {%- endfor -%}
       </div>
       {%- if paginate.pages > 1 -%}
-        <nav class="collection-grid__pagination" aria-label="{{ 'general.pagination.page' | t: number: paginate.current_page }}">
+        <nav class="collection-grid__pagination" aria-label="{{ 'general.pagination.label' | t }}">
           {%- if paginate.previous -%}
             <a class="collection-grid__page collection-grid__page--step" href="{{ paginate.previous.url }}" rel="prev">{{ 'general.pagination.previous' | t }}</a>
           {%- endif -%}
@@ -43,6 +43,7 @@
 {
   "name": "Collection grid",
   "tag": "div",
+  "enabled_on": { "templates": ["collection"] },
   "settings": [
     { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 48 },
     { "type": "range", "id": "eager_count", "label": "Images loaded immediately", "min": 0, "max": 8, "step": 1, "default": 4 },

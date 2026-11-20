@@ -60,3 +60,7 @@ Reused: `snippets/section-heading` (+ css), `arrow-button` (+ css), `cutout-imag
 - `url_encode` turns a space into `+`, `encodeURIComponent` into `%20`; the PDP reads `?colour=` via URLSearchParams so both decode identically.
 - Piece/thumb images rely on product media alt convention (`<Colour> | front`); fallback chain is in `cutout-image`.
 - Source `.look`/`.photo` have no explicit link text colour on `.piece`; added `color: inherit; text-decoration: none` because the theme anchors may be styled by base.css.
+
+## Q4 QA fixes
+- Piece thumbnails use `decorative: true` (A11): piece name is visible text in the same link. Unused `piece_alt` assign removed.
+- Product pickers product_1..3 carry info "Pick after adding the section — presets can't include products/collections." (E2)

@@ -61,9 +61,9 @@
           <p class="gift-card__expiry">{{ 'gift_card.expires' | t: date: gift_card.expires_on | date: '%-d %B %Y' }}</p>
         {%- endif -%}
 
-        <div class="gift-card__code-row">
+        <div class="gift-card__code-row" role="group" aria-labelledby="GiftCardCodeLabel">
           <p class="gift-card__code-label" id="GiftCardCodeLabel">{{ 'gift_card.code' | t }}</p>
-          <div class="gift-card__code" aria-labelledby="GiftCardCodeLabel">
+          <div class="gift-card__code">
             <code id="GiftCardCode" class="gift-card__code-value">{{ gc_code }}</code>
           </div>
           <button type="button" class="button button--secondary button--small gift-card__copy" data-copy-button data-copied-label="{{ 'gift_card.copied' | t | escape }}" data-label="{{ 'gift_card.copy' | t | escape }}">
@@ -73,7 +73,7 @@
         </div>
 
         {%- if gc_state == 'active' -%}
-          <div class="gift-card__qr" id="GiftCardQr" data-identifier="{{ gift_card.qr_identifier }}"></div>
+          <div class="gift-card__qr" id="GiftCardQr" role="img" aria-label="{{ 'gift_card.qr_code' | t: default: 'Gift card QR code' }}" data-identifier="{{ gift_card.qr_identifier }}"></div>
         {%- endif -%}
       </div>
 
@@ -109,12 +109,10 @@
         var timer;
 
         function done() {
-          label.textContent = button.getAttribute('data-copied-label');
           status.textContent = button.getAttribute('data-copied-label');
           button.setAttribute('data-copied', '');
           clearTimeout(timer);
           timer = setTimeout(function () {
-            label.textContent = button.getAttribute('data-label');
             status.textContent = '';
             button.removeAttribute('data-copied');
           }, 2000);
