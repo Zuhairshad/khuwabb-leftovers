@@ -400,6 +400,8 @@ Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `
 - F2 `hero-reels.js` look chooser: close on Escape and return focus to the CTA (a11y, G15; source closes only via ×).
 - Note: `spacing` / `look_scale` ranges use step 0.1 (theme check rejects 0.05); defaults unchanged.
 
+### Phase 6 QA (Stage A) — ✅ done; see docs/qa.md (0 critical / 0 major open)
+
 ### Batch 5 — Stage B (local)
 Shad runs `tools/store-setup` → Opus starts `shopify theme dev --path theme` → `npm run compare` per page → fixes sent back per task → Phase 6 QA.
 

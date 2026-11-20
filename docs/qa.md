@@ -128,7 +128,17 @@ Shared-file fixes by the main session: head-config (no intro on password/gift ca
 | Q3 header/footer/campaign/ticker | header, footer, newsletter, campaign-moods, ticker.js | A1, A2, A3, A6, A15, E2, E3, M6 |
 | Q4 misc | collection sections, main-search, shop-the-look, list-collections, gift_card, component-form.css, favicons, schema info texts | E1, E2, A11, A12, A13, A19, M5, B6 (search) |
 
+**Re-run (verification of the fixes):** 36/37 fixed findings verified in headless Chromium + code reading; earlier functions suite 196/196 and a new strict suite 57/57 pass; keyboard runs pass; axe 0 violations; theme check clean. The re-run found 4 small items — A19 border 2.99:1 (raised to .52 alpha → 3.69 / 3.34), N1 newsletter `aria-describedby` permanently set (now only when invalid), N2 gift card lost its visible "Copied" (restored, single announcement), E2 info text missing on New arrivals (added) — all fixed and committed; intro failsafe extended to 15s.
+
 **Shad decisions (defaults keep parity):** A4 (darker small text in bag/hero bar to pass 4.5:1), A14 (visible pause control for the ticker).
+
+## Sign-off (Stage A)
+
+- **Critical: 0 open. Major: 0 open** (A4 is a parity decision for Shad, not a defect in the port). All fixable minors from A, B, C, D are fixed or explicitly kept with a reason above.
+- Theme check: **76 files, no offenses**.
+- Code parity: every reference CSS declaration, string, test hook, breakpoint and route accounted for (area A).
+- Functions: all reference flows pass in headless Chromium against a mock Shopify cart (area B + re-run).
+- **Not signed off yet:** anything that needs the real store or the real theme in a browser — the Stage B list below. Visual match is only claimed once `npm run compare` is clean in Stage B.
 
 ---
 
