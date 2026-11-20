@@ -1,4 +1,22 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "intro": {
+      "type": "collection-intro",
+      "settings": {
+        "note": "Gym wear, co-ords, trousers, jackets and dresses. Tap anything to take a closer look.",
+        "image_alt": "Khuwabb pieces on a clothes rail: a pink trouser, black top and trouser, maroon maxi and an olive puffer"
+      }
+    },
+    "grid": {
+      "type": "main-collection-grid",
+      "settings": {
+        "products_per_page": 48,
+        "eager_count": 4
+      }
+    }
+  },
+  "order": [
+    "intro",
+    "grid"
+  ]
 }

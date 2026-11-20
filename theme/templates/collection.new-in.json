@@ -1,4 +1,21 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "header": {
+      "type": "new-in-header",
+      "settings": {
+        "title": "New arrivals",
+        "text": "Just dropped — fresh, easy co-ords and statement fits. New drops every week."
+      }
+    },
+    "grid": {
+      "type": "main-collection-hangers",
+      "settings": {
+        "products_per_page": 48
+      }
+    }
+  },
+  "order": [
+    "header",
+    "grid"
+  ]
 }

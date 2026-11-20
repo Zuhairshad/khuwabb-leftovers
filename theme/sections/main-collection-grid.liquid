@@ -1,0 +1,53 @@
+{{ 'section-main-collection-grid.css' | asset_url | stylesheet_tag }}
+
+{%- paginate collection.products by section.settings.products_per_page -%}
+  <section class="collection-grid" data-section="products">
+    {%- if collection.products.size > 0 -%}
+      <div class="collection-grid__grid">
+        {%- for product in collection.products -%}
+          {%- liquid
+            assign cg_loading = 'lazy'
+            if forloop.index0 < section.settings.eager_count
+              assign cg_loading = 'eager'
+            endif
+          -%}
+          {% render 'product-card', product: product, loading: cg_loading %}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="collection-grid__pagination" aria-label="{{ 'general.pagination.page' | t: number: paginate.current_page }}">
+          {%- if paginate.previous -%}
+            <a class="collection-grid__page collection-grid__page--step" href="{{ paginate.previous.url }}" rel="prev">{{ 'general.pagination.previous' | t }}</a>
+          {%- endif -%}
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a class="collection-grid__page" href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+            {%- elsif part.title == paginate.current_page -%}
+              <span class="collection-grid__page" aria-current="page">{{ part.title }}</span>
+            {%- else -%}
+              <span class="collection-grid__page collection-grid__page--gap">{{ part.title }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}
+            <a class="collection-grid__page collection-grid__page--step" href="{{ paginate.next.url }}" rel="next">{{ 'general.pagination.next' | t }}</a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- else -%}
+      <p class="collection-grid__empty">{{ section.settings.empty_text | escape }}</p>
+    {%- endif -%}
+  </section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "tag": "div",
+  "settings": [
+    { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 48 },
+    { "type": "range", "id": "eager_count", "label": "Images loaded immediately", "min": 0, "max": 8, "step": 1, "default": 4 },
+    { "type": "text", "id": "empty_text", "label": "Empty collection message", "default": "Nothing here yet. New pieces land every week." }
+  ],
+  "presets": [{ "name": "Collection grid" }]
+}
+{% endschema %}

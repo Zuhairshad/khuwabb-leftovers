@@ -386,7 +386,7 @@ Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `
 | 4C password + gift card | `sections/main-password.liquid`, `templates/gift_card.liquid` (exception to A12: Liquid template owned by this task), `assets/section-password.css` | password page, gift card |
 
 ### Follow-ups (small, assign to the owner of the file in a later batch)
-- F1 `cutout-image`: add a `decorative: true` param that renders `alt=""`; then drop the `hc-decorative` placeholder swap in `hanger-card.liquid` and the `-cm-` swap in `campaign-moods.liquid`.
+- F1 `cutout-image`: add a `decorative: true` param that renders `alt=""`; then drop the `hc-decorative` placeholder swap in `hanger-card.liquid` and the `-cm-` swap in `campaign-moods.liquid`; use it in `product-card.liquid` too (shop card image alt duplicates the visible product name in the same link).
 - F2 `hero-reels.js` look chooser: close on Escape and return focus to the CTA (a11y, G15; source closes only via ×).
 - Note: `spacing` / `look_scale` ranges use step 0.1 (theme check rejects 0.05); defaults unchanged.
 

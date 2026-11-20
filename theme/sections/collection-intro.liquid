@@ -1,0 +1,67 @@
+{{ 'section-collection-intro.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign ci_title = section.settings.title
+  if ci_title == blank
+    if collection.handle == 'all'
+      assign ci_title = 'All collections'
+    else
+      assign ci_title = collection.title
+    endif
+  endif
+  assign ci_image = section.settings.image
+  if ci_image == blank
+    assign ci_image = collection.image
+  endif
+  assign ci_alt = section.settings.image_alt
+  assign ci_sizes = '(max-width: 1279px) calc(100vw - 32px), 1216px'
+-%}
+
+<section class="collection-intro" data-section="intro">
+  <div class="collection-intro__photo">
+    {%- if ci_image != blank -%}
+      {{
+        ci_image
+        | image_url: width: 1849
+        | image_tag:
+          widths: '640, 960, 1280, 1849',
+          sizes: ci_sizes,
+          alt: ci_alt,
+          loading: 'eager',
+          fetchpriority: 'high'
+      }}
+    {%- else -%}
+      <img
+        src="{{ 'collections-1849w.webp' | asset_url }}"
+        srcset="{{ 'collections-640w.webp' | asset_url }} 640w, {{ 'collections-960w.webp' | asset_url }} 960w, {{ 'collections-1280w.webp' | asset_url }} 1280w, {{ 'collections-1849w.webp' | asset_url }} 1849w"
+        sizes="{{ ci_sizes }}"
+        width="1849"
+        height="851"
+        alt="{{ ci_alt | escape }}"
+        fetchpriority="high"
+      >
+    {%- endif -%}
+  </div>
+  <div class="collection-intro__heading">
+    <div class="collection-intro__title-wrap">
+      <h1 class="collection-intro__title">{{ ci_title | escape }}</h1>
+    </div>
+    {%- if section.settings.note != blank -%}
+      <p class="collection-intro__note">{{ section.settings.note | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection intro",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "info": "Leave blank to use the collection title ('All collections' for the all-products collection)." },
+    { "type": "textarea", "id": "note", "label": "Note", "default": "Gym wear, co-ords, trousers, jackets and dresses. Tap anything to take a closer look." },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Blank: the collection image, then the built-in rail photo." },
+    { "type": "text", "id": "image_alt", "label": "Photo description", "default": "Khuwabb pieces on a clothes rail: a pink trouser, black top and trouser, maroon maxi and an olive puffer" }
+  ],
+  "presets": [{ "name": "Collection intro" }]
+}
+{% endschema %}

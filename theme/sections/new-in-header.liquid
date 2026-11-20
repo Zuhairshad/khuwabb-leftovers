@@ -1,0 +1,58 @@
+{{ 'section-new-in.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign nh_title = section.settings.title
+  if nh_title == blank
+    assign nh_title = collection.title
+  endif
+  assign nh_sizes = '(max-width: 809px) calc(100vw - 32px), 360px'
+-%}
+
+<section class="new-in new-in--header" data-section="new-in-page">
+  <div class="new-in__header">
+    <div class="new-in__photo">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 819
+          | image_tag:
+            widths: '400, 819',
+            sizes: nh_sizes,
+            alt: section.settings.image_alt,
+            loading: 'eager',
+            fetchpriority: 'high'
+        }}
+      {%- else -%}
+        <img
+          src="{{ 'new-in-header-819w.webp' | asset_url }}"
+          srcset="{{ 'new-in-header-400w.webp' | asset_url }} 400w, {{ 'new-in-header-819w.webp' | asset_url }} 819w"
+          sizes="{{ nh_sizes }}"
+          width="819"
+          height="1024"
+          alt="{{ section.settings.image_alt | escape }}"
+          fetchpriority="high"
+        >
+      {%- endif -%}
+    </div>
+    <div class="new-in__title">
+      <h1 class="new-in__h1">{{ nh_title | escape }}</h1>
+      {%- if section.settings.text != blank -%}
+        <p class="new-in__text">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "New in header",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "info": "Leave blank to use the collection title." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Just dropped — fresh, easy co-ords and statement fits. New drops every week." },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Blank: the built-in photo." },
+    { "type": "text", "id": "image_alt", "label": "Photo description", "info": "Leave blank: the photo is decorative." }
+  ],
+  "presets": [{ "name": "New in header" }]
+}
+{% endschema %}

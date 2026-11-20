@@ -1,0 +1,45 @@
+{%- comment -%}
+  Arch product card (components/shop/ProductGrid.tsx): tinted arch with the front cut-out of the first colour,
+  name + price underneath. Cut-out springs (rotate -3deg, scale 1.08, y -6px) on hover (hover-capable devices).
+
+  Parameters:
+  - product (required)
+  - loading (optional) 'lazy' (default) | 'eager'
+  - sizes   (optional) default '(max-width: 809.98px) 45vw, 290px'
+  - appear  (optional) true (default) | false. true = card rises in on scroll (data-appear="card", appear.js, amount .15)
+  - class   (optional) extra classes on the link
+
+  Tint: product.metafields.custom.tint (no fallback, like `p.tint ?? undefined`).
+  CSS: the section must load {{ 'section-main-collection-grid.css' | asset_url | stylesheet_tag }} (product-card rules live there)
+  and appear.js is already loaded globally.
+
+  Usage: {% render 'product-card', product: product, loading: 'eager' %}
+{%- endcomment -%}
+{%- liquid
+  assign pc_tint = product.metafields.custom.tint.value | default: ''
+  assign pc_sizes = sizes | default: '(max-width: 809.98px) 45vw, 290px'
+  assign pc_loading = loading | default: 'lazy'
+-%}
+<a
+  href="{{ product.url }}"
+  class="product-card{% if class != blank %} {{ class }}{% endif %}"
+  {%- unless appear == false %} data-appear="card" data-appear-amount="0.15"{% endunless %}
+  draggable="false"
+>
+  <div class="product-card__card"{% if pc_tint != blank %} style="background: {{ pc_tint | escape }}"{% endif %}>
+    <div class="product-card__cutout">
+      {%- render 'cutout-image',
+        product: product,
+        view: 'front',
+        widths: '360,480,640',
+        sizes: pc_sizes,
+        loading: pc_loading,
+        alt: product.title
+      -%}
+    </div>
+  </div>
+  <div class="product-card__info">
+    <p class="product-card__name">{{ product.title | escape }}</p>
+    <p class="product-card__price">{% render 'price', price: product.price %}</p>
+  </div>
+</a>

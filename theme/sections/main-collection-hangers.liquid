@@ -1,0 +1,47 @@
+{{ 'component-hanger-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-new-in.css' | asset_url | stylesheet_tag }}
+
+{%- paginate collection.products by section.settings.products_per_page -%}
+  <section class="new-in new-in--grid" data-section="new-in-grid">
+    {%- if collection.products.size > 0 -%}
+      <div class="new-in__grid">
+        {%- for product in collection.products -%}
+          {% render 'hanger-card', product: product, context: 'grid', sizes: '(max-width: 809.98px) 45vw, 280px' %}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="new-in__pagination" aria-label="{{ 'general.pagination.page' | t: number: paginate.current_page }}">
+          {%- if paginate.previous -%}
+            <a class="new-in__page" href="{{ paginate.previous.url }}" rel="prev">{{ 'general.pagination.previous' | t }}</a>
+          {%- endif -%}
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a class="new-in__page" href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+            {%- elsif part.title == paginate.current_page -%}
+              <span class="new-in__page" aria-current="page">{{ part.title }}</span>
+            {%- else -%}
+              <span class="new-in__page new-in__page--gap">{{ part.title }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}
+            <a class="new-in__page" href="{{ paginate.next.url }}" rel="next">{{ 'general.pagination.next' | t }}</a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- else -%}
+      <p class="new-in__empty">{{ section.settings.empty_text | escape }}</p>
+    {%- endif -%}
+  </section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "New in grid",
+  "tag": "div",
+  "settings": [
+    { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 48 },
+    { "type": "text", "id": "empty_text", "label": "Empty collection message", "default": "Nothing here yet. New pieces land every week." }
+  ],
+  "presets": [{ "name": "New in grid" }]
+}
+{% endschema %}
