@@ -255,7 +255,11 @@
     padding: 0 20px;
   }
 
+  /* Cards are taller than a phone screen, so they scroll normally here:
+     stacking would slide the next card over the pieces before they're seen. */
   .look {
+    position: relative;
+    top: auto;
     flex-direction: column;
     gap: 20px;
     height: auto;
@@ -283,5 +287,42 @@
 
   .description {
     font-size: 17px;
+  }
+
+  /* Price under the name, so names get the full row. */
+  .piece {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    grid-template-areas: "thumb text" "thumb price";
+    align-items: center;
+    column-gap: 14px;
+    row-gap: 4px;
+  }
+
+  .thumb {
+    grid-area: thumb;
+    width: 64px;
+    height: 64px;
+  }
+
+  .thumb img {
+    width: 54px;
+    height: 54px;
+  }
+
+  .text {
+    grid-area: text;
+    width: auto;
+    align-self: end;
+  }
+
+  .price {
+    grid-area: price;
+    align-self: start;
+    font-size: 15px;
+  }
+
+  .actions {
+    align-items: center;
   }
 }
