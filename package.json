@@ -12,7 +12,8 @@
     "compare:framer": "node scripts/compare-pages.mjs",
     "catalog:build": "node scripts/build-khuwabb-data.mjs && node scripts/build-khuwabb-content.mjs",
     "catalog:gaps": "node scripts/catalog-gaps.mjs --md",
-    "shopify:sync": "node scripts/sync-shopify.mjs"
+    "shopify:sync": "node scripts/sync-shopify.mjs",
+    "theme:local": "node tools/local-preview/server.mjs"
   },
   "dependencies": {
     "framer-motion": "^14.14.0",

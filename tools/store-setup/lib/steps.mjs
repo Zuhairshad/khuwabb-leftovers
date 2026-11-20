@@ -1,18 +1,43 @@
-// Steps. Each has plan(local) -> string[] (offline) and run(ctx) (reads; writes only when ctx.apply).
+// Steps. Each has plan(local, flags) -> string[] (offline, each line tagged [additive] /
+// [go-live] / [publish-new-collections] / [report-only]) and run(ctx) (reads; writes only
+// when ctx.apply, and only the ops its tag allows for the current flags).
+//
+// Default --apply is additive-only: it may only add things a customer can't see yet (new
+// metafield values where none existed, new UNPUBLISHED collections, new menus/definitions).
+// --go-live unlocks the customer-visible / data-changing ops (publishing, media, productType,
+// descriptions, redirects, pinning+storefront access on existing definitions).
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { ROOT, DEFINITIONS, COLLECTIONS, MENUS, REDIRECTS, FILES, EMAIL } from "./data.mjs"
+import { collectionsCreatedByScript } from "./undo-log.mjs"
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 const mimeOf = (f) => (f.endsWith(".webp") ? "image/webp" : f.endsWith(".png") ? "image/png" : "image/jpeg")
 
-// Stat + write helper. In dry-run prints what would happen; in apply runs fn.
-async function act(ctx, st, label, fn, kind = "created") {
+// Stat + write helper. In dry-run (or when the op's gate is closed) prints what would happen;
+// in apply (with the gate open) runs fn and, if undoMeta is given, writes pending→done/failed
+// to the run's undo log.
+async function act(ctx, st, label, fn, kind = "created", undoMeta = null) {
   st[kind] = (st[kind] ?? 0) + 1
   if (!ctx.apply) return console.log(`  [would] ${label}`)
-  try { await fn(); console.log(`  [done]  ${label}`) } catch (e) { st.errors++; ctx.errors.push(`${label}: ${e.message}`); console.log(`  [ERROR] ${label}: ${e.message}`) }
+  let pendingId = null
+  if (undoMeta && ctx.undoLog) pendingId = ctx.undoLog.pending({ step: undoMeta.step, op: undoMeta.op, target: undoMeta.target, before: undoMeta.before ?? null }).id
+  try {
+    const result = await fn()
+    console.log(`  [done]  ${label}`)
+    if (undoMeta && ctx.undoLog) {
+      const extra = undoMeta.after ? (await undoMeta.after(result)) ?? {} : {}
+      ctx.undoLog.done({ id: pendingId, step: undoMeta.step, op: undoMeta.op, target: undoMeta.target, before: undoMeta.before ?? null, after: extra.after, createdIds: extra.createdIds, undo: extra.undo })
+    }
+    return result
+  } catch (e) {
+    st.errors++; ctx.errors.push(`${label}: ${e.message}`); console.log(`  [ERROR] ${label}: ${e.message}`)
+    if (undoMeta && ctx.undoLog) ctx.undoLog.failed({ id: pendingId, step: undoMeta.step, op: undoMeta.op, target: undoMeta.target, before: undoMeta.before ?? null, message: e.message })
+  }
 }
+// Report-only line (never writes, never gated): used for "report only" behaviours.
+function report(ctx, msg) { console.log(`  [report] ${msg}`) }
 const newStat = () => ({ created: 0, updated: 0, unchanged: 0, errors: 0 })
 
 async function shopProducts(ctx) {
@@ -23,7 +48,10 @@ async function shopProducts(ctx) {
 
 // ---------------------------------------------------------------- definitions
 const definitions = {
-  plan: () => DEFINITIONS.map((d) => `metafieldDefinitionCreate product custom.${d.key} (${d.type}) "${d.name}" pinned, storefront PUBLIC_READ`),
+  plan: () => DEFINITIONS.flatMap((d) => [
+    `[additive] create definition custom.${d.key} (${d.type}) "${d.name}" if missing`,
+    `[go-live] on an EXISTING custom.${d.key}: set storefront PUBLIC_READ + pin (default mode only reports this; type mismatch is always an error either way)`,
+  ]),
   async run(ctx) {
     const st = newStat()
     const existing = await ctx.api.gql(`query{metafieldDefinitions(ownerType:PRODUCT,namespace:"custom",first:100){nodes{id key type{name} pinnedPosition access{storefront}}}}`)
@@ -33,24 +61,30 @@ const definitions = {
       if (!ex) {
         await act(ctx, st, `create definition custom.${d.key} (${d.type})`, () => ctx.api.mutate(
           `mutation($d:MetafieldDefinitionInput!){metafieldDefinitionCreate(definition:$d){createdDefinition{id} userErrors{field message code}}}`,
-          { d: { name: d.name, namespace: "custom", key: d.key, description: d.description, type: d.type, ownerType: "PRODUCT", pin: true, access: { storefront: "PUBLIC_READ" } } }, "metafieldDefinitionCreate"))
+          { d: { name: d.name, namespace: "custom", key: d.key, description: d.description, type: d.type, ownerType: "PRODUCT", pin: true, access: { storefront: "PUBLIC_READ" } } }, "metafieldDefinitionCreate"),
+          "created",
+          { step: "definitions", op: "metafieldDefinitionCreate", target: `custom.${d.key}`, before: null,
+            after: (p) => ({ after: { id: p.createdDefinition.id }, createdIds: [p.createdDefinition.id], undo: { mutation: "metafieldDefinitionDelete", variables: { id: p.createdDefinition.id, deleteAllAssociatedMetafields: false } } }) })
         continue
       }
-      let changed = false
       if (ex.type.name !== d.type) { ctx.errors.push(`definition custom.${d.key} exists with type ${ex.type.name}, wanted ${d.type} (types can't change; fix by hand)`); st.errors++; console.log(`  [ERROR] custom.${d.key} type mismatch ${ex.type.name} != ${d.type}`); continue }
-      if (ex.access?.storefront !== "PUBLIC_READ") {
-        changed = true
-        await act(ctx, st, `set storefront PUBLIC_READ on custom.${d.key}`, () => ctx.api.mutate(
-          `mutation($d:MetafieldDefinitionUpdateInput!){metafieldDefinitionUpdate(definition:$d){updatedDefinition{id} userErrors{field message code}}}`,
-          { d: { namespace: "custom", key: d.key, ownerType: "PRODUCT", access: { storefront: "PUBLIC_READ" } } }, "metafieldDefinitionUpdate"), "updated")
+      const wantsAccess = ex.access?.storefront !== "PUBLIC_READ", wantsPin = ex.pinnedPosition == null
+      if (!wantsAccess && !wantsPin) { st.unchanged++; continue }
+      if (!ctx.goLive) {
+        report(ctx, `custom.${d.key} exists${wantsAccess ? "; storefront access is not PUBLIC_READ" : ""}${wantsPin ? "; not pinned" : ""} — would set with --go-live`)
+        st.unchanged++
+        continue
       }
-      if (ex.pinnedPosition == null) {
-        changed = true
-        await act(ctx, st, `pin custom.${d.key}`, () => ctx.api.mutate(
-          `mutation($k:String!){metafieldDefinitionPin(identifier:{ownerType:PRODUCT,namespace:"custom",key:$k}){pinnedDefinition{id} userErrors{field message code}}}`,
-          { k: d.key }, "metafieldDefinitionPin"), "updated")
-      }
-      if (!changed) st.unchanged++
+      if (wantsAccess) await act(ctx, st, `set storefront PUBLIC_READ on custom.${d.key}`, () => ctx.api.mutate(
+        `mutation($d:MetafieldDefinitionUpdateInput!){metafieldDefinitionUpdate(definition:$d){updatedDefinition{id} userErrors{field message code}}}`,
+        { d: { namespace: "custom", key: d.key, ownerType: "PRODUCT", access: { storefront: "PUBLIC_READ" } } }, "metafieldDefinitionUpdate"), "updated",
+        { step: "definitions", op: "metafieldDefinitionUpdate", target: `custom.${d.key}`, before: { access: ex.access ?? null },
+          after: () => ({ after: { access: { storefront: "PUBLIC_READ" } }, undo: { mutation: "metafieldDefinitionUpdate", variables: { d: { namespace: "custom", key: d.key, ownerType: "PRODUCT", access: { storefront: ex.access?.storefront ?? "NONE" } } } } }) })
+      if (wantsPin) await act(ctx, st, `pin custom.${d.key}`, () => ctx.api.mutate(
+        `mutation($k:String!){metafieldDefinitionPin(identifier:{ownerType:PRODUCT,namespace:"custom",key:$k}){pinnedDefinition{id} userErrors{field message code}}}`,
+        { k: d.key }, "metafieldDefinitionPin"), "updated",
+        { step: "definitions", op: "metafieldDefinitionPin", target: `custom.${d.key}`, before: { pinnedPosition: null },
+          after: () => ({ after: { pinned: true }, undo: { mutation: "metafieldDefinitionUnpin", variables: { identifier: { ownerType: "PRODUCT", namespace: "custom", key: d.key } } } }) })
     }
     return st
   },
@@ -69,33 +103,61 @@ function desiredMetafields(it) {
 }
 const products = {
   plan: (local, flags) => [
-    ...local.items.map((it) => `productUpdate ${it.handle}: productType="${it.productType}", custom.tint=${it.tint}${it.categoryLine ? `, custom.category_line="${it.categoryLine}"` : ""}${flags.descriptions && it.description ? ", descriptionHtml (only if empty in Shopify)" : ""}`),
-    ...local.shopifyHandles.filter((h) => !local.items.some((i) => i.handle === h)).map((h) => `report: ${h} is in data/shopify.json but not data/products.json`),
+    `[additive] per product: write custom.tint/category_line/fabric/care/size_guide ONLY for keys that are currently unset in Shopify (existing different value → report "[skip] differs", never overwritten, even with --go-live)`,
+    `[go-live] per product: productType → category (default mode only reports a mismatch)`,
+    ...(flags.descriptions ? [`[go-live] --descriptions: fill descriptionHtml only where Shopify's is empty (default mode, even with --descriptions, only reports)`] : []),
+    ...local.shopifyHandles.filter((h) => !local.items.some((i) => i.handle === h)).map((h) => `[report-only] ${h} is in data/shopify.json but not data/products.json`),
   ],
   async run(ctx) {
     const st = newStat()
     const shop = await shopProducts(ctx)
     for (const it of ctx.local.items) {
       const sp = shop.get(it.handle)
-      if (!sp) { console.log(`  [report] ${it.handle}: in products.json but NOT in Shopify`); st.errors++; ctx.errors.push(`product ${it.handle} missing in Shopify`); continue }
-      const input = { id: sp.id }, diffs = []
-      if (sp.productType !== it.productType) { input.productType = it.productType; diffs.push(`productType "${sp.productType}" → "${it.productType}"`) }
+      if (!sp) { report(ctx, `${it.handle}: in products.json but NOT in Shopify`); st.errors++; ctx.errors.push(`product ${it.handle} missing in Shopify`); continue }
       const have = new Map(sp.metafields.nodes.map((m) => [m.key, m.value]))
-      const mfs = desiredMetafields(it).filter((m) => (have.get(m.key) ?? "").toLowerCase() !== m.value.toLowerCase())
-      if (mfs.length) { input.metafields = mfs.map((m) => ({ namespace: "custom", ...m })); diffs.push(...mfs.map((m) => `custom.${m.key} "${have.get(m.key) ?? ""}" → "${m.value.slice(0, 50)}"`)) }
-      if (ctx.flags.descriptions && it.description && !sp.descriptionHtml.replace(/<[^>]*>/g, "").trim()) { input.descriptionHtml = `<p>${esc(it.description)}</p>`; diffs.push("descriptionHtml (was empty)") }
-      if (!diffs.length) { st.unchanged++; if (ctx.verbose) console.log(`  [same]  ${it.handle}`); continue }
+      const input = { id: sp.id }
+      const sets = [], skips = []
+      for (const m of desiredMetafields(it)) {
+        const cur = have.get(m.key)
+        if (cur == null || cur === "") sets.push(m)
+        else if (cur.toLowerCase() !== m.value.toLowerCase()) skips.push({ key: m.key, cur })
+      }
+      for (const s of skips) report(ctx, `${it.handle}: custom.${s.key} differs ("${s.cur}" vs desired "${(desiredMetafields(it).find((m) => m.key === s.key) ?? {}).value}") — [skip] differs, never overwritten; review by hand`)
+      const diffs = []
+      if (sets.length) { input.metafields = sets.map((m) => ({ namespace: "custom", ...m })); diffs.push(...sets.map((m) => `custom.${m.key} (was unset) → "${m.value.slice(0, 50)}"`)) }
+      let typeChangeOnly = false
+      if (sp.productType !== it.productType) {
+        if (ctx.goLive) { input.productType = it.productType; diffs.push(`productType "${sp.productType}" → "${it.productType}"`) }
+        else { report(ctx, `${it.handle}: productType "${sp.productType}" → "${it.productType}" — would set with --go-live`); typeChangeOnly = true }
+      }
+      if (ctx.flags.descriptions) {
+        const empty = !sp.descriptionHtml?.replace(/<[^>]*>/g, "").trim()
+        if (empty && it.description) {
+          if (ctx.goLive) { input.descriptionHtml = `<p>${esc(it.description)}</p>`; diffs.push("descriptionHtml (was empty)") }
+          else report(ctx, `${it.handle}: descriptionHtml is empty — would fill with --go-live --descriptions`)
+        }
+      }
+      if (!diffs.length) { if (!typeChangeOnly) st.unchanged++; continue }
+      const before = { productType: sp.productType, metafields: sets.map((m) => ({ key: m.key, value: have.get(m.key) ?? null })) }
       await act(ctx, st, `${it.handle}: ${diffs.join("; ")}`, () => ctx.api.mutate(
-        `mutation($p:ProductUpdateInput!){productUpdate(product:$p){product{id} userErrors{field message}}}`, { p: input }, "productUpdate"), "updated")
+        `mutation($p:ProductUpdateInput!){productUpdate(product:$p){product{id} userErrors{field message}}}`, { p: input }, "productUpdate"), "updated",
+        { step: "products", op: "productUpdate", target: it.handle, before,
+          // undo is a LIST of ops, run in reverse by undo.mjs: one metafieldsDelete per key
+          // that had no prior value (there's nothing to "restore" — it didn't exist), plus a
+          // productUpdate restoring productType, only when productType was actually changed.
+          after: () => {
+            const undo = sets.map((m) => ({ mutation: "metafieldsDelete", variables: { metafields: [{ ownerId: sp.id, namespace: "custom", key: m.key }] } }))
+            if (input.productType) undo.push({ mutation: "productUpdate", variables: { p: { id: sp.id, productType: sp.productType } } })
+            return { after: { productType: input.productType ?? sp.productType, metafieldsSet: sets.map((m) => m.key) }, undo }
+          } })
     }
-    for (const [h] of shop) if (!ctx.local.items.some((i) => i.handle === h)) console.log(`  [report] ${h}: in Shopify but NOT in products.json (left untouched)`)
+    for (const [h] of shop) if (!ctx.local.items.some((i) => i.handle === h)) report(ctx, `${h}: in Shopify but NOT in products.json (left untouched)`)
     return st
   },
 }
 
 // ---------------------------------------------------------------------- media
 async function uploadStaged(ctx, files, resource = "IMAGE") {
-  // files: [{path, filename}] -> [resourceUrl]
   const p = await ctx.api.mutate(
     `mutation($i:[StagedUploadInput!]!){stagedUploadsCreate(input:$i){stagedTargets{url resourceUrl parameters{name value}} userErrors{field message}}}`,
     { i: files.map((f) => ({ filename: f.filename, mimeType: mimeOf(f.filename), httpMethod: "POST", resource })) }, "stagedUploadsCreate")
@@ -119,14 +181,15 @@ async function productMedia(ctx, id) {
 }
 
 const media = {
+  // Customer-visible in the live theme's gallery → go-live only. Default mode only reports.
   plan: (local) => {
     const byP = {}
     for (const m of local.media) (byP[m.handle] ??= []).push(m)
     const lines = []
     for (const [h, ms] of Object.entries(byP)) {
-      lines.push(`${h}: upload ${ms.length} images via stagedUploadsCreate + productUpdate(media): ${ms.map((m) => `"${m.alt}"`).join(", ")}`)
+      lines.push(`[go-live] ${h}: upload ${ms.length} images via stagedUploadsCreate + productUpdate(media) (default mode only reports): ${ms.map((m) => `"${m.alt}"`).join(", ")}`)
       const cols = [...new Set(ms.map((m) => m.colour))]
-      lines.push(`${h}: productVariantAppendMedia — each variant → its colour's front image (${cols.join(", ")})`)
+      lines.push(`[go-live] ${h}: productVariantAppendMedia — each variant → its colour's front image (${cols.join(", ")}); a variant with a DIFFERENT media already attached is skipped and reported, never detached`)
     }
     return lines
   },
@@ -137,42 +200,56 @@ const media = {
     for (const m of ctx.local.media) byP.set(m.handle, [...(byP.get(m.handle) ?? []), m])
     for (const [handle, ms] of byP) {
       const sp = shop.get(handle)
-      if (!sp) { console.log(`  [skip]  ${handle}: not in Shopify`); continue }
+      if (!sp) { report(ctx, `${handle}: not in Shopify`); continue }
       let cur = await productMedia(ctx, sp.id)
       const haveAlts = new Set(cur.media.nodes.map((n) => n.alt))
       const missing = ms.filter((m) => !haveAlts.has(m.alt))
       st.unchanged += ms.length - missing.length
       if (missing.length) {
-        await act(ctx, st, `${handle}: upload ${missing.length} image(s): ${missing.map((m) => m.alt).join(", ")}`, async () => {
-          const urls = await uploadStaged(ctx, missing.map((m) => ({ path: m.file, filename: m.filename })))
-          await ctx.api.mutate(
-            `mutation($p:ProductUpdateInput!,$m:[CreateMediaInput!]){productUpdate(product:$p,media:$m){product{id} userErrors{field message}}}`,
-            { p: { id: sp.id }, m: missing.map((m, i) => ({ originalSource: urls[i], alt: m.alt, mediaContentType: "IMAGE" })) }, "productUpdate")
-        })
-        if (ctx.apply) cur = await productMedia(ctx, sp.id)
+        if (!ctx.goLive) { report(ctx, `${handle}: ${missing.length} image(s) not yet uploaded (would upload with --go-live): ${missing.map((m) => m.alt).join(", ")}`); st.unchanged += missing.length }
+        else {
+          const beforeIds = cur.media.nodes.map((n) => n.id)
+          await act(ctx, st, `${handle}: upload ${missing.length} image(s): ${missing.map((m) => m.alt).join(", ")}`, async () => {
+            const urls = await uploadStaged(ctx, missing.map((m) => ({ path: m.file, filename: m.filename })))
+            await ctx.api.mutate(
+              `mutation($p:ProductUpdateInput!,$m:[CreateMediaInput!]){productUpdate(product:$p,media:$m){product{id media(first:60){nodes{id}}} userErrors{field message}}}`,
+              { p: { id: sp.id }, m: missing.map((m, i) => ({ originalSource: urls[i], alt: m.alt, mediaContentType: "IMAGE" })) }, "productUpdate")
+          }, "created",
+            { step: "media", op: "productUpdate", target: handle, before: { mediaIds: beforeIds },
+              after: async () => {
+                const after = await productMedia(ctx, sp.id)
+                const createdIds = after.media.nodes.map((n) => n.id).filter((id) => !beforeIds.includes(id))
+                return { after: { mediaIds: after.media.nodes.map((n) => n.id) }, createdIds,
+                  undo: { mutation: "fileDelete", variables: { fileIds: createdIds }, note: "fileDelete also removes product media ids on recent API versions; productDeleteMedia(productId, mediaIds) is the alternative if that stops working" } }
+              } })
+          cur = await productMedia(ctx, sp.id)
+        }
       }
-      // variant → front image of its colour
       const front = new Map(cur.media.nodes.filter((n) => / \| front$/.test(n.alt ?? "")).map((n) => [n.alt.replace(/ \| front$/, ""), n]))
       const links = []
       for (const v of cur.variants.nodes) {
         const colour = v.selectedOptions.find((o) => o.name === "Color")?.value
         const f = front.get(colour)
-        if (!f) { if (ctx.apply || missing.length === 0) console.log(`  [warn]  ${handle}: no front image for variant colour "${colour}"`); continue }
-        if (v.media.nodes[0]?.id === f.id) { st.unchanged++; continue }
+        if (!f) { if (ctx.goLive) report(ctx, `${handle}: no front image for variant colour "${colour}"`); continue }
+        const existingId = v.media.nodes[0]?.id
+        if (existingId === f.id) { st.unchanged++; continue }
+        if (existingId) { report(ctx, `${handle}: variant "${colour}" already has a different media (${existingId}) attached — skipped, not detached; review by hand`); continue }
         links.push({ variantId: v.id, mediaIds: [f.id], f })
       }
-      if (ctx.apply && links.length) {
-        // media must be READY before it can be attached
-        for (let i = 0; i < 40; i++) {
-          const m = (await productMedia(ctx, sp.id)).media.nodes
-          if (links.every((l) => m.find((x) => x.id === l.f.id)?.status === "READY")) break
-          if (i === 39) { ctx.errors.push(`${handle}: media not READY after waiting; re-run to attach variants`); st.errors++ }
-          await sleep(3000)
-        }
+      if (!links.length) continue
+      if (!ctx.goLive) { report(ctx, `${handle}: ${links.length} variant(s) would be linked to media with --go-live`); st.unchanged += links.length; continue }
+      for (let i = 0; i < 40; i++) {
+        const m = (await productMedia(ctx, sp.id)).media.nodes
+        if (links.every((l) => m.find((x) => x.id === l.f.id)?.status === "READY")) break
+        if (i === 39) { ctx.errors.push(`${handle}: media not READY after waiting; re-run to attach variants`); st.errors++ }
+        await sleep(3000)
       }
-      if (links.length) await act(ctx, st, `${handle}: set media on ${links.length} variant(s)`, () => ctx.api.mutate(
+      await act(ctx, st, `${handle}: set media on ${links.length} variant(s)`, () => ctx.api.mutate(
         `mutation($p:ID!,$v:[ProductVariantAppendMediaInput!]!){productVariantAppendMedia(productId:$p,variantMedia:$v){userErrors{field message}}}`,
-        { p: sp.id, v: links.map(({ variantId, mediaIds }) => ({ variantId, mediaIds })) }, "productVariantAppendMedia"), "updated")
+        { p: sp.id, v: links.map(({ variantId, mediaIds }) => ({ variantId, mediaIds })) }, "productVariantAppendMedia"), "updated",
+        { step: "media", op: "productVariantAppendMedia", target: handle, before: { variants: links.map((l) => ({ variantId: l.variantId, mediaId: null })) },
+          after: () => ({ after: { variants: links.map((l) => ({ variantId: l.variantId, mediaId: l.mediaIds[0] })) },
+            undo: { mutation: "productVariantDetachMedia", variables: { productId: sp.id, variantMedia: links.map((l) => ({ variantId: l.variantId, mediaIds: l.mediaIds })) }, note: "variants skipped above (different media already attached) are not touched, so there is nothing to re-append on undo" } }) })
     }
     return st
   },
@@ -180,11 +257,12 @@ const media = {
 
 // ---------------------------------------------------------------- collections
 const collections = {
-  plan: (local) => [
+  plan: (local, flags) => [
     ...COLLECTIONS.map((c) => c.manual
-      ? `collectionCreate "${c.title}" (${c.handle}) manual, + collectionAddProducts for ${local.items.filter((i) => i.newIn).length} newIn products`
-      : `collectionCreate "${c.title}" (${c.handle}) smart: product type = "${c.type}"`),
-    `publishablePublish ${COLLECTIONS.length} collections to the Online Store publication`,
+      ? `[additive] create manual collection "${c.title}" (${c.handle}) UNPUBLISHED if its handle doesn't exist yet; add ${local.items.filter((i) => i.newIn).length} newIn product(s) [additive, only if this script created it]`
+      : `[additive] create smart collection "${c.title}" (${c.handle}) UNPUBLISHED if its handle doesn't exist yet: product type = "${c.type}"`),
+    `[report-only] if a collection's handle already exists: report only — never add products, publish, or change its rules`,
+    `[publish-new-collections / go-live] publish ONLY collections this script created (recorded in this run or in tools/store-setup/out/undo-*.jsonl) to the Online Store publication; a pre-existing collection is never published by this script`,
   ],
   async run(ctx) {
     const st = newStat()
@@ -192,35 +270,57 @@ const collections = {
     const online = pubs.find((p) => p.name === "Online Store")
     if (!online) { ctx.errors.push(`no "Online Store" publication found (have: ${pubs.map((p) => p.name).join(", ")})`); st.errors++ }
     const shop = await shopProducts(ctx)
+    const scriptCreated = new Set(ctx.store ? collectionsCreatedByScript(ctx.store) : [])
     const Q = `query($h:String!,$pub:ID!){collectionByIdentifier(identifier:{handle:$h}){id title ruleSet{appliedDisjunctively rules{column relation condition}} products(first:250){nodes{id}} publishedOnPublication(publicationId:$pub)}}`
     for (const c of COLLECTIONS) {
       let ex = (await ctx.api.gql(Q, { h: c.handle, pub: online?.id ?? "gid://shopify/Publication/0" })).collectionByIdentifier
       let id = ex?.id
+      let createdThisRun = false
       if (!ex) {
         const input = { title: c.title, handle: c.handle }
         if (!c.manual) input.ruleSet = { appliedDisjunctively: false, rules: [{ column: "TYPE", relation: "EQUALS", condition: c.type }] }
-        await act(ctx, st, `create ${c.manual ? "manual" : "smart"} collection "${c.title}" (${c.handle})`, async () => {
-          id = (await ctx.api.mutate(`mutation($i:CollectionInput!){collectionCreate(input:$i){collection{id} userErrors{field message}}}`, { i: input }, "collectionCreate")).collection.id
-        })
+        await act(ctx, st, `create ${c.manual ? "manual" : "smart"} collection "${c.title}" (${c.handle}) [UNPUBLISHED]`, async () => {
+          const r = await ctx.api.mutate(`mutation($i:CollectionInput!){collectionCreate(input:$i){collection{id} userErrors{field message}}}`, { i: input }, "collectionCreate")
+          id = r.collection.id
+          return r
+        }, "created",
+          { step: "collections", op: "collectionCreate", target: c.handle, before: null,
+            after: () => ({ after: { id }, createdIds: [id], undo: { mutation: "collectionDelete", variables: { input: { id } } } }) })
+        if (id) { createdThisRun = true; scriptCreated.add(c.handle) }
       } else {
         const r = ex.ruleSet?.rules ?? []
         const ok = c.manual ? !ex.ruleSet : r.length === 1 && r[0].column === "TYPE" && r[0].relation === "EQUALS" && r[0].condition === c.type
-        if (!ok) { st.errors++; ctx.errors.push(`collection ${c.handle} exists with different type/rules; fix by hand (not auto-changed)`); console.log(`  [ERROR] ${c.handle} exists with different rules`) }
-        else st.unchanged++
+        if (!ok) report(ctx, `collection ${c.handle} exists with different type/rules than desired; left unchanged — fix by hand if wrong`)
+        else report(ctx, `collection ${c.handle} already exists — report only, not modified`)
+        st.unchanged++
       }
-      if (c.manual) {
+      // In a dry run nothing is actually created, so treat "doesn't exist yet" as "this run
+      // would make it" for the preview messages below (apply mode only trusts real creation).
+      const scriptMade = createdThisRun || scriptCreated.has(c.handle) || (!ctx.apply && !ex)
+      if (c.manual && scriptMade) {
         const want = ctx.local.items.filter((i) => i.newIn).map((i) => shop.get(i.handle)?.id).filter(Boolean)
         const have = new Set((ex?.products.nodes ?? []).map((n) => n.id))
         const add = want.filter((x) => !have.has(x))
-        if (add.length) await act(ctx, st, `${c.handle}: add ${add.length} product(s)`, async () => {
+        if (add.length) await act(ctx, st, `${c.handle}: add ${add.length} product(s) [additive, script-created collection]`, async () => {
           if (!id) return
-          await ctx.api.mutate(`mutation($id:ID!,$p:[ID!]!){collectionAddProducts(id:$id,productIds:$p){collection{id} userErrors{field message}}}`, { id, p: add }, "collectionAddProducts")
-        }, "updated")
+          return ctx.api.mutate(`mutation($id:ID!,$p:[ID!]!){collectionAddProducts(id:$id,productIds:$p){collection{id} userErrors{field message}}}`, { id, p: add }, "collectionAddProducts")
+        }, "updated",
+          { step: "collections", op: "collectionAddProducts", target: c.handle, before: { productIds: [...have] },
+            after: () => ({ after: { addedProductIds: add }, undo: { mutation: null, note: "covered by deleting the collection (collectionCreate undo above); recorded here for the audit trail" } }) })
+      } else if (c.manual && !scriptMade) {
+        report(ctx, `${c.handle}: pre-existing manual collection — not adding products (only done for collections this script created)`)
       }
-      if (online && !ex?.publishedOnPublication) await act(ctx, st, `publish "${c.handle}" to Online Store`, async () => {
-        if (!id) return
-        await ctx.api.mutate(`mutation($id:ID!,$i:[PublicationInput!]!){publishablePublish(id:$id,input:$i){userErrors{field message}}}`, { id, i: [{ publicationId: online.id }] }, "publishablePublish")
-      }, "updated")
+      const canPublish = ctx.goLive || ctx.publishNewCollections
+      if (online && !ex?.publishedOnPublication) {
+        if (!scriptMade) report(ctx, `${c.handle}: not published — pre-existing collection, this script never publishes those`)
+        else if (!canPublish) report(ctx, `${c.handle}: would publish with --publish-new-collections or --go-live (script-created collection)`)
+        else await act(ctx, st, `publish "${c.handle}" to Online Store [script-created]`, async () => {
+          if (!id) return
+          return ctx.api.mutate(`mutation($id:ID!,$i:[PublicationInput!]!){publishablePublish(id:$id,input:$i){userErrors{field message}}}`, { id, i: [{ publicationId: online.id }] }, "publishablePublish")
+        }, "updated",
+          { step: "collections", op: "publishablePublish", target: c.handle, before: { published: false },
+            after: () => ({ after: { published: true }, undo: { mutation: "publishableUnpublish", variables: { id, input: [{ publicationId: online.id }] } } }) })
+      }
     }
     return st
   },
@@ -229,18 +329,26 @@ const collections = {
 // ---------------------------------------------------------------------- menus
 const norm = (u) => (u ?? "").replace(/^https?:\/\/[^/]+/i, "").replace(/\/$/, "") || "/"
 const menus = {
-  plan: () => MENUS.map((m) => `menu ${m.handle} "${m.title}": menuCreate/menuUpdate items → ${m.items.map(([t, u]) => `${t} (${u})`).join(", ")}`),
+  // Create-only: an existing handle is reported, never updated. menuUpdate is never called.
+  // The store's own "main-menu" handle is never read for writing or modified (we use
+  // "khuwabb-main" instead, defined in lib/data.mjs).
+  plan: () => MENUS.map((m) => `[additive] create menu ${m.handle} "${m.title}" if its handle doesn't exist → ${m.items.map(([t, u]) => `${t} (${u})`).join(", ")} [create-only: if it exists, report differences and do nothing; untested: HTTP/FRONTPAGE item shapes on 2026-10]`),
   async run(ctx) {
     const st = newStat()
     const existing = await ctx.api.all(async (after) => (await ctx.api.gql(`query($after:String){menus(first:50,after:$after){nodes{id handle title items{title url}} pageInfo{hasNextPage endCursor}}}`, { after })).menus)
     for (const m of MENUS) {
       const items = m.items.map(([title, url]) => url === "/" ? { title, type: "FRONTPAGE" } : { title, type: "HTTP", url })
       const ex = existing.find((e) => e.handle === m.handle)
-      if (!ex) { await act(ctx, st, `create menu ${m.handle}`, () => ctx.api.mutate(`mutation($t:String!,$h:String!,$i:[MenuItemCreateInput!]!){menuCreate(title:$t,handle:$h,items:$i){menu{id} userErrors{field message}}}`, { t: m.title, h: m.handle, i: items }, "menuCreate")); continue }
+      if (!ex) {
+        await act(ctx, st, `create menu ${m.handle}`, () => ctx.api.mutate(`mutation($t:String!,$h:String!,$i:[MenuItemCreateInput!]!){menuCreate(title:$t,handle:$h,items:$i){menu{id} userErrors{field message}}}`, { t: m.title, h: m.handle, i: items }, "menuCreate"), "created",
+          { step: "menus", op: "menuCreate", target: m.handle, before: null,
+            after: (p) => ({ after: { id: p.menu.id }, createdIds: [p.menu.id], undo: { mutation: "menuDelete", variables: { id: p.menu.id } } }) })
+        continue
+      }
       const same = ex.items.length === m.items.length && m.items.every(([t, u], i) => ex.items[i].title === t && norm(ex.items[i].url) === norm(u))
       if (same) { st.unchanged++; continue }
-      await act(ctx, st, `replace items of menu ${m.handle} (${ex.items.map((i) => i.title).join(", ") || "empty"} → ${m.items.map((i) => i[0]).join(", ")})`, () =>
-        ctx.api.mutate(`mutation($id:ID!,$t:String!,$h:String!,$i:[MenuItemUpdateInput!]!){menuUpdate(id:$id,title:$t,handle:$h,items:$i){menu{id} userErrors{field message}}}`, { id: ex.id, t: m.title === "Main menu" ? ex.title : m.title, h: m.handle, i: items }, "menuUpdate"), "updated")
+      report(ctx, `menu ${m.handle} exists with different items (${ex.items.map((i) => i.title).join(", ") || "empty"} vs desired ${m.items.map((i) => i[0]).join(", ")}) — not modified (create-only; menuUpdate is never called)`)
+      st.unchanged++
     }
     return st
   },
@@ -248,15 +356,23 @@ const menus = {
 
 // ------------------------------------------------------------------ redirects
 const redirects = {
-  plan: () => REDIRECTS.map(([a, b]) => `urlRedirectCreate ${a} → ${b}`),
+  // Only matters once the new pages exist → go-live only. Existing path with a different
+  // target is reported, never updated; urlRedirectUpdate is never called.
+  plan: () => REDIRECTS.map(([a, b]) => `[go-live] urlRedirectCreate ${a} → ${b} if path has no redirect yet (default mode only reports) [report-only if ${a} already redirects somewhere else]`),
   async run(ctx) {
     const st = newStat()
     const ex = await ctx.api.all(async (after) => (await ctx.api.gql(`query($after:String){urlRedirects(first:250,after:$after){nodes{id path target} pageInfo{hasNextPage endCursor}}}`, { after })).urlRedirects)
     for (const [path, target] of REDIRECTS) {
       const e = ex.find((r) => r.path === path)
-      if (!e) await act(ctx, st, `redirect ${path} → ${target}`, () => ctx.api.mutate(`mutation($r:UrlRedirectInput!){urlRedirectCreate(urlRedirect:$r){urlRedirect{id} userErrors{field message}}}`, { r: { path, target } }, "urlRedirectCreate"))
-      else if (norm(e.target) !== norm(target)) await act(ctx, st, `update redirect ${path}: ${e.target} → ${target}`, () => ctx.api.mutate(`mutation($id:ID!,$r:UrlRedirectInput!){urlRedirectUpdate(id:$id,urlRedirect:$r){urlRedirect{id} userErrors{field message}}}`, { id: e.id, r: { target } }, "urlRedirectUpdate"), "updated")
-      else st.unchanged++
+      if (!e) {
+        if (!ctx.goLive) { report(ctx, `${path} → ${target}: would create with --go-live`); st.unchanged++; continue }
+        await act(ctx, st, `redirect ${path} → ${target}`, () => ctx.api.mutate(`mutation($r:UrlRedirectInput!){urlRedirectCreate(urlRedirect:$r){urlRedirect{id} userErrors{field message}}}`, { r: { path, target } }, "urlRedirectCreate"), "created",
+          { step: "redirects", op: "urlRedirectCreate", target: path, before: null,
+            after: (p) => ({ after: { id: p.urlRedirect.id, target }, createdIds: [p.urlRedirect.id], undo: { mutation: "urlRedirectDelete", variables: { id: p.urlRedirect.id } } }) })
+      } else if (norm(e.target) !== norm(target)) {
+        report(ctx, `${path} already redirects to "${e.target}" (desired "${target}") — report only, never updated`)
+        st.unchanged++
+      } else st.unchanged++
     }
     return st
   },
@@ -265,7 +381,7 @@ const redirects = {
 // ---------------------------------------------------------------------- files
 const files = {
   optional: true,
-  plan: () => FILES.map(([p, n]) => `fileCreate ${p} as "${n}" (stagedUploadsCreate + fileCreate)`),
+  plan: () => FILES.map(([p, n]) => `[additive] fileCreate ${p} as "${n}" if not already present (stagedUploadsCreate + fileCreate)`),
   async run(ctx) {
     const st = newStat()
     for (const [path, filename] of FILES) {
@@ -275,8 +391,10 @@ const files = {
       if (found) { st.unchanged++; continue }
       await act(ctx, st, `upload file ${filename}`, async () => {
         const [url] = await uploadStaged(ctx, [{ path, filename }])
-        await ctx.api.mutate(`mutation($f:[FileCreateInput!]!){fileCreate(files:$f){files{id} userErrors{field message}}}`, { f: [{ originalSource: url, filename, contentType: "IMAGE", alt: filename.replace(/\.[^.]+$/, "").replace(/-/g, " ") }] }, "fileCreate")
-      })
+        return ctx.api.mutate(`mutation($f:[FileCreateInput!]!){fileCreate(files:$f){files{id} userErrors{field message}}}`, { f: [{ originalSource: url, filename, contentType: "IMAGE", alt: filename.replace(/\.[^.]+$/, "").replace(/-/g, " ") }] }, "fileCreate")
+      }, "created",
+        { step: "files", op: "fileCreate", target: filename, before: null,
+          after: (p) => ({ after: { id: p.files[0].id }, createdIds: [p.files[0].id], undo: { mutation: "fileDelete", variables: { fileIds: [p.files[0].id] } } }) })
     }
     return st
   },

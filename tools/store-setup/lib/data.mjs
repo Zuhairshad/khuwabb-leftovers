@@ -94,8 +94,10 @@ export const COLLECTIONS = [
 ]
 
 const M = `mailto:${EMAIL}`
+// NOTE: the store's built-in "main-menu" handle is never read for writing or modified; we create
+// our own menu "khuwabb-main" instead (create-only, like every other menu here).
 export const MENUS = [
-  { handle: "main-menu", title: "Main menu", items: [["Shop", "/collections/all"], ["New in", "/collections/new-in"], ["Lookbook", "/#looks"]] },
+  { handle: "khuwabb-main", title: "Main menu", items: [["Shop", "/collections/all"], ["New in", "/collections/new-in"], ["Lookbook", "/#looks"]] },
   { handle: "footer-shop", title: "Shop", items: [["All collections", "/collections/all"], ["New in", "/collections/new-in"], ["Lookbook", "/#looks"]] },
   { handle: "footer-help", title: "Help", items: [["Size guide", `${M}?subject=Size%20guide`], ["7-day exchange", `${M}?subject=Exchange`], [EMAIL, M]] },
   { handle: "footer-khuwabb", title: "Khuwabb", items: [["Born in Lahore", "/"], ["Delivery across Pakistan", "/collections/all"], ["Cash on delivery", "/collections/all"]] },

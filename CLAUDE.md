@@ -30,7 +30,7 @@ Stage B (local terminal) — runbook: docs/stage-b.md
 - `shopify theme dev` runs once, started by the main session, in the background. Agents never start their own.
 - The compare tool is the source of truth for visual match.
 
-**Current stage: A**
+**Current stage: B**
 
 ## Known pitfalls
 - The React source uses **CSS Modules + `app/globals.css`, not Tailwind**. Parity tables map each CSS-module rule (file:line) to its theme selector; class names are scoped hashes, so theme classes follow the naming in docs/mapping.md.
