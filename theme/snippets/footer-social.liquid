@@ -1,0 +1,36 @@
+{%- comment -%}
+  Footer social circles (components/Footer.tsx SOCIAL, lines 38-42, 69-82).
+  URLs come from global settings; a network with a blank URL is hidden.
+  Icons are the public/icons SVGs used as CSS masks.
+{%- endcomment -%}
+{%- liquid
+  assign names = 'Instagram,Tiktok,Pinterest' | split: ','
+  assign has_any = false
+  if settings.social_instagram_link != blank or settings.social_tiktok_link != blank or settings.social_pinterest_link != blank
+    assign has_any = true
+  endif
+-%}
+{%- if has_any -%}
+  <div class="footer__follow">
+    {%- for name in names -%}
+      {%- liquid
+        case name
+          when 'Instagram'
+            assign href = settings.social_instagram_link
+            assign icon = 'icon-instagram.svg' | asset_url
+          when 'Tiktok'
+            assign href = settings.social_tiktok_link
+            assign icon = 'icon-tiktok.svg' | asset_url
+          else
+            assign href = settings.social_pinterest_link
+            assign icon = 'icon-pinterest.svg' | asset_url
+        endcase
+      -%}
+      {%- if href != blank -%}
+        <a class="footer__social" href="{{ href }}" aria-label="{{ name }}">
+          <span class="footer__icon" style="-webkit-mask-image: url({{ icon }}); mask-image: url({{ icon }});"></span>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}

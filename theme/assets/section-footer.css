@@ -1,0 +1,444 @@
+/*
+ * Footer, newsletter form and fitting curtain.
+ * Ported from components/Footer.module.css, NewsletterForm.module.css and
+ * the inline styles in components/FittingCurtain.tsx. See docs/parity/footer.md.
+ * Breakpoints: tablet 810-1199.98, phone max 809.98.
+ */
+
+/* ---------------- Footer (Footer.module.css) ---------------- */
+.footer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 160px;
+  width: 100%;
+  min-height: 900px;
+  padding: 220px 96px 32px;
+  overflow: clip;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.footer__newsletter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.footer__title {
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--paper);
+}
+
+.footer__lede {
+  max-width: 520px;
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+  color: rgba(247, 243, 236, 0.7);
+}
+
+.footer__form {
+  width: 100%;
+  max-width: 520px;
+}
+
+.footer__bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+  max-width: 1216px;
+}
+
+.footer__columns {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  width: 100%;
+  padding: 40px 0 0;
+}
+
+.footer__columns::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-top: 1px solid #f7f3ec24;
+  pointer-events: none;
+}
+
+.footer__column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 0 0;
+  width: 1px;
+  min-width: 160px;
+}
+
+.footer__heading {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+}
+
+.footer__link {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: rgba(247, 243, 236, 0.7);
+}
+
+.footer__follow {
+  display: flex;
+  gap: 10px;
+}
+
+.footer__social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: rgba(247, 243, 236, 0.08);
+  transition: background-color 0.3s var(--ease-out);
+}
+
+.footer__social:hover {
+  background-color: rgba(247, 243, 236, 0.18);
+}
+
+.footer__icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: var(--paper);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.footer__legal p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19.6px;
+  color: rgba(247, 243, 236, 0.5);
+}
+
+.footer__curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .footer {
+    gap: 120px;
+    padding: 200px 72px 32px;
+  }
+
+  .footer__title {
+    font-size: 84px;
+  }
+
+  .footer__lede {
+    font-size: 19px;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .footer {
+    gap: 96px;
+    min-height: 760px;
+    padding: 140px 36px 28px;
+  }
+
+  .footer__title {
+    font-size: 54px;
+  }
+
+  .footer__lede {
+    font-size: 17px;
+  }
+
+  .footer__columns {
+    gap: 32px;
+  }
+
+  .footer__legal {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+/* ---------------- Newsletter (NewsletterForm.module.css) ---------------- */
+.newsletter-form__shell {
+  margin: 0;
+}
+
+.newsletter-form {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  font-family: var(--font-body);
+  color: var(--paper);
+}
+
+.newsletter-form__form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 22px;
+  border-radius: 999px;
+  background: rgba(247, 243, 236, 0.08);
+  border: 1px solid rgba(247, 243, 236, 0.16);
+  transition: border-color 0.3s ease;
+  overflow: hidden;
+}
+
+.newsletter-form[data-state="bad"] .newsletter-form__form {
+  border-color: #f3a0a0;
+}
+
+.newsletter-form__input {
+  flex: 1;
+  min-width: 0;
+  height: 50px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--paper);
+  font: inherit;
+  font-size: 16px;
+  transition: opacity 0.4s ease;
+}
+
+.newsletter-form__input::placeholder {
+  color: rgba(247, 243, 236, 0.5);
+}
+
+/* The reference removes the input outline; keep a visible focus ring on the pill instead (a11y). */
+.newsletter-form__form:focus-within {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+}
+
+.newsletter-form__button {
+  flex-shrink: 0;
+  height: 50px;
+  padding: 0 24px;
+  border-radius: 999px;
+  border: none;
+  background: var(--pistachio);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transform: scale(1);
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease;
+}
+
+.newsletter-form__button:hover {
+  transform: scale(1.04);
+}
+
+.newsletter-form[data-state="sending"] .newsletter-form__button {
+  opacity: 0.6;
+}
+
+.newsletter-form[data-state="done"] .newsletter-form__input,
+.newsletter-form[data-state="done"] .newsletter-form__button {
+  opacity: 0;
+}
+
+.newsletter-form[data-state="done"] .newsletter-form__button:hover {
+  transform: scale(1);
+}
+
+.newsletter-form__done {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--pistachio);
+  color: var(--ink);
+  border-radius: 999px;
+  clip-path: circle(0% at 90% 50%);
+  transition: clip-path 1s var(--ease-in-out);
+  pointer-events: none;
+}
+
+.newsletter-form[data-state="done"] .newsletter-form__done {
+  clip-path: circle(150% at 90% 50%);
+}
+
+.newsletter-form__error {
+  height: 22px;
+  padding: 8px 0 0 22px;
+  font-size: 13px;
+  color: #f3a0a0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.newsletter-form[data-state="bad"] .newsletter-form__error {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .newsletter-form__done,
+  .newsletter-form__button {
+    transition: none;
+  }
+}
+
+/* ---------------- Fitting curtain (FittingCurtain.tsx) ---------------- */
+.fitting-curtain {
+  --curtain-edge: var(--curtain-edge-desktop, 56px);
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* element width < 640 (set by assets/footer.js ResizeObserver) */
+.fitting-curtain[data-compact] {
+  --curtain-edge: var(--curtain-edge-mobile, 16px);
+}
+
+/* Without JS the curtain could never open: hide it. */
+.no-js .fitting-curtain {
+  display: none;
+}
+
+.fitting-curtain__panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.5%;
+  transform: translateX(0) skewY(0deg);
+  transition: transform var(--curtain-duration, 2.2s) var(--ease-in-out) 0s;
+  will-change: transform;
+}
+
+.fitting-curtain--rod .fitting-curtain__panel {
+  top: 10px;
+}
+
+.fitting-curtain__panel--left {
+  left: 0;
+  transform-origin: 0% 0%;
+}
+
+.fitting-curtain__panel--right {
+  right: 0;
+  transform-origin: 100% 0%;
+}
+
+.fitting-curtain[data-open] .fitting-curtain__panel {
+  transition-delay: var(--curtain-delay, 0.15s);
+}
+
+.fitting-curtain[data-open] .fitting-curtain__panel--left {
+  transform: translateX(calc(-100% + var(--curtain-edge)));
+}
+
+.fitting-curtain[data-open] .fitting-curtain__panel--right {
+  transform: translateX(calc(100% - var(--curtain-edge)));
+}
+
+.fitting-curtain__hem {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26px;
+  background: linear-gradient(180deg, rgba(23, 20, 15, 0) 0%, rgba(23, 20, 15, 0.16) 100%);
+}
+
+.fitting-curtain__fold {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 36px;
+  opacity: 1;
+  transition: opacity calc(var(--curtain-duration, 2.2s) * 0.6) ease 0s;
+}
+
+.fitting-curtain__panel--left .fitting-curtain__fold {
+  right: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.28) 60%, rgba(23, 20, 15, 0.12) 100%);
+}
+
+.fitting-curtain__panel--right .fitting-curtain__fold {
+  left: 0;
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.28) 60%, rgba(23, 20, 15, 0.12) 100%);
+}
+
+.fitting-curtain[data-open] .fitting-curtain__fold {
+  opacity: 0;
+  transition-delay: var(--curtain-delay, 0.15s);
+}
+
+.fitting-curtain__rod {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 12px;
+  background: linear-gradient(180deg, #ece8e0 0%, #b4afa6 55%, #77726a 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fitting-curtain__panel,
+  .fitting-curtain__fold {
+    transition: none;
+  }
+}

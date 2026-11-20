@@ -1,0 +1,74 @@
+{%- comment -%}
+  Fitting curtain (components/FittingCurtain.tsx). Parameter: cfg (section.settings).
+  Rendered closed on the server with the pleat gradients precomputed from the
+  colour settings (shade() ported to Liquid), so there is no flash. assets/footer.js
+  (<fitting-curtain>) only toggles [data-open] and [data-compact].
+{%- endcomment -%}
+{%- liquid
+  assign stops_t = '-0.14,0.05,0.38,0.08,-0.1,-0.14' | split: ','
+  assign stops_p = '0,0.22,0.45,0.68,0.9,1' | split: ','
+  assign pleat = cfg.curtain_pleat | default: 56
+  assign left_color = cfg.curtain_left | default: '#d5e5be'
+  assign right_color = cfg.curtain_right | default: '#f6c9cf'
+
+  assign sides = 'left,right' | split: ','
+  for side in sides
+    if side == 'left'
+      assign c = left_color
+    else
+      assign c = right_color
+    endif
+    assign cr = c | color_extract: 'red'
+    assign cg = c | color_extract: 'green'
+    assign cb = c | color_extract: 'blue'
+    assign parts = ''
+    for t_str in stops_t
+      assign t = t_str | times: 1.0
+      if t >= 0
+        assign r = 255 | minus: cr | times: t | plus: cr | round
+        assign g = 255 | minus: cg | times: t | plus: cg | round
+        assign b = 255 | minus: cb | times: t | plus: cb | round
+      else
+        assign k = 1.0 | plus: t
+        assign r = cr | times: k | round
+        assign g = cg | times: k | round
+        assign b = cb | times: k | round
+      endif
+      assign pos = stops_p[forloop.index0] | times: pleat | round: 3
+      assign part = 'rgb(' | append: r | append: ', ' | append: g | append: ', ' | append: b | append: ') ' | append: pos | append: 'px'
+      if forloop.first
+        assign parts = part
+      else
+        assign parts = parts | append: ', ' | append: part
+      endif
+    endfor
+    if side == 'left'
+      assign gradient_left = 'repeating-linear-gradient(90deg, ' | append: parts | append: ')'
+    else
+      assign gradient_right = 'repeating-linear-gradient(90deg, ' | append: parts | append: ')'
+    endif
+  endfor
+
+  assign threshold = cfg.curtain_threshold | default: 30 | divided_by: 100.0
+-%}
+<fitting-curtain
+  class="fitting-curtain{% if cfg.curtain_rod %} fitting-curtain--rod{% endif %}"
+  aria-hidden="true"
+  data-threshold="{{ threshold }}"
+  {% if cfg.curtain_replay %}
+    data-replay
+  {% endif %}
+  style="--curtain-edge-desktop: {{ cfg.curtain_edge | default: 56 }}px; --curtain-edge-mobile: {{ cfg.curtain_edge_mobile | default: 16 }}px; --curtain-duration: {{ cfg.curtain_duration | default: 2.2 }}s; --curtain-delay: {{ cfg.curtain_delay | default: 150 }}ms;"
+>
+  <div class="fitting-curtain__panel fitting-curtain__panel--left" style="background: {{ gradient_left }};">
+    <div class="fitting-curtain__fold"></div>
+    <div class="fitting-curtain__hem"></div>
+  </div>
+  <div class="fitting-curtain__panel fitting-curtain__panel--right" style="background: {{ gradient_right }};">
+    <div class="fitting-curtain__fold"></div>
+    <div class="fitting-curtain__hem"></div>
+  </div>
+  {%- if cfg.curtain_rod -%}
+    <div class="fitting-curtain__rod"></div>
+  {%- endif -%}
+</fitting-curtain>

@@ -1,0 +1,270 @@
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'footer.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign email = settings.contact_email
+  assign fallback_titles = 'Shop,Help,Khuwabb' | split: ','
+-%}
+
+<footer class="footer" data-section="footer">
+  <div class="footer__newsletter">
+    <h2 class="footer__title">{{ section.settings.title }}</h2>
+    {%- if section.settings.lede != blank -%}
+      <p class="footer__lede">{{ section.settings.lede | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.show_newsletter -%}
+      <div class="footer__form">
+        {%- render 'newsletter-form', section: section -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="footer__bottom">
+    <div class="footer__columns">
+      {%- for i in (1..3) -%}
+        {%- liquid
+          case i
+            when 1
+              assign menu = section.settings.menu_1
+            when 2
+              assign menu = section.settings.menu_2
+            else
+              assign menu = section.settings.menu_3
+          endcase
+          assign has_links = false
+          if menu != blank and menu.links.size > 0
+            assign has_links = true
+          endif
+          assign heading = fallback_titles[forloop.index0]
+          if has_links and menu.title != blank
+            assign heading = menu.title
+          endif
+        -%}
+        <div class="footer__column">
+          <p class="footer__heading">{{ heading }}</p>
+          {%- if has_links -%}
+            {%- for link in menu.links -%}
+              <p class="footer__link"><a href="{{ link.url }}">{{ link.title }}</a></p>
+            {%- endfor -%}
+          {%- else -%}
+            {%- case i -%}
+              {%- when 1 -%}
+                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">All collections</a></p>
+                <p class="footer__link"><a href="{{ routes.collections_url }}/new-in">New in</a></p>
+                <p class="footer__link"><a href="{{ routes.root_url }}#looks">Lookbook</a></p>
+              {%- when 2 -%}
+                <p class="footer__link"><a href="mailto:{{ email }}?subject=Size%20guide">Size guide</a></p>
+                <p class="footer__link"><a href="mailto:{{ email }}?subject=Exchange">7-day exchange</a></p>
+                <p class="footer__link"><a href="mailto:{{ email }}">{{ email }}</a></p>
+              {%- else -%}
+                <p class="footer__link"><a href="{{ routes.root_url }}">Born in Lahore</a></p>
+                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">Delivery across Pakistan</a></p>
+                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">Cash on delivery</a></p>
+            {%- endcase -%}
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+      {%- render 'footer-social' -%}
+    </div>
+    <div class="footer__legal">
+      <p>© {{ 'now' | date: '%Y' }} Khuwabb.{% if section.settings.legal_text != blank %} {{ section.settings.legal_text }}{% endif %}</p>
+    </div>
+  </div>
+
+  {%- if section.settings.curtain_enabled -%}
+    <div class="footer__curtain">
+      {%- render 'fitting-curtain', cfg: section.settings -%}
+    </div>
+  {%- endif -%}
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Dressed in dreams"
+    },
+    {
+      "type": "textarea",
+      "id": "lede",
+      "label": "Lede",
+      "default": "Clothes that feel like a dream you never want to wake up from. New drops every week — hear about them first."
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter form",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Email placeholder",
+      "default": "Your email"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button",
+      "label": "Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_success",
+      "label": "Success message",
+      "default": "You’re in. See you in your inbox."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_error",
+      "label": "Error message",
+      "default": "That email doesn’t look right"
+    },
+    {
+      "type": "header",
+      "content": "Link columns"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "Column 1 menu",
+      "default": "footer-shop",
+      "info": "The menu title is the column heading. Falls back to the built-in Shop links when empty."
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Column 2 menu",
+      "default": "footer-help",
+      "info": "Falls back to the built-in Help links when empty."
+    },
+    {
+      "type": "link_list",
+      "id": "menu_3",
+      "label": "Column 3 menu",
+      "default": "footer-khuwabb",
+      "info": "Falls back to the built-in Khuwabb links when empty."
+    },
+    {
+      "type": "header",
+      "content": "Legal"
+    },
+    {
+      "type": "text",
+      "id": "legal_text",
+      "label": "Legal text",
+      "default": "Born in Lahore.",
+      "info": "Shown after “© year Khuwabb.”"
+    },
+    {
+      "type": "header",
+      "content": "Fitting curtain"
+    },
+    {
+      "type": "checkbox",
+      "id": "curtain_enabled",
+      "label": "Show curtain",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "curtain_left",
+      "label": "Left curtain colour",
+      "default": "#d5e5be"
+    },
+    {
+      "type": "color",
+      "id": "curtain_right",
+      "label": "Right curtain colour",
+      "default": "#f6c9cf"
+    },
+    {
+      "type": "range",
+      "id": "curtain_edge",
+      "label": "Visible edge when open",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "curtain_edge_mobile",
+      "label": "Visible edge when open (narrow)",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "curtain_pleat",
+      "label": "Pleat width",
+      "min": 8,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "curtain_duration",
+      "label": "Open duration",
+      "min": 0.5,
+      "max": 6,
+      "step": 0.1,
+      "unit": "s",
+      "default": 2.2
+    },
+    {
+      "type": "range",
+      "id": "curtain_delay",
+      "label": "Open delay",
+      "min": 0,
+      "max": 2000,
+      "step": 50,
+      "unit": "ms",
+      "default": 150
+    },
+    {
+      "type": "range",
+      "id": "curtain_threshold",
+      "label": "Open when visible",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "curtain_replay",
+      "label": "Close again when scrolled back up",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "curtain_rod",
+      "label": "Show curtain rod",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
