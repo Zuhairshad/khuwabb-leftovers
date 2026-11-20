@@ -44,7 +44,8 @@
 <cart-drawer class="cart-drawer" data-section="cart-drawer" data-count="{{ count }}">
   <div class="cart-drawer__layer" data-layer inert aria-hidden="true">
     <div class="cart-drawer__scrim" data-close aria-hidden="true"></div>
-    <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ section.settings.title | escape }}" data-bag-drawer data-code-component>
+    <div class="cart-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ section.settings.title | escape }}" data-bag-drawer data-code-component>
+      <div class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" data-drawer-live></div>
       <div data-drawer-inner class="cart-drawer__inner">
         <div class="cart-drawer__head">
           <div class="cart-drawer__title">
@@ -110,16 +111,13 @@
           </div>
         {%- endif -%}
       </div>
-    </aside>
+    </div>
   </div>
 </cart-drawer>
 
 {% schema %}
 {
   "name": "Cart drawer",
-  "enabled_on": {
-    "groups": ["custom.overlay"]
-  },
   "settings": [
     { "type": "text", "id": "title", "label": "Title", "default": "Your bag" },
     { "type": "text", "id": "empty_text", "label": "Empty text", "default": "Your bag is empty." },

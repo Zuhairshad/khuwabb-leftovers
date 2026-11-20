@@ -37,7 +37,7 @@
 >
   <div class="cart-line__thumb">
     {%- if item.image -%}
-      <img src="{{ item.image | image_url: width: 300 }}" alt="{{ line_name | escape }}" width="300" height="{{ 300 | times: item.image.height | divided_by: item.image.width }}" loading="lazy" decoding="async">
+      <img src="{{ item.image | image_url: width: 300 }}" alt="" width="300" height="{{ 300 | times: item.image.height | divided_by: item.image.width }}" loading="lazy" decoding="async">
     {%- endif -%}
   </div>
   <div class="cart-line__body">
@@ -56,18 +56,18 @@
     </div>
     <div class="cart-line__bottom">
       <div class="cart-line__stepper">
-        <button type="button" aria-label="{{ 'bag.one_less' | t }}" data-action="dec" data-step="-1">&minus;</button>
+        <button type="button" aria-label="{{ 'bag.one_less_label' | t: title: line_name }}" data-action="dec" data-step="-1">&minus;</button>
         {%- if context == 'page' -%}
-          <input class="cart-line__qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric" aria-label="{{ line_name | escape }}" data-qty>
+          <input class="cart-line__qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric" aria-label="{{ 'bag.quantity_label' | t: title: line_name }}" data-qty>
         {%- else -%}
           <span data-qty>{{ item.quantity }}</span>
         {%- endif -%}
-        <button type="button" aria-label="{{ 'bag.one_more' | t }}" data-action="inc" data-step="1"{% unless orderable %} disabled{% endunless %}>+</button>
+        <button type="button" aria-label="{{ 'bag.one_more_label' | t: title: line_name }}" data-action="inc" data-step="1"{% unless orderable %} disabled{% endunless %}>+</button>
       </div>
       {%- if context == 'page' -%}
-        <a class="cart-line__remove" href="{{ item.url_to_remove }}" data-action="remove">{{ 'bag.remove' | t }}</a>
+        <a class="cart-line__remove" href="{{ item.url_to_remove }}" data-action="remove" aria-label="{{ 'bag.remove_label' | t: title: line_name }}">{{ 'bag.remove' | t }}</a>
       {%- else -%}
-        <button type="button" class="cart-line__remove" data-action="remove">{{ 'bag.remove' | t }}</button>
+        <button type="button" class="cart-line__remove" data-action="remove" aria-label="{{ 'bag.remove_label' | t: title: line_name }}">{{ 'bag.remove' | t }}</button>
       {%- endif -%}
     </div>
   </div>

@@ -55,8 +55,9 @@
           <span class="cart-num">{% render 'price', price: subtotal %}</span>
         </div>
         <div class="cart-drawer__note" data-checkout-note>{{ note | escape }}</div>
+        <button type="submit" name="update" value="" class="visually-hidden" tabindex="-1" aria-hidden="true" data-update></button>
         <noscript>
-          <button type="submit" name="update" class="main-cart__update">Update</button>
+          <button type="submit" name="update" class="main-cart__update">{{ 'bag.update' | t }}</button>
         </noscript>
         <button
           type="submit"
@@ -77,6 +78,14 @@
       (function () {
         var form = document.getElementById('MainCartForm')
         if (!form) return
+        var updateButton = form.querySelector('[data-update]')
+        var submitting = false
+        function submit() {
+          if (submitting) return
+          submitting = true
+          if (form.requestSubmit) form.requestSubmit(updateButton || undefined)
+          else form.submit()
+        }
         form.addEventListener('click', function (e) {
           var button = e.target.closest('[data-step]')
           if (!button || button.disabled) return
@@ -84,10 +93,16 @@
           var input = line && line.querySelector('input[data-qty]')
           if (!input) return
           input.value = Math.max(0, (parseInt(input.value, 10) || 0) + parseInt(button.dataset.step, 10))
-          form.requestSubmit ? form.requestSubmit() : form.submit()
+          submit()
+        })
+        form.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && e.target.matches('input[data-qty]')) {
+            e.preventDefault()
+            submit()
+          }
         })
         form.addEventListener('change', function (e) {
-          if (e.target.matches('input[data-qty]')) form.requestSubmit ? form.requestSubmit() : form.submit()
+          if (e.target.matches('input[data-qty]')) submit()
         })
       })()
     </script>

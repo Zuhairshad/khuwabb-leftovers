@@ -78,7 +78,10 @@ class CartDrawer extends HTMLElement {
     this.unlock()
     const opener = this.opener
     this.opener = null
-    if (restore && opener && document.contains(opener)) opener.focus({ preventScroll: true })
+    if (!restore) return
+    const fallback = document.querySelector('[data-bag-button]')
+    const target = opener && document.contains(opener) ? opener : fallback
+    if (target) target.focus({ preventScroll: true })
   }
 
   lock() {
@@ -171,13 +174,16 @@ class CartDrawer extends HTMLElement {
     if (line) {
       target = line.querySelector('[data-action="' + action + '"]:not([disabled])') || line.querySelector('[data-action="remove"]')
     }
-    if (!target) target = this.querySelector('[data-line] [data-action="remove"]') || this.querySelector('[data-close]')
+    if (!target) target = this.querySelector('[data-line] [data-action="remove"]') || this.querySelector('[data-close-button]')
     if (target) target.focus({ preventScroll: true })
   }
 
   handleChange(detail) {
     const html = detail.sections && detail.sections['cart-drawer']
-    if (html) this.swap(html)
+    if (html) {
+      this.swap(html)
+      this.announce()
+    }
     const cart = detail.cart
     if (!cart || typeof cart.item_count !== 'number') return
     const count = cart.item_count
@@ -198,6 +204,25 @@ class CartDrawer extends HTMLElement {
     if (list) list.scrollTop = top
   }
 
+  // Polite live region (outside the swapped markup): "Bag, 2 items · Subtotal Rs.5,000".
+  announce() {
+    const live = this.querySelector('[data-drawer-live]')
+    if (!live) return
+    const strings = (window.Khuwabb && window.Khuwabb.strings) || {}
+    const count = parseInt(this.querySelector('[data-drawer-count]')?.textContent, 10) || 0
+    const subtotal = this.querySelector('.cart-drawer__subtotal')
+    let text = this.querySelector('.cart-drawer__empty-text')?.textContent.trim() || ''
+    if (count > 0) {
+      const template = (count === 1 ? strings.bagButtonOne : strings.bagButton) || ''
+      text = template.replace('[count]', String(count))
+      if (subtotal) text += ' · ' + Array.from(subtotal.children).map((s) => s.textContent.trim()).join(' ')
+    }
+    live.textContent = ''
+    requestAnimationFrame(() => {
+      live.textContent = text
+    })
+  }
+
   updateHeader(count) {
     const strings = (window.Khuwabb && window.Khuwabb.strings) || {}
     document.querySelectorAll('[data-bag-count]').forEach((badge) => {
@@ -209,7 +234,8 @@ class CartDrawer extends HTMLElement {
       }
     })
     document.querySelectorAll('[data-bag-button]').forEach((button) => {
-      if (strings.bagButton) button.setAttribute('aria-label', strings.bagButton.replace('[count]', String(count)))
+      const template = count === 1 ? strings.bagButtonOne || strings.bagButton : strings.bagButton
+      if (template) button.setAttribute('aria-label', template.replace('[count]', String(count)))
     })
   }
 }

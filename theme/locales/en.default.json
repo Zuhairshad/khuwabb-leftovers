@@ -8,7 +8,8 @@
     "pagination": {
       "previous": "Previous",
       "next": "Next",
-      "page": "Page {{ number }}"
+      "page": "Page {{ number }}",
+      "label": "Pagination"
     },
     "password_page": {
       "login_label": "Enter store password",
@@ -32,7 +33,10 @@
   },
   "bag": {
     "button": "Bag",
-    "button_label": "Bag, {{ count }} items",
+    "button_label": {
+      "one": "Bag, {{ count }} item",
+      "other": "Bag, {{ count }} items"
+    },
     "title": "Your bag",
     "empty": "Your bag is empty.",
     "start_shopping": "Start shopping",
@@ -49,7 +53,12 @@
     "note_paused": "Online checkout is paused right now.",
     "free_delivery_away": "{{ amount }} away from free delivery",
     "free_delivery_unlocked": "Free delivery unlocked",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "update": "Update",
+    "quantity_label": "Quantity for {{ title }}",
+    "one_less_label": "One less {{ title }}",
+    "one_more_label": "One more {{ title }}",
+    "remove_label": "Remove {{ title }}"
   },
   "product": {
     "colour": "Colour",

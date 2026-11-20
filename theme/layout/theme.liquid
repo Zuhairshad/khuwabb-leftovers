@@ -6,6 +6,10 @@
     {%- render 'head-fonts' -%}
     {{ 'tokens.css' | asset_url | stylesheet_tag }}
     {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'section-header.css' | asset_url | preload_tag: as: 'style' }}
+    {%- if template.name == 'index' -%}
+      {{ 'section-hero-reels.css' | asset_url | preload_tag: as: 'style' }}
+    {%- endif -%}
     <script src="{{ 'money.js' | asset_url }}" defer></script>
     <script src="{{ 'cart.js' | asset_url }}" defer></script>
     <script src="{{ 'appear.js' | asset_url }}" defer></script>
@@ -22,6 +26,8 @@
     </main>
 
     {% sections 'footer-group' %}
+    {%- comment -%} Static so the Section Rendering API can return it by id 'cart-drawer'. {%- endcomment -%}
+    {% section 'cart-drawer' %}
     {% sections 'overlay-group' %}
   </body>
 </html>

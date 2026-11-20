@@ -45,12 +45,12 @@ Class map: `.layer/.scrim/.panel/.head/.title/.count/.close/.meter*/.track/.fill
 | `FREE_OVER = 0`, meter only if > 0, no NaN | D `free_over` setting (whole rupees x100 -> cents); `{% if free_over_cents > 0 %}`, progress capped 0-100 via Liquid |
 | `EMPTY_IMAGE` rendered via `atLeast(...,300)` (= `-320w.webp`) | `assets/empty-bag.webp` (320x400, the exact WebP variant the source serves), `loading=lazy`, `alt=""` |
 | `<div data-code-component data-open data-bag-drawer>` | `<cart-drawer data-section="cart-drawer">`; layer `data-layer` + `data-open`; aside has `data-bag-drawer data-code-component` and its own `data-open` (toggled together in `setOpen`) |
-| `<aside role="dialog" aria-label="Your bag">` | D `role="dialog" aria-modal="true" aria-label="{{ section.settings.title }}"` |
+| `<aside role="dialog" aria-label="Your bag">` | D `<div role="dialog" aria-modal="true" aria-label="{{ section.settings.title }}"` |
 | Title `Your bag` + count (blank when 0) | D `title` setting, `data-drawer-count` |
 | Close button aria `Close`, X svg (#17140F, 1.8, round) | D, `accessibility.close`, same path; `data-close data-close-button` |
 | Meter copy `{price} away from free delivery` / `Free delivery unlocked` | locales `bag.free_delivery_away/unlocked`; amount bold via `price` snippet |
 | Empty: `Your bag is empty.`, CTA `Start shopping` -> /shop, closes drawer | D `empty_text`, `empty_cta_label`, `empty_cta_link` (default /collections/all), CTA has `data-close` |
-| Line: thumb img alt = name, name, `formatPrice(price*qty)` | L: `item.image | image_url: width 300`, alt, `item.product.title`, `price` of `final_line_price` |
+| Line: thumb img alt = name, name, `formatPrice(price*qty)` | L: `item.image | image_url: width 300`, `alt=""` (decorative; name is adjacent text, A11), `item.product.title`, `price` of `final_line_price` |
 | Line `{colour} · Size {size}` | L: `bag.colour_size` from `options_with_values` by name Color/Colour and Size; fallback variant title (not "Default Title") |
 | `No longer available` for missing product | L: `bag.no_longer_available` when product title blank |
 | `Not available to order` | L: `bag.not_available` when `!item.variant.available` |
@@ -100,3 +100,18 @@ Class map: `.layer/.scrim/.panel/.head/.title/.count/.close/.meter*/.track/.fill
 - Cart page (`main-cart`) has no counterpart in the Next app (bag was drawer-only): page frame (max-width 720, padding 140/28, 112/20 under 810px) is new; lines/foot reuse drawer values.
 - Page quantity changes reload the page (form submit) rather than AJAX; page 422 errors show Shopify's own cart redirect.
 - Section-editor extras added (not in source): `shopify:section:select/deselect` opens/closes the drawer.
+
+
+## Phase 6 QA fixes (Q1)
+
+| Finding | Change | Where |
+|---|---|---|
+| B1 | `fail()` message = `data.description \|\| data.message \|\| strings.cartError`; `description` kept | `assets/cart.js` |
+| B2 | Hidden default `<button type="submit" name="update" data-update>` before checkout; click/change/Enter all call `submit()` -> `form.requestSubmit(updateButton)`; Enter keydown is preventDefault'd and guarded by a `submitting` flag (single submit); noscript Update uses `bag.update` | `sections/main-cart.liquid` |
+| B3 | `restoreFocus` fallback and open() focus target `[data-close-button]` (the button), not scrim `[data-close]` | `assets/cart-drawer.js`, `sections/cart-drawer.liquid` |
+| B4 (drawer) | On close, if opener left the document, focus `[data-bag-button]` | `assets/cart-drawer.js` `close()` |
+| A8 | `<aside>` -> `<div role="dialog" aria-modal="true">`, hooks/classes unchanged | `sections/cart-drawer.liquid` |
+| A10 | Stepper/remove names via `bag.one_less_label` / `one_more_label` / `remove_label` (title); page qty input `bag.quantity_label`; polite `role="status"` live region `[data-drawer-live]` (outside swapped `[data-drawer-inner]`) announces "Bag, N items · Subtotal Rs.X" after each swap | `snippets/cart-line.liquid`, `sections/cart-drawer.liquid`, `assets/cart-drawer.js` `announce()` |
+| A11 | Line image `alt=""` | `snippets/cart-line.liquid` |
+| 8 | Bag button aria-label uses `bagButtonOne` when count is 1 | `assets/cart-drawer.js` `updateHeader()` |
+| 9 | Removed `enabled_on` from schema (no presets existed) | `sections/cart-drawer.liquid` |

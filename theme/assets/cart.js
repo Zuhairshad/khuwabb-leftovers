@@ -21,9 +21,10 @@
   function fail(status, data) {
     var strings = K.strings || {}
     data = data || {}
+    var text = data.description || data.message
     return {
       status: status,
-      message: data.message || strings.cartError || 'Something went wrong. Please try again.',
+      message: (typeof text === 'string' && text) || strings.cartError || 'Something went wrong. Please try again.',
       description: data.description || ''
     }
   }

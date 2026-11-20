@@ -2,10 +2,6 @@
   "type": "custom.overlay",
   "name": "Overlays",
   "sections": {
-    "cart-drawer": {
-      "type": "cart-drawer",
-      "settings": {}
-    },
     "scoop-intro": {
       "type": "scoop-intro",
       "settings": {
@@ -22,7 +18,6 @@
     }
   },
   "order": [
-    "cart-drawer",
     "scoop-intro"
   ]
 }
