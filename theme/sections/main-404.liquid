@@ -1,0 +1,34 @@
+{{ 'section-shopify-pages.css' | asset_url | stylesheet_tag }}
+{{ 'component-arrow-button.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign nf_title = section.settings.title
+  if nf_title == blank
+    assign nf_title = '404.title' | t
+  endif
+  assign nf_text = section.settings.text
+  if nf_text == blank
+    assign nf_text = '404.text' | t
+  endif
+  assign nf_cta = '404.cta' | t
+-%}
+<section class="page-width sp sp__center" data-section="not-found">
+  <div class="sp__narrow">
+    <h1 class="sp__title" data-appear="rise">{{ nf_title | escape }}</h1>
+    <p class="sp__lead">{{ nf_text | escape }}</p>
+    <div class="sp__cta">
+      {% render 'arrow-button', href: routes.all_products_collection_url, label: nf_cta %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 page",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title (blank = Page not found)" },
+    { "type": "textarea", "id": "text", "label": "Text (blank = default)" }
+  ]
+}
+{% endschema %}

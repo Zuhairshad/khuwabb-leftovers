@@ -196,5 +196,25 @@
     "balance": "Balance",
     "initial_value": "Original value",
     "add_to_wallet": "Add to Apple Wallet"
+  },
+  "blog": {
+    "read_more": "Read more",
+    "back": "Back to {{ blog }}",
+    "by_author": "By {{ author }}",
+    "empty": "No articles yet.",
+    "comments": {
+      "title": {
+        "one": "{{ count }} comment",
+        "other": "{{ count }} comments"
+      },
+      "leave": "Leave a comment",
+      "name": "Name",
+      "email": "Email",
+      "message": "Comment",
+      "submit": "Post comment",
+      "moderated": "Comments are approved before they appear.",
+      "success": "Your comment was posted.",
+      "success_moderated": "Your comment was posted. It will appear once approved."
+    }
   }
 }

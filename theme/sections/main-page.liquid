@@ -1,0 +1,16 @@
+{{ 'section-shopify-pages.css' | asset_url | stylesheet_tag }}
+
+<section class="page-width sp" data-section="page">
+  <div class="sp__narrow">
+    <h1 class="sp__title" data-appear="rise">{{ page.title | escape }}</h1>
+    <div class="sp-rte">{{ page.content }}</div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page",
+  "tag": "div",
+  "settings": []
+}
+{% endschema %}

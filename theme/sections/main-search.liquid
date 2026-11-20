@@ -1,0 +1,92 @@
+{{ 'section-main-collection-grid.css' | asset_url | stylesheet_tag }}
+{{ 'section-shopify-pages.css' | asset_url | stylesheet_tag }}
+{{ 'component-form.css' | asset_url | stylesheet_tag }}
+
+{%- paginate search.results by section.settings.results_per_page -%}
+  <section class="page-width sp" data-section="search">
+    {%- liquid
+      assign sp_title = section.settings.title
+      if sp_title == blank
+        assign sp_title = 'search.title' | t
+      endif
+    -%}
+    <h1 class="sp__title" data-appear="rise">{{ sp_title | escape }}</h1>
+
+    <form class="sp-search" action="{{ routes.search_url }}" method="get" role="search">
+      <div class="field">
+        <label class="field__label visually-hidden" for="SearchPageInput">{{ 'accessibility.search' | t }}</label>
+        <input
+          class="field__input"
+          type="search"
+          id="SearchPageInput"
+          name="q"
+          value="{{ search.terms | escape }}"
+          placeholder="{{ 'search.placeholder' | t }}"
+          autocomplete="off"
+        >
+      </div>
+      <button type="submit" class="button button--small">{{ 'search.submit' | t }}</button>
+    </form>
+
+    {%- if search.performed -%}
+      {%- if search.results_count > 0 -%}
+        <p class="sp-count" role="status">{{ 'search.results' | t: count: search.results_count, terms: search.terms }}</p>
+
+        {%- assign sp_products = search.results | where: 'object_type', 'product' -%}
+        {%- if sp_products.size > 0 -%}
+          <ul class="sp-grid">
+            {%- for item in sp_products -%}
+              <li>{% render 'product-card', product: item, loading: 'lazy' %}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        <ul class="sp-rows">
+          {%- for item in search.results -%}
+            {%- if item.object_type != 'product' -%}
+              <li class="sp-row">
+                <a class="sp-row__link" href="{{ item.url }}">
+                  <span class="sp-row__title">{{ item.title | escape }}</span>
+                  <span class="sp-row__type">{{ item.object_type | capitalize }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="sp-pagination" aria-label="{{ 'general.pagination.page' | t: number: paginate.current_page }}">
+            {%- if paginate.previous -%}
+              <a class="sp-pagination__page" href="{{ paginate.previous.url }}" rel="prev">{{ 'general.pagination.previous' | t }}</a>
+            {%- endif -%}
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a class="sp-pagination__page" href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+              {%- elsif part.title == paginate.current_page -%}
+                <span class="sp-pagination__page" aria-current="page">{{ part.title }}</span>
+              {%- else -%}
+                <span class="sp-pagination__page sp-pagination__page--gap">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}
+              <a class="sp-pagination__page" href="{{ paginate.next.url }}" rel="next">{{ 'general.pagination.next' | t }}</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <p class="sp-empty" role="status">{{ 'search.no_results' | t: terms: search.terms }}</p>
+      {%- endif -%}
+    {%- endif -%}
+  </section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Search results",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title (blank = Search)" },
+    { "type": "range", "id": "results_per_page", "label": "Results per page", "min": 8, "max": 48, "step": 4, "default": 24 }
+  ]
+}
+{% endschema %}

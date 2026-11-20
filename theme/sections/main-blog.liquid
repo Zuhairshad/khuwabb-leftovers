@@ -1,0 +1,68 @@
+{{ 'section-shopify-pages.css' | asset_url | stylesheet_tag }}
+
+{%- paginate blog.articles by section.settings.per_page -%}
+  <section class="page-width sp" data-section="blog">
+    <div class="sp__head">
+      <h1 class="sp__title" data-appear="rise">{{ blog.title | escape }}</h1>
+    </div>
+
+    {%- if blog.articles.size > 0 -%}
+      <ul class="sp-articles">
+        {%- for article in blog.articles -%}
+          <li class="sp-article">
+            {%- if article.image -%}
+              <a class="sp-article__media" href="{{ article.url }}" tabindex="-1" aria-hidden="true">
+                {{ article.image | image_url: width: 800 | image_tag: widths: '400, 600, 800', sizes: '(max-width: 809.98px) 100vw, (max-width: 1199.98px) 50vw, 400px', loading: 'lazy', alt: article.image.alt | default: article.title }}
+              </a>
+            {%- endif -%}
+            {%- if section.settings.show_date -%}
+              <p class="sp-article__date"><time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | time_tag: format: 'date' }}</time></p>
+            {%- endif -%}
+            <h2 class="sp-article__title"><a href="{{ article.url }}">{{ article.title | escape }}</a></h2>
+            {%- if section.settings.show_excerpt -%}
+              {%- assign bl_excerpt = article.excerpt_or_content | strip_html | truncatewords: 30 -%}
+              {%- if bl_excerpt != blank -%}
+                <p class="sp-article__excerpt">{{ bl_excerpt }}</p>
+              {%- endif -%}
+            {%- endif -%}
+            <a class="sp-article__more" href="{{ article.url }}" aria-label="{{ 'blog.read_more' | t }}: {{ article.title | escape }}">{{ 'blog.read_more' | t }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="sp-pagination" aria-label="{{ 'general.pagination.page' | t: number: paginate.current_page }}">
+          {%- if paginate.previous -%}
+            <a class="sp-pagination__page" href="{{ paginate.previous.url }}" rel="prev">{{ 'general.pagination.previous' | t }}</a>
+          {%- endif -%}
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a class="sp-pagination__page" href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+            {%- elsif part.title == paginate.current_page -%}
+              <span class="sp-pagination__page" aria-current="page">{{ part.title }}</span>
+            {%- else -%}
+              <span class="sp-pagination__page sp-pagination__page--gap">{{ part.title }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}
+            <a class="sp-pagination__page" href="{{ paginate.next.url }}" rel="next">{{ 'general.pagination.next' | t }}</a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- else -%}
+      <p class="sp-empty">{{ 'blog.empty' | t }}</p>
+    {%- endif -%}
+  </section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "tag": "div",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Articles per page", "min": 3, "max": 24, "step": 3, "default": 9 },
+    { "type": "checkbox", "id": "show_date", "label": "Show date", "default": true },
+    { "type": "checkbox", "id": "show_excerpt", "label": "Show excerpt", "default": true }
+  ]
+}
+{% endschema %}

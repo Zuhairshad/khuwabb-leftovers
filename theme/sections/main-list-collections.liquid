@@ -1,0 +1,68 @@
+{{ 'section-shopify-pages.css' | asset_url | stylesheet_tag }}
+
+{%- paginate collections by section.settings.per_page -%}
+  <section class="page-width sp" data-section="collections">
+    <div class="sp__head">
+      <h1 class="sp__title" data-appear="rise">{{ section.settings.title | escape }}</h1>
+    </div>
+
+    <ul class="sp-grid">
+      {%- for collection in collections -%}
+        {%- liquid
+          assign lc_image = collection.image
+          assign lc_first = collection.products.first
+        -%}
+        <li>
+          <a class="sp-tile" href="{{ collection.url }}">
+            {%- if lc_image -%}
+              <div class="sp-tile__card sp-tile__card--cover">
+                {{ lc_image | image_url: width: 640 | image_tag: widths: '360, 480, 640', sizes: '(max-width: 809.98px) 45vw, 290px', loading: 'lazy', alt: collection.title }}
+              </div>
+            {%- else -%}
+              <div class="sp-tile__card"{% if lc_first.metafields.custom.tint.value != blank %} style="background: {{ lc_first.metafields.custom.tint.value | escape }}"{% endif %}>
+                {%- if lc_first -%}
+                  {% render 'cutout-image', product: lc_first, view: 'front', widths: '360,480,640', sizes: '(max-width: 809.98px) 45vw, 290px', loading: 'lazy', alt: collection.title %}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            <div class="sp-tile__info">
+              <p class="sp-tile__name">{{ collection.title | escape }}</p>
+              <p class="sp-tile__count">{{ 'general.piece' | t: count: collection.all_products_count }}</p>
+            </div>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if paginate.pages > 1 -%}
+      <nav class="sp-pagination" aria-label="{{ 'general.pagination.page' | t: number: paginate.current_page }}">
+        {%- if paginate.previous -%}
+          <a class="sp-pagination__page" href="{{ paginate.previous.url }}" rel="prev">{{ 'general.pagination.previous' | t }}</a>
+        {%- endif -%}
+        {%- for part in paginate.parts -%}
+          {%- if part.is_link -%}
+            <a class="sp-pagination__page" href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+          {%- elsif part.title == paginate.current_page -%}
+            <span class="sp-pagination__page" aria-current="page">{{ part.title }}</span>
+          {%- else -%}
+            <span class="sp-pagination__page sp-pagination__page--gap">{{ part.title }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if paginate.next -%}
+          <a class="sp-pagination__page" href="{{ paginate.next.url }}" rel="next">{{ 'general.pagination.next' | t }}</a>
+        {%- endif -%}
+      </nav>
+    {%- endif -%}
+  </section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collections list",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Collections" },
+    { "type": "range", "id": "per_page", "label": "Collections per page", "min": 8, "max": 48, "step": 4, "default": 24 }
+  ]
+}
+{% endschema %}

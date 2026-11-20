@@ -1,0 +1,103 @@
+{{ 'section-shopify-pages.css' | asset_url | stylesheet_tag }}
+{%- if blog.comments_enabled? -%}
+  {{ 'component-form.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<article class="page-width sp" data-section="article">
+  <div class="sp__narrow">
+    <h1 class="sp__title" data-appear="rise">{{ article.title | escape }}</h1>
+    <p class="sp-post__meta">
+      {%- if section.settings.show_date -%}
+        <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | time_tag: format: 'date' }}</time>
+      {%- endif -%}
+      {%- if section.settings.show_author and article.author != blank -%}
+        {%- if section.settings.show_date %} · {% endif -%}
+        {{ 'blog.by_author' | t: author: article.author }}
+      {%- endif -%}
+    </p>
+  </div>
+
+  {%- if article.image -%}
+    <div class="sp-post__image">
+      {{ article.image | image_url: width: 1600 | image_tag: widths: '800, 1000, 1200, 1600', sizes: '(max-width: 1000px) 100vw, 1000px', loading: 'eager', alt: article.image.alt | default: article.title }}
+    </div>
+  {%- endif -%}
+
+  <div class="sp__narrow">
+    <div class="sp-rte">{{ article.content }}</div>
+
+    <a class="sp-post__back" href="{{ blog.url }}">{{ 'blog.back' | t: blog: blog.title }}</a>
+
+    {%- if blog.comments_enabled? -%}
+      <section class="sp-comments" id="comments">
+        {%- if article.comments_count > 0 -%}
+          <h2 class="sp-comments__title">{{ 'blog.comments.title' | t: count: article.comments_count }}</h2>
+          {%- paginate article.comments by 10 -%}
+            <ul class="sp-comments__list">
+              {%- for comment in article.comments -%}
+                <li class="sp-comment" id="{{ comment.id }}">
+                  <p class="sp-comment__author">{{ comment.author | escape }}</p>
+                  <p class="sp-comment__date"><time datetime="{{ comment.created_at | date: '%Y-%m-%d' }}">{{ comment.created_at | time_tag: format: 'date' }}</time></p>
+                  <div class="sp-comment__body">{{ comment.content }}</div>
+                </li>
+              {%- endfor -%}
+            </ul>
+            {%- if paginate.pages > 1 -%}
+              <nav class="sp-pagination" aria-label="{{ 'general.pagination.page' | t: number: paginate.current_page }}">
+                {%- if paginate.previous -%}
+                  <a class="sp-pagination__page" href="{{ paginate.previous.url }}#comments" rel="prev">{{ 'general.pagination.previous' | t }}</a>
+                {%- endif -%}
+                {%- if paginate.next -%}
+                  <a class="sp-pagination__page" href="{{ paginate.next.url }}#comments" rel="next">{{ 'general.pagination.next' | t }}</a>
+                {%- endif -%}
+              </nav>
+            {%- endif -%}
+          {%- endpaginate -%}
+        {%- endif -%}
+
+        {%- form 'new_comment', article, class: 'sp-comment-form' -%}
+          <h2 class="sp-comments__title">{{ 'blog.comments.leave' | t }}</h2>
+          {%- if form.posted_successfully? -%}
+            <p class="form-message form-message--success" role="status">
+              {%- if blog.moderated? -%}{{ 'blog.comments.success_moderated' | t }}{%- else -%}{{ 'blog.comments.success' | t }}{%- endif -%}
+            </p>
+          {%- endif -%}
+          {%- if form.errors -%}
+            <div class="form-message form-message--error" role="alert">
+              {%- for field in form.errors -%}
+                <p>{{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}</p>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+          <div class="field">
+            <label class="field__label" for="CommentAuthor">{{ 'blog.comments.name' | t }}</label>
+            <input class="field__input" type="text" id="CommentAuthor" name="comment[author]" value="{{ form.author | escape }}" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="CommentEmail">{{ 'blog.comments.email' | t }}</label>
+            <input class="field__input" type="email" id="CommentEmail" name="comment[email]" value="{{ form.email | escape }}" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="CommentBody">{{ 'blog.comments.message' | t }}</label>
+            <textarea class="field__input" id="CommentBody" name="comment[body]" rows="5" required>{{ form.body }}</textarea>
+          </div>
+          {%- if blog.moderated? -%}
+            <p class="sp-comment__date">{{ 'blog.comments.moderated' | t }}</p>
+          {%- endif -%}
+          <button type="submit" class="button">{{ 'blog.comments.submit' | t }}</button>
+        {%- endform -%}
+      </section>
+    {%- endif -%}
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "div",
+  "settings": [
+    { "type": "checkbox", "id": "show_date", "label": "Show date", "default": true },
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": true }
+  ]
+}
+{% endschema %}

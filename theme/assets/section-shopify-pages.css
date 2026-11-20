@@ -1,0 +1,613 @@
+/*
+ * Shopify-only pages (search, 404, page, collections list, blog, article). No React reference: built from the design system.
+ * Frame: section-main-product.css:11-13,262-266 (page top padding clears the fixed nav).
+ * Title scale: component-section-heading.css:15-44. Lead text: section-main-collection-grid.css:152-161 (.collection-grid__empty).
+ * Grid + pagination: section-main-collection-grid.css:10-18,112-150,163-202 (product-card rules come from that file).
+ */
+.page-width.sp {
+  padding-top: 140px;
+  padding-bottom: 140px;
+}
+
+.sp__narrow {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.sp__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 64px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.sp__lead {
+  margin: 20px 0 0;
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--ink-62);
+}
+
+.sp__head {
+  margin-bottom: 48px;
+}
+
+.sp__center {
+  text-align: center;
+}
+
+.sp__center .sp__narrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sp__cta {
+  margin-top: 40px;
+}
+
+/* ---- rich text (page content, article body) ---- */
+.sp-rte {
+  margin-top: 40px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.sp-rte > :first-child {
+  margin-top: 0;
+}
+
+.sp-rte > :last-child {
+  margin-bottom: 0;
+}
+
+.sp-rte p,
+.sp-rte ul,
+.sp-rte ol,
+.sp-rte blockquote,
+.sp-rte table {
+  margin: 0 0 1.2em;
+}
+
+.sp-rte h2,
+.sp-rte h3,
+.sp-rte h4 {
+  margin: 1.8em 0 0.6em;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.sp-rte h2 {
+  font-size: 32px;
+}
+
+.sp-rte h3 {
+  font-size: 24px;
+}
+
+.sp-rte h4 {
+  font-size: 20px;
+}
+
+.sp-rte a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.sp-rte ul,
+.sp-rte ol {
+  padding-left: 1.4em;
+}
+
+.sp-rte img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+
+.sp-rte blockquote {
+  padding-left: 20px;
+  border-left: 2px solid var(--ink-line);
+  color: var(--ink-62);
+}
+
+.sp-rte table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sp-rte th,
+.sp-rte td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ink-line);
+  text-align: left;
+}
+
+/* ---- search form ---- */
+.sp-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 720px;
+  margin-top: 32px;
+}
+
+.sp-search .field {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+
+.sp-search .button {
+  flex: none;
+}
+
+.sp-count {
+  margin: 40px 0 32px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--ink-62);
+}
+
+.sp-empty {
+  margin: 40px 0 0;
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--ink-62);
+}
+
+/* ---- product grid (same as the Shop page) ---- */
+.sp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 48px 24px;
+  justify-content: start;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sp-grid > li {
+  display: flex;
+  min-width: 0;
+}
+
+/* ---- non-product result rows ---- */
+.sp-rows {
+  margin: 48px 0 0;
+  padding: 0;
+  max-width: 720px;
+  list-style: none;
+  border-top: 1px solid var(--ink-line);
+}
+
+.sp-grid + .sp-rows {
+  margin-top: 64px;
+}
+
+.sp-row {
+  border-bottom: 1px solid var(--ink-line);
+}
+
+.sp-row__link {
+  display: block;
+  padding: 20px 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.sp-row__link:hover .sp-row__title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sp-row__link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.sp-row__title {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.sp-row__type {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-62);
+}
+
+/* ---- collection tiles ---- */
+.sp-tile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.sp-tile__card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 360px;
+  padding: 56px 24px 24px;
+  overflow: clip;
+  border-radius: 999px 999px 28px 28px;
+  background: var(--white);
+}
+
+.sp-tile__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 50%;
+}
+
+.sp-tile__card--cover {
+  padding: 0;
+}
+
+.sp-tile__card--cover img {
+  object-fit: cover;
+}
+
+.sp-tile__info {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 4px 0;
+}
+
+.sp-tile__name,
+.sp-tile__count {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+  color: var(--ink);
+}
+
+.sp-tile__name {
+  flex: 1 0 0;
+  width: 1px;
+  overflow-wrap: break-word;
+}
+
+.sp-tile__count {
+  color: var(--ink-62);
+  white-space: pre;
+}
+
+.sp-tile:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+/* ---- blog list ---- */
+.sp-articles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 56px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sp-article {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sp-article__media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: clip;
+  border-radius: 28px;
+  background: var(--white);
+}
+
+.sp-article__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sp-article__date {
+  margin: 20px 0 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-62);
+}
+
+.sp-article__title {
+  margin: 6px 0 0;
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.sp-article__title a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.sp-article__title a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sp-article__title a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.sp-article__excerpt {
+  margin: 10px 0 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink-62);
+}
+
+.sp-article__more {
+  margin-top: 14px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---- single article ---- */
+.sp-post__meta {
+  margin: 20px 0 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-62);
+}
+
+.sp-post__image {
+  width: 100%;
+  max-width: 1000px;
+  margin: 40px auto 0;
+  overflow: clip;
+  border-radius: 28px;
+}
+
+.sp-post__image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sp-post__back {
+  display: inline-block;
+  margin-top: 56px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sp-comments {
+  margin-top: 72px;
+  padding-top: 40px;
+  border-top: 1px solid var(--ink-line);
+}
+
+.sp-comments__title {
+  margin: 0 0 24px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.sp-comments__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sp-comment {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--ink-line);
+}
+
+.sp-comment__author {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.sp-comment__date {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: var(--ink-62);
+}
+
+.sp-comment__body {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.sp-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.sp-comment-form .button {
+  align-self: flex-start;
+}
+
+/* ---- pagination (look of .collection-grid__pagination) ---- */
+.sp-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 72px;
+}
+
+.sp-pagination__page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--ink-line);
+  border-radius: 999px;
+  background: var(--white);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+a.sp-pagination__page:hover {
+  border-color: var(--ink);
+}
+
+.sp-pagination__page[aria-current="page"] {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.sp-pagination__page--gap {
+  border-color: transparent;
+  background: none;
+  color: var(--ink-62);
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .sp__title {
+    font-size: 52px;
+    line-height: 52px;
+  }
+
+  .sp-grid {
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+
+  .sp-tile__card {
+    height: 320px;
+  }
+
+  .sp-articles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sp__lead {
+    font-size: 19px;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .page-width.sp {
+    padding-top: 104px;
+    padding-bottom: 96px;
+  }
+
+  .sp__title {
+    font-size: 38px;
+    line-height: 38px;
+  }
+
+  .sp__lead {
+    font-size: 17px;
+  }
+
+  .sp__head {
+    margin-bottom: 32px;
+  }
+
+  .sp-grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    gap: 28px 12px;
+  }
+
+  .sp-tile__card {
+    height: 220px;
+    padding: 36px 12px 12px;
+  }
+
+  .sp-tile__info {
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 4px 0;
+  }
+
+  .sp-tile__name {
+    flex: none;
+    width: 100%;
+  }
+
+  .sp-articles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sp-pagination {
+    margin-top: 48px;
+  }
+
+  .sp-search {
+    margin-top: 24px;
+  }
+
+  .sp-rte h2 {
+    font-size: 26px;
+  }
+
+  .sp-rte h3 {
+    font-size: 21px;
+  }
+}
