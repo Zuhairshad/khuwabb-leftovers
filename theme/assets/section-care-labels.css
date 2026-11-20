@@ -1,0 +1,116 @@
+/*
+ * care-labels — port of components/home/CareLabels.module.css (line refs = that file).
+ * Entrance/hover = CareLabels.tsx variants, driven by appear.js (data-appear="label",
+ * data-appear-amount .3 -> data-shown, toggled both ways).
+ */
+
+/* :1-9 .section */
+.care-labels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 40px 32px 140px;
+}
+
+/* :11-18 .label (+ static tilt: framer style rotate / "shown" rotate) */
+.care-labels__label {
+  display: flex;
+  flex: none;
+  width: min-content;
+  padding: 6px;
+  border-radius: 6px;
+  background: var(--ink);
+  rotate: var(--tilt, 0deg);
+}
+
+/* :20-29 .stitch */
+.care-labels__stitch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min-content;
+  padding: 14px 20px;
+  border-radius: 3px;
+  color: var(--paper);
+}
+
+/* :31-39 .stitch::after. Stitching drawn over the box, so it takes no layout space. */
+.care-labels__stitch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1.5px dashed #f7f3ec73;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* :41-44 .stitch svg */
+.care-labels__stitch svg {
+  display: block;
+  flex: none;
+}
+
+/* :46-53 .stitch p */
+.care-labels__stitch p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+  white-space: pre;
+}
+
+/*
+ * Motion (only with html.js and no reduced-motion preference; otherwise static at the tilt).
+ * hidden {opacity 0, y 30, rotate ±8}  -> shown {opacity 1, y 0, rotate tilt}: spring bounce .3 / 1.2s
+ * (--spring-label), delay .10 + .12*index (--delay). Hover / focus-within: rotate 0, scale 1.04,
+ * spring bounce .4 / .6s (--spring-label-hover), no delay. Leaving hover uses the shown transition
+ * (with its delay), as framer does.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .js .care-labels__label[data-appear="label"] {
+    opacity: 0;
+    translate: 0 30px;
+    rotate: var(--enter-rotate, 0deg);
+    scale: 1;
+    transition:
+      opacity 1.2s var(--spring-label) var(--delay, 0s),
+      translate 1.2s var(--spring-label) var(--delay, 0s),
+      rotate 1.2s var(--spring-label) var(--delay, 0s),
+      scale 1.2s var(--spring-label) var(--delay, 0s);
+  }
+
+  .js .care-labels__label[data-appear="label"][data-shown] {
+    opacity: 1;
+    translate: 0 0;
+    rotate: var(--tilt, 0deg);
+  }
+
+  .js .care-labels__label[data-appear="label"]:is(:hover, :focus-within) {
+    opacity: 1;
+    translate: 0 0;
+    rotate: 0deg;
+    scale: 1.04;
+    transition:
+      opacity 0.6s var(--spring-label-hover),
+      translate 0.6s var(--spring-label-hover),
+      rotate 0.6s var(--spring-label-hover),
+      scale 0.6s var(--spring-label-hover);
+  }
+}
+
+/* :55-64 phone */
+@media (max-width: 809.98px) {
+  .care-labels {
+    gap: 12px;
+    padding: 24px 20px 96px;
+  }
+
+  .care-labels__label {
+    max-width: 100%;
+  }
+}

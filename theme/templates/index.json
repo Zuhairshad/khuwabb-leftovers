@@ -109,7 +109,7 @@
           "type": "mood",
           "settings": {
             "name": "Weekend plans",
-            "note": "Off-duty, on point \u2014 a soft jogger and a glossy puffer.",
+            "note": "Off-duty, on point — a soft jogger and a glossy puffer.",
             "color": "#f6c9cf",
             "x": 20,
             "y": 89,
@@ -252,7 +252,7 @@
           "type": "look",
           "settings": {
             "title": "Daily edit",
-            "description": "A cropped puffer gilet over the ribbed drawstring trouser \u2014 easy layers for every day.",
+            "description": "A cropped puffer gilet over the ribbed drawstring trouser — easy layers for every day.",
             "tint": "#c9d2f2",
             "fallback_image": "daily-edit",
             "image_alt": "The Daily edit look: Hooded Sleeveless Cropped Puffer Jacket in Beige with Ribbed Drawstring Wide Leg Trouser in Black",
@@ -280,7 +280,7 @@
           "type": "look",
           "settings": {
             "title": "Street ready",
-            "description": "High shine meets sporty stripes \u2014 the black vinyl puffer with the two-stripe wide-leg trouser.",
+            "description": "High shine meets sporty stripes — the black vinyl puffer with the two-stripe wide-leg trouser.",
             "tint": "#d5e5be",
             "fallback_image": "street-ready",
             "image_alt": "The Street ready look: Ladies Vinyl Jacket in Black with Wide Leg Trouser with Two Full Stripes in Blue",
@@ -315,6 +315,94 @@
         "cta_link": "/collections/all",
         "total_label": "The look"
       }
+    },
+    "reviews_receipts": {
+      "type": "reviews-receipts",
+      "blocks": {
+        "r1": {
+          "type": "receipt",
+          "settings": {
+            "order_text": "Order KH-1042 · 14 Oct 2026",
+            "quote": "“The co-ord is so comfortable I wore it to class three days running. Cash on delivery made it easy too.”",
+            "byline": "Ayesha, Lahore",
+            "tilt": -3,
+            "product_1": "seam-detail-co-ords-set",
+            "product_2": "ribbed-drawstring-wide-leg-trouser"
+          }
+        },
+        "r2": {
+          "type": "receipt",
+          "settings": {
+            "order_text": "Order KH-1107 · 29 Oct 2026",
+            "quote": "“Exchanged a size within the week, no fuss. The jogger is the comfiest thing I own.”",
+            "byline": "Hamza, Karachi",
+            "tilt": 2,
+            "product_1": "womens-high-shine-vinyl-puffer-jacket",
+            "product_2": "shape-high-waist-wide-leg-jogger"
+          }
+        },
+        "r3": {
+          "type": "receipt",
+          "settings": {
+            "order_text": "Order KH-1163 · 6 Nov 2026",
+            "quote": "“The puffer is warm without being bulky, and the striped trousers get compliments every time.”",
+            "byline": "Mahnoor, Islamabad",
+            "tilt": -1.5,
+            "product_1": "womens-hooded-full-sleeve-cropped-puffer-jacket",
+            "product_2": "wide-leg-trouser-two-full-stripes"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3"
+      ],
+      "settings": {
+        "heading": "Seen on you",
+        "brand": "khuwabb",
+        "draggable": true
+      }
+    },
+    "care_labels": {
+      "type": "care-labels",
+      "blocks": {
+        "l1": {
+          "type": "label",
+          "settings": {
+            "text": "Born in Lahore",
+            "icon": "leaf"
+          }
+        },
+        "l2": {
+          "type": "label",
+          "settings": {
+            "text": "Custom stitching",
+            "icon": "needle"
+          }
+        },
+        "l3": {
+          "type": "label",
+          "settings": {
+            "text": "7-day exchange",
+            "icon": "returns"
+          }
+        },
+        "l4": {
+          "type": "label",
+          "settings": {
+            "text": "Cash on delivery",
+            "icon": "truck"
+          }
+        }
+      },
+      "block_order": [
+        "l1",
+        "l2",
+        "l3",
+        "l4"
+      ],
+      "settings": {}
     }
   },
   "order": [
@@ -322,6 +410,8 @@
     "category_cards",
     "new_arrivals",
     "campaign_moods",
-    "shop_the_look"
+    "shop_the_look",
+    "reviews_receipts",
+    "care_labels"
   ]
 }

@@ -1,0 +1,68 @@
+{{ 'section-care-labels.css' | asset_url | stylesheet_tag }}
+
+<section class="care-labels" data-section="care-labels">
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign cl_odd = forloop.index0 | modulo: 2
+      if cl_odd == 0
+        assign cl_tilt = -2
+        assign cl_enter = -8
+      else
+        assign cl_tilt = 2
+        assign cl_enter = 8
+      endif
+      assign cl_delay = forloop.index0 | times: 0.12 | plus: 0.1 | round: 2
+    -%}
+    <div
+      class="care-labels__label"
+      data-appear="label"
+      data-appear-amount="0.3"
+      style="--tilt: {{ cl_tilt }}deg; --enter-rotate: {{ cl_enter }}deg; --delay: {{ cl_delay }}s;"
+      {{ block.shopify_attributes }}
+    >
+      <div class="care-labels__stitch">
+        {%- render 'care-icon', icon: block.settings.icon -%}
+        <p>{{ block.settings.text | escape }}</p>
+      </div>
+    </div>
+  {%- endfor -%}
+</section>
+
+{% schema %}
+{
+  "name": "Care labels",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "label",
+      "name": "Label",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Born in Lahore" },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "needle", "label": "Needle" },
+            { "value": "returns", "label": "Returns" },
+            { "value": "truck", "label": "Truck" }
+          ],
+          "default": "leaf"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Care labels",
+      "blocks": [
+        { "type": "label", "settings": { "text": "Born in Lahore", "icon": "leaf" } },
+        { "type": "label", "settings": { "text": "Custom stitching", "icon": "needle" } },
+        { "type": "label", "settings": { "text": "7-day exchange", "icon": "returns" } },
+        { "type": "label", "settings": { "text": "Cash on delivery", "icon": "truck" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

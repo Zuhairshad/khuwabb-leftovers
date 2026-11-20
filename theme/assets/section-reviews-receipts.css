@@ -1,0 +1,240 @@
+/*
+ * reviews-receipts ("Seen on you") — port of components/home/Receipts.module.css.
+ * Source line refs in comments are Receipts.module.css:<line>.
+ */
+
+/* :1-8 .section */
+.reviews-receipts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+  width: 100%;
+  padding: 120px 32px 80px;
+}
+
+/* :10-19 .title */
+.reviews-receipts__title {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 64px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-align: center;
+  white-space: pre;
+}
+
+/* :21-29 .row */
+.reviews-receipts__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 36px;
+  width: 100%;
+  max-width: 1216px;
+}
+
+/*
+ * :31-37 .receipt. Split in two so drag and entrance don't fight:
+ * __slot (<receipt-drag> or div) = flex item, size, cursor, drag translate (set by receipts.js);
+ * __receipt = column, static tilt (rotate) and the entrance (translate Y + opacity).
+ * The slot's translate is applied outside the rotate, like framer's x/y before rotate.
+ */
+.reviews-receipts__slot {
+  display: block;
+  flex: none;
+  width: 340px;
+}
+
+receipt-drag.reviews-receipts__slot {
+  cursor: grab;
+  /* Mouse/pen drag freely; on touch, vertical page scrolling keeps working (see receipts.js). */
+  touch-action: pan-y;
+}
+
+receipt-drag.reviews-receipts__slot.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.reviews-receipts__receipt {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  rotate: var(--tilt, 0deg);
+}
+
+/* :39-47 .paper */
+.reviews-receipts__paper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 28px 26px 22px;
+  background: var(--white);
+  border-radius: 4px 4px 0 0;
+}
+
+/* :49-55 .head */
+.reviews-receipts__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+/* :57-63 .brand */
+.reviews-receipts__brand {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.36px;
+}
+
+/* :65-72 .order, .by */
+.reviews-receipts__order,
+.reviews-receipts__by {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19.6px;
+  color: var(--ink-62);
+}
+
+/* :74-78 .dash */
+.reviews-receipts__dash {
+  position: relative;
+  width: 100%;
+  height: 1px;
+}
+
+/* :80-85 .dash::after */
+.reviews-receipts__dash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-top: 1px dashed #17140f4d;
+}
+
+/* :87-91 .line */
+.reviews-receipts__line {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+/* :93-99 .line p */
+.reviews-receipts__line p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  white-space: pre;
+}
+
+/* :101-105 .line .lineName */
+.reviews-receipts__line .reviews-receipts__line-name {
+  flex: 1 0 0;
+  width: 1px;
+  white-space: pre-wrap;
+}
+
+/* :107-111 .total p */
+.reviews-receipts__total p {
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+}
+
+/* :113-116 .stars */
+.reviews-receipts__stars {
+  display: flex;
+  gap: 2px;
+}
+
+/* :118-121 .stars svg */
+.reviews-receipts__stars svg {
+  display: block;
+  flex: none;
+}
+
+/* :123-130 .quote */
+.reviews-receipts__quote {
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* :132-136 .tear */
+.reviews-receipts__tear {
+  display: block;
+  width: 100%;
+  height: 14px;
+}
+
+/*
+ * Entrance (Receipts.tsx m.div variants): hidden {opacity 0, y -80} <-> shown, spring
+ * bounce .25 / 1.4s (--spring-receipt), delay .15 + .18*index (set inline as --delay), both
+ * directions. appear.js toggles data-shown (data-appear="receipt", amount .25 via attribute).
+ * Only under html.js (no JS -> visible) and only without reduced motion (then: static, shown).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reviews-receipts__receipt[data-appear="receipt"] {
+    opacity: 0;
+    translate: 0 -80px;
+    transition:
+      opacity 1.4s var(--spring-receipt) var(--delay, 0s),
+      translate 1.4s var(--spring-receipt) var(--delay, 0s);
+  }
+
+  .js .reviews-receipts__receipt[data-appear="receipt"][data-shown] {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* :138-147 tablet */
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .reviews-receipts__title {
+    font-size: 52px;
+    line-height: 52px;
+  }
+
+  .reviews-receipts__quote {
+    font-size: 19px;
+  }
+}
+
+/* :149-172 phone */
+@media (max-width: 809.98px) {
+  .reviews-receipts {
+    gap: 40px;
+    padding: 80px 20px 56px;
+  }
+
+  .reviews-receipts__title {
+    font-size: 38px;
+    line-height: 38px;
+  }
+
+  .reviews-receipts__row {
+    gap: 28px;
+  }
+
+  .reviews-receipts__slot {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .reviews-receipts__quote {
+    font-size: 17px;
+  }
+}
