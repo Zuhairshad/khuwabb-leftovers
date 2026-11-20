@@ -65,7 +65,7 @@ Method: fixture page with the real theme CSS + `header.js` + `cart-drawer.js` in
 | A1 | major | Footer, all pages | Focus ring is ink on ink (invisible) | inherited | **Fix**: paper-coloured ring inside the footer |
 | A2 | major | All pages | Header not in a `<header>` landmark (axe `region`) | inherited | **Fix**: `<header>` wrapper |
 | A3 | major | Footer newsletter | Error not announced; no `aria-invalid`/`aria-describedby`; hidden error text always in the a11y tree | inherited | **Fix** |
-| A4 | major | Bag drawer, hero bar | Text at ink .55 / .6 opacity fails 4.5:1 (3.97–4.47) | inherited values | **Shad** — fixing = slightly darker text (≥ .62 bag, ≈ .7 hero). Default: keep parity |
+| A4 | major | Bag drawer, hero bar | Text at ink .55 / .6 opacity fails 4.5:1 (3.97–4.47) | inherited values | **Kept (Shad, parity)** — reference opacities stay |
 | A5 | major | Product | Sold-out size is visual-only; disabled add button leaves the tab order so its explanation can't be reached; label/image changes silent | inherited | **Fix**: `aria-disabled` + visually-hidden "sold out", polite live region for the button label |
 | A6 | major | Home campaign (desktop) | Hidden look cards' CTAs still tabbable; keyboard focus doesn't pause the 4s auto-cycle (WCAG 2.2.2); no `aria-pressed` on tags | inherited | **Fix**: inactive floats `inert`/`visibility:hidden` after fade; focusin pauses; `aria-pressed` |
 | A7 | minor | Hero chooser | × and successful add drop focus to `<body>`; add→drawer close can't restore focus | theme | **Fix**: return focus to the CTA |
@@ -75,7 +75,7 @@ Method: fixture page with the real theme CSS + `header.js` + `cart-drawer.js` in
 | A11 | minor | Cart line, shop-the-look thumbs, collections list | Image alt repeats adjacent visible text | inherited | **Fix**: decorative |
 | A12 | minor | Pagination | `nav` labelled "Page N" | theme | **Fix**: "Pagination" |
 | A13 | minor | Gift card | `aria-labelledby` on a role-less div; QR has no name; copy announced twice | theme | **Fix** |
-| A14 | minor | Home ticker | Auto-scroll pauses on hover/focus only; no visible pause control (2.2.2) | inherited | **Shad** — a pause button is a visible addition. Default: keep (reduced motion stops it) |
+| A14 | minor | Home ticker | Auto-scroll pauses on hover/focus only; no visible pause control (2.2.2) | inherited | **Kept (Shad, parity)** — no pause control; hover/focus pause and reduced motion stop it |
 | A15 | minor | Header | "Bag, 1 items" plural; no `aria-haspopup="dialog"`; toggle label + aria-expanded double signal | inherited | **Fix** plural + haspopup; keep label |
 | A16 | minor | Nav over dark footer | Pill links 3.42:1 over ink | inherited | Keep (parity) |
 | A17 | minor | Hero, campaign | Reduced-motion read once at load | theme | Keep (low impact) |
@@ -130,11 +130,11 @@ Shared-file fixes by the main session: head-config (no intro on password/gift ca
 
 **Re-run (verification of the fixes):** 36/37 fixed findings verified in headless Chromium + code reading; earlier functions suite 196/196 and a new strict suite 57/57 pass; keyboard runs pass; axe 0 violations; theme check clean. The re-run found 4 small items — A19 border 2.99:1 (raised to .52 alpha → 3.69 / 3.34), N1 newsletter `aria-describedby` permanently set (now only when invalid), N2 gift card lost its visible "Copied" (restored, single announcement), E2 info text missing on New arrivals (added) — all fixed and committed; intro failsafe extended to 15s.
 
-**Shad decisions (defaults keep parity):** A4 (darker small text in bag/hero bar to pass 4.5:1), A14 (visible pause control for the ticker).
+**Shad decisions:** A4 and A14 — **keep parity** (decided 2026-11-20). Recorded as known, accepted accessibility gaps inherited from the reference design.
 
 ## Sign-off (Stage A)
 
-- **Critical: 0 open. Major: 0 open** (A4 is a parity decision for Shad, not a defect in the port). All fixable minors from A, B, C, D are fixed or explicitly kept with a reason above.
+- **Critical: 0 open. Major: 0 open** (A4 and A14 accepted by Shad as parity). All fixable minors from A, B, C, D are fixed or explicitly kept with a reason above.
 - Theme check: **76 files, no offenses**.
 - Code parity: every reference CSS declaration, string, test hook, breakpoint and route accounted for (area A).
 - Functions: all reference flows pass in headless Chromium against a mock Shopify cart (area B + re-run).
