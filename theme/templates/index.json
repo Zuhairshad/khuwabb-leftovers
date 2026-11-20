@@ -176,9 +176,78 @@
         "cta_label": "Shop the look",
         "cta_link": "/collections/all"
       }
+    },
+    "hero": {
+      "type": "hero-reels",
+      "blocks": {
+        "flavour-campus": {
+          "type": "flavour",
+          "settings": {
+            "name": "Campus",
+            "color": "#d5e5be"
+          }
+        },
+        "flavour-weekend": {
+          "type": "flavour",
+          "settings": {
+            "name": "Weekend",
+            "color": "#f6c9cf"
+          }
+        },
+        "flavour-brunch": {
+          "type": "flavour",
+          "settings": {
+            "name": "Brunch",
+            "color": "#f5e7a6"
+          }
+        },
+        "flavour-work": {
+          "type": "flavour",
+          "settings": {
+            "name": "Work",
+            "color": "#c9d2f2"
+          }
+        },
+        "flavour-winter": {
+          "type": "flavour",
+          "settings": {
+            "name": "Winter",
+            "color": "#f7d2b8"
+          }
+        }
+      },
+      "block_order": [
+        "flavour-campus",
+        "flavour-weekend",
+        "flavour-brunch",
+        "flavour-work",
+        "flavour-winter"
+      ],
+      "settings": {
+        "tops_collection": "jackets",
+        "bottoms_collection": "trousers",
+        "set_product": "gym-co-ords-set",
+        "intro": true,
+        "intro_delay": 2.9,
+        "auto_shuffle": 0,
+        "curve": 1,
+        "side_blur": 2.4,
+        "spacing": 1,
+        "look_scale": 1,
+        "top_inset": 11,
+        "top_space": 112,
+        "top_space_mobile": 92,
+        "hint": "Drag any row to restyle",
+        "shuffle_label": "Shuffle",
+        "total_label": "The look",
+        "cta_label": "Add the look",
+        "empty_cta_label": "Shop all",
+        "empty_cta_link": "/collections/all"
+      }
     }
   },
   "order": [
+    "hero",
     "category_cards",
     "new_arrivals",
     "campaign_moods"

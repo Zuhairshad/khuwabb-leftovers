@@ -362,7 +362,7 @@ Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `
 | 1C intro | `sections/scoop-intro.liquid`, `assets/section-scoop-intro.css`, `assets/scoop-intro.js`, `assets/intro-1.webp`…`intro-6.webp` | ScoopIntro.tsx/.module.css, globals.css keyframes, data/scoop-intro.json, lib/intro | full sequence timings, skip on product, scroll lock, reduced motion, `play_on` modes |
 | 1D store setup | `tools/store-setup/**` (no theme files) | scripts/build-khuwabb-data.mjs, data/products.json, data/shopify.json, lib/shopify-config.mjs, this file §3 | dry-run output listing every mutation; not run in Stage A |
 
-### Batch 2 — Home page I (depends on 1) — 🔄 in progress
+### Batch 2 — Home page I (depends on 1) — ✅ done (Stage A)
 | Task | Owns | Reads | Covers |
 |---|---|---|---|
 | 2A hero reels | `sections/hero-reels.liquid`, `assets/section-hero-reels.css`, `assets/hero-reels.js` | Hero.tsx, ScoopReels.tsx/.module.css, data/reels.json | intro spin, drag/flick/tap, shuffle (seeded), tags, total, chooser (open, colour/size, sold out, add → cart), phone layout, reduced motion |
@@ -370,7 +370,7 @@ Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `
 | 2C new arrivals | `sections/new-arrivals.liquid`, `snippets/hanger-card.liquid`, `assets/component-hanger-card.css`, `assets/section-new-arrivals.css`, `assets/ticker.js` | NewIn.tsx/.module.css, Ticker.tsx | marquee speed, pause on hover, drag + click suppression, hanger swing |
 | 2D campaign moods | `sections/campaign-moods.liquid`, `assets/section-campaign-moods.css`, `assets/campaign-moods.js`, `assets/wear-the-dream-{640,960,1280,1672}w.webp` | FreshDaily.tsx/.module.css, GelatoCounter.tsx/.module.css, data/gelato-counter.json | scroll words, clip reveal, tags fade, auto-cycle, hover/focus/tap, narrow (<700) chips mode |
 
-### Batch 3 — Home page II, product, collections (depends on 1; 3D depends on 2C)
+### Batch 3 — Home page II, product, collections (depends on 1; 3D depends on 2C) — 🔄 in progress
 | Task | Owns | Reads | Covers |
 |---|---|---|---|
 | 3A shop the look | `sections/shop-the-look.liquid`, `assets/section-shop-the-look.css`, `assets/look-1.jpg`…`look-4.jpg` | Looks.tsx/.module.css, data/looks.json | sticky stacking, 3 breakpoints, totals, piece links `?colour=` |
@@ -387,6 +387,8 @@ Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `
 
 ### Follow-ups (small, assign to the owner of the file in a later batch)
 - F1 `cutout-image`: add a `decorative: true` param that renders `alt=""`; then drop the `hc-decorative` placeholder swap in `hanger-card.liquid` and the `-cm-` swap in `campaign-moods.liquid`.
+- F2 `hero-reels.js` look chooser: close on Escape and return focus to the CTA (a11y, G15; source closes only via ×).
+- Note: `spacing` / `look_scale` ranges use step 0.1 (theme check rejects 0.05); defaults unchanged.
 
 ### Batch 5 — Stage B (local)
 Shad runs `tools/store-setup` → Opus starts `shopify theme dev --path theme` → `npm run compare` per page → fixes sent back per task → Phase 6 QA.

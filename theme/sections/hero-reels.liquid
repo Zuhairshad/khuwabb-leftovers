@@ -1,0 +1,673 @@
+{%- comment -%}
+  Home hero: outfit reels (components/home/Hero.tsx + components/ScoopReels.tsx).
+  Liquid builds the reels' pieces (tops = jackets x colours, bottoms = trousers x colours, plus the set
+  product's piece-top / piece-bottom), the server-rendered DOM and a JSON payload (docs/mapping.md 3.4).
+  assets/hero-reels.js (<hero-reels>, <look-chooser>) runs the engine.
+  Parity table: docs/parity/hero-reels.md.
+
+  Piece records are strings while building (fields joined by ~~, records by ^^):
+  id ~~ handle ~~ name ~~ price ~~ src ~~ srcset ~~ width ~~ height
+{%- endcomment -%}
+{{ 'section-hero-reels.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hero-reels.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign hr_set = section.settings.set_product
+  assign hr_widths = '360,480,640,960' | split: ','
+  assign hr_rows = 'tops,bottoms' | split: ','
+  assign hr_rendered = '|'
+  assign hr_products_json = ''
+  assign hr_tops = ''
+  assign hr_bottoms = ''
+
+  for hr_row in hr_rows
+    if hr_row == 'tops'
+      assign hr_coll = section.settings.tops_collection
+      assign hr_set_view = 'piece-top'
+    else
+      assign hr_coll = section.settings.bottoms_collection
+      assign hr_set_view = 'piece-bottom'
+    endif
+    assign hr_coll_products = hr_coll.products
+    assign hr_count = hr_coll_products | size
+    assign hr_last = hr_count | minus: 1
+    if hr_set != blank
+      assign hr_last = hr_count
+    endif
+
+    assign hr_groups = ''
+    assign hr_max = 0
+
+    for hr_i in (0..hr_last)
+      if hr_i < hr_count
+        assign hr_p = hr_coll_products[hr_i]
+        assign hr_view = 'front'
+      else
+        assign hr_p = hr_set
+        assign hr_view = hr_set_view
+      endif
+
+      assign hr_opt = hr_p.options_by_name['Color']
+      if hr_opt
+        assign hr_ci = hr_opt.position | minus: 1
+        assign hr_names = hr_opt.values
+      else
+        assign hr_ci = -1
+        assign hr_names = 'Default' | split: ','
+      endif
+
+      assign hr_group = ''
+      assign hr_group_size = 0
+      for hr_name in hr_names
+        assign hr_norm = hr_name | strip | downcase
+        assign hr_media = nil
+        for hr_m in hr_p.media
+          if hr_m.media_type != 'image'
+            continue
+          endif
+          assign hr_parts = hr_m.alt | split: '|'
+          if hr_parts.size < 2
+            continue
+          endif
+          assign hr_a = hr_parts[0] | strip | downcase
+          assign hr_b = hr_parts[1] | strip | downcase
+          if hr_a == hr_norm and hr_b == hr_view
+            assign hr_media = hr_m
+            break
+          endif
+        endfor
+
+        comment
+          A colour without an explicit front cut-out falls back to its variant's featured media
+          (the convention makes that the front); set pieces need the exact piece-top / piece-bottom alt.
+        endcomment
+        if hr_media == nil and hr_view == 'front'
+          for hr_v in hr_p.variants
+            if hr_v.featured_media == nil
+              continue
+            endif
+            if hr_ci >= 0
+              assign hr_vc = hr_v.options[hr_ci] | strip | downcase
+              if hr_vc != hr_norm
+                continue
+              endif
+            endif
+            assign hr_media = hr_v.featured_media
+            break
+          endfor
+        endif
+
+        if hr_media != nil
+          assign hr_pw = hr_media.preview_image.width
+          assign hr_ph = hr_media.preview_image.height
+          assign hr_srcset = ''
+          assign hr_top_w = 0
+          assign hr_top_u = ''
+          for hr_w in hr_widths
+            assign hr_wi = hr_w | strip | plus: 0
+            if hr_wi <= hr_pw
+              assign hr_u = hr_media | image_url: width: hr_wi
+              assign hr_piece = hr_u | append: ' ' | append: hr_wi | append: 'w'
+              if hr_srcset == ''
+                assign hr_srcset = hr_piece
+              else
+                assign hr_srcset = hr_srcset | append: ', ' | append: hr_piece
+              endif
+              assign hr_top_w = hr_wi
+              assign hr_top_u = hr_u
+            endif
+          endfor
+          if hr_top_w == 0
+            assign hr_top_w = hr_pw
+            assign hr_top_u = hr_media | image_url: width: hr_pw
+            assign hr_srcset = hr_top_u | append: ' ' | append: hr_pw | append: 'w'
+          endif
+          assign hr_th = hr_top_w | times: hr_ph | plus: 0.0 | divided_by: hr_pw | round
+
+          assign hr_rec = hr_p.handle | append: '#' | append: hr_name | append: '~~' | append: hr_p.handle | append: '~~' | append: hr_p.title | append: '~~' | append: hr_p.price | append: '~~' | append: hr_top_u | append: '~~' | append: hr_srcset | append: '~~' | append: hr_top_w | append: '~~' | append: hr_th
+          assign hr_group = hr_group | append: hr_rec | append: '^^'
+          assign hr_group_size = hr_group_size | plus: 1
+
+          if hr_view != 'front'
+            break
+          endif
+        endif
+      endfor
+
+      if hr_group_size > 0
+        assign hr_groups = hr_groups | append: hr_group | append: '%%'
+        if hr_group_size > hr_max
+          assign hr_max = hr_group_size
+        endif
+        assign hr_key = '|' | append: hr_p.handle | append: '|'
+        unless hr_rendered contains hr_key
+          assign hr_rendered = hr_rendered | append: hr_p.handle | append: '|'
+          capture hr_pj
+            render 'product-json', product: hr_p
+          endcapture
+          if hr_products_json != ''
+            assign hr_products_json = hr_products_json | append: ','
+          endif
+          assign hr_products_json = hr_products_json | append: '"' | append: hr_p.handle | append: '":' | append: hr_pj
+        endunless
+      endif
+    endfor
+
+    comment
+      interleave(groups): round-robin across products
+    endcomment
+    assign hr_group_arr = hr_groups | split: '%%'
+    assign hr_inter = ''
+    if hr_max > 0
+      assign hr_max_idx = hr_max | minus: 1
+      for hr_k in (0..hr_max_idx)
+        for hr_g in hr_group_arr
+          assign hr_recs = hr_g | split: '^^'
+          if hr_k < hr_recs.size
+            assign hr_inter = hr_inter | append: hr_recs[hr_k] | append: '^^'
+          endif
+        endfor
+      endfor
+    endif
+
+    comment
+      fill(): lists of 2+ cycle round the ring up to 12 slots
+    endcomment
+    assign hr_il = hr_inter | split: '^^'
+    assign hr_sz = hr_il.size
+    assign hr_final = hr_inter
+    if hr_sz >= 2
+      assign hr_len = hr_sz
+      if hr_len < 12
+        assign hr_len = 12
+      endif
+      assign hr_len_idx = hr_len | minus: 1
+      assign hr_final = ''
+      for hr_j in (0..hr_len_idx)
+        assign hr_ix = hr_j | modulo: hr_sz
+        assign hr_final = hr_final | append: hr_il[hr_ix] | append: '^^'
+      endfor
+    endif
+
+    if hr_row == 'tops'
+      assign hr_tops = hr_final
+    else
+      assign hr_bottoms = hr_final
+    endif
+  endfor
+
+  assign hr_tops_arr = hr_tops | split: '^^'
+  assign hr_bottoms_arr = hr_bottoms | split: '^^'
+  assign hr_has_pieces = false
+  if hr_tops_arr.size > 0 or hr_bottoms_arr.size > 0
+    assign hr_has_pieces = true
+  endif
+
+  comment
+    Shuffle needs at least one row with 2+ distinct piece ids.
+  endcomment
+  assign hr_can_shuffle = false
+  for hr_row in hr_rows
+    if hr_row == 'tops'
+      assign hr_arr = hr_tops_arr
+    else
+      assign hr_arr = hr_bottoms_arr
+    endif
+    assign hr_seen = '|'
+    assign hr_distinct = 0
+    for hr_rec in hr_arr
+      assign hr_f = hr_rec | split: '~~'
+      assign hr_id_key = '|' | append: hr_f[0] | append: '|'
+      unless hr_seen contains hr_id_key
+        assign hr_seen = hr_seen | append: hr_f[0] | append: '|'
+        assign hr_distinct = hr_distinct | plus: 1
+      endunless
+    endfor
+    if hr_distinct > 1
+      assign hr_can_shuffle = true
+    endif
+  endfor
+
+  comment
+    Server-rendered first state: centre piece 0 of each row, "The look" total counts a shared id once.
+  endcomment
+  assign hr_tf = hr_tops_arr[0] | split: '~~'
+  assign hr_bf = hr_bottoms_arr[0] | split: '~~'
+  assign hr_total = 0
+  if hr_tops_arr.size > 0
+    assign hr_total = hr_tf[3] | plus: 0
+  endif
+  if hr_bottoms_arr.size > 0
+    if hr_tops_arr.size == 0 or hr_bf[0] != hr_tf[0]
+      assign hr_total = hr_total | plus: hr_bf[3]
+    endif
+  endif
+
+  assign hr_intro = section.settings.intro
+  assign hr_flavours = section.blocks | where: 'type', 'flavour'
+  assign hr_first = hr_flavours.first
+  assign hr_bg = 'var(--pistachio)'
+  if hr_first
+    assign hr_bg = hr_first.settings.color
+  endif
+
+  assign hr_shuffle_label = section.settings.shuffle_label
+  assign hr_cta_label = section.settings.cta_label
+  if hr_has_pieces == false
+    assign hr_cta_label = section.settings.empty_cta_label
+  endif
+  assign hr_cta_href = section.settings.empty_cta_link | default: routes.all_products_collection_url
+-%}
+
+<section class="hero-reels" data-section="hero">
+  <h1 class="visually-hidden">{{ shop.name }}</h1>
+  <hero-reels
+    class="hero-reels__root"
+    data-code-component
+    style="background: {{ hr_bg }}; --flavour: {{ hr_bg }};"
+  >
+    <div class="hero-reels__glow" aria-hidden="true"></div>
+    {%- for block in hr_flavours -%}
+      {%- assign hr_r = block.settings.color.red | times: 955 | divided_by: 1000.0 | round -%}
+      {%- assign hr_gr = block.settings.color.green | times: 955 | divided_by: 1000.0 | round -%}
+      {%- assign hr_bl = block.settings.color.blue | times: 955 | divided_by: 1000.0 | round -%}
+      <div
+        class="hero-reels__word"
+        aria-hidden="true"
+        {% if forloop.first %}data-active{% endif %}
+        style="color: rgb({{ hr_r }}, {{ hr_gr }}, {{ hr_bl }});"
+        {{ block.shopify_attributes }}
+      >{{ block.settings.name }}</div>
+    {%- endfor -%}
+
+    {%- if hr_tops_arr.size > 0 -%}
+      <div class="hero-reels__hit" data-row="tops" style="z-index: 3;"></div>
+    {%- endif -%}
+    {%- if hr_bottoms_arr.size > 0 -%}
+      <div class="hero-reels__hit" data-row="bottoms" style="z-index: 1;"></div>
+    {%- endif -%}
+
+    <div class="hero-reels__track">
+      {%- for hr_row in hr_rows -%}
+        {%- if hr_row == 'tops' -%}
+          {%- assign hr_arr = hr_tops_arr -%}
+          {%- assign hr_sizes = '(max-width: 639px) 46vw, 30vw' -%}
+        {%- else -%}
+          {%- assign hr_arr = hr_bottoms_arr -%}
+          {%- assign hr_sizes = '(max-width: 639px) 36vw, 26vw' -%}
+        {%- endif -%}
+        {%- assign hr_n = hr_arr.size -%}
+        {%- comment -%}
+          Photos that load first: the centre and one either side; with the intro also the spot the row is parked at
+          (parked = -dir * (max(8, n) + 3), dir tops +1, bottoms -1).
+        {%- endcomment -%}
+        {%- assign hr_park = 8 -%}
+        {%- if hr_n > 8 -%}
+          {%- assign hr_park = hr_n -%}
+        {%- endif -%}
+        {%- assign hr_park = hr_park | plus: 3 -%}
+        {%- if hr_row == 'tops' -%}
+          {%- assign hr_park = 0 | minus: hr_park -%}
+        {%- endif -%}
+        {%- for hr_rec in hr_arr -%}
+          {%- assign hr_f = hr_rec | split: '~~' -%}
+          {%- assign hr_idx = forloop.index0 -%}
+          {%- assign hr_d0 = hr_idx | modulo: hr_n -%}
+          {%- assign hr_r0 = hr_d0 | times: 2 -%}
+          {%- if hr_r0 >= hr_n -%}
+            {%- assign hr_d0 = hr_d0 | minus: hr_n -%}
+          {%- endif -%}
+          {%- if hr_d0 < 0 -%}
+            {%- assign hr_d0 = hr_d0 | times: -1 -%}
+          {%- endif -%}
+          {%- assign hr_load = false -%}
+          {%- if hr_d0 <= 1 -%}
+            {%- assign hr_load = true -%}
+          {%- endif -%}
+          {%- if hr_intro and hr_load == false -%}
+            {%- assign hr_d1 = hr_idx | minus: hr_park | modulo: hr_n | plus: hr_n | modulo: hr_n -%}
+            {%- assign hr_r1 = hr_d1 | times: 2 -%}
+            {%- if hr_r1 >= hr_n -%}
+              {%- assign hr_d1 = hr_d1 | minus: hr_n -%}
+            {%- endif -%}
+            {%- if hr_d1 < 0 -%}
+              {%- assign hr_d1 = hr_d1 | times: -1 -%}
+            {%- endif -%}
+            {%- if hr_d1 <= 1 -%}
+              {%- assign hr_load = true -%}
+            {%- endif -%}
+          {%- endif -%}
+          <div class="hero-reels__piece" data-row="{{ hr_row }}" data-idx="{{ hr_idx }}">
+            {%- if hr_load -%}
+              <img
+                src="{{ hr_f[4] }}"
+                srcset="{{ hr_f[5] }}"
+                sizes="{{ hr_sizes }}"
+                width="{{ hr_f[6] }}"
+                height="{{ hr_f[7] }}"
+                alt="{{ hr_f[2] | escape }}"
+                draggable="false"
+                decoding="async"
+              >
+            {%- else -%}
+              <img
+                sizes="{{ hr_sizes }}"
+                width="{{ hr_f[6] }}"
+                height="{{ hr_f[7] }}"
+                alt=""
+                draggable="false"
+                decoding="async"
+              >
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if hr_tops_arr.size > 0 -%}
+      <div class="hero-reels__tag-slot" data-tag-row="tops">
+        <div class="hero-reels__tag" {% unless hr_intro %}data-show{% endunless %}>
+          <span class="hero-reels__tag-name">{{ hr_tf[2] }}</span>
+          <span class="hero-reels__tag-price">{% render 'price', price: hr_tf[3] %}</span>
+        </div>
+      </div>
+    {%- endif -%}
+    {%- if hr_bottoms_arr.size > 0 -%}
+      <div class="hero-reels__tag-slot" data-tag-row="bottoms">
+        <div class="hero-reels__tag" {% unless hr_intro %}data-show{% endunless %}>
+          <span class="hero-reels__tag-name">{{ hr_bf[2] }}</span>
+          <span class="hero-reels__tag-price">{% render 'price', price: hr_bf[3] %}</span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="hero-reels__bar">
+      <div class="hero-reels__left">
+        {%- if hr_can_shuffle -%}
+          <button type="button" class="hero-reels__shuffle" aria-label="{{ hr_shuffle_label | escape }}" data-shuffle>
+            <span class="hero-reels__dice">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" stroke="currentColor" stroke-width="1.8"/>
+                <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+                <circle cx="15.5" cy="8.5" r="1.5" fill="currentColor"/>
+                <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                <circle cx="8.5" cy="15.5" r="1.5" fill="currentColor"/>
+                <circle cx="15.5" cy="15.5" r="1.5" fill="currentColor"/>
+              </svg>
+            </span>
+            {{ hr_shuffle_label }}
+          </button>
+          <span class="hero-reels__hint">{{ section.settings.hint }}</span>
+        {%- endif -%}
+      </div>
+      <div class="hero-reels__right">
+        <div class="hero-reels__total">
+          <span class="hero-reels__total-label">{{ section.settings.total_label }}</span>
+          <span class="hero-reels__total-value"{% if hr_intro and hr_has_pieces %} style="opacity: 0.35;"{% endif %}>{% render 'price', price: hr_total %}</span>
+        </div>
+        <a
+          href="{{ hr_cta_href }}"
+          class="hero-reels__cta"
+          data-add-look
+          data-cta-label="{{ section.settings.cta_label | escape }}"
+          data-empty-label="{{ section.settings.empty_cta_label | escape }}"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M9 10V6.5a3 3 0 0 1 6 0V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span data-cta-text>{{ hr_cta_label }}</span>
+        </a>
+      </div>
+    </div>
+
+    <script type="application/json" data-hero-reels-data>
+      {
+        "config": {
+          "autoShuffle": {{ section.settings.auto_shuffle | default: 0 | json }},
+          "intro": {{ hr_intro | json }},
+          "introDelay": {{ section.settings.intro_delay | default: 0 | json }},
+          "curve": {{ section.settings.curve | json }},
+          "lookScale": {{ section.settings.look_scale | json }},
+          "sideBlur": {{ section.settings.side_blur | json }},
+          "spacing": {{ section.settings.spacing | json }},
+          "topInset": {{ section.settings.top_inset | divided_by: 100.0 | json }},
+          "topSpace": {{ section.settings.top_space | json }},
+          "topSpaceMobile": {{ section.settings.top_space_mobile | json }}
+        },
+        "flavours": [
+          {%- for block in hr_flavours -%}
+            {"name": {{ block.settings.name | json }}, "color": {{ block.settings.color | append: '' | json }}}{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ],
+        "tops": [
+          {%- for hr_rec in hr_tops_arr -%}
+            {%- assign hr_f = hr_rec | split: '~~' -%}
+            {"id": {{ hr_f[0] | json }}, "handle": {{ hr_f[1] | json }}, "name": {{ hr_f[2] | json }}, "price": {{ hr_f[3] }}, "src": {{ hr_f[4] | json }}, "srcset": {{ hr_f[5] | json }}, "width": {{ hr_f[6] }}, "height": {{ hr_f[7] }}}{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ],
+        "bottoms": [
+          {%- for hr_rec in hr_bottoms_arr -%}
+            {%- assign hr_f = hr_rec | split: '~~' -%}
+            {"id": {{ hr_f[0] | json }}, "handle": {{ hr_f[1] | json }}, "name": {{ hr_f[2] | json }}, "price": {{ hr_f[3] }}, "src": {{ hr_f[4] | json }}, "srcset": {{ hr_f[5] | json }}, "width": {{ hr_f[6] }}, "height": {{ hr_f[7] }}}{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ],
+        "products": { {{ hr_products_json }} },
+        "strings": {
+          "addTheLook": {{ 'reels.add_the_look' | t | json }},
+          "addToBag": {{ 'reels.add_to_bag' | t | json }},
+          "soldOut": {{ 'reels.sold_out' | t | json }},
+          "size": {{ 'reels.size_placeholder' | t | json }},
+          "colourLabel": {{ 'reels.colour_label' | t: name: '[name]' | json }},
+          "sizeLabel": {{ 'reels.size_label' | t: name: '[name]' | json }},
+          "close": {{ 'accessibility.close' | t | json }},
+          "error": {{ 'bag.error' | t | json }}
+        }
+      }
+    </script>
+  </hero-reels>
+</section>
+
+{% schema %}
+{
+  "name": "Hero reels",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Pieces"
+    },
+    {
+      "type": "collection",
+      "id": "tops_collection",
+      "label": "Tops collection"
+    },
+    {
+      "type": "collection",
+      "id": "bottoms_collection",
+      "label": "Bottoms collection"
+    },
+    {
+      "type": "product",
+      "id": "set_product",
+      "label": "Set product",
+      "info": "Its piece-top and piece-bottom images join the top and bottom rows as one set."
+    },
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "checkbox",
+      "id": "intro",
+      "label": "Spin the reels in when the page opens",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "intro_delay",
+      "label": "Intro delay",
+      "info": "Timed to the page intro. Used only while the page intro is playing; otherwise the reels start at once.",
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "unit": "s",
+      "default": 2.9
+    },
+    {
+      "type": "range",
+      "id": "auto_shuffle",
+      "label": "Auto shuffle after idle",
+      "info": "0 turns it off.",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "s",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "curve",
+      "label": "Track curve",
+      "min": 0,
+      "max": 2.5,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "side_blur",
+      "label": "Side blur",
+      "min": 0,
+      "max": 6,
+      "step": 0.2,
+      "default": 2.4
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "label": "Piece spacing",
+      "min": 0.6,
+      "max": 1.8,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "look_scale",
+      "label": "Look size",
+      "min": 0.5,
+      "max": 1.3,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "top_inset",
+      "label": "Top inset",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "top_space",
+      "label": "Top space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 112
+    },
+    {
+      "type": "range",
+      "id": "top_space_mobile",
+      "label": "Top space (phone)",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 92
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "text",
+      "id": "hint",
+      "label": "Hint",
+      "default": "Drag any row to restyle"
+    },
+    {
+      "type": "text",
+      "id": "shuffle_label",
+      "label": "Shuffle button",
+      "default": "Shuffle"
+    },
+    {
+      "type": "text",
+      "id": "total_label",
+      "label": "Total label",
+      "default": "The look"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Add button",
+      "default": "Add the look"
+    },
+    {
+      "type": "text",
+      "id": "empty_cta_label",
+      "label": "Button when there are no pieces",
+      "default": "Shop all"
+    },
+    {
+      "type": "url",
+      "id": "empty_cta_link",
+      "label": "Link when there are no pieces",
+      "default": "/collections/all"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "flavour",
+      "name": "Flavour",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Campus"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Backdrop colour",
+          "default": "#d5e5be"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero reels",
+      "blocks": [
+        { "type": "flavour", "settings": { "name": "Campus", "color": "#d5e5be" } },
+        { "type": "flavour", "settings": { "name": "Weekend", "color": "#f6c9cf" } },
+        { "type": "flavour", "settings": { "name": "Brunch", "color": "#f5e7a6" } },
+        { "type": "flavour", "settings": { "name": "Work", "color": "#c9d2f2" } },
+        { "type": "flavour", "settings": { "name": "Winter", "color": "#f7d2b8" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
