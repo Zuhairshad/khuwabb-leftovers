@@ -386,7 +386,7 @@ Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `
 | 4C password + gift card | `sections/main-password.liquid`, `templates/gift_card.liquid` (exception to A12: Liquid template owned by this task), `assets/section-password.css` | password page, gift card |
 
 ### Follow-ups (small, assign to the owner of the file in a later batch)
-- F1 `cutout-image`: add a `decorative: true` param that renders `alt=""`; then drop the `hc-decorative` placeholder swap in `hanger-card.liquid`.
+- F1 `cutout-image`: add a `decorative: true` param that renders `alt=""`; then drop the `hc-decorative` placeholder swap in `hanger-card.liquid` and the `-cm-` swap in `campaign-moods.liquid`.
 
 ### Batch 5 — Stage B (local)
 Shad runs `tools/store-setup` → Opus starts `shopify theme dev --path theme` → `npm run compare` per page → fixes sent back per task → Phase 6 QA.

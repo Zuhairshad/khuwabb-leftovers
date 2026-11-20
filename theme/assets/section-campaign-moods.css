@@ -1,0 +1,349 @@
+/*
+ * Campaign moods ("Wear the dream"): ports components/home/FreshDaily.module.css and
+ * components/GelatoCounter.module.css. See docs/parity/campaign-moods.md.
+ * Phone = max-width 809.98px, tablet = 810px-1199.98px (lib/useMedia.ts).
+ */
+
+/* ---- FreshDaily.module.css ---- */
+
+.campaign-moods {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  padding: 40px 0 140px;
+  overflow: clip;
+}
+
+.campaign-moods__words {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  padding: 0 32px;
+}
+
+/* Stands in for framer-motion's m.div around each word (see scroll-words in campaign-moods.js). */
+.campaign-moods__word-wrap {
+  display: block;
+}
+
+.campaign-moods__word {
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  white-space: pre;
+}
+
+.campaign-moods__campaign {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  max-width: 1280px;
+  padding: 0 32px;
+}
+
+.campaign-moods__counter {
+  position: relative;
+  flex: 1 0 0;
+  width: 1px;
+  height: 700px;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .campaign-moods__word {
+    font-size: 84px;
+  }
+
+  .campaign-moods__counter {
+    height: 600px;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .campaign-moods {
+    padding: 24px 0 96px;
+  }
+
+  .campaign-moods__words {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 0 20px;
+  }
+
+  .campaign-moods__word {
+    font-size: 54px;
+  }
+
+  .campaign-moods__campaign {
+    padding: 0 20px;
+  }
+
+  .campaign-moods__counter {
+    height: 900px;
+  }
+}
+
+/* ---- GelatoCounter.module.css ---- */
+
+.campaign-moods__root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.campaign-moods__frame {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.campaign-moods__clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Before JS runs: start closed like the source's reveal 0 (side = .2 * W). campaign-moods.js then drives it inline. */
+.js .campaign-moods__clip {
+  clip-path: inset(0 20% 0 20% round 50% 50% 32px 32px);
+}
+
+.campaign-moods__photo {
+  position: absolute;
+  max-width: none;
+  display: block;
+  transform-origin: 50% 60%;
+  /* No-JS / pre-JS placement; campaign-moods.js sets exact left/top/width/height inline. */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.08);
+}
+
+.campaign-moods__tag {
+  position: absolute;
+  opacity: 0;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px 8px 10px;
+  border-radius: 12px;
+  background: #fffdf8;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.campaign-moods__tag[data-on] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Tags fade in once the reveal passes .92 (data-revealed is set by JS). */
+.campaign-moods__root[data-revealed] .campaign-moods__tag {
+  opacity: 1;
+}
+
+.campaign-moods__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+.campaign-moods__float {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+  filter: blur(8px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.campaign-moods__float[data-shown] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0px);
+  pointer-events: auto;
+  z-index: 3;
+}
+
+.campaign-moods__card {
+  box-sizing: border-box;
+  /* Wide: JS sets width = min(320, frame width - 32). */
+  width: 320px;
+  padding: 16px;
+  border-radius: 24px;
+  background: rgba(255, 253, 248, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(23, 20, 15, 0.06);
+  color: var(--ink);
+  font-family: var(--font-body);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.campaign-moods__pieces {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.campaign-moods__tile {
+  aspect-ratio: 0.82;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.campaign-moods__tile img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+.campaign-moods__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.campaign-moods__name {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.campaign-moods__note {
+  font-size: 14px;
+  line-height: 1.45;
+  opacity: 0.62;
+}
+
+.campaign-moods__buy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 0 4px;
+}
+
+.campaign-moods__price {
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.campaign-moods__cta {
+  height: 44px;
+  padding: 0 6px 0 18px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.campaign-moods__cta span {
+  width: 32px;
+  height: 32px;
+  border-radius: 99px;
+  background: var(--paper);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+}
+
+.campaign-moods__chips {
+  display: none;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px;
+  scrollbar-width: none;
+}
+
+.campaign-moods__stack {
+  display: none;
+}
+
+/* ---- Narrow mode (frame width < 700; JS sets data-narrow and moves tags into the chips row,
+   cards into the stack, so only one full-width card shows below the photo) ---- */
+
+.campaign-moods__root[data-narrow] .campaign-moods__chips {
+  display: flex;
+}
+
+.campaign-moods__root[data-narrow] .campaign-moods__stack {
+  display: block;
+}
+
+.campaign-moods__root[data-narrow] .campaign-moods__tag {
+  position: relative;
+}
+
+.campaign-moods__root[data-narrow] .campaign-moods__float {
+  position: static;
+  display: none;
+  opacity: 1;
+  transform: none;
+  filter: none;
+  pointer-events: auto;
+  transition: none;
+}
+
+.campaign-moods__root[data-narrow] .campaign-moods__float[data-shown] {
+  display: block;
+}
+
+.campaign-moods__root[data-narrow] .campaign-moods__card {
+  width: 100%;
+  background: #fffdf8;
+}
+
+/* ---- Reduced motion (the source has none; the theme does) ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .campaign-moods__tag,
+  .campaign-moods__float {
+    transition: none;
+  }
+}

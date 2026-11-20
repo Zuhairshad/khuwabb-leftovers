@@ -1,0 +1,267 @@
+{%- comment -%}
+  "Wear the dream" words + campaign photo with mood tags and look cards
+  (components/home/FreshDaily.tsx + components/GelatoCounter.tsx). See docs/parity/campaign-moods.md.
+
+  - Two <h2> words (G6: the source's <h1>s) wrapped in <scroll-words> (scroll-linked slide + fade).
+  - <campaign-moods> owns the photo reveal, tag placement, floating card positioning, narrow mode and auto-cycle.
+    Everything (tags, one card per mood) is rendered here; JS only places and toggles them.
+  - Card price = sum of the 3 products' product.price (blank when any product is missing).
+  - Tile images go through snippets/cutout-image.liquid (front view of the first colour); the snippet cannot output
+    alt="" itself, so a marker alt is passed and swapped for an empty alt below (decorative: the card names the look).
+{%- endcomment -%}
+{{ 'section-campaign-moods.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cm_radius = section.settings.radius | default: 32
+  assign cm_img_sizes = '(max-width: 809px) 200vw, 1216px'
+  assign cm_alt = section.settings.image_alt | default: 'Khuwabb campaign photo'
+  assign cm_cta = section.settings.cta_label | default: 'Shop the look'
+  assign cm_link = section.settings.cta_link | default: '#'
+  assign cm_cycle = section.settings.cycle | default: 4
+  assign cm_focus = section.settings.focus_x
+  if cm_focus == nil
+    assign cm_focus = 50
+  endif
+  assign cm_focus_m = section.settings.focus_x_mobile
+  if cm_focus_m == nil
+    assign cm_focus_m = 62
+  endif
+-%}
+
+<div class="campaign-moods" data-section="fresh-daily">
+  <div class="campaign-moods__words">
+    <scroll-words class="campaign-moods__word-wrap" data-from="-180">
+      <h2 class="campaign-moods__word">{{ section.settings.word_1 | default: 'Wear the' }}</h2>
+    </scroll-words>
+    <scroll-words class="campaign-moods__word-wrap" data-from="180">
+      <h2 class="campaign-moods__word">{{ section.settings.word_2 | default: 'dream' }}</h2>
+    </scroll-words>
+  </div>
+
+  <div class="campaign-moods__campaign">
+    <div class="campaign-moods__counter">
+      <campaign-moods
+        class="campaign-moods__root"
+        data-code-component
+        data-radius="{{ cm_radius }}"
+        data-focus-x="{{ cm_focus }}"
+        data-focus-x-mobile="{{ cm_focus_m }}"
+        data-cycle="{{ cm_cycle }}"
+      >
+        <div class="campaign-moods__frame" data-frame>
+          <div class="campaign-moods__clip" data-clip>
+            {%- if section.settings.image != blank -%}
+              {{
+                section.settings.image
+                | image_url: width: 1672
+                | image_tag:
+                  widths: '640, 960, 1280, 1672',
+                  sizes: cm_img_sizes,
+                  loading: 'lazy',
+                  decoding: 'async',
+                  alt: cm_alt,
+                  class: 'campaign-moods__photo'
+              }}
+            {%- else -%}
+              <img
+                class="campaign-moods__photo"
+                data-photo
+                src="{{ 'wear-the-dream-1672w.webp' | asset_url }}"
+                srcset="{{ 'wear-the-dream-640w.webp' | asset_url }} 640w, {{ 'wear-the-dream-960w.webp' | asset_url }} 960w, {{ 'wear-the-dream-1280w.webp' | asset_url }} 1280w, {{ 'wear-the-dream-1672w.webp' | asset_url }} 1672w"
+                sizes="{{ cm_img_sizes }}"
+                width="1672"
+                height="941"
+                alt="{{ cm_alt | escape }}"
+                loading="lazy"
+                decoding="async"
+              >
+            {%- endif -%}
+          </div>
+
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign m_name = block.settings.name
+              assign m_color = block.settings.color | default: '#d5e5be'
+              assign m_x = block.settings.x | default: 50
+              assign m_y = block.settings.y | default: 89
+              assign m_delay = forloop.index0 | times: 0.08 | round: 2
+            -%}
+            <button
+              type="button"
+              class="campaign-moods__tag"
+              data-tag
+              data-index="{{ forloop.index0 }}"
+              data-x="{{ m_x }}"
+              data-y="{{ m_y }}"
+              {% if forloop.first %}data-on{% endif %}
+              aria-label="{{ m_name | escape }}"
+              style="transition-delay: 0s, {{ m_delay }}s, 0s, 0s;"
+              {{ block.shopify_attributes }}
+            >
+              <span class="campaign-moods__dot" style="background: {{ m_color }};"></span>
+              {{- m_name -}}
+            </button>
+          {%- endfor -%}
+
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign m_name = block.settings.name
+              assign m_note = block.settings.note
+              assign m_color = block.settings.color | default: '#d5e5be'
+              assign m_x = block.settings.x | default: 50
+              assign m_y = block.settings.y | default: 89
+
+              assign p1 = block.settings.product_1
+              assign p2 = block.settings.product_2
+              assign p3 = block.settings.product_3
+
+              comment
+                Present products in order: tile 1 = first, tile 2 = second (or the first), tile 3 = third (or the first),
+                as image1/image2/image3 in FreshDaily.tsx.
+              endcomment
+              assign pa = nil
+              assign pb = nil
+              assign pc = nil
+              for pr in (1..3)
+                case pr
+                  when 1
+                    assign cur = p1
+                  when 2
+                    assign cur = p2
+                  else
+                    assign cur = p3
+                endcase
+                if cur
+                  if pa == nil
+                    assign pa = cur
+                  elsif pb == nil
+                    assign pb = cur
+                  else
+                    assign pc = cur
+                  endif
+                endif
+              endfor
+              assign tile_1 = pa
+              assign tile_2 = pb | default: pa
+              assign tile_3 = pc | default: pa
+
+              assign m_total = nil
+              if p1 and p2 and p3
+                assign m_total = p1.price | plus: p2.price | plus: p3.price
+              endif
+            -%}
+            <div
+              class="campaign-moods__float"
+              data-float
+              data-index="{{ forloop.index0 }}"
+              data-x="{{ m_x }}"
+              data-y="{{ m_y }}"
+            >
+              <div class="campaign-moods__card">
+                <div class="campaign-moods__pieces">
+                  {%- for t in (1..3) -%}
+                    {%- liquid
+                    case t
+                      when 1
+                        assign tile_product = tile_1
+                      when 2
+                        assign tile_product = tile_2
+                      else
+                        assign tile_product = tile_3
+                    endcase
+                  -%}
+                    <div class="campaign-moods__tile" style="background: {{ m_color }};">
+                      {%- if tile_product -%}
+                        {%- capture tile_img -%}
+                          {%- render 'cutout-image',
+                            product: tile_product,
+                            view: 'front',
+                            widths: '300,480',
+                            sizes: '(max-width: 809px) 30vw, 100px',
+                            loading: 'lazy',
+                            alt: '-cm-'
+                          -%}
+                        {%- endcapture -%}
+                        {{- tile_img | replace: 'alt="-cm-"', 'alt=""' -}}
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+                <div class="campaign-moods__copy">
+                  <div class="campaign-moods__name">{{ m_name }}</div>
+                  {%- if m_note != blank -%}
+                    <div class="campaign-moods__note">{{ m_note }}</div>
+                  {%- endif -%}
+                </div>
+                <div class="campaign-moods__buy">
+                  <span class="campaign-moods__price">{%- if m_total != nil -%}{%- render 'price', price: m_total -%}{%- endif -%}</span>
+                  <a href="{{ cm_link }}" class="campaign-moods__cta">
+                    {{- cm_cta -}}
+                    <span>
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                        <path d="M4 10L10 4M5 4h5v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div class="campaign-moods__chips" data-chips></div>
+        <div class="campaign-moods__stack" data-stack></div>
+      </campaign-moods>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'campaign-moods.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Campaign moods",
+  "class": "section-campaign-moods",
+  "settings": [
+    { "type": "text", "id": "word_1", "label": "First word", "default": "Wear the" },
+    { "type": "text", "id": "word_2", "label": "Second word", "default": "dream" },
+    { "type": "image_picker", "id": "image", "label": "Campaign photo", "info": "Leave blank to use the theme's built-in photo." },
+    { "type": "text", "id": "image_alt", "label": "Photo alt text", "default": "Khuwabb campaign photo" },
+    { "type": "range", "id": "radius", "label": "Photo corner radius", "min": 0, "max": 64, "step": 1, "unit": "px", "default": 32 },
+    { "type": "range", "id": "focus_x", "label": "Photo focus (desktop)", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 50 },
+    { "type": "range", "id": "focus_x_mobile", "label": "Photo focus (phone)", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 62 },
+    { "type": "range", "id": "cycle", "label": "Seconds per mood when cycling", "min": 2, "max": 10, "step": 1, "unit": "s", "default": 4 },
+    { "type": "text", "id": "cta_label", "label": "Card button label", "default": "Shop the look" },
+    { "type": "url", "id": "cta_link", "label": "Card button link", "default": "/collections/all" }
+  ],
+  "blocks": [
+    {
+      "type": "mood",
+      "name": "Mood",
+      "limit": 6,
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Campus days" },
+        { "type": "textarea", "id": "note", "label": "Note", "default": "Easy wide trousers and a cropped gilet for early lectures." },
+        { "type": "color", "id": "color", "label": "Colour", "default": "#d5e5be" },
+        { "type": "range", "id": "x", "label": "Tag position X", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 9 },
+        { "type": "range", "id": "y", "label": "Tag position Y", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 89 },
+        { "type": "product", "id": "product_1", "label": "Product 1" },
+        { "type": "product", "id": "product_2", "label": "Product 2" },
+        { "type": "product", "id": "product_3", "label": "Product 3" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Campaign moods",
+      "blocks": [
+        { "type": "mood", "settings": { "name": "Campus days", "note": "Easy wide trousers and a cropped gilet for early lectures.", "color": "#d5e5be", "x": 9, "y": 89 } },
+        { "type": "mood", "settings": { "name": "Weekend plans", "note": "Off-duty, on point — a soft jogger and a glossy puffer.", "color": "#f6c9cf", "x": 20, "y": 89 } },
+        { "type": "mood", "settings": { "name": "Brunch dates", "note": "Two easy maxis and a statement panelled trouser.", "color": "#f5e7a6", "x": 31, "y": 89 } },
+        { "type": "mood", "settings": { "name": "Work mode", "note": "Sharp seams and clean wide-leg trousers.", "color": "#c9d2f2", "x": 42, "y": 89 } },
+        { "type": "mood", "settings": { "name": "Winter layers", "note": "Cropped puffers for chilly days.", "color": "#f7d2b8", "x": 84, "y": 89 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

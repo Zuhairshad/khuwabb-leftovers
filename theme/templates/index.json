@@ -88,10 +88,99 @@
         "speed": 34,
         "pause_on_hover": true
       }
+    },
+    "campaign_moods": {
+      "type": "campaign-moods",
+      "blocks": {
+        "mood_campus": {
+          "type": "mood",
+          "settings": {
+            "name": "Campus days",
+            "note": "Easy wide trousers and a cropped gilet for early lectures.",
+            "color": "#d5e5be",
+            "x": 9,
+            "y": 89,
+            "product_1": "ribbed-drawstring-wide-leg-trouser",
+            "product_2": "womens-hooded-sleeveless-cropped-puffer-jacket",
+            "product_3": "wide-leg-trouser-three-half-stripes"
+          }
+        },
+        "mood_weekend": {
+          "type": "mood",
+          "settings": {
+            "name": "Weekend plans",
+            "note": "Off-duty, on point \u2014 a soft jogger and a glossy puffer.",
+            "color": "#f6c9cf",
+            "x": 20,
+            "y": 89,
+            "product_1": "shape-high-waist-wide-leg-jogger",
+            "product_2": "womens-high-shine-vinyl-puffer-jacket",
+            "product_3": "wide-leg-trouser-two-full-stripes"
+          }
+        },
+        "mood_brunch": {
+          "type": "mood",
+          "settings": {
+            "name": "Brunch dates",
+            "note": "Two easy maxis and a statement panelled trouser.",
+            "color": "#f5e7a6",
+            "x": 31,
+            "y": 89,
+            "product_1": "womens-side-pocket-cotton-maxi-dress",
+            "product_2": "womens-boat-neck-long-sleeve-maxi-dress",
+            "product_3": "women-trouser-two-full-panels"
+          }
+        },
+        "mood_work": {
+          "type": "mood",
+          "settings": {
+            "name": "Work mode",
+            "note": "Sharp seams and clean wide-leg trousers.",
+            "color": "#c9d2f2",
+            "x": 42,
+            "y": 89,
+            "product_1": "seam-detail-co-ords-set",
+            "product_2": "cargo-pocket-trouser-for-women",
+            "product_3": "women-trouser-two-full-panels"
+          }
+        },
+        "mood_winter": {
+          "type": "mood",
+          "settings": {
+            "name": "Winter layers",
+            "note": "Cropped puffers for chilly days.",
+            "color": "#f7d2b8",
+            "x": 84,
+            "y": 89,
+            "product_1": "womens-hooded-full-sleeve-cropped-puffer-jacket",
+            "product_2": "womens-high-shine-vinyl-puffer-jacket",
+            "product_3": "ribbed-drawstring-wide-leg-trouser"
+          }
+        }
+      },
+      "block_order": [
+        "mood_campus",
+        "mood_weekend",
+        "mood_brunch",
+        "mood_work",
+        "mood_winter"
+      ],
+      "settings": {
+        "word_1": "Wear the",
+        "word_2": "dream",
+        "image_alt": "Khuwabb campaign photo",
+        "radius": 32,
+        "focus_x": 50,
+        "focus_x_mobile": 62,
+        "cycle": 4,
+        "cta_label": "Shop the look",
+        "cta_link": "/collections/all"
+      }
     }
   },
   "order": [
     "category_cards",
-    "new_arrivals"
+    "new_arrivals",
+    "campaign_moods"
   ]
 }
