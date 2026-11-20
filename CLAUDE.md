@@ -15,6 +15,29 @@ visually and behaviourally, built on branch `themecode`.
 - Opus does not write section/snippet code itself. If an agent's output is wrong, Opus sends it back with specific feedback instead of fixing it directly.
 - Run independent agents in parallel. Give each agent a disjoint list of files it owns. Two agents never own the same file.
 - Shared files are owned by Opus only: layout/theme.liquid, config/settings_schema.json, config/settings_data.json, locales/*.json, assets/base.css, assets/tokens.css, snippets/head-*.liquid.
-- One `shopify theme dev` process, started by the main session and running in the background. Agents never start their own.
 - Max 4 agents in parallel at once (the compare tool runs browsers).
 - After each batch: Opus reads every report, merges shared-file changes, runs `shopify theme check` once, and decides the next batch.
+
+## Environment stages
+Stage A (Claude Code web, current):
+- No `shopify theme dev`, no store login, no `shopify theme push`, no running the compare tool. Don't try them.
+- Verification = code parity, not screenshots: every style, class, breakpoint, state and piece of copy in the React source must have a matching place in the theme. Agents record this in docs/parity/<section>.md.
+- Try `npx -y @shopify/cli@latest theme check`. If it can't install or run, note it in the report and continue.
+
+Stage B (local terminal):
+- `shopify theme dev` runs once, started by the main session, in the background. Agents never start their own.
+- The compare tool is the source of truth for visual match.
+
+**Current stage: A**
+
+## Known pitfalls
+- The React source uses **CSS Modules + `app/globals.css`, not Tailwind**. Parity tables map each CSS-module rule (file:line) to its theme selector; class names are scoped hashes, so theme classes follow the naming in docs/mapping.md.
+- Copy exact values from docs/audit.md / the source; never round (e.g. `809.98px`, `20.8px`, `-0.08px`, `.95` line-height).
+- Satoshi is shipped at 400 and 500 only. Rules that ask for 600 render as 500 in the reference; keep `font-weight: 600` in CSS but don't add a 600 face.
+- `all_products[...]` is capped at 20 handles per page: use `product`/`collection` settings in sections and blocks, never `all_products`, for home-page content.
+- Option names are exactly `Color` and `Size`; look options up by name, not position.
+- Shopify money is in cents; always format through the shared money snippet/JS helper (`Rs.` + grouped, no decimals), never raw `| money`.
+- `position: sticky` (Looks cards, PDP info) breaks if any ancestor has `overflow: hidden`; use `overflow: clip` only where the source does.
+- Keep every `data-*` test hook listed in docs/audit.md §7 item 20 and §5.8a on the equivalent theme element.
+- Respect `prefers-reduced-motion` in every animation you port (the source misses several; the theme should not).
+- Each JS component is a custom element in its own `assets/<name>.js`, loaded with `defer`; no frameworks, no build step.
