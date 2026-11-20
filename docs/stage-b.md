@@ -19,6 +19,8 @@ Then edit `CLAUDE.md`: change `**Current stage: A**` to `**Current stage: B**`, 
 
 ## 1. Store data (main session runs, Shad approves)
 
+**Approved by Zuhair (2026-11-20): additive plan.** Run `npm run store-setup -- --dry-run`, then `npm run store-setup -- --apply` (additive only). In additive mode this creates 5 `custom.*` metafield definitions; fills `custom.*` metafields on existing products **only where unset** (kept additive by owner decision); creates 6 collections UNPUBLISHED; creates menus `khuwabb-main`, `footer-shop`, `footer-help`, `footer-khuwabb`. Everything else (productType, 118 cut-out media + variant images, publishing collections, redirects, existing-definition pin/access) waits for `--go-live` after client approval. After apply: report created items, failures, backup folder and undo file.
+
 ```bash
 SHOPIFY_ADMIN_TOKEN=… node tools/store-setup/setup.mjs --dry-run
 ```
