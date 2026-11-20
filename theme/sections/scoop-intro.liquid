@@ -1,0 +1,117 @@
+{%- comment -%}
+  Slot-machine intro overlay (components/ScoopIntro.tsx). Fully server-rendered.
+  Shown only under html[data-intro-playing] (set by snippets/head-config.liquid
+  from the global settings intro_enabled / intro_play_on); see section-scoop-intro.css.
+
+  Image index: IMAGES[(i*3 + a*5) % 20] -> the 20-entry list cycles six pictures
+  in order, so entry j is intro-(j % 6 + 1).webp.
+{%- endcomment -%}
+{{ 'section-scoop-intro.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign brand = section.settings.brand | default: 'khuwabb' | slice: 0, 8
+  assign n = brand | size
+  assign spins = section.settings.spins | round | at_least: 3 | at_most: 12
+  assign speed_in = section.settings.speed | times: 1.0 | at_least: 0.5 | at_most: 2
+  assign k = 1.0 | divided_by: speed_in
+
+  assign color_list = section.settings.color_1 | append: '|' | append: section.settings.color_2 | append: '|' | append: section.settings.color_3 | append: '|' | append: section.settings.color_4 | append: '|' | append: section.settings.color_5
+  assign colors = color_list | split: '|'
+
+  comment
+    SPIN_START .35, spinDuration(i) = 1.35 + .2i, SETTLED = SPIN_START + spinDuration(n-1) + .55, TOTAL = (SETTLED + 1.15) * SPEED
+  endcomment
+  assign last_dur = n | minus: 1 | times: 0.2 | plus: 1.35
+  assign settled = last_dur | plus: 0.9
+  assign total = settled | plus: 1.15 | times: k | round: 3
+
+  assign spin_start = 0.35 | times: k | round: 3
+  assign bg_dur = 0.9 | times: k | round: 3
+  assign bg_delay = settled | plus: 0.15 | times: k | round: 3
+  assign out_delay = settled | plus: 1.1 | times: k | round: 3
+  assign up_dur = 1.0 | times: k | round: 3
+  assign in_dur = 0.7 | times: k | round: 3
+
+  assign arch_w = 88.0 | divided_by: n | round: 2
+  assign spin_end_raw = spins | minus: 1 | times: 100.0 | divided_by: spins
+  assign spin_over_add = 7.0 | divided_by: spins
+  assign spin_over = spin_end_raw | plus: spin_over_add | round: 4
+  assign spin_end = spin_end_raw | round: 4
+  assign last_a = spins | minus: 1
+-%}
+
+{%- if n > 0 -%}
+  <scoop-intro
+    class="scoop-intro"
+    data-intro
+    {% if section.settings.lock_scroll %}data-lock{% endif %}
+    data-total="{{ total }}"
+    aria-hidden="true"
+    style="--arch-w: min({{ arch_w }}vw, 250px, 43.48vh); --spin-end: -{{ spin_end }}%; --spin-overshoot: -{{ spin_over }}%; animation: siBg {{ bg_dur }}s cubic-bezier(0.65,0,0.35,1) {{ bg_delay }}s forwards, siOut 0.01s linear {{ out_delay }}s forwards;"
+  >
+    <div class="scoop-intro__row">
+      {%- for i in (0..7) -%}
+        {%- if i >= n -%}{%- break -%}{%- endif -%}
+        {%- liquid
+          assign letter = brand | slice: i, 1
+          assign ci = i | modulo: 5
+          assign color = colors[ci]
+          assign dur = i | times: 0.2 | plus: 1.35 | times: k | round: 3
+          assign exit_delay = i | times: 0.06 | plus: settled | times: k | round: 3
+          assign in_delay = i | times: 0.05 | plus: 0.05 | times: k | round: 3
+          assign parity = i | modulo: 2
+          if parity == 0
+            assign exit_name = 'siUp'
+          else
+            assign exit_name = 'siDown'
+          endif
+          assign reel_h = spins | times: 100
+        -%}
+        <div style="animation: {{ exit_name }} {{ up_dur }}s cubic-bezier(0.76,0,0.24,1) {{ exit_delay }}s forwards;">
+          <div class="scoop-intro__arch" style="background: {{ color }}; animation: siIn {{ in_dur }}s cubic-bezier(0.22,1,0.36,1) {{ in_delay }}s forwards;">
+            <div class="scoop-intro__reel" style="height: {{ reel_h }}%; animation: siSpin {{ dur }}s cubic-bezier(0.35,0.05,0.2,1) {{ spin_start }}s forwards;">
+              {%- for a in (0..11) -%}
+                {%- if a >= spins -%}{%- break -%}{%- endif -%}
+                {%- if a == last_a -%}
+                  <div class="scoop-intro__cell" style="background: {{ color }};"><span class="scoop-intro__letter">{{ letter | escape }}</span></div>
+                {%- else -%}
+                  {%- liquid
+                    assign i3 = i | times: 3
+                    assign img_j = a | times: 5 | plus: i3 | modulo: 20 | modulo: 6 | plus: 1
+                    assign cell_ci = i | plus: a | plus: 1 | modulo: 5
+                    assign cell_color = colors[cell_ci]
+                    assign img_file = 'intro-' | append: img_j | append: '.webp'
+                  -%}
+                  <div class="scoop-intro__cell" style="background: {{ cell_color }};"><div class="scoop-intro__frame" style="background-image: url({{ img_file | asset_url }});"></div></div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </scoop-intro>
+  <script src="{{ 'scoop-intro.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Scoop intro",
+  "tag": "div",
+  "class": "section-scoop-intro",
+  "enabled_on": { "groups": ["custom.overlay"] },
+  "settings": [
+    { "type": "paragraph", "content": "Turning the intro on/off and choosing which pages it plays on are global theme settings (Theme settings > Intro)." },
+    { "type": "text", "id": "brand", "label": "Brand text", "default": "khuwabb", "info": "Only the first 8 characters are used." },
+    { "type": "color", "id": "color_1", "label": "Colour 1", "default": "#d5e5be" },
+    { "type": "color", "id": "color_2", "label": "Colour 2", "default": "#f6c9cf" },
+    { "type": "color", "id": "color_3", "label": "Colour 3", "default": "#f5e7a6" },
+    { "type": "color", "id": "color_4", "label": "Colour 4", "default": "#c9d2f2" },
+    { "type": "color", "id": "color_5", "label": "Colour 5", "default": "#f7d2b8" },
+    { "type": "range", "id": "spins", "label": "Spins", "min": 3, "max": 12, "step": 1, "default": 7 },
+    { "type": "range", "id": "speed", "label": "Speed", "min": 0.5, "max": 2, "step": 0.1, "default": 1 },
+    { "type": "checkbox", "id": "lock_scroll", "label": "Lock scrolling while it plays", "default": true }
+  ],
+  "presets": [{ "name": "Scoop intro" }]
+}
+{% endschema %}
