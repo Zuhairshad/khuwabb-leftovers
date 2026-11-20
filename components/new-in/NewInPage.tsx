@@ -20,7 +20,7 @@ export function NewInPage() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 1.4, ease }}
         >
-          <img {...responsive("/brand/looks/street-ready.jpg")} sizes="(max-width: 809px) calc(100vw - 32px), 360px" fetchPriority="high" alt="Khuwabb black vinyl puffer jacket with blue two-stripe wide-leg trousers" />
+          <img {...responsive("/brand/looks/off-duty.jpg")} sizes="(max-width: 809px) calc(100vw - 32px), 360px" fetchPriority="high" alt="Khuwabb olive hooded cropped puffer jacket with the cream high-waist wide-leg jogger" />
         </m.div>
         <div className={styles.title}>
           <m.h1 initial={{ opacity: 0.001, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 1.2, ease }}>
