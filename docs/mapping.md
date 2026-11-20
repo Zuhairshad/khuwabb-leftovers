@@ -345,7 +345,7 @@ Rules: max 4 tasks per batch; each task owns a disjoint file list; shared files 
 templates are Opus-only (agents propose changes). Every builder task ends with
 `docs/parity/<section>.md` (Stage A) and states to check in Stage B.
 
-### Batch 0 — Foundation + header/footer (Phase 4)
+### Batch 0 — Foundation + header/footer (Phase 4) — ✅ done (Stage A), theme check clean
 **Opus**: `theme/` skeleton, `layout/theme.liquid`, `layout/password.liquid`, `config/settings_schema.json`, `config/settings_data.json`, `locales/en.default.json`, `assets/tokens.css`, `assets/base.css`, `snippets/head-meta.liquid`, `snippets/head-fonts.liquid`, `snippets/head-config.liquid`, all `templates/**/*.json` (sections listed but empty-safe), `sections/*-group.json`, font/logo/brand asset copies.
 Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `@font-face` metrics from a `next build` of the reference (read-only, writes only `docs/parity/font-fallbacks.md`).
 
@@ -392,4 +392,10 @@ Shad runs `tools/store-setup` → Opus starts `shopify theme dev --path theme` �
 `0 → 1 → {2, 4}`; `1 → 3A, 3B, 3C`; `2C → 3D`. Phase 3 (compare tool) is independent and can run alongside Batch 0/1 (it only writes `tools/compare/**`).
 
 ### Stage B visual checklist (filled in as batches finish)
-_Empty until Batch 0 is done._
+**Batch 0 (compare page `home`, `mobile-menu`; any page for header/footer):**
+- Fonts: Clash Display / Satoshi load from theme assets; no layout shift while loading (fallback metrics).
+- Header: pill size/blur/shadow at 1440 and 390; entrance (opacity + 30px slide, 1s) starts 3.3s after load only while the intro plays, instant on product pages; phone drawer open/close height animation and hamburger → X; Escape closes; bag button + badge look.
+- Footer: title/lede sizes at ≥1200, 810–1199, ≤809; columns wrap; social circles + hover; legal line.
+- Curtain: closed on load, opens over 2.2s when ~30% of the footer is visible, closes when scrolling back up; 56px (16px on phone) edges stay visible; pleat colours.
+- Newsletter: invalid email → red border + message; valid → Shopify customer form submits, returns to `#FooterNewsletter`, green "You’re in" state.
+- Deviations to eyeball: `curtain_delay` setting is in ms (Shopify range-step rule); newsletter "done" state appears after the page reload, not instantly.
