@@ -66,7 +66,7 @@ Strings: "New arrivals", "Shop new in" are section settings defaults (schema); n
 
 - Hanger spring: CSS `linear()` approximation (`--spring-hanger`) used in both directions; framer uses its default spring for the un-hover return.
 - Hover swing only under `(hover: hover)` for `:hover` (framer whileHover ignores touch as well); `:focus-visible` swing is new.
-- Intentional improvement: card image has `alt=""` (decorative; source used alt = name, which a screen reader reads twice next to the visible name in the same link; mapping G15). Implemented by swapping a placeholder alt, since `cutout-image` treats blank alt as "use default".
+- Intentional improvement: card image has `alt=""` (decorative; source used alt = name, which a screen reader reads twice next to the visible name in the same link; mapping G15). Implemented with `cutout-image` param `decorative: true` (no placeholder/replace workaround).
 - Section `cta_link` and `collection` have no schema defaults (Shopify disallows them); the template JSON supplies them.
 - Ticker not re-attachable after disconnect/reconnect of the same element (section re-render creates a new element, so fine).
 

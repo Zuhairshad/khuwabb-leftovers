@@ -12,6 +12,8 @@
   - fetchpriority (optional) 'high' | 'low' | 'auto'
   - class         (optional)
   - alt           (optional) default "<title> in <colour>, <view> view"
+  - decorative    (optional) default false; true = render alt="" (generated/explicit alt ignored), for images whose
+                  name is already visible text in the same link/card
   - fallback      (optional) default true; false = exact colour+view match only, otherwise render nothing
 
   Lookup: exact colour+view -> (fallback false: render nothing)
@@ -119,7 +121,9 @@
     assign ci_h = ci_top | times: ci_ph | plus: 0.0 | divided_by: ci_pw | round
 
     assign ci_alt = alt
-    if ci_alt == blank
+    if decorative == true or decorative == 'true'
+      assign ci_alt = ''
+    elsif ci_alt == blank
       assign ci_view_label = ci_view | replace: '-', ' '
       if ci_colour != blank
         assign ci_alt = product.title | append: ' in ' | append: ci_colour | append: ', ' | append: ci_view_label | append: ' view'

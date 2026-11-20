@@ -130,7 +130,7 @@ Hooks kept: `data-section="hero"`, `data-code-component`, `data-shuffle`, `data-
 - **`range` steps for `spacing` and `look_scale`:** mapping says step .05; Shopify theme check rejects it ("not divisible by 0.1"), so the steps are .1 (defaults unchanged). Source values between steps stay reachable only via the template JSON.
 - **Chooser for a product without a Size option:** source assumes sizes exist. Theme hides the size select and uses the implied `Default` size so Add isn't stuck disabled.
 - **Chooser is a snapshot:** the source re-derives rows from the live look while the dialog is open (stale picks if the reels move); the theme uses the look at open time. A second CTA click while open does nothing.
-- **Chooser close:** only the x button, as in the source (no Escape / focus trap; not required by G15 for this component).
+- **Chooser keyboard (intentional improvement, F2):** the x button is unchanged; additionally Escape closes the chooser and returns focus to the "Add the look" CTA, and on open focus moves to the first (colour) select. The source has neither. No focus trap.
 - **Colour without an explicit front image:** the piece falls back to that colour's variant `featured_media`; a colour with neither is skipped (source: `c.image`).
 - **Product name / URL:** pieces use `product.title` (Shopify title, G24), not the catalog's site names.
 - **`piece-top` / `piece-bottom` alt:** first Color value that has the view (source hard-codes `black`).

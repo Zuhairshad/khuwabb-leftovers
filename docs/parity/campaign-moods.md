@@ -99,7 +99,7 @@ Theme: `sections/campaign-moods.liquid` (L), `assets/section-campaign-moods.css`
 | mood name, note, colour, x, y, 3 slugs | block `mood` settings `name` `note` `color` `x` `y` `product_1..3` |
 | Card price | `{% render 'price' %}` of the sum of `product.price` |
 | `sizes` `(max-width: 809px) 200vw, 1216px` | L `cm_img_sizes` |
-| tile `alt=""`, lazy, async | L (cutout-image + marker alt swapped for `alt=""`), lazy |
+| tile `alt=""`, lazy, async | L (cutout-image `decorative: true` -> `alt=""`), lazy |
 | arrow svg `M4 10L10 4M5 4h5v5` | L (CTA badge) |
 | tag `aria-label` = name | L |
 | `data-section="fresh-daily"` | root `div.campaign-moods` |
@@ -116,7 +116,7 @@ No locale keys are needed: all copy is section settings.
 - `onScreen`/auto-cycle under reduced motion: source never sets onScreen there, so no cycling; kept (also calmer).
 - Image placement before JS/with JS off: `object-fit: cover; width/height 100%` is added to `.photo` (source has none); inline JS values override it once running, so the result is identical when the image aspect equals natural size.
 - Missing product price: source sums only the present products (and prints Rs.0 if none); the brief asks for blank if any is missing, so that is what the theme does.
-- `alt=""` on tile images: `cutout-image` cannot emit an empty alt, so L passes a marker and replaces `alt="-cm-"` with `alt=""`.
+- Tile images use `cutout-image` `decorative: true`, giving `alt=""` as in the source (no placeholder/replace workaround).
 - Phone focus uses the source's viewport media query (810px), not the frame-width `narrow` flag from the brief; they differ only for viewports 740-809px.
 - Card layout in narrow mode moves the same DOM nodes instead of re-rendering one card (visually identical); a focused tag loses focus if the viewport crosses the 700px threshold.
 - The placeholder `clip-path` before JS (`.js .campaign-moods__clip`) uses `round 50% 50% 32px 32px`, not the exact per-frame pixel values (they depend on measured width).

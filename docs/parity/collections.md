@@ -47,7 +47,7 @@ Breakpoints as source: tablet `min-width:810px and max-width:1199.98px`, phone `
 | Hanger hover rotate 5 | component-hanger-card.css (unchanged) |
 | First 4 cards eager | `eager_count` setting (4); `loading` param of product-card |
 | `atLeast(src,360)` cut-out | cutout-image widths `360,480,640`, sizes `(max-width: 809.98px) 45vw, 290px` (hangers: `... 45vw, 280px`) |
-| Card alt = name | `alt: product.title` passed to cutout-image; hanger-card keeps alt="" (decorative) |
+| Card alt = name | Intentional improvement: product-card and hanger-card pass `decorative: true` (alt=""): the name is visible text in the same link, so alt = name would be read twice (G15) |
 | intro image `responsive("/brand/collections.jpg")` | image_picker -> collection.image -> asset srcset 640/960/1280/1849, sizes `(max-width: 1279px) calc(100vw - 32px), 1216px`, fetchpriority high |
 | new-in photo `responsive(...)`, alt "", sizes `(max-width: 809px) calc(100vw - 32px), 360px` | image_picker -> asset 400/819w; `image_alt` blank = alt="" |
 | `<title>` strings | head-meta (shared) |

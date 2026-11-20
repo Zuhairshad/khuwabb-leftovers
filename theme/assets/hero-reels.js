@@ -528,6 +528,16 @@
         chooser = document.createElement('look-chooser')
         chooser.setup({ look: lookNow(), products: products, strings: strings, onClose: closeChooser })
         el.appendChild(chooser)
+        // Keyboard: Escape closes and returns focus to the CTA; on open focus moves to the first
+        // select (the colour select, always visible) so keyboard users land on the first control.
+        chooser.addEventListener('keydown', function (ev) {
+          if (ev.key !== 'Escape') return
+          ev.preventDefault()
+          closeChooser()
+          ctaEl.focus()
+        })
+        var firstSelect = chooser.querySelector('select')
+        if (firstSelect) firstSelect.focus({ preventScroll: true })
       }
       if (ctaEl) ctaEl.addEventListener('click', onCtaClick)
 

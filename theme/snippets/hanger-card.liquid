@@ -48,18 +48,15 @@
     <path d="M60 30 L10 56.5 c-3.4 1.8-2.4 4.5 1.5 4.5 h97 c3.9 0 4.9-2.7 1.5-4.5 Z" stroke="#17140F" stroke-width="3" stroke-linejoin="round" fill="none"/>
   </svg>
   <div class="hanger-card__card"{% if hc_tint != blank %} style="background: {{ hc_tint | escape }}"{% endif %}>
-    {%- comment -%} Decorative: the name is visible text in the same link. cutout-image treats a blank alt as "use default", so a placeholder is swapped for alt="". {%- endcomment -%}
-    {%- capture hc_img -%}
-      {%- render 'cutout-image',
-        product: product,
-        view: 'front',
-        widths: '360,480,640',
-        sizes: hc_sizes,
-        loading: hc_loading,
-        alt: 'hc-decorative'
-      -%}
-    {%- endcapture -%}
-    {{- hc_img | replace: 'alt="hc-decorative"', 'alt=""' -}}
+    {%- comment -%} Decorative: the name is visible text in the same link. {%- endcomment -%}
+    {%- render 'cutout-image',
+      product: product,
+      view: 'front',
+      widths: '360,480,640',
+      sizes: hc_sizes,
+      loading: hc_loading,
+      decorative: true
+    -%}
   </div>
   <div class="hanger-card__info">
     <p class="hanger-card__name">{{ product.title | escape }}</p>

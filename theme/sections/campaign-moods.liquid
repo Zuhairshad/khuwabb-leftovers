@@ -6,8 +6,8 @@
   - <campaign-moods> owns the photo reveal, tag placement, floating card positioning, narrow mode and auto-cycle.
     Everything (tags, one card per mood) is rendered here; JS only places and toggles them.
   - Card price = sum of the 3 products' product.price (blank when any product is missing).
-  - Tile images go through snippets/cutout-image.liquid (front view of the first colour); the snippet cannot output
-    alt="" itself, so a marker alt is passed and swapped for an empty alt below (decorative: the card names the look).
+  - Tile images go through snippets/cutout-image.liquid (front view of the first colour); they pass decorative: true
+    (alt=""; the card names the look).
 {%- endcomment -%}
 {{ 'section-campaign-moods.css' | asset_url | stylesheet_tag }}
 
@@ -172,17 +172,14 @@
                   -%}
                     <div class="campaign-moods__tile" style="background: {{ m_color }};">
                       {%- if tile_product -%}
-                        {%- capture tile_img -%}
-                          {%- render 'cutout-image',
-                            product: tile_product,
-                            view: 'front',
-                            widths: '300,480',
-                            sizes: '(max-width: 809px) 30vw, 100px',
-                            loading: 'lazy',
-                            alt: '-cm-'
-                          -%}
-                        {%- endcapture -%}
-                        {{- tile_img | replace: 'alt="-cm-"', 'alt=""' -}}
+                        {%- render 'cutout-image',
+                          product: tile_product,
+                          view: 'front',
+                          widths: '300,480',
+                          sizes: '(max-width: 809px) 30vw, 100px',
+                          loading: 'lazy',
+                          decorative: true
+                        -%}
                       {%- endif -%}
                     </div>
                   {%- endfor -%}

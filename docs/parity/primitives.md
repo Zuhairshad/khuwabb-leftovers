@@ -66,3 +66,7 @@ CSS is NOT emitted by the snippet. Sections must load `component-arrow-button.cs
 - Non-Color/Size products: placeholder colour "Default" (and size key "Default"); source has no such case.
 - Image attributes: `fetchpriority`/`class`/`sizes` passed as nil to `image_tag` when unset; relies on Shopify omitting nil attributes (verify in Stage B).
 - Cut-out JSON/image output was not rendered (Stage A); only theme check and a Node check of the money algorithm were run.
+
+## Decorative images (F1, intentional improvement)
+
+`cutout-image.liquid` has a `decorative` param (default false). When true it renders `alt=""` and ignores `alt`/the generated alt; all other behaviour is unchanged. Callers: hanger-card, campaign-moods tiles, product-card (shop card: the name is visible text in the same link, so the source's alt = title was read twice; G15). No placeholder/replace workarounds remain in these files.
