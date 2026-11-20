@@ -17,7 +17,7 @@ Severity: **critical** = page broken / wrong content / blocks a task · **major*
 | Area | Critical | Major | Minor | Status |
 |---|---|---|---|---|
 | A parity | 0 | 0 | 4 (1 not applicable) | ✅ reported |
-| B functions | – | – | – | pending |
+| B functions | 0 | 1 (B1) | 5 (B2–B6) | ✅ reported |
 | C accessibility | 0 | 6 (A1–A6) | 13 (A7–A19) | ✅ reported |
 | D performance + editor | 0 | 0 | 9 perf/editor (M1–M7, E1–E3, E5) | ✅ reported |
 
@@ -40,7 +40,19 @@ Result: no missing or wrong values. 22 flagged declarations are all accounted fo
 
 ## B — Functions
 
-_pending_
+Method: the real theme JS + CSS served by a mock Shopify server (in-memory cart with per-variant stock, Shopify-shaped 422 bodies, `?sections=cart-drawer` rendered by a port of the drawer Liquid), driven in headless Chromium at 1440 and 390; hand-written fixtures reproduce the Liquid output for the PDP, header, hero chooser and intro (incl. the `?variant=`/`?colour=` logic and inline script verbatim). Liquid-only flows code-reviewed. **178 checks, 170 pass** — the 8 failures are B1, B3, B4 below (one per width each).
+
+Passing highlights: the test-store.mjs PDP flow (Peppercorn front → back view → Cherry keeps back → M enables Add), sold-out size / sold-out product, `?variant=` and `?colour=` (incl. `+` and `%20`), add → drawer + badge/bump + "Added — add another", drawer +/−/remove/empty/unavailable line/checkout paused, focus trap both ways, scroll lock released, phone menu, chooser (preselect, sold-out sizes, multi-add, Escape), intro timings (4.68s / 0.88s reduced motion). No sort/filter in the theme — correct, the reference has none. Every `| t` key exists in locales. Customer/search/password/newsletter/cart-page Liquid uses correct form types and field names.
+
+| # | Sev | Where | Finding | Decision |
+|---|---|---|---|---|
+| B1 | major | PDP + hero chooser, all | 422 shows Shopify's generic "Cart Error" (cart.js passes `message`, the reason is in `description`) | **Fix** Q1 (cart.js) |
+| B2 | minor–major | `/cart`, JS on | Enter in a quantity input triggers implicit submit with the first submit button = checkout | **Fix** Q1 |
+| B3 | minor | Drawer | Removing the last line drops focus to `<body>` (fallback hits the scrim div) | **Fix** Q1 |
+| B4 | minor | Home chooser → drawer | Drawer can't restore focus (opener removed) | **Fix** Q1 + Q2 |
+| B5 | minor | Password page | `html[data-intro-playing]` never cleared (no intro section there) | **Fixed** (Opus): head-config skips password / gift card; 10s failsafe |
+| B6 | minor | `/cart` no-JS, search | Hardcoded "Update"; empty `q` shows "no results" | **Fix** Q1 (`bag.update`) / Q4 |
+| — | risk | Drawer refresh | Section Rendering by id `cart-drawer` when the section lived in a section group (group section ids are generated) | **Fixed** (Opus): drawer is now a static `{% section 'cart-drawer' %}` in theme.liquid; verify in Stage B |
 
 ## C — Accessibility
 
@@ -105,6 +117,33 @@ Estimated mobile Lighthouse vs reference (80 / 90 / 91 / 91): collection, new-in
 
 ---
 
+## QA-fix batch (Stage A)
+
+Shared-file fixes by the main session: head-config (no intro on password/gift card, 10s failsafe — B5, A18), theme.liquid (static cart drawer; preload `section-header.css`, and `section-hero-reels.css` on the home page — M1), overlay-group (drawer removed), locales (plural bag label — A15; `bag.update`, product-named bag control labels — A10; `general.pagination.label` — A12).
+
+| Task | Owns | Findings |
+|---|---|---|
+| Q1 cart | cart.js, cart-drawer.js/.liquid/.css, cart-line, main-cart | B1, B2, B3, B4, B6, A8, A10, A11, static-section schema |
+| Q2 product + hero | main-product, product-form.js, hero-reels | A5, A7/B4, M4, E2, E3 |
+| Q3 header/footer/campaign/ticker | header, footer, newsletter, campaign-moods, ticker.js | A1, A2, A3, A6, A15, E2, E3, M6 |
+| Q4 misc | collection sections, main-search, shop-the-look, list-collections, gift_card, component-form.css, favicons, schema info texts | E1, E2, A11, A12, A13, A19, M5, B6 (search) |
+
+**Shad decisions (defaults keep parity):** A4 (darker small text in bag/hero bar to pass 4.5:1), A14 (visible pause control for the ticker).
+
+---
+
 ## Stage B — must be verified on the real store
 
-_Merged from all areas once reported._
+Run order: `tools/store-setup --dry-run` → `--apply` → `shopify theme dev --path theme` → `npm run compare`.
+
+1. **Store data**: setup dry-run first (Admin API shapes written from memory); option names exactly `Color`/`Size`; 118 media with `<Color> | <view>` alts; `custom.*` metafields; collections incl. `new-in` titled "New arrivals"; menus; redirects; shop name "Khuwabb" (titles).
+2. **Compare tool**: all pages × both viewports; per-section diffs and key-selector tables (springs are `linear()` approximations — expect small motion-frame differences only).
+3. **Cart**: Section Rendering returns the static `cart-drawer` (add/change/refresh); real 422 wording; line keys; checkout via `/checkout`; locale-prefixed routes; bfcache refresh; `/cart` with JS off.
+4. **Product**: real variants (gym set fully sold out, vinyl Black/Red sold out), `?variant=` reload, `?colour=` hold (≤3s failsafe), no-JS add, JSON-LD.
+5. **Home**: hero pieces built from live collections + gym piece-top/bottom; seeded shuffle vs reference; chooser add; campaign tag positions at 740–809px and across 700px; category card heights; ticker; looks sticky stacking.
+6. **Images**: `image_tag` omits nil attrs and outputs `alt=""` for decorative cut-outs.
+7. **Intro**: `home_only` / `once_per_session` / editor; header entrance timing.
+8. **Performance**: mobile + desktop Lighthouse (median of 3) for `/`, `/collections/all`, `/collections/new-in`, a product, vs 80 / 90 / 91 / 91; LCP element + priority; home HTML size + TTFB (hero JSON, M7); rAF cost; transferred JS/CSS per template.
+9. **Editor**: add/remove/reorder blocks in every home section; block select previews (hero flavour, campaign mood); collection sections only on collection templates; no console errors.
+10. **Accessibility**: re-run axe on real pages; keyboard pass through header, drawer, PDP, chooser, campaign; screen-reader spot check of the live regions.
+11. **Customer accounts** (only if the store uses classic accounts), search, password page, gift card, newsletter tagging (`newsletter` tag in Admin → Customers).
