@@ -10,6 +10,31 @@ export class UserErrors extends Error {
   }
 }
 
+// Mutations that change or remove existing/customer-visible data. setup.mjs never calls these
+// directly (the per-step rewrite avoided every one); only undo.mjs may, passing allow:true.
+export const DENYLIST = new Set([
+  "menuUpdate", "menuDelete", "urlRedirectUpdate", "urlRedirectDelete", "productDelete", "collectionDelete",
+  "productVariantDetachMedia", "metafieldsDelete", "fileDelete", "productDeleteMedia", "collectionUpdate",
+  "publishableUnpublish",
+])
+
+export class DenylistedMutation extends Error {
+  constructor(field) { super(`mutation "${field}" is denylisted (changes/removes existing or customer-visible data); only undo.mjs may call it (allow:true)`) }
+}
+
+// Query shop{name myshopifyDomain}; abort the whole process (exit 2, nothing written) unless
+// myshopifyDomain starts with "<handle>.". Always prints shop name + domain.
+export async function checkStore(api, handle) {
+  const d = await api.gql(`query{shop{name myshopifyDomain}}`)
+  const { name, myshopifyDomain } = d.shop
+  console.log(`Shop: ${name} (${myshopifyDomain})`)
+  if (handle && !myshopifyDomain.startsWith(`${handle}.`)) {
+    console.error(`ABORT: --store-check ${handle} does not match store domain ${myshopifyDomain}. Nothing written.`)
+    process.exit(2)
+  }
+  return d.shop
+}
+
 export function makeClient({ store, token, verbose }) {
   const url = `https://${store}/admin/api/${SHOPIFY_API_VERSION}/graphql.json`
   let available = null, restoreRate = 50
@@ -42,7 +67,9 @@ export function makeClient({ store, token, verbose }) {
     }
   }
   // Run a mutation whose payload has userErrors; return payload.
-  async function mutate(query, variables, field) {
+  // opts.allow:true is required to call a DENYLIST mutation (undo.mjs only).
+  async function mutate(query, variables, field, opts = {}) {
+    if (DENYLIST.has(field) && !opts.allow) throw new DenylistedMutation(field)
     const data = await gql(query, variables)
     const p = data[field]
     if (p?.userErrors?.length) throw new UserErrors(field, p.userErrors)

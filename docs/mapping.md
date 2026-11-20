@@ -102,7 +102,7 @@ JSON template (`templates/*.json`), which Opus writes with these values.
 | `logo` | image_picker | blank → `assets/logo.png` |
 | `logo_label` | text | `leftover` |
 | `logo_aria` | text | `Khuwabb leftover — home` |
-| `menu` | link_list | `main-menu` (Shop → /collections/all, New in → /collections/new-in, Lookbook → /#looks) |
+| `menu` | link_list | `khuwabb-main`, set in `header-group.json` (store-setup creates it; the store's existing `main-menu` is never touched) (Shop → /collections/all, New in → /collections/new-in, Lookbook → /#looks) |
 | `show_search` | checkbox | true |
 | `entrance_delay` | range 0–5 s, step 0.1 | 3.3 (forced 0 on `template.name == 'product'` and when the intro doesn't play) |
 No blocks.
@@ -254,7 +254,7 @@ Settings: `show_thumbs` checkbox true; `restock_note` text `This colour is sold 
 | `category` | `product.type` (Trousers, Jackets, Dresses, Co-ord Set, Gymwear) |
 | `newIn` | collection `new-in` (manual) |
 | Category collections | automated collections by product type: `jackets`, `trousers`, `dresses`, `gym-wear`, `co-ord-sets` |
-| Nav / footer links | menus `main-menu`, `footer-shop`, `footer-help`, `footer-khuwabb` |
+| Nav / footer links | menus `khuwabb-main`, `footer-shop`, `footer-help`, `footer-khuwabb` |
 | Reels flavours, moods, looks, receipts, care labels, category cards | section blocks (§2) |
 | Email `khuwabb@gmail.com`, socials, currency prefix | global theme settings (§5.2) |
 | Gym `piece-top` / `piece-bottom` | product media with alt `Black \| piece-top` / `Black \| piece-bottom` |

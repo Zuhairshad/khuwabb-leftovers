@@ -1,0 +1,13 @@
+{
+  "name": "khuwabb-local-preview",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Offline preview of theme/ with LiquidJS and mock store data (no Shopify login)",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "liquidjs": "^10.21.0"
+  }
+}
