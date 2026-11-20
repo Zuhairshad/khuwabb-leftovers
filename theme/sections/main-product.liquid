@@ -106,16 +106,15 @@
   {%- for mp_vn in mp_view_names -%}
     {%- capture mp_t -%}
       {%- if mp_vn == 'front' -%}
-        {%- render 'cutout-image', product: product, colour: mp_colour, view: mp_vn, widths: '360', sizes: '56px', alt: 'THUMB' -%}
+        {%- render 'cutout-image', product: product, colour: mp_colour, view: mp_vn, widths: '360', sizes: '56px', decorative: true -%}
       {%- else -%}
-        {%- render 'cutout-image', product: product, colour: mp_colour, view: mp_vn, widths: '360', sizes: '56px', alt: 'THUMB', fallback: false -%}
+        {%- render 'cutout-image', product: product, colour: mp_colour, view: mp_vn, widths: '360', sizes: '56px', decorative: true, fallback: false -%}
       {%- endif -%}
     {%- endcapture -%}
     {%- assign mp_t = mp_t | strip -%}
     {%- if mp_t != blank -%}
       {%- assign mp_thumb_count = mp_thumb_count | plus: 1 -%}
       {%- assign mp_vl = mp_view_label | replace: '{view}', mp_vn | escape -%}
-      {%- assign mp_t = mp_t | replace: 'alt="THUMB"', 'alt=""' -%}
       {%- assign mp_thumbs = mp_thumbs | append: '<button type="button" aria-pressed="' | append: forloop.first | append: '" aria-label="' | append: mp_vl | append: '"' -%}
       {%- if mp_tint != blank -%}
         {%- assign mp_tint_e = mp_tint | escape -%}

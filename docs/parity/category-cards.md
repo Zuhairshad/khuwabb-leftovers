@@ -41,7 +41,7 @@ Spring `{bounce .15, duration .9}` = `.9s var(--spring-cards)` (tokens.css).
 | caption opacity `shown ? 1 : 0` (L76) | C `.category-cards__caption` 0, `[data-open]` 1, stacked always 1; `.9s` spring |
 | side label opacity `shown ? 0 : 1`, aria-hidden (L84) | C `.category-cards__side` 1 / `[data-open]` 0; stacked `display: none`; S `aria-hidden="true"` |
 | `stacked` via useMedia (JS) | C media query `max-width: 1199.98px` only, no JS, no flash |
-| Cover image `responsive(image)`, `sizes`, `alt=""`, lazy (L73) | S `cutout-image` (view front, sizes `(max-width: 809px) 45vw, (max-width: 1199px) 30vw, 360px`, `alt: ''`, default lazy) |
+| Cover image `responsive(image)`, `sizes`, `alt=""`, lazy (L73) | S `cutout-image` (view front, sizes `(max-width: 809px) 45vw, (max-width: 1199px) 30vw, 360px`, `decorative: true` (alt=""; source used alt="" too, now guaranteed since cutout-image no longer falls back to a generated alt for a blank one), default lazy) |
 | Count `{n} piece(s)` (L80) | S `{{ 'general.piece' \| t: count: collection.products_count }}` (locale already has one/other); no collection set: pill omitted |
 | Empty category hidden (L33) | S: card skipped when the collection is set and `products_count == 0` |
 | `href="/shop"` (L54) | S `block.settings.link \| default: '/collections/all'` |
