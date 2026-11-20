@@ -354,7 +354,7 @@ Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `
 | 0A header | `sections/header.liquid`, `snippets/header-icon.liquid`, `assets/section-header.css`, `assets/header.js` | Nav.tsx/.module.css, Bag.tsx (BagButton part), lib/intro.ts | desktop bar, phone menu open/closed, entrance delay, bag button + bump (contract §1.1) |
 | 0B footer | `sections/footer.liquid`, `snippets/footer-social.liquid`, `snippets/newsletter-form.liquid`, `snippets/fitting-curtain.liquid`, `assets/section-footer.css`, `assets/footer.js` | Footer.tsx, NewsletterForm.tsx, FittingCurtain.tsx (+css), data/fitting-curtain.json | 3 breakpoints, newsletter idle/bad/done, curtain closed/open/replay, social hover |
 
-### Batch 1 — Shared primitives, cart, intro, store setup (depends on 0)
+### Batch 1 — Shared primitives, cart, intro, store setup (depends on 0) — ✅ done (Stage A), theme check: 0 errors (5 orphaned-snippet warnings until Batch 2 uses them)
 | Task | Owns | Reads | Covers |
 |---|---|---|---|
 | 1A primitives | `snippets/arrow-button.liquid`, `snippets/section-heading.liquid`, `snippets/price.liquid`, `snippets/product-cutouts.liquid`, `snippets/cutout-image.liquid`, `snippets/product-json.liquid`, `assets/component-arrow-button.css`, `assets/component-section-heading.css`, `assets/appear.js`, `assets/money.js` | ArrowButton, SectionHeader, Appear, lib/format, lib/catalog, lib/img | arrow hover, heading 3 breakpoints, appear rise/lift both directions, money format, cut-out lookup incl. fallbacks |
@@ -399,3 +399,10 @@ Shad runs `tools/store-setup` → Opus starts `shopify theme dev --path theme` �
 - Curtain: closed on load, opens over 2.2s when ~30% of the footer is visible, closes when scrolling back up; 56px (16px on phone) edges stay visible; pleat colours.
 - Newsletter: invalid email → red border + message; valid → Shopify customer form submits, returns to `#FooterNewsletter`, green "You’re in" state.
 - Deviations to eyeball: `curtain_delay` setting is in ms (Shopify range-step rule); newsletter "done" state appears after the page reload, not instantly.
+
+**Batch 1 (run `tools/store-setup` first: `--dry-run`, then `--apply`; compare pages `cart-drawer`, any page for the intro):**
+- Store setup: dry-run against the live store first — Admin API shapes written from memory need confirming (`productUpdate(media:)`, `ProductVariantAppendMediaInput`, `MenuItemCreateInput`, `collectionByIdentifier`, `publishedOnPublication`, files lookup). Then check in admin: 118 media with `<Color> | <view>` alts, variant images = colour fronts, 5 smart collections + `new-in` ("New arrivals"), 4 menus, 4 redirects, metafield definitions pinned.
+- Intro: full sequence matches the reference frame by frame (arches rise, reels spin with blur and overshoot, letters fly out alternately, background fades) at 1440 and 390; no scroll during it; skipped on product pages; header slides in at 3.3s; `html[data-intro-playing]` removed at ~4.68s; reduced motion → 0.8s paper fade only.
+- Bag drawer: opens from the bag button and after add-to-bag; scrim blur + panel slide; empty state (arch + image + "Start shopping"); line stagger; stepper/remove keep the drawer open and focus in place; sold-out line message + checkout disabled reason; checkout goes to Shopify checkout; Escape/scrim/× close; Tab stays inside while open; badge count + bump.
+- Cart page `/cart`: works with JS off (quantity update button, remove links, checkout button).
+- Primitives render correctly (verified as sections start using them in Batch 2): `image_tag` omits nil `sizes`/`class`/`fetchpriority`; cut-out lookup by alt; `product-json` is valid JSON.

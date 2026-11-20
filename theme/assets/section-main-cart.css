@@ -1,0 +1,75 @@
+/*
+ * Cart page layout. Line, stepper, foot, note and checkout styles are shared
+ * with the drawer (section-cart-drawer.css, ported from Bag.module.css); this file
+ * only adds the page frame. Same tokens/values, no new design.
+ */
+.main-cart {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 140px 28px 96px;
+  font-family: var(--font-body);
+  color: var(--ink);
+}
+
+/* Same as Bag.module.css .title / .count */
+.main-cart__title {
+  margin: 0 0 18px;
+  font-family: var(--font-body);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.main-cart__count {
+  opacity: 0.4;
+}
+
+.main-cart__empty {
+  min-height: 360px;
+}
+
+/* Same padding/stack as .list; border-top matches .foot */
+.main-cart__list {
+  padding: 8px 0;
+}
+
+.main-cart__foot {
+  padding: 20px 0 0;
+}
+
+.main-cart__checkout {
+  width: 100%;
+  border: none;
+  font-family: inherit;
+}
+
+.main-cart__checkout:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.main-cart__update {
+  width: 100%;
+  height: 48px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(23, 20, 15, 0.12);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* No JS: the +/- buttons can't submit; the number input and Update button do. */
+.no-js .main-cart .cart-line__stepper button {
+  display: none;
+}
+
+@media (max-width: 809.98px) {
+  .main-cart {
+    padding: 112px 20px 72px;
+  }
+}

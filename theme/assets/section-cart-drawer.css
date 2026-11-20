@@ -1,0 +1,413 @@
+/*
+ * Cart drawer + shared cart line styles (also loaded by main-cart).
+ * Ported 1:1 from components/Bag.module.css. The button/badge rules (lines 1-34)
+ * live in section-header.css (.bag-button, .bag-button__badge).
+ * Class names: .layer -> .cart-drawer__layer, .line -> .cart-line, .num -> .cart-num, etc.
+ */
+
+/* Bag.module.css:36-43 .layer */
+.cart-drawer__layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  font-family: var(--font-body);
+  color: var(--ink);
+}
+
+/* Bag.module.css:45-47 .layer[data-open] */
+.cart-drawer__layer[data-open] {
+  pointer-events: auto;
+}
+
+/* Bag.module.css:49-59 .scrim */
+.cart-drawer__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(23, 20, 15, 0.32);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  opacity: 0;
+  transition:
+    opacity 0.7s var(--ease-out),
+    backdrop-filter 0.7s var(--ease-out);
+}
+
+/* Bag.module.css:61-65 */
+.cart-drawer__layer[data-open] .cart-drawer__scrim {
+  opacity: 1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Bag.module.css:67-81 .panel */
+.cart-drawer__panel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  width: min(460px, calc(100vw - 24px));
+  background: var(--paper);
+  border-radius: 28px;
+  box-shadow: 0 30px 80px rgba(23, 20, 15, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateX(calc(100% + 24px));
+  transition: transform 0.9s var(--ease-out);
+}
+
+/* Bag.module.css:83-85 */
+.cart-drawer__layer[data-open] .cart-drawer__panel {
+  transform: translateX(0);
+}
+
+/* Wrapper swapped by cart-drawer.js; keeps the panel's column layout intact. */
+.cart-drawer__inner {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Bag.module.css:87-92 .head */
+.cart-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px 26px 18px 28px;
+}
+
+/* Bag.module.css:94-98 .title */
+.cart-drawer__title {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+/* Bag.module.css:100-102 .count */
+.cart-drawer__count {
+  opacity: 0.4;
+}
+
+/* Bag.module.css:104-113 .close */
+.cart-drawer__close {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(23, 20, 15, 0.06);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+/* Bag.module.css:115-120 .meter */
+.cart-drawer__meter {
+  margin: 0 28px 8px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(23, 20, 15, 0.04);
+}
+
+/* Bag.module.css:122-125 .meterLabel */
+.cart-drawer__meter-label {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* Bag.module.css:127-132 .track */
+.cart-drawer__track {
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(23, 20, 15, 0.08);
+  overflow: hidden;
+}
+
+/* Bag.module.css:134-139 .fill */
+.cart-drawer__fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--pistachio);
+  transition: width 0.9s var(--ease-out);
+}
+
+/* Bag.module.css:141-145 .list */
+.cart-drawer__list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 28px;
+}
+
+/* Bag.module.css:147-156 .empty */
+.cart-drawer__empty {
+  height: 100%;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+}
+
+/* Bag.module.css:158-164 .emptyArch */
+.cart-drawer__empty-arch {
+  width: 168px;
+  height: 212px;
+  border-radius: 999px 999px 22px 22px;
+  overflow: hidden;
+  background: #f1ece3;
+}
+
+/* Bag.module.css:166-170 .emptyArch img */
+.cart-drawer__empty-arch img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Bag.module.css:172-175 .emptyText */
+.cart-drawer__empty-text {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+/* Bag.module.css:177-187 .emptyCta */
+.cart-drawer__empty-cta {
+  height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* Bag.module.css:189-198 .line (drawer entrance state) */
+.cart-drawer__layer .cart-line {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s ease calc(0.25s + var(--i) * 0.06s),
+    transform 0.8s var(--ease-out) calc(0.25s + var(--i) * 0.06s);
+}
+
+/* Bag.module.css:204-207 .layer[data-open] .line */
+.cart-drawer__layer[data-open] .cart-line {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Bag.module.css:189-192 .line (shared by drawer + page) */
+.cart-line {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+/* Bag.module.css:200-202 .line + .line */
+.cart-line + .cart-line {
+  border-top: 1px solid rgba(23, 20, 15, 0.08);
+}
+
+/* Bag.module.css:209-218 .thumb */
+.cart-line__thumb {
+  width: 92px;
+  height: 112px;
+  border-radius: 18px;
+  background: #f1ece3;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* Bag.module.css:220-224 .thumb img */
+.cart-line__thumb img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+}
+
+/* Bag.module.css:226-232 .lineBody */
+.cart-line__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Bag.module.css:234-240 .lineTop */
+.cart-line__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Bag.module.css:242-244 .num */
+.cart-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Bag.module.css:246-250 .size */
+.cart-line__size {
+  font-size: 14px;
+  opacity: 0.55;
+  margin-top: 4px;
+}
+
+/* Bag.module.css:331-335 .unavailable; also the 422 line error (G21) */
+.cart-line__unavailable,
+.cart-line__error {
+  font-size: 13px;
+  color: #a8321e;
+  margin-top: 4px;
+}
+
+.cart-line__error:empty {
+  display: none;
+}
+
+/* Bag.module.css:252-256 .lineBottom */
+.cart-line__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Bag.module.css:258-266 .stepper */
+.cart-line__stepper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 38px;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid rgba(23, 20, 15, 0.12);
+}
+
+/* Bag.module.css:268-273 .stepper span (page uses an input for the no-JS form) */
+.cart-line__stepper span,
+.cart-line__qty {
+  min-width: 22px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cart-line__qty {
+  width: 36px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.cart-line__qty::-webkit-outer-spin-button,
+.cart-line__qty::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Bag.module.css:275-285 .stepper button */
+.cart-line__stepper button {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--ink);
+  padding: 0;
+}
+
+/* Bag.module.css:342-345 .stepper button:disabled */
+.cart-line__stepper button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Bag.module.css:287-296 .remove */
+.cart-line__remove {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  opacity: 0.55;
+  text-decoration: underline;
+  color: var(--ink);
+  padding: 0;
+}
+
+/* Bag.module.css:298-301 .foot */
+.cart-drawer__foot {
+  padding: 20px 28px 28px;
+  border-top: 1px solid rgba(23, 20, 15, 0.08);
+}
+
+/* Bag.module.css:303-309 .subtotal */
+.cart-drawer__subtotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Bag.module.css:311-315 .note */
+.cart-drawer__note {
+  font-size: 13px;
+  opacity: 0.55;
+  margin-bottom: 18px;
+}
+
+/* Bag.module.css:317-329 .checkout */
+.cart-drawer__checkout {
+  height: 56px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Bag.module.css:337-340 .checkout[aria-disabled] */
+.cart-drawer__checkout[aria-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Accessibility (G15): reduced motion, no slide / stagger / blur transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .cart-drawer__scrim,
+  .cart-drawer__panel,
+  .cart-drawer__fill,
+  .cart-drawer__layer .cart-line {
+    transition: none;
+  }
+
+  .cart-drawer__layer .cart-line {
+    opacity: 1;
+    transform: none;
+  }
+}

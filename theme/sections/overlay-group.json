@@ -1,6 +1,28 @@
 {
   "type": "custom.overlay",
   "name": "Overlays",
-  "sections": {},
-  "order": []
+  "sections": {
+    "cart-drawer": {
+      "type": "cart-drawer",
+      "settings": {}
+    },
+    "scoop-intro": {
+      "type": "scoop-intro",
+      "settings": {
+        "brand": "khuwabb",
+        "color_1": "#d5e5be",
+        "color_2": "#f6c9cf",
+        "color_3": "#f5e7a6",
+        "color_4": "#c9d2f2",
+        "color_5": "#f7d2b8",
+        "spins": 7,
+        "speed": 1,
+        "lock_scroll": true
+      }
+    }
+  },
+  "order": [
+    "cart-drawer",
+    "scoop-intro"
+  ]
 }

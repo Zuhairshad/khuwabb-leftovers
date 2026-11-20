@@ -1,0 +1,138 @@
+{{ 'section-cart-drawer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign count = cart.item_count
+  assign subtotal = 0
+  assign unavailable = 0
+  for item in cart.items
+    if item.variant.available
+      assign subtotal = subtotal | plus: item.final_line_price
+    else
+      assign unavailable = unavailable | plus: 1
+    endif
+  endfor
+
+  comment
+    Checkout readiness, same order as lib/checkout.ts: empty, unavailable line, paused, ready.
+  endcomment
+  assign ready = false
+  if count == 0
+    assign note = 'bag.empty' | t
+  elsif unavailable > 0
+    assign note = 'bag.note_unavailable' | t
+  elsif settings.checkout_enabled == false
+    assign note = 'bag.note_paused' | t
+  else
+    assign ready = true
+    assign note = section.settings.note_ready
+  endif
+
+  assign free_over_cents = section.settings.free_over | times: 100
+  if free_over_cents > 0
+    assign remaining = free_over_cents | minus: subtotal
+    if remaining < 0
+      assign remaining = 0
+    endif
+    assign progress = subtotal | times: 100.0 | divided_by: free_over_cents
+    if progress > 100
+      assign progress = 100
+    endif
+  endif
+-%}
+
+<cart-drawer class="cart-drawer" data-section="cart-drawer" data-count="{{ count }}">
+  <div class="cart-drawer__layer" data-layer inert aria-hidden="true">
+    <div class="cart-drawer__scrim" data-close aria-hidden="true"></div>
+    <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ section.settings.title | escape }}" data-bag-drawer data-code-component>
+      <div data-drawer-inner class="cart-drawer__inner">
+        <div class="cart-drawer__head">
+          <div class="cart-drawer__title">
+            {{ section.settings.title | escape }} <span class="cart-drawer__count" data-drawer-count>{% if count > 0 %}{{ count }}{% endif %}</span>
+          </div>
+          <button type="button" class="cart-drawer__close" aria-label="{{ 'accessibility.close' | t }}" data-close data-close-button>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 3l10 10M13 3L3 13" stroke="#17140F" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        {%- if free_over_cents > 0 -%}
+          <div class="cart-drawer__meter">
+            <div class="cart-drawer__meter-label">
+              {%- if remaining > 0 -%}
+                {%- capture amount -%}<b>{% render 'price', price: remaining %}</b>{%- endcapture -%}
+                {{- 'bag.free_delivery_away' | t: amount: '__AMOUNT__' | escape | replace: '__AMOUNT__', amount -}}
+              {%- else -%}
+                <b>{{ 'bag.free_delivery_unlocked' | t }}</b>
+              {%- endif -%}
+            </div>
+            <div class="cart-drawer__track">
+              <div class="cart-drawer__fill" style="width: {{ progress }}%"></div>
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="cart-drawer__list">
+          {%- if count == 0 -%}
+            <div class="cart-drawer__empty">
+              <div class="cart-drawer__empty-arch">
+                <img src="{{ 'empty-bag.webp' | asset_url }}" alt="" width="320" height="400" loading="lazy" decoding="async">
+              </div>
+              <div class="cart-drawer__empty-text">{{ section.settings.empty_text | escape }}</div>
+              <a href="{{ section.settings.empty_cta_link | default: routes.all_products_collection_url }}" class="cart-drawer__empty-cta" data-close>
+                {{ section.settings.empty_cta_label | escape }}
+              </a>
+            </div>
+          {%- endif -%}
+          {%- for item in cart.items -%}
+            {%- render 'cart-line', item: item, index: forloop.index0, context: 'drawer' -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if count > 0 -%}
+          <div class="cart-drawer__foot">
+            <div class="cart-drawer__subtotal">
+              <span>{{ 'bag.subtotal' | t }}</span>
+              <span class="cart-num">{% render 'price', price: subtotal %}</span>
+            </div>
+            <div class="cart-drawer__note" data-checkout-note>{{ note | escape }}</div>
+            <a
+              class="cart-drawer__checkout"
+              {% if ready %}href="{{ routes.root_url }}checkout"{% else %}aria-disabled="true"{% endif %}
+              data-checkout
+            >
+              {{ 'bag.checkout' | t }}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </aside>
+  </div>
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "enabled_on": {
+    "groups": ["custom.overlay"]
+  },
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Your bag" },
+    { "type": "text", "id": "empty_text", "label": "Empty text", "default": "Your bag is empty." },
+    { "type": "text", "id": "empty_cta_label", "label": "Empty button label", "default": "Start shopping" },
+    { "type": "url", "id": "empty_cta_link", "label": "Empty button link", "default": "/collections/all" },
+    { "type": "text", "id": "note_ready", "label": "Checkout note", "default": "Cash on delivery. Delivery charges are shown at checkout." },
+    {
+      "type": "number",
+      "id": "free_over",
+      "label": "Free delivery over (whole rupees)",
+      "default": 0,
+      "info": "0 hides the free-delivery meter."
+    }
+  ]
+}
+{% endschema %}
