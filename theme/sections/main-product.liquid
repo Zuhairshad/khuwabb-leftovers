@@ -1,0 +1,328 @@
+{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign mp_color_opt = product.options_by_name['Color']
+  assign mp_size_opt = product.options_by_name['Size']
+  assign mp_ci = -1
+  assign mp_si = -1
+  if mp_color_opt
+    assign mp_ci = mp_color_opt.position | minus: 1
+    assign mp_colours = mp_color_opt.values
+  else
+    assign mp_colours = 'Default' | split: ','
+  endif
+  if mp_size_opt
+    assign mp_si = mp_size_opt.position | minus: 1
+    assign mp_sizes = mp_size_opt.values
+  else
+    assign mp_sizes = '' | split: ','
+  endif
+
+  # Initial colour: colour of ?variant= when present, else the first Color value.
+  assign mp_colour = mp_colours.first
+  if product.selected_variant and mp_ci >= 0
+    assign mp_colour = product.selected_variant.options[mp_ci]
+  endif
+
+  # ?variant= also preselects the size; otherwise the size starts empty.
+  assign mp_size = ''
+  if product.selected_variant and mp_si >= 0
+    assign mp_size = product.selected_variant.options[mp_si]
+  endif
+
+  # Which sizes can be ordered in the initial colour (lib/catalog.ts canOrder).
+  assign mp_ok = '|'
+  assign mp_orderable_here = false
+  for mp_s in mp_sizes
+    for mp_v in product.variants
+      assign mp_vc = 'Default'
+      if mp_ci >= 0
+        assign mp_vc = mp_v.options[mp_ci]
+      endif
+      if mp_vc == mp_colour and mp_v.options[mp_si] == mp_s and mp_v.available
+        assign mp_ok = mp_ok | append: mp_s | append: '|'
+        assign mp_orderable_here = true
+        break
+      endif
+    endfor
+  endfor
+
+  # Server-side twin of logic.state() for the add button.
+  assign mp_ready = false
+  if mp_size != blank
+    for mp_v in product.variants
+      assign mp_vc = 'Default'
+      if mp_ci >= 0
+        assign mp_vc = mp_v.options[mp_ci]
+      endif
+      if mp_vc == mp_colour and mp_v.options[mp_si] == mp_size and mp_v.available
+        assign mp_ready = true
+        break
+      endif
+    endfor
+  endif
+
+  assign mp_tint = product.metafields.custom.tint.value | append: '' | strip
+  assign mp_line = product.metafields.custom.category_line.value | append: '' | strip
+  if mp_line == blank
+    assign mp_line = product.type
+  endif
+
+  assign mp_email = settings.contact_email
+  assign mp_mail_link = '<a href="mailto:' | append: mp_email | append: '">' | append: mp_email | append: '</a>'
+  assign mp_note = section.settings.restock_note
+  if mp_note == blank
+    assign mp_note_html = 'product.restock_note_html' | t: email: mp_mail_link
+  else
+    assign mp_note_html = mp_note | escape | replace: '{email}', mp_mail_link
+  endif
+
+  assign mp_view_label = 'accessibility.view' | t: view: '{view}'
+  assign mp_fabric = product.metafields.custom.fabric.value | append: '' | strip
+  assign mp_care = product.metafields.custom.care.value | append: '' | strip
+  assign mp_guide = product.metafields.custom.size_guide | metafield_tag
+  assign mp_guide_text = mp_guide | strip_html | strip
+  assign mp_desc_text = product.description | strip_html | strip
+  assign mp_start = product.selected_or_first_available_variant
+-%}
+
+{%- capture mp_img -%}
+  {%- render 'cutout-image',
+    product: product,
+    colour: mp_colour,
+    view: 'front',
+    sizes: '(max-width: 809px) 70vw, 440px',
+    fetchpriority: 'high',
+    loading: 'eager'
+  -%}
+{%- endcapture -%}
+
+{%- comment -%} Thumbnails for the initial colour (exact views only; front always resolves). {%- endcomment -%}
+{%- assign mp_view_names = 'front,side,back' | split: ',' -%}
+{%- assign mp_thumbs = '' -%}
+{%- assign mp_thumb_count = 0 -%}
+{%- if section.settings.show_thumbs -%}
+  {%- for mp_vn in mp_view_names -%}
+    {%- capture mp_t -%}
+      {%- if mp_vn == 'front' -%}
+        {%- render 'cutout-image', product: product, colour: mp_colour, view: mp_vn, widths: '360', sizes: '56px', alt: 'THUMB' -%}
+      {%- else -%}
+        {%- render 'cutout-image', product: product, colour: mp_colour, view: mp_vn, widths: '360', sizes: '56px', alt: 'THUMB', fallback: false -%}
+      {%- endif -%}
+    {%- endcapture -%}
+    {%- assign mp_t = mp_t | strip -%}
+    {%- if mp_t != blank -%}
+      {%- assign mp_thumb_count = mp_thumb_count | plus: 1 -%}
+      {%- assign mp_vl = mp_view_label | replace: '{view}', mp_vn | escape -%}
+      {%- assign mp_t = mp_t | replace: 'alt="THUMB"', 'alt=""' -%}
+      {%- assign mp_thumbs = mp_thumbs | append: '<button type="button" aria-pressed="' | append: forloop.first | append: '" aria-label="' | append: mp_vl | append: '"' -%}
+      {%- if mp_tint != blank -%}
+        {%- assign mp_tint_e = mp_tint | escape -%}
+        {%- assign mp_thumbs = mp_thumbs | append: ' style="background: ' | append: mp_tint_e | append: '"' -%}
+      {%- endif -%}
+      {%- assign mp_thumbs = mp_thumbs | append: ' data-view="' | append: mp_vn | append: '">' | append: mp_t | append: '</button>' -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<section class="product" data-section="product" data-product="{{ product.handle }}">
+  <product-form
+    data-colour="{{ mp_colour | escape }}"
+    data-server-colour="{{ mp_colour | escape }}"
+    data-size="{{ mp_size | escape }}"
+    data-show-thumbs="{{ section.settings.show_thumbs }}"
+  >
+    <div class="product__media">
+      <div class="product__gallery"{% if mp_tint != blank %} style="background: {{ mp_tint | escape }}"{% endif %} data-gallery>
+        {{ mp_img | strip }}
+      </div>
+      {%- if mp_thumb_count > 1 -%}
+        <div class="product__views" role="group" aria-label="{{ 'accessibility.photos' | t }}" data-views>
+          {{ mp_thumbs }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product__info">
+      {%- if mp_line != blank -%}
+        <p class="product__category">{{ mp_line }}</p>
+      {%- endif -%}
+      <h1 class="product__name">{{ product.title }}</h1>
+      <p class="product__price">{% render 'price', price: product.price %}</p>
+
+      {%- if mp_color_opt -%}
+        <fieldset class="product__group">
+          <legend>{{ 'product.colour' | t }} <b data-colour-label>{{ mp_colour }}</b></legend>
+          <div class="product__options">
+            {%- for mp_c in mp_colours -%}
+              <button type="button" class="product__option" aria-pressed="{% if mp_c == mp_colour %}true{% else %}false{% endif %}" data-option-colour="{{ mp_c | escape }}">{{ mp_c }}</button>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      {%- endif -%}
+
+      <fieldset class="product__group">
+        <legend>{{ 'product.size' | t }}</legend>
+        {%- if mp_sizes.size == 0 -%}
+          <p class="product__note">{{ 'product.sizes_coming_soon' | t }}</p>
+        {%- endif -%}
+        <div class="product__options">
+          {%- for mp_s in mp_sizes -%}
+            {%- assign mp_key = '|' | append: mp_s | append: '|' -%}
+            <button type="button" class="product__option" aria-pressed="{% if mp_s == mp_size %}true{% else %}false{% endif %}"{% unless mp_ok contains mp_key %} data-unavailable{% endunless %} data-option-size="{{ mp_s | escape }}">{{ mp_s }}</button>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+
+      <form class="product__form" action="{{ routes.cart_add_url }}" method="post" data-add-form>
+        <input type="hidden" name="id" value="{{ mp_start.id }}" data-variant-id>
+        <button type="submit" class="product__add" data-add-to-bag{% unless mp_ready %} data-inactive{% endunless %}{% unless product.available %} disabled{% endunless %}>
+          <span class="product__add-label product__add-label--js" data-add-label>
+            {%- if mp_orderable_here == false -%}
+              {{- 'product.sold_out_colour' | t -}}
+            {%- elsif mp_size == blank -%}
+              {{- 'product.choose_size' | t -}}
+            {%- elsif mp_ready -%}
+              {{- 'product.add_to_bag' | t -}}
+            {%- else -%}
+              {{- 'product.sold_out_size' | t -}}
+            {%- endif -%}
+          </span>
+          <span class="product__add-label product__add-label--nojs" data-nojs-label>
+            {%- if product.available -%}
+              {{- 'product.add_to_bag' | t -}}
+            {%- else -%}
+              {{- 'product.sold_out' | t -}}
+            {%- endif -%}
+          </span>
+        </button>
+        <p class="product__error" role="alert" data-error hidden></p>
+      </form>
+      <p class="product__note" data-restock{% if mp_orderable_here %} hidden{% endif %}>{{ mp_note_html }}</p>
+
+      {%- if mp_desc_text != blank or mp_fabric != blank or mp_care != blank or mp_guide_text != blank -%}
+        <dl class="product__facts">
+          {%- if mp_desc_text != blank -%}
+            <div><dt>{{ 'product.description' | t }}</dt><dd>{{ product.description }}</dd></div>
+          {%- endif -%}
+          {%- if mp_fabric != blank -%}
+            <div><dt>{{ 'product.fabric' | t }}</dt><dd>{{ mp_fabric | escape | newline_to_br }}</dd></div>
+          {%- endif -%}
+          {%- if mp_care != blank -%}
+            <div><dt>{{ 'product.care' | t }}</dt><dd>{{ mp_care | escape | newline_to_br }}</dd></div>
+          {%- endif -%}
+          {%- if mp_guide_text != blank -%}
+            <div><dt>{{ 'product.size_guide' | t }}</dt><dd>{{ mp_guide }}</dd></div>
+          {%- endif -%}
+        </dl>
+      {%- endif -%}
+    </div>
+
+    <script type="application/json" data-product-json>
+      {%- render 'product-json', product: product -%}
+    </script>
+    <script type="application/json" data-strings>
+      {
+        "choose_size": {{ 'product.choose_size' | t | json }},
+        "add_to_bag": {{ 'product.add_to_bag' | t | json }},
+        "added": {{ 'product.added' | t | json }},
+        "sold_out_colour": {{ 'product.sold_out_colour' | t | json }},
+        "sold_out_size": {{ 'product.sold_out_size' | t | json }},
+        "view_label": {{ mp_view_label | json }},
+        "photos": {{ 'accessibility.photos' | t | json }}
+      }
+    </script>
+  </product-form>
+</section>
+<script>
+  // G22: apply ?colour= before first paint. product-form.js (deferred) reads data-colour and un-hides.
+  ;(function () {
+    var root = document.currentScript.previousElementSibling
+    var pf = root && root.querySelector('product-form')
+    var data = pf && pf.querySelector('script[data-product-json]')
+    if (!data) return
+    try {
+      var wanted = new URLSearchParams(window.location.search).get('colour')
+      var colours = JSON.parse(data.textContent).colours
+      if (wanted && wanted !== pf.getAttribute('data-colour') && colours.some(function (c) { return c.name === wanted })) {
+        pf.setAttribute('data-colour', wanted)
+        root.setAttribute('data-pending', '')
+        setTimeout(function () { root.removeAttribute('data-pending') }, 3000)
+      }
+    } catch (e) {}
+  })()
+</script>
+
+{%- comment -%} Product JSON-LD (G19) {%- endcomment -%}
+<script type="application/ld+json">
+  {%- liquid
+    echo '{"@context":"https://schema.org","@type":"Product","name":'
+    echo product.title | json
+    echo ',"url":'
+    echo canonical_url | json
+    echo ',"description":'
+    echo product.description | strip_html | strip_newlines | strip | json
+    echo ',"brand":{"@type":"Brand","name":'
+    echo shop.name | json
+    echo '},"image":['
+    for ld_img in product.images limit: 5
+      assign ld_u = ld_img | image_url: width: 1200
+      unless ld_u contains 'https:'
+        assign ld_u = 'https:' | append: ld_u
+      endunless
+      echo ld_u | json
+      unless forloop.last
+        echo ','
+      endunless
+    endfor
+    echo '],"offers":['
+    for ld_v in product.variants
+      assign ld_price = ld_v.price | divided_by: 100.0
+      echo '{"@type":"Offer","url":'
+      assign ld_url = request.origin | append: ld_v.url
+      echo ld_url | json
+      echo ',"priceCurrency":'
+      echo cart.currency.iso_code | json
+      echo ',"price":' | append: ld_price
+      echo ',"availability":'
+      if ld_v.available
+        echo '"https://schema.org/InStock"'
+      else
+        echo '"https://schema.org/OutOfStock"'
+      endif
+      if ld_v.sku != blank
+        echo ',"sku":'
+        echo ld_v.sku | json
+      endif
+      echo ',"name":'
+      echo ld_v.title | json
+      echo '}'
+      unless forloop.last
+        echo ','
+      endunless
+    endfor
+    echo ']'
+    if product.selected_or_first_available_variant.sku != blank
+      echo ',"sku":'
+      echo product.selected_or_first_available_variant.sku | json
+    endif
+    echo '}'
+  -%}
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    { "type": "checkbox", "id": "show_thumbs", "label": "Show photo thumbnails", "default": true },
+    {
+      "type": "text",
+      "id": "restock_note",
+      "label": "Sold-out colour note",
+      "info": "{email} becomes a mailto link to the contact email in Theme settings.",
+      "default": "This colour is sold out right now. Message {email} to ask about a restock."
+    }
+  ]
+}
+{% endschema %}

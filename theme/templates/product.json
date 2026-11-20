@@ -1,4 +1,14 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_thumbs": true,
+        "restock_note": "This colour is sold out right now. Message {email} to ask about a restock."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
 }

@@ -370,7 +370,7 @@ Prep (Sonnet, before Opus writes `head-fonts`): extract the generated fallback `
 | 2C new arrivals | `sections/new-arrivals.liquid`, `snippets/hanger-card.liquid`, `assets/component-hanger-card.css`, `assets/section-new-arrivals.css`, `assets/ticker.js` | NewIn.tsx/.module.css, Ticker.tsx | marquee speed, pause on hover, drag + click suppression, hanger swing |
 | 2D campaign moods | `sections/campaign-moods.liquid`, `assets/section-campaign-moods.css`, `assets/campaign-moods.js`, `assets/wear-the-dream-{640,960,1280,1672}w.webp` | FreshDaily.tsx/.module.css, GelatoCounter.tsx/.module.css, data/gelato-counter.json | scroll words, clip reveal, tags fade, auto-cycle, hover/focus/tap, narrow (<700) chips mode |
 
-### Batch 3 — Home page II, product, collections (depends on 1; 3D depends on 2C) — 🔄 in progress
+### Batch 3 — Home page II, product, collections (depends on 1; 3D depends on 2C) — ✅ done (Stage A)
 | Task | Owns | Reads | Covers |
 |---|---|---|---|
 | 3A shop the look | `sections/shop-the-look.liquid`, `assets/section-shop-the-look.css`, `assets/look-1.jpg`…`look-4.jpg` | Looks.tsx/.module.css, data/looks.json | sticky stacking, 3 breakpoints, totals, piece links `?colour=` |
@@ -411,3 +411,16 @@ Shad runs `tools/store-setup` → Opus starts `shopify theme dev --path theme` �
 - Bag drawer: opens from the bag button and after add-to-bag; scrim blur + panel slide; empty state (arch + image + "Start shopping"); line stagger; stepper/remove keep the drawer open and focus in place; sold-out line message + checkout disabled reason; checkout goes to Shopify checkout; Escape/scrim/× close; Tab stays inside while open; badge count + bump.
 - Cart page `/cart`: works with JS off (quantity update button, remove links, checkout button).
 - Primitives render correctly (verified as sections start using them in Batch 2): `image_tag` omits nil `sizes`/`class`/`fetchpriority`; cut-out lookup by alt; `product-json` is valid JSON.
+
+**Batch 2 (compare page `home`: sections hero, flavours, new-in, fresh-daily):**
+- Hero reels: rows built from the jackets/trousers collections + gym piece-top/bottom; intro spin lands 2.9s after load in sync with the page intro (0s delay when the intro doesn't play); drag, flick-snap, tap-to-centre; Shuffle (seeded via `reelsRandom`) spins, cycles the flavour colour and giant word, dice rotates; name tags + total appear when rows settle; "Add the look" chooser: colour preselected, sold-out sizes disabled, "Sold out" when nothing orderable (vinyl jacket Black/Red, gym set), add → drawer opens with both pieces; phone layout (<640px); reels pause off-screen.
+- Find your fit: Gym wear open on load; hover each card (≥1200) grows it 2.6× with tilt/height spring; stacked 300px cards below 1200; counts from collections; side labels.
+- New arrivals: 34px/s marquee, pause on hover, drag without momentum and click suppressed after drag, hanger swing on hover, tints from `custom.tint`.
+- Wear the dream: words slide in with scroll; photo reveal from arch to rounded rect; tags fade in and auto-cycle every 4s; hover/tap selects; phone (<700px frame) chips row + full-width card; totals = sum of 3 prices.
+
+**Batch 3 (compare pages `home` looks/receipts/care-labels, `shop`, `new-in`, `product`, `product-variant`):**
+- Shop the look: sticky stacking at top 96px on all widths; photos (fallback assets until Files are uploaded); piece rows link to `?colour=` and open that colour on the PDP (multi-word colours encode as `+`).
+- Seen on you / care labels: staggered spring entrances that replay on scroll; receipt drag with momentum (touch: horizontal only, page still scrolls); label hover straighten + scale.
+- Shop (`/collections/all`): title "All collections", photo + entrances, 4/3/2-column arch grid, card reveal, cut-out hover spring, pagination styling; other collections use the same template with their own title.
+- New In (`/collections/new-in`): arch header, hanger grid 4/3/2 columns, hanger swing.
+- Product: default state, colour/view/size switching (test-store flow: Peppercorn → back view → Cherry keeps back → M enables "Add to bag"), gym set "Sold out in this colour", restock note, facts, sticky info column, phone layout, add → drawer + "Added — add another", 422 message, `?variant=` reload restores colour+size, `?colour=` links briefly hide the page until JS applies the colour (3s failsafe), no-JS add form, product JSON-LD valid.
