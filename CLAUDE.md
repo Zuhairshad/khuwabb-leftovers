@@ -4,6 +4,8 @@ The Next.js storefront in this repo (`app/`, `components/`, `lib/`, `data/`, `pu
 is the reference. The goal is a Shopify Online Store 2.0 theme that matches it
 visually and behaviourally, built on branch `themecode`.
 
+**Branch rule (owner decision):** all work stays on `themecode` only. Never open a PR to `main` and never merge into `main`. The theme is uploaded to the store from `themecode` (`theme/` folder; see docs/stage-b.md).
+
 - Store: `citbkj-yj.myshopify.com` (see `lib/shopify-config.mjs`).
 - Reference site: the Next.js app (local `npm run dev` on :3000, or https://khuwabb-leftovers.vercel.app).
 - Planning docs: `docs/audit.md` (what the Next.js app does) and `docs/mapping.md` (how it maps to the theme).
