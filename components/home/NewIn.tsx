@@ -7,6 +7,7 @@ import { Ticker } from "../Ticker"
 import { SectionHeader } from "./SectionHeader"
 import styles from "./NewIn.module.css"
 import { atLeast } from "@/lib/img"
+import { LaterImg } from "../LaterImg"
 
 const NEW_IN = products.filter((p) => p.newIn).slice(0, 14)
 
@@ -37,7 +38,7 @@ export function NewIn() {
             >
               <Hook />
               <div className={styles.card} style={{ background: p.tint ?? "#09F" }}>
-                <img src={atLeast(photo(p).src, 360)} alt={p.name} draggable={false} loading="lazy" decoding="async" />
+                <LaterImg src={atLeast(photo(p).src, 360)} alt={p.name} draggable={false} loading="lazy" decoding="async" />
               </div>
               <div className={styles.info}>
                 <p className={styles.name}>{p.name}</p>

@@ -8,6 +8,7 @@ import { Appear } from "../Appear"
 import { SectionHeader } from "./SectionHeader"
 import styles from "./Flavours.module.css"
 import { responsive } from "@/lib/img"
+import { LaterImg } from "../LaterImg"
 
 type Category = { name: string; match: (p: Product) => boolean; tint: string; image: string; ratio: number; wide?: boolean; tilt: number }
 
@@ -70,7 +71,7 @@ export function Flavours() {
                     initial={false}
                     animate={{ rotate: tilt, ...(c.wide ? { width: stacked ? "66%" : isOpen ? "70%" : "92%" } : { height: stacked ? "86%" : isOpen ? "78%" : "44%" }) }}
                   >
-                    <img {...responsive(c.image)} sizes="(max-width: 809px) 45vw, (max-width: 1199px) 30vw, 360px" alt="" draggable={false} loading="lazy" decoding="async" />
+                    <LaterImg {...responsive(c.image)} sizes="(max-width: 809px) 45vw, (max-width: 1199px) 30vw, 360px" alt="" draggable={false} loading="lazy" decoding="async" />
                   </m.div>
                 </div>
                 <m.div transition={SPRING} className={styles.caption} initial={false} animate={{ opacity: shown ? 1 : 0 }}>

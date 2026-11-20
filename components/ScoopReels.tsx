@@ -488,12 +488,18 @@ export function ScoopReels({ config }: { config: ReelsConfig }) {
         ) as Record<Row, Set<number>>,
     )
     let idle = 0
+    let wait = 0
     const whenIdle = () => {
       const ric = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback
       idle = ric ? ric(() => setLoadAll(true), { timeout: 2000 }) : window.setTimeout(() => setLoadAll(true), 200)
     }
-    if (document.readyState === "complete") whenIdle()
-    else window.addEventListener("load", whenIdle, { once: true })
+    // Behind the intro the ring isn't needed until the first spin, so it
+    // waits a beat and leaves the bandwidth to the photos on screen.
+    const afterLoad = () => {
+      wait = window.setTimeout(whenIdle, cfgRef.current.intro && !reduced ? 800 : 0)
+    }
+    if (document.readyState === "complete") afterLoad()
+    else window.addEventListener("load", afterLoad, { once: true })
     frame = requestAnimationFrame(tick)
     api.current.kick = () => {
       frame ||= requestAnimationFrame(tick)
@@ -508,7 +514,8 @@ export function ScoopReels({ config }: { config: ReelsConfig }) {
       window.removeEventListener("pointercancel", onUp)
       io.disconnect()
       document.removeEventListener("visibilitychange", onVisibility)
-      window.removeEventListener("load", whenIdle)
+      window.removeEventListener("load", afterLoad)
+      clearTimeout(wait)
       const cic = (window as Window & { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback
       if (cic) cic(idle)
       else clearTimeout(idle)
@@ -579,7 +586,11 @@ export function ScoopReels({ config }: { config: ReelsConfig }) {
               <img
                 src={loadAll || nearby[row].has(i) ? p.image : undefined}
                 srcSet={loadAll || nearby[row].has(i) ? p.srcSet : undefined}
-                sizes={row === "tops" ? "(max-width: 639px) 46vw, 30vw" : "(max-width: 639px) 36vw, 26vw"} alt={loadAll || nearby[row].has(i) ? p.name : ""} draggable={false} decoding="async" style={{ objectPosition: row === "tops" ? "50% 100%" : row === "bottoms" ? "50% 0%" : "50% 50%" }} />
+                sizes={row === "tops" ? "(max-width: 639px) 46vw, 30vw" : "(max-width: 639px) 36vw, 26vw"}
+                // The pieces on screen first (parked behind the intro, then
+                // each row's first piece) are fetched ahead of the rest.
+                fetchPriority={i === 0 || (cfg.intro && i === ((parked(row, pieces[row].length) % pieces[row].length) + pieces[row].length) % pieces[row].length) ? "high" : undefined}
+                alt={loadAll || nearby[row].has(i) ? p.name : ""} draggable={false} decoding="async" style={{ objectPosition: row === "tops" ? "50% 100%" : row === "bottoms" ? "50% 0%" : "50% 50%" }} />
             </div>
           )),
         )}

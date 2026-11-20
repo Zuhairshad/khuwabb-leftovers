@@ -5,6 +5,7 @@ import { ArrowButton } from "../ArrowButton"
 import { SectionHeader } from "./SectionHeader"
 import styles from "./Looks.module.css"
 import { atLeast, responsive } from "@/lib/img"
+import { LaterImg } from "../LaterImg"
 
 type Piece = { p: Product; colour: string }
 
@@ -18,7 +19,7 @@ function Outfit({ pieces, name }: { pieces: Piece[]; name: string }) {
     <div className={styles.outfit} data-layout={hasFull ? "beside" : "stack"} role="img" aria-label={`${name}: ${pieces.map((x) => `${x.p.name} in ${x.colour}`).join(", ")}`}>
       {pieces.map((x) => (
         <div key={x.p.slug} className={styles.layer} data-role={role(x.p)}>
-          <img src={atLeast(photo(x.p, x.colour).src, 600)} alt="" draggable={false} loading="lazy" decoding="async" />
+          <LaterImg src={atLeast(photo(x.p, x.colour).src, 600)} alt="" draggable={false} loading="lazy" decoding="async" />
         </div>
       ))}
     </div>
@@ -42,7 +43,7 @@ export function Looks() {
           return (
             <article key={look.id} className={styles.look} style={{ background: look.tint }} data-look={look.slug}>
               <div className={styles.photo}>
-                {look.image ? <img className={styles.lookPhoto} {...responsive(look.image)} sizes="(max-width: 809px) calc(100vw - 72px), (max-width: 1199px) 320px, 470px" alt={look.imageAlt} loading="lazy" decoding="async" /> : <Outfit pieces={pieces} name={look.name} />}
+                {look.image ? <LaterImg className={styles.lookPhoto} {...responsive(look.image)} sizes="(max-width: 809px) calc(100vw - 72px), (max-width: 1199px) 320px, 470px" alt={look.imageAlt} loading="lazy" decoding="async" /> : <Outfit pieces={pieces} name={look.name} />}
               </div>
               <div className={styles.details}>
                 <div className={styles.intro}>
@@ -53,7 +54,7 @@ export function Looks() {
                   {pieces.map(({ p, colour }) => (
                     <a key={p.id} href={`${productHref(p)}?colour=${encodeURIComponent(colour)}`} className={styles.piece}>
                       <div className={styles.thumb}>
-                        <img src={atLeast(photo(p, colour).src, 300)} alt={`${p.name} in ${colour}`} loading="lazy" decoding="async" />
+                        <LaterImg src={atLeast(photo(p, colour).src, 300)} alt={`${p.name} in ${colour}`} loading="lazy" decoding="async" />
                       </div>
                       <div className={styles.text}>
                         <p className={styles.pieceName}>{p.name}</p>

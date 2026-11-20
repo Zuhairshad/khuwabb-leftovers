@@ -3,6 +3,7 @@
 import { Fragment, useEffect, useRef, useState, type CSSProperties } from "react"
 import { atLeast, responsive } from "@/lib/img"
 import styles from "./GelatoCounter.module.css"
+import { LaterImg } from "./LaterImg"
 
 // Campaign photo that opens up as it scrolls into view, with a tag per
 // flavour placed on the photo. Hovering, focusing or tapping a tag shows that
@@ -140,7 +141,7 @@ export function GelatoCounter({ image, imageAlt, flavours, cta = "Shop the look"
       <div className={styles.pieces}>
         {[f.image1, f.image2, f.image3].map((src, i) => (
           <div key={i} className={styles.tile} style={{ background: f.color }}>
-            {src && <img src={atLeast(src, 300)} alt="" loading="lazy" decoding="async" />}
+            {src && <LaterImg src={atLeast(src, 300)} alt="" loading="lazy" decoding="async" />}
           </div>
         ))}
       </div>
@@ -166,7 +167,7 @@ export function GelatoCounter({ image, imageAlt, flavours, cta = "Shop the look"
     <div className={styles.root} data-code-component onMouseLeave={() => setHovering(false)}>
       <div ref={frame} className={styles.frame}>
         <div className={styles.clip} style={{ clipPath: clip, WebkitClipPath: clip }}>
-          <img
+          <LaterImg
             {...responsive(image)}
             sizes="(max-width: 809px) 200vw, 1216px"
             loading="lazy"
