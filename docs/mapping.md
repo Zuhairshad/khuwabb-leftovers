@@ -119,7 +119,7 @@ No blocks.
 | `curtain_enabled` | checkbox | true |
 | `curtain_left` / `curtain_right` | color | `#d5e5be` / `#f6c9cf` |
 | `curtain_edge` / `curtain_edge_mobile` / `curtain_pleat` | range px | 56 / 16 / 56 |
-| `curtain_duration` / `curtain_delay` | range s | 2.2 / 0.15 |
+| `curtain_duration` / `curtain_delay` | range s / range ms | 2.2 s / 150 ms (delay stored in ms: Shopify range-step rule) |
 | `curtain_threshold` | range % | 30 |
 | `curtain_replay` / `curtain_rod` | checkbox | true / true |
 Socials come from global settings (§5.2). No blocks.
@@ -155,8 +155,8 @@ Other strings (`Subtotal`, `Checkout`, `Remove`, `One less`, `One more`, `Close`
 | `auto_shuffle` | range 0–20 s | 0 (off) |
 | `curve` | range 0–2.5 step 0.1 | 1 |
 | `side_blur` | range 0–6 step 0.2 | 2.4 |
-| `spacing` | range 0.6–1.8 step 0.05 | 1 |
-| `look_scale` | range 0.5–1.3 step 0.05 | 1 |
+| `spacing` | range 0.6–1.8 step 0.1 | 1 |
+| `look_scale` | range 0.5–1.3 step 0.1 | 1 |
 | `top_inset` | range 0–40 % | 11 |
 | `top_space` / `top_space_mobile` | range 0–200 px step 2 | 112 / 92 |
 | `hint` | text | `Drag any row to restyle` |
