@@ -1,0 +1,136 @@
+{{ 'section-header.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'header.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign menu = section.settings.menu
+  assign use_menu = false
+  if menu != blank and menu.links.size > 0
+    assign use_menu = true
+  endif
+  assign delay = section.settings.entrance_delay | default: 0
+  assign logo = section.settings.logo
+-%}
+
+{%- capture nav_links -%}
+  {%- if use_menu -%}
+    {%- for link in menu.links -%}
+      <a href="{{ link.url }}">{{ link.title | escape }}</a>
+    {%- endfor -%}
+  {%- else -%}
+    <a href="{{ routes.all_products_collection_url }}">Shop</a>
+    <a href="{{ routes.collections_url }}/new-in">New in</a>
+    <a href="{{ routes.root_url }}#looks">Lookbook</a>
+  {%- endif -%}
+{%- endcapture -%}
+
+<site-header
+  data-label-open="{{ 'accessibility.open_menu' | t | escape }}"
+  data-label-close="{{ 'accessibility.close_menu' | t | escape }}"
+>
+  <div class="site-header" data-section="nav" style="--site-header-delay: {{ delay }}s">
+    <div class="site-header__pill" data-pill>
+      <div class="site-header__bar">
+        <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ section.settings.logo_aria | escape }}">
+          {%- if logo != blank -%}
+            <img
+              src="{{ logo | image_url: width: 365 }}"
+              alt=""
+              width="{{ logo.width }}"
+              height="{{ logo.height }}"
+            >
+          {%- else -%}
+            <img src="{{ 'logo.png' | asset_url }}" alt="" width="365" height="256">
+          {%- endif -%}
+          <span>{{ section.settings.logo_label | escape }}</span>
+        </a>
+
+        <nav class="site-header__links" aria-label="{{ 'accessibility.main_navigation' | t }}">
+          {{- nav_links -}}
+        </nav>
+
+        <div class="site-header__actions">
+          {%- if section.settings.show_search -%}
+            <a href="{{ routes.search_url }}" class="site-header__search" aria-label="{{ 'accessibility.search' | t }}">
+              {%- render 'header-icon', name: 'search' -%}
+            </a>
+          {%- endif -%}
+
+          <button type="button" class="bag-button" data-code-component data-bag-button aria-label="{{ 'bag.button_label' | t: count: cart.item_count }}"><span>{{ 'bag.button' | t }}</span><span class="bag-button__badge" data-bag-count>{{ cart.item_count }}</span></button>
+
+          <button
+            type="button"
+            class="site-header__menu"
+            aria-label="{{ 'accessibility.open_menu' | t }}"
+            aria-expanded="false"
+            aria-controls="SiteHeaderDrawer"
+            data-menu-toggle
+          >
+            <span class="site-header__line site-header__line--top"></span>
+            <span class="site-header__line site-header__line--bottom"></span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="site-header__drawer" id="SiteHeaderDrawer" aria-label="{{ 'accessibility.mobile_navigation' | t }}" inert>
+        <div class="site-header__drawer-clip">
+          <div class="site-header__drawer-inner" data-drawer-links>
+            {{- nav_links -}}
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+</site-header>
+
+{% schema %}
+{
+  "name": "Header",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image",
+      "info": "Leave blank to use the theme's logo.png."
+    },
+    {
+      "type": "text",
+      "id": "logo_label",
+      "label": "Text under the logo",
+      "default": "leftover"
+    },
+    {
+      "type": "text",
+      "id": "logo_aria",
+      "label": "Logo link label (screen readers)",
+      "default": "Khuwabb leftover — home"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu",
+      "info": "Falls back to Shop, New in and Lookbook if the menu is empty."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search icon",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "entrance_delay",
+      "label": "Entrance delay",
+      "info": "Only used when the intro plays; timed to the intro. Otherwise the header is simply there.",
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "unit": "s",
+      "default": 3.3
+    }
+  ]
+}
+{% endschema %}

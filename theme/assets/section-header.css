@@ -1,0 +1,292 @@
+/*
+ * Header: ported from components/Nav.module.css (+ BagButton rules from
+ * components/Bag.module.css). Breakpoints: phone max-width 809.98px,
+ * desktop nav min-width 810px.
+ */
+
+site-header {
+  display: contents;
+}
+
+/* Nav.module.css:1-11 .nav */
+.site-header {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 16px;
+}
+
+/*
+ * Entrance (Nav.tsx initial/animate/transition): only while the intro plays.
+ * Delay comes from the section setting via --site-header-delay.
+ * `backwards` holds the start frame during the delay and leaves no transform behind.
+ */
+@keyframes site-header-in {
+  from {
+    opacity: 0.001;
+    transform: translateY(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+html[data-intro-playing] .site-header {
+  animation: site-header-in 1s var(--ease-out) var(--site-header-delay, 0s) backwards;
+}
+
+/* Nav.module.css:13-26 .pill */
+.site-header__pill {
+  width: min(100vw - 32px, 1240px);
+  display: flex;
+  flex-direction: column;
+  padding: 8px 8px 8px 24px;
+  overflow: clip;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 32px;
+  box-shadow:
+    0 1px 2px rgba(23, 20, 15, 0.06),
+    0 10px 30px rgba(23, 20, 15, 0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Nav.module.css:28-33 .bar */
+.site-header__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+}
+
+/* Nav.module.css:36-41 .logo */
+.site-header__logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ink);
+}
+
+/* Nav.module.css:43-47 .logo img */
+.site-header__logo img {
+  display: block;
+  width: auto;
+  height: 54px;
+}
+
+/* Nav.module.css:49-58 .logo span */
+.site-header__logo span {
+  margin-top: -1px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 10px;
+  letter-spacing: 0.34em;
+  text-transform: lowercase;
+  color: var(--ink-62);
+}
+
+/* Nav.module.css:60-64 .links */
+.site-header__links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* Nav.module.css:66-72 .links a */
+.site-header__links a {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--ink-62);
+}
+
+/* Nav.module.css:74-78 .actions */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Nav.module.css:80-89 .search */
+.site-header__search {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(23, 20, 15, 0.06);
+  color: #000;
+}
+
+/* Bag.module.css:1-15 .button */
+.bag-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 6px 0 18px;
+  border-radius: 999px;
+  border: none;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Bag.module.css:17-30 .badge */
+.bag-button__badge {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--pistachio);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  transform: scale(1);
+  transition: transform 0.6s cubic-bezier(0.34, 1.8, 0.64, 1);
+}
+
+/* Bag.module.css:32-34 .badge[data-bump] (set by cart-drawer.js for 600ms) */
+.bag-button__badge[data-bump] {
+  transform: scale(1.25);
+}
+
+/* Nav.module.css:91-101 .menu */
+.site-header__menu {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(23, 20, 15, 0.06);
+  cursor: pointer;
+}
+
+/* Nav.module.css:103-110 .line; top/rotate animated like framer (top 17/25 -> 21, rotate 0 -> +-45) */
+.site-header__line {
+  position: absolute;
+  left: 13px;
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+  transform: rotate(0deg);
+  transition:
+    top 0.6s var(--spring-nav),
+    transform 0.6s var(--spring-nav);
+}
+
+.site-header__line--top {
+  top: 17px;
+}
+
+.site-header__line--bottom {
+  top: 25px;
+}
+
+.site-header__pill[data-open] .site-header__line--top {
+  top: 21px;
+  transform: rotate(45deg);
+}
+
+.site-header__pill[data-open] .site-header__line--bottom {
+  top: 21px;
+  transform: rotate(-45deg);
+}
+
+/*
+ * Nav.module.css:112-114 .drawer. Height 0 <-> auto is done with a grid row
+ * 0fr -> 1fr so the pill (and its glass) grows with the same spring.
+ * Closed: hidden from the accessibility tree and tab order (also `inert` via JS/markup).
+ */
+.site-header__drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.6s var(--spring-nav),
+    visibility 0s linear 0.6s;
+}
+
+.site-header__pill[data-open] .site-header__drawer {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition-delay: 0s, 0s;
+}
+
+.site-header__drawer-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Nav.module.css:116-121 .drawerInner */
+.site-header__drawer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 28px 0 20px;
+}
+
+/* Nav.module.css:123-130 .drawerInner a */
+.site-header__drawer-inner a {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 46px;
+  letter-spacing: -0.6px;
+  color: var(--ink-62);
+}
+
+/* Nav.module.css:132-145 */
+@media (max-width: 809.98px) {
+  .site-header__pill {
+    padding: 6px 6px 6px 20px;
+  }
+
+  .site-header__links,
+  .site-header__search {
+    display: none;
+  }
+
+  .site-header__menu {
+    display: block;
+  }
+}
+
+/* Nav.module.css:147-151 */
+@media (min-width: 810px) {
+  .site-header__drawer {
+    display: none;
+  }
+}
+
+/* Theme addition (CLAUDE.md pitfalls / mapping G15): no entrance, no spring. */
+@media (prefers-reduced-motion: reduce) {
+  html[data-intro-playing] .site-header {
+    animation: none;
+  }
+
+  .site-header__line,
+  .site-header__drawer,
+  .bag-button__badge {
+    transition: none;
+  }
+}
