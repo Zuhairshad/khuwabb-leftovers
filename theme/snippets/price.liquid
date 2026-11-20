@@ -1,0 +1,39 @@
+{%- comment -%}
+  Price as settings.currency_prefix + whole amount with comma thousands separators, e.g. Rs.2,500
+  (lib/format.ts formatPrice). Independent of the store's money format.
+
+  Parameters:
+  - price (required) amount in cents (Shopify's unit). nil/blank -> empty output. 0 -> Rs.0
+  Rounds to whole units half away from zero (like Intl.NumberFormat maximumFractionDigits: 0).
+  JS twin: Khuwabb.formatMoney(cents) in assets/money.js.
+
+  Usage: {% render 'price', price: product.price %}
+{%- endcomment -%}
+{%- liquid
+  if price != blank
+    assign p_cents = price | plus: 0 | round
+    assign p_neg = false
+    if p_cents < 0
+      assign p_neg = true
+      assign p_cents = p_cents | times: -1
+    endif
+    assign p_whole = p_cents | plus: 50 | divided_by: 100
+    assign p_digits = p_whole | append: ''
+    assign p_len = p_digits.size
+    echo settings.currency_prefix
+    if p_neg
+      echo '-'
+    endif
+    assign p_last = p_len | minus: 1
+    for p_i in (0..p_last)
+      assign p_left = p_len | minus: p_i
+      if p_i > 0 and p_left > 0
+        assign p_mod = p_left | modulo: 3
+        if p_mod == 0
+          echo ','
+        endif
+      endif
+      echo p_digits | slice: p_i
+    endfor
+  endif
+-%}

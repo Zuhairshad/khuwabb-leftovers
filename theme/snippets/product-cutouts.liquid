@@ -1,0 +1,143 @@
+{%- comment -%}
+  Product cut-out images per colour and view, as JSON (lib/catalog.ts photo() + Colour.views).
+  Convention (docs/mapping.md 3.2): an image media whose alt is "<Color value> | <view>" where view is
+  front | side | back | piece-top | piece-bottom (colour and view compared case-insensitively after strip).
+  Media with other alts are ignored.
+
+  Parameters:
+  - product (required)
+  - as_list (optional) false (default): outputs an object keyed by colour in Shopify's Color option order
+                         { "<Colour>": { "front": M, "side": M|null, "back": M|null, "pieceTop": M|null, "pieceBottom": M|null } }
+                       true: outputs an array [ { "name": "<Colour>", "views": { ... } } ] (used by product-json)
+  - widths  (optional) srcset widths, default '360,480,640,960'; widths larger than the original are skipped
+  M = { "src": largest url, "srcset": "url 360w, ...", "width": n, "height": n } (width/height = the src size)
+
+  "front" falls back to: first variant of that colour with a featured_media -> product.featured_media
+  (null only when the product has no media). Other views are null when missing.
+  Products without a Color option produce a single colour named "Default".
+  Output is valid JSON; embed inside <script type="application/json"> or capture it.
+{%- endcomment -%}
+{%- liquid
+  assign cc_opt = product.options_by_name['Color']
+  assign cc_idx = -1
+  if cc_opt
+    assign cc_idx = cc_opt.position | minus: 1
+    assign cc_names = cc_opt.values
+  else
+    assign cc_names = 'Default' | split: ','
+  endif
+  assign cc_widths = widths | default: '360,480,640,960' | split: ','
+  assign cc_views = 'front,side,back,piece-top,piece-bottom' | split: ','
+  assign cc_keys = 'front,side,back,pieceTop,pieceBottom' | split: ','
+
+  if as_list
+    echo '['
+  else
+    echo '{'
+  endif
+
+  for cc_name in cc_names
+    assign cc_norm = cc_name | strip | downcase
+    if as_list
+      echo '{"name":'
+      echo cc_name | json
+      echo ',"views":{'
+    else
+      echo cc_name | json
+      echo ':{'
+    endif
+
+    for cc_view in cc_views
+      assign cc_media = nil
+      for cc_m in product.media
+        if cc_m.media_type != 'image'
+          continue
+        endif
+        assign cc_parts = cc_m.alt | split: '|'
+        if cc_parts.size < 2
+          continue
+        endif
+        assign cc_a = cc_parts[0] | strip | downcase
+        assign cc_b = cc_parts[1] | strip | downcase
+        if cc_a == cc_norm and cc_b == cc_view
+          assign cc_media = cc_m
+          break
+        endif
+      endfor
+
+      if cc_media == nil and cc_view == 'front'
+        for cc_v in product.variants
+          if cc_v.featured_media == nil
+            continue
+          endif
+          if cc_idx >= 0
+            assign cc_vc = cc_v.options[cc_idx] | strip | downcase
+            if cc_vc != cc_norm
+              continue
+            endif
+          endif
+          assign cc_media = cc_v.featured_media
+          break
+        endfor
+        if cc_media == nil
+          assign cc_media = product.featured_media
+        endif
+      endif
+
+      echo cc_keys[forloop.index0] | json
+      echo ':'
+      if cc_media == nil
+        echo 'null'
+      else
+        assign cc_pw = cc_media.preview_image.width
+        assign cc_ph = cc_media.preview_image.height
+        assign cc_srcset = ''
+        assign cc_top_w = 0
+        assign cc_top_u = ''
+        for cc_w in cc_widths
+          assign cc_wi = cc_w | strip | plus: 0
+          if cc_wi <= cc_pw
+            assign cc_u = cc_media | image_url: width: cc_wi
+            assign cc_piece = cc_u | append: ' ' | append: cc_wi | append: 'w'
+            if cc_srcset == ''
+              assign cc_srcset = cc_piece
+            else
+              assign cc_srcset = cc_srcset | append: ', ' | append: cc_piece
+            endif
+            assign cc_top_w = cc_wi
+            assign cc_top_u = cc_u
+          endif
+        endfor
+        if cc_top_w == 0
+          assign cc_top_w = cc_pw
+          assign cc_top_u = cc_media | image_url: width: cc_pw
+          assign cc_srcset = cc_top_u | append: ' ' | append: cc_pw | append: 'w'
+        endif
+        assign cc_th = cc_top_w | times: cc_ph | plus: 0.0 | divided_by: cc_pw | round
+        echo '{"src":'
+        echo cc_top_u | json
+        echo ',"srcset":'
+        echo cc_srcset | json
+        echo ',"width":' | append: cc_top_w | append: ',"height":' | append: cc_th | append: '}'
+      endif
+      unless forloop.last
+        echo ','
+      endunless
+    endfor
+
+    if as_list
+      echo '}}'
+    else
+      echo '}'
+    endif
+    unless forloop.last
+      echo ','
+    endunless
+  endfor
+
+  if as_list
+    echo ']'
+  else
+    echo '}'
+  endif
+-%}

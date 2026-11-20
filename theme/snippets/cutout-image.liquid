@@ -1,0 +1,153 @@
+{%- comment -%}
+  Responsive <img> of a product cut-out (lib/catalog.ts photo()). Uses the media/alt convention from
+  docs/mapping.md 3.2 ("<Color value> | <view>", views front|side|back|piece-top|piece-bottom).
+
+  Parameters:
+  - product       (required)
+  - colour        (optional) Color option value; blank -> first Color value
+  - view          (optional) default 'front'
+  - widths        (optional) default '360,480,640,960' (widths above the original are skipped)
+  - sizes         (optional) sizes attribute
+  - loading       (optional) default 'lazy' ('eager' is implied when fetchpriority is 'high' and loading is blank)
+  - fetchpriority (optional) 'high' | 'low' | 'auto'
+  - class         (optional)
+  - alt           (optional) default "<title> in <colour>, <view> view"
+  - fallback      (optional) default true; false = exact colour+view match only, otherwise render nothing
+
+  Lookup: exact colour+view -> (fallback false: render nothing)
+  -> colour front (when view is not front) -> featured_media of the first variant with that Color (and a featured_media)
+  -> product.featured_media. Renders nothing if the product has no media at all.
+{%- endcomment -%}
+{%- liquid
+  assign ci_view = view | default: 'front' | strip | downcase
+  assign ci_fallback = true
+  if fallback == false or fallback == 'false'
+    assign ci_fallback = false
+  endif
+  assign ci_opt = product.options_by_name['Color']
+  assign ci_idx = -1
+  if ci_opt
+    assign ci_idx = ci_opt.position | minus: 1
+  endif
+  assign ci_colour = colour
+  if ci_colour == blank and ci_opt
+    assign ci_colour = ci_opt.values.first
+  endif
+  assign ci_norm = ci_colour | strip | downcase
+
+  assign ci_media = nil
+  if ci_colour != blank
+    for ci_m in product.media
+      if ci_m.media_type != 'image'
+        continue
+      endif
+      assign ci_parts = ci_m.alt | split: '|'
+      if ci_parts.size < 2
+        continue
+      endif
+      assign ci_a = ci_parts[0] | strip | downcase
+      assign ci_b = ci_parts[1] | strip | downcase
+      if ci_a == ci_norm and ci_b == ci_view
+        assign ci_media = ci_m
+        break
+      endif
+    endfor
+  endif
+
+  if ci_media == nil and ci_fallback
+    if ci_view != 'front' and ci_colour != blank
+      # colour front
+      for ci_m in product.media
+        if ci_m.media_type != 'image'
+          continue
+        endif
+        assign ci_parts = ci_m.alt | split: '|'
+        if ci_parts.size < 2
+          continue
+        endif
+        assign ci_a = ci_parts[0] | strip | downcase
+        assign ci_b = ci_parts[1] | strip | downcase
+        if ci_a == ci_norm and ci_b == 'front'
+          assign ci_media = ci_m
+          break
+        endif
+      endfor
+    endif
+  endif
+
+  if ci_media == nil and ci_fallback
+    for ci_v in product.variants
+      if ci_v.featured_media == nil
+        continue
+      endif
+      if ci_idx >= 0 and ci_colour != blank
+        assign ci_vc = ci_v.options[ci_idx] | strip | downcase
+        if ci_vc != ci_norm
+          continue
+        endif
+      endif
+      assign ci_media = ci_v.featured_media
+      break
+    endfor
+    if ci_media == nil
+      assign ci_media = product.featured_media
+    endif
+  endif
+-%}
+{%- if ci_media != nil -%}
+  {%- liquid
+    assign ci_pw = ci_media.preview_image.width
+    assign ci_ph = ci_media.preview_image.height
+    assign ci_list = widths | default: '360,480,640,960' | split: ','
+    assign ci_widths = ''
+    assign ci_top = 0
+    for ci_w in ci_list
+      assign ci_wi = ci_w | strip | plus: 0
+      if ci_wi <= ci_pw
+        if ci_widths == ''
+          assign ci_widths = ci_wi
+        else
+          assign ci_widths = ci_widths | append: ', ' | append: ci_wi
+        endif
+        assign ci_top = ci_wi
+      endif
+    endfor
+    if ci_top == 0
+      assign ci_top = ci_pw
+      assign ci_widths = ci_pw
+    endif
+    assign ci_h = ci_top | times: ci_ph | plus: 0.0 | divided_by: ci_pw | round
+
+    assign ci_alt = alt
+    if ci_alt == blank
+      assign ci_view_label = ci_view | replace: '-', ' '
+      if ci_colour != blank
+        assign ci_alt = product.title | append: ' in ' | append: ci_colour | append: ', ' | append: ci_view_label | append: ' view'
+      else
+        assign ci_alt = product.title | append: ', ' | append: ci_view_label | append: ' view'
+      endif
+    endif
+
+    assign ci_loading = loading
+    if ci_loading == blank
+      if fetchpriority == 'high'
+        assign ci_loading = 'eager'
+      else
+        assign ci_loading = 'lazy'
+      endif
+    endif
+  -%}
+  {{
+    ci_media
+    | image_url: width: ci_top
+    | image_tag:
+      widths: ci_widths,
+      sizes: sizes,
+      width: ci_top,
+      height: ci_h,
+      alt: ci_alt,
+      class: class,
+      loading: ci_loading,
+      fetchpriority: fetchpriority
+  }}
+{%- endif -%}

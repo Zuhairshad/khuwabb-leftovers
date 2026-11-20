@@ -1,0 +1,31 @@
+{%- comment -%}
+  Section title row with an optional arrow-button CTA (components/home/SectionHeader.tsx).
+
+  Parameters:
+  - title        (required) heading text. Line breaks are preserved (white-space: pre), so keep
+                 the value on one line in templates and use a textarea setting for multi-line titles.
+  - cta_label    (optional) CTA text; the CTA renders only when both cta_label and cta_href are set
+  - cta_href     (optional) CTA link
+  - tone         (optional) arrow-button tone, 'dark' (default) | 'light'
+  - heading_tag  (optional) 'h2' (default) | 'h1' | 'h3' ...
+  - appear       (optional) data-appear preset on the title wrapper: 'rise' (default) | 'lift' | 'none'
+  - class        (optional) extra classes on the root
+
+  CSS: sections must load (this snippet does not emit them):
+    {{ 'component-section-heading.css' | asset_url | stylesheet_tag }}
+    {{ 'component-arrow-button.css' | asset_url | stylesheet_tag }}  (only if a CTA is used)
+
+  Usage: {% render 'section-heading', title: section.settings.heading, cta_label: section.settings.cta_label, cta_href: section.settings.cta_link %}
+{%- endcomment -%}
+{%- liquid
+  assign sh_tag = heading_tag | default: 'h2'
+  assign sh_appear = appear | default: 'rise'
+-%}
+<div class="section-heading{% if class != blank %} {{ class }}{% endif %}">
+  <div{% if sh_appear != 'none' %} data-appear="{{ sh_appear }}"{% endif %}>
+    <{{ sh_tag }} class="section-heading__title">{{ title | escape }}</{{ sh_tag }}>
+  </div>
+  {%- if cta_label != blank and cta_href != blank -%}
+    {% render 'arrow-button', href: cta_href, label: cta_label, tone: tone %}
+  {%- endif -%}
+</div>

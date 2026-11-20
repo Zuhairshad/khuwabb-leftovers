@@ -1,0 +1,96 @@
+{%- comment -%}
+  Product data for JS (docs/mapping.md 1.1 contract; lib/catalog.ts Product + canOrder variants map).
+
+  Parameters:
+  - product (required)
+
+  Output (valid JSON, embed in <script type="application/json">):
+  { id, handle, title, url, price (cents, min variant price), type,
+    tint (custom.tint as CSS colour string | null),
+    categoryLine (custom.category_line, else product.type, else null),
+    colours: [ { name, views: { front, side, back, pieceTop, pieceBottom } } ]   (see product-cutouts),
+    sizes: [ ...Size option values ],
+    variants: { "<Color> / <Size>": { id, available } } }
+
+  Options are looked up by name ('Color', 'Size'), never by position. A product without a Color
+  option gets one colour "Default"; without a Size option, sizes is [] and variant keys use
+  "<Color> / Default". Render this inside a section; widths for images are product-cutouts' defaults.
+{%- endcomment -%}
+{%- liquid
+  assign pj_color = product.options_by_name['Color']
+  assign pj_size = product.options_by_name['Size']
+  assign pj_ci = -1
+  assign pj_si = -1
+  if pj_color
+    assign pj_ci = pj_color.position | minus: 1
+  endif
+  if pj_size
+    assign pj_si = pj_size.position | minus: 1
+  endif
+
+  assign pj_tint = product.metafields.custom.tint.value | append: '' | strip
+  assign pj_line = product.metafields.custom.category_line.value | append: '' | strip
+  if pj_line == blank
+    assign pj_line = product.type
+  endif
+
+  echo '{"id":' | append: product.id | append: ',"handle":'
+  echo product.handle | json
+  echo ',"title":'
+  echo product.title | json
+  echo ',"url":'
+  echo product.url | json
+  echo ',"price":' | append: product.price
+  echo ',"type":'
+  echo product.type | json
+  echo ',"tint":'
+  if pj_tint == blank
+    echo 'null'
+  else
+    echo pj_tint | json
+  endif
+  echo ',"categoryLine":'
+  if pj_line == blank
+    echo 'null'
+  else
+    echo pj_line | json
+  endif
+
+  echo ',"colours":'
+  render 'product-cutouts', product: product, as_list: true
+
+  echo ',"sizes":['
+  if pj_size
+    for pj_s in pj_size.values
+      echo pj_s | json
+      unless forloop.last
+        echo ','
+      endunless
+    endfor
+  endif
+  echo '],"variants":{'
+  for pj_v in product.variants
+    if pj_ci >= 0
+      assign pj_vc = pj_v.options[pj_ci]
+    else
+      assign pj_vc = 'Default'
+    endif
+    if pj_si >= 0
+      assign pj_vs = pj_v.options[pj_si]
+    else
+      assign pj_vs = 'Default'
+    endif
+    assign pj_key = pj_vc | append: ' / ' | append: pj_vs
+    echo pj_key | json
+    echo ':{"id":' | append: pj_v.id | append: ',"available":'
+    if pj_v.available
+      echo 'true}'
+    else
+      echo 'false}'
+    endif
+    unless forloop.last
+      echo ','
+    endunless
+  endfor
+  echo '}}'
+-%}

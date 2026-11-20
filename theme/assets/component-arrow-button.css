@@ -1,0 +1,64 @@
+/*
+ * Arrow button (components/ArrowButton.module.css). Markup: snippets/arrow-button.liquid.
+ * Sections that render the snippet (directly or via section-heading) must load this file.
+ */
+.arrow-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 8px 0 24px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  white-space: nowrap;
+}
+
+.arrow-button[data-tone="light"] {
+  background: var(--white);
+  color: var(--ink);
+}
+
+.arrow-button__label {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+}
+
+.arrow-button__badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  color: #000;
+  /* framer: spring, bounce .2, duration .5 */
+  transition: transform 0.5s var(--spring-arrow);
+}
+
+.arrow-button[data-tone="light"] .arrow-button__badge {
+  background: var(--ink);
+}
+
+.arrow-button__badge svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* whileHover="hover": rotate 0 -> 45deg (keyboard focus gets the same pose) */
+.arrow-button:hover .arrow-button__badge,
+.arrow-button:focus-visible .arrow-button__badge {
+  transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow-button__badge {
+    transition: none;
+  }
+}
