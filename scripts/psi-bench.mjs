@@ -1,5 +1,5 @@
 // PageSpeed Insights (Google's servers) against a public URL, sequential.
-//   node scripts/psi-bench.mjs --url https://khuwabb-leftovers.vercel.app [--runs 3]
+//   node scripts/psi-bench.mjs --url https://khuwabb-export-factory-leftovers.vercel.app [--runs 3]
 // Raw responses: perf/psi/<route>--<device>--<n>.json; summary in perf/psi/summary.md.
 import { mkdir, writeFile } from "node:fs/promises"
 const args = process.argv.slice(2)

@@ -4,7 +4,7 @@ Online store for **Khuwabb** — women's pret and everyday wear, born in Lahore.
 Built with Next.js, hand-written React components and CSS Modules, with the
 motion and layout of the original design kept intact.
 
-**Live:** https://khuwabb-leftovers.vercel.app
+**Live:** https://khuwabb-export-factory-leftovers.vercel.app
 
 ![Khuwabb home page: outfit reels with a black vinyl puffer over a ribbed wide-leg trouser](docs/screenshots/home-hero.webp)
 

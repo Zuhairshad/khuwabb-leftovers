@@ -1,11 +1,11 @@
 // Captures the README screenshots from a running site.
-//   node scripts/readme-screenshots.mjs [--url https://khuwabb-leftovers.vercel.app]
+//   node scripts/readme-screenshots.mjs [--url https://khuwabb-export-factory-leftovers.vercel.app]
 // Writes docs/screenshots/*.webp (encoded in Chromium, quality 0.82).
 import { writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 
 const args = process.argv.slice(2)
-const BASE = args.includes("--url") ? args[args.indexOf("--url") + 1] : "https://khuwabb-leftovers.vercel.app"
+const BASE = args.includes("--url") ? args[args.indexOf("--url") + 1] : "https://khuwabb-export-factory-leftovers.vercel.app"
 const OUT = "docs/screenshots"
 const wait = (ms) => new Promise((r) => setTimeout(r, ms))
 
