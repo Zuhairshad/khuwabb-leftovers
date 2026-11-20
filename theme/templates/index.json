@@ -244,12 +244,84 @@
         "empty_cta_label": "Shop all",
         "empty_cta_link": "/collections/all"
       }
+    },
+    "shop_the_look": {
+      "type": "shop-the-look",
+      "blocks": {
+        "look_daily_edit": {
+          "type": "look",
+          "settings": {
+            "title": "Daily edit",
+            "description": "A cropped puffer gilet over the ribbed drawstring trouser \u2014 easy layers for every day.",
+            "tint": "#c9d2f2",
+            "fallback_image": "daily-edit",
+            "image_alt": "The Daily edit look: Hooded Sleeveless Cropped Puffer Jacket in Beige with Ribbed Drawstring Wide Leg Trouser in Black",
+            "product_1": "womens-hooded-sleeveless-cropped-puffer-jacket",
+            "colour_1": "Beige",
+            "product_2": "ribbed-drawstring-wide-leg-trouser",
+            "colour_2": "Black"
+          }
+        },
+        "look_off_duty": {
+          "type": "look",
+          "settings": {
+            "title": "Off duty",
+            "description": "The olive cropped puffer with our cream high-waist jogger. Soft, warm and weekend-ready.",
+            "tint": "#f6c9cf",
+            "fallback_image": "off-duty",
+            "image_alt": "The Off duty look: Hooded Full Sleeve Cropped Puffer Jacket in Olive with Shape High Waist Wide Leg Jogger in Cream",
+            "product_1": "womens-hooded-full-sleeve-cropped-puffer-jacket",
+            "colour_1": "Olive",
+            "product_2": "shape-high-waist-wide-leg-jogger",
+            "colour_2": "Cream"
+          }
+        },
+        "look_street_ready": {
+          "type": "look",
+          "settings": {
+            "title": "Street ready",
+            "description": "High shine meets sporty stripes \u2014 the black vinyl puffer with the two-stripe wide-leg trouser.",
+            "tint": "#d5e5be",
+            "fallback_image": "street-ready",
+            "image_alt": "The Street ready look: Ladies Vinyl Jacket in Black with Wide Leg Trouser with Two Full Stripes in Blue",
+            "product_1": "womens-high-shine-vinyl-puffer-jacket",
+            "colour_1": "Black",
+            "product_2": "wide-leg-trouser-two-full-stripes",
+            "colour_2": "Blue"
+          }
+        },
+        "look_brunch_dates": {
+          "type": "look",
+          "settings": {
+            "title": "Brunch dates",
+            "description": "The boat-neck maxi in maroon: sleek, long-sleeved and made for long lunches.",
+            "tint": "#f5e7a6",
+            "fallback_image": "brunch-dates",
+            "image_alt": "The Brunch dates look: Boat Neck Long Sleeve Maxi Dress in Maroon",
+            "product_1": "womens-boat-neck-long-sleeve-maxi-dress",
+            "colour_1": "Maroon"
+          }
+        }
+      },
+      "block_order": [
+        "look_daily_edit",
+        "look_off_duty",
+        "look_street_ready",
+        "look_brunch_dates"
+      ],
+      "settings": {
+        "heading": "Shop the look",
+        "cta_label": "Shop all",
+        "cta_link": "/collections/all",
+        "total_label": "The look"
+      }
     }
   },
   "order": [
     "hero",
     "category_cards",
     "new_arrivals",
-    "campaign_moods"
+    "campaign_moods",
+    "shop_the_look"
   ]
 }
