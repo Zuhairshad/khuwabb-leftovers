@@ -1,0 +1,54 @@
+{%- comment -%}
+  Brand fonts, matching next/font/local output (docs/parity/font-fallbacks.md).
+  Fallback faces are the metric-matched Arial faces Next generates, so layout
+  is stable while the woff2 files load. Owned by the main session.
+{%- endcomment -%}
+{{ 'clash-display-600.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{{ 'satoshi-400.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{{ 'satoshi-500.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+<style>
+  @font-face {
+    font-family: "clashDisplay";
+    src: url("{{ 'clash-display-600.woff2' | asset_url }}") format("woff2");
+    font-display: swap;
+    font-weight: 600;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "clashDisplay";
+    src: url("{{ 'clash-display-700.woff2' | asset_url }}") format("woff2");
+    font-display: swap;
+    font-weight: 700;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "clashDisplay Fallback";
+    src: local("Arial");
+    ascent-override: 79.51%;
+    descent-override: 22.33%;
+    line-gap-override: 8.04%;
+    size-adjust: 111.94%;
+  }
+  @font-face {
+    font-family: "satoshi";
+    src: url("{{ 'satoshi-400.woff2' | asset_url }}") format("woff2");
+    font-display: swap;
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "satoshi";
+    src: url("{{ 'satoshi-500.woff2' | asset_url }}") format("woff2");
+    font-display: swap;
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "satoshi Fallback";
+    src: local("Arial");
+    ascent-override: 102.23%;
+    descent-override: 24.29%;
+    line-gap-override: 10.12%;
+    size-adjust: 98.80%;
+  }
+</style>

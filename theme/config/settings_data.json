@@ -1,0 +1,15 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "currency_prefix": "Rs.",
+      "contact_email": "khuwabb@gmail.com",
+      "checkout_enabled": true,
+      "intro_enabled": true,
+      "intro_play_on": "all_but_product",
+      "social_instagram_link": "https://instagram.com",
+      "social_tiktok_link": "https://tiktok.com",
+      "social_pinterest_link": "https://pinterest.com"
+    }
+  }
+}

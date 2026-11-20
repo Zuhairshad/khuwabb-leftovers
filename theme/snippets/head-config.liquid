@@ -1,0 +1,59 @@
+{%- comment -%}
+  Global JS config + the intro decision. Runs before first paint so the header
+  entrance and the intro overlay agree. Owned by the main session.
+
+  html[data-intro-playing] is set when the intro will play on this page view:
+  - settings.intro_enabled, never in the theme editor
+  - settings.intro_play_on: all_but_product (reference behaviour) | home_only | once_per_session
+{%- endcomment -%}
+{%- liquid
+  assign intro_possible = false
+  if settings.intro_enabled and request.design_mode == false
+    case settings.intro_play_on
+      when 'home_only'
+        if template.name == 'index'
+          assign intro_possible = true
+        endif
+      else
+        unless template.name == 'product'
+          assign intro_possible = true
+        endunless
+    endcase
+  endif
+-%}
+<script>
+  document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+  window.Khuwabb = {
+    routes: {
+      root: {{ routes.root_url | json }},
+      cart: {{ routes.cart_url | json }},
+      cartAdd: {{ routes.cart_add_url | json }},
+      cartChange: {{ routes.cart_change_url | json }},
+      cartUpdate: {{ routes.cart_update_url | json }},
+      search: {{ routes.search_url | json }}
+    },
+    currencyPrefix: {{ settings.currency_prefix | json }},
+    checkoutEnabled: {{ settings.checkout_enabled | json }},
+    template: {{ template.name | json }},
+    strings: {
+      bagButton: {{ 'bag.button_label' | t: count: '[count]' | json }},
+      addToBag: {{ 'product.add_to_bag' | t | json }},
+      soldOut: {{ 'product.sold_out' | t | json }},
+      notAvailable: {{ 'bag.not_available' | t | json }},
+      cartError: {{ 'bag.error' | t | json }}
+    }
+  };
+  {%- if intro_possible %}
+  (function () {
+    var mode = {{ settings.intro_play_on | json }};
+    var key = 'khuwabb-intro-seen';
+    try {
+      if (mode === 'once_per_session') {
+        if (sessionStorage.getItem(key)) return;
+        sessionStorage.setItem(key, '1');
+      }
+    } catch (e) {}
+    document.documentElement.setAttribute('data-intro-playing', '');
+  })();
+  {%- endif %}
+</script>

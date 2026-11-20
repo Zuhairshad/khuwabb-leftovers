@@ -8,7 +8,7 @@ Before writing anything, read CLAUDE.md, docs/mapping.md and the React component
 
 File ownership:
 - Edit ONLY the files listed in your task.
-- NEVER edit shared files: layout/theme.liquid, config/settings_schema.json, config/settings_data.json, locales/*.json, assets/base.css, assets/tokens.css, snippets/head-*.liquid. If you need a change there, include it as a "Proposed shared-file changes" block (exact JSON/Liquid to add) in your report.
+- NEVER edit shared files: layout/theme.liquid, config/settings_schema.json, config/settings_data.json, locales/*.json, assets/base.css, assets/tokens.css, snippets/head-*.liquid, templates/**/*.json, sections/*-group.json (all under `theme/`). If you need a change there, include it as a "Proposed shared-file changes" block (exact JSON/Liquid to add) in your report.
 - Never start `shopify theme dev`. In Stage A it doesn't run at all; in Stage B the main session runs it at http://127.0.0.1:9292.
 
 When done (Stage A — web):

@@ -2,7 +2,7 @@
 
 Phase 2 output (planning only — no code). Source of truth for values is
 `docs/audit.md`; this file decides **where** each thing lives in the theme and
-**in which batch** it gets built. Status: **draft, awaiting Shad's review.**
+**in which batch** it gets built. Status: **approved by Shad (2026-11-20) — all [Shad] items resolved with the proposed choice.**
 
 Legend for decisions: **[Shad]** = needs Shad's decision · **[default]** = safe
 default, will be used unless Shad says otherwise.
@@ -79,6 +79,9 @@ default, will be used unless Shad says otherwise.
 | `scripts/sync-shopify.mjs`, `build-khuwabb-data.mjs` (inputs) | `tools/store-setup/*` | tooling | — |
 
 ### 1.1 Cross-component contracts (fixed now so parallel tasks agree)
+- **Section roots**: `data-section="<name>"` (names from audit §5.8a / §7.20) goes on the section's own root element inside Shopify's `shopify-section-*` wrapper. Fonts use Next's generated family names (`clashDisplay`, `satoshi`) via `var(--font-display)` / `var(--font-body)` — never hardcode family names.
+- **Intro state**: `html[data-intro-playing]` (see §2.3); `html.js` is set before first paint. `scoop-intro.js` must **remove** `data-intro-playing` from `<html>` when the overlay is removed (the compare tool waits on it). The overlay keeps the `data-intro` attribute.
+- **Seeded randomness**: reels/shuffle code calls `window.reelsRandom()` at call time (never caches `Math.random`); define `window.reelsRandom ||= Math.random`.
 - **Bag button** (rendered by header): `<button type="button" class="bag-button" data-bag-button aria-label="{{ 'bag.button_label' | t: count: cart.item_count }}"><span>Bag</span><span class="bag-button__badge" data-bag-count>{{ cart.item_count }}</span></button>`. Click → `document.dispatchEvent(new CustomEvent('khuwabb-bag-open'))`. `cart-drawer.js` updates `[data-bag-count]`, the aria-label, and toggles `data-bump` for 600 ms when the count rises. Styles for `.bag-button` live in `section-header.css`.
 - **Cart API** (`assets/cart.js`, global `window.Khuwabb.cart`): `add(items: [{id, quantity}]) → Promise<cart>`, `change(key, quantity)`, `get()`. After every mutation it fetches `?sections=cart-drawer`, swaps the drawer HTML and dispatches `khuwabb-bag-change` with `detail.cart`. `add()` also dispatches `khuwabb-bag-open`. Errors (422 etc.) reject with `{status, message}`.
 - **Product JSON** (`snippets/product-json.liquid`, render with `product:`): `{id, handle, title, url, price, type, tint, categoryLine, colours: [{name, views: {front, side, back, pieceTop, pieceBottom} each {src, srcset, width, height} or null}], sizes: [...], variants: {"<Color> / <Size>": {id, available}}}`. Used by hero-reels, look chooser, product form.
@@ -122,10 +125,9 @@ No blocks.
 Socials come from global settings (§5.2). No blocks.
 
 ### 2.3 `scoop-intro` (overlay group)
+On/off and "play on" are **global theme settings** (`settings.intro_enabled`, `settings.intro_play_on`: `all_but_product` default / `home_only` / `once_per_session`), because the layout must decide before first paint. `snippets/head-config.liquid` sets **`html[data-intro-playing]`** when the intro plays on this page view (never in the theme editor). The section renders its overlay only when that attribute is present; the header delays its entrance only when it is present.
 | Setting | Type | Default |
 |---|---|---|
-| `enabled` | checkbox | true |
-| `play_on` | select `all_but_product` / `home_only` / `once_per_session` | `all_but_product` (= current behaviour) |
 | `brand` | text | `khuwabb` |
 | `color_1…5` | color | `#d5e5be`, `#f6c9cf`, `#f5e7a6`, `#c9d2f2`, `#f7d2b8` |
 | `spins` | range 3–12 | 7 |

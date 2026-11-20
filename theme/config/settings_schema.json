@@ -1,0 +1,93 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Khuwabb",
+    "theme_version": "0.1.0",
+    "theme_author": "Khuwabb",
+    "theme_documentation_url": "https://khuwabb-leftovers.vercel.app",
+    "theme_support_url": "https://khuwabb-leftovers.vercel.app"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Square PNG, at least 180 × 180 px. Leave blank to use the Khuwabb mark."
+      }
+    ]
+  },
+  {
+    "name": "Store",
+    "settings": [
+      {
+        "type": "text",
+        "id": "currency_prefix",
+        "label": "Price prefix",
+        "default": "Rs.",
+        "info": "Prices show as this prefix + the amount with no decimals, e.g. Rs.2,500."
+      },
+      {
+        "type": "text",
+        "id": "contact_email",
+        "label": "Contact email",
+        "default": "khuwabb@gmail.com",
+        "info": "Used in the footer help links and the sold-out restock note."
+      },
+      {
+        "type": "checkbox",
+        "id": "checkout_enabled",
+        "label": "Online checkout",
+        "default": true,
+        "info": "Turn off to pause checkout. The bag shows “Online checkout is paused right now.”"
+      }
+    ]
+  },
+  {
+    "name": "Intro",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "intro_enabled",
+        "label": "Show the khuwabb intro",
+        "default": true,
+        "info": "Never shown in the theme editor. Animation settings are on the Intro section."
+      },
+      {
+        "type": "select",
+        "id": "intro_play_on",
+        "label": "Play the intro",
+        "default": "all_but_product",
+        "options": [
+          { "value": "all_but_product", "label": "On every page load except product pages" },
+          { "value": "home_only", "label": "On the home page only" },
+          { "value": "once_per_session", "label": "Once per visit (not on product pages)" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "default": "https://instagram.com"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok",
+        "default": "https://tiktok.com"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest",
+        "default": "https://pinterest.com"
+      }
+    ]
+  }
+]
