@@ -1,0 +1,68 @@
+{{ 'component-section-heading.css' | asset_url | stylesheet_tag }}
+{{ 'component-arrow-button.css' | asset_url | stylesheet_tag }}
+{{ 'component-hanger-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-new-arrivals.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ticker.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign na_collection = section.settings.collection
+  if na_collection == blank
+    assign na_collection = collections['new-in']
+  endif
+  assign na_cta = section.settings.cta_link
+  if na_cta == blank
+    assign na_cta = na_collection.url | default: '/collections/new-in'
+  endif
+  assign na_limit = section.settings.limit | default: 14
+  assign na_speed = section.settings.speed | default: 34
+  assign na_factor = 1
+  if section.settings.pause_on_hover
+    assign na_factor = 0
+  endif
+-%}
+
+<section class="new-arrivals" data-section="new-in">
+  {%- render 'section-heading',
+    title: section.settings.heading,
+    cta_label: section.settings.cta_label,
+    cta_href: na_cta
+  -%}
+  {%- if na_collection.products_count > 0 -%}
+    <div class="new-arrivals__rack">
+      <div class="new-arrivals__rail" aria-hidden="true"></div>
+      <marquee-ticker
+        class="new-arrivals__ticker"
+        data-speed="{{ na_speed }}"
+        data-gap="28"
+        data-hover-factor="{{ na_factor }}"
+      >
+        <ul class="new-arrivals__track" data-ticker-track>
+          <li data-ticker-set>
+            <div class="new-arrivals__list" data-ticker-measure>
+              {%- for product in na_collection.products limit: na_limit -%}
+                {% render 'hanger-card', product: product, context: 'ticker' %}
+              {%- endfor -%}
+            </div>
+          </li>
+        </ul>
+      </marquee-ticker>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "New arrivals",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "New arrivals" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop new in" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "limit", "label": "Products", "min": 4, "max": 20, "step": 1, "default": 14 },
+    { "type": "range", "id": "speed", "label": "Speed", "min": 10, "max": 80, "step": 1, "unit": "px/s", "default": 34 },
+    { "type": "checkbox", "id": "pause_on_hover", "label": "Pause on hover", "default": true }
+  ],
+  "presets": [{ "name": "New arrivals" }]
+}
+{% endschema %}

@@ -76,9 +76,22 @@
         "cta_label": "All collections",
         "cta_link": "/collections/all"
       }
+    },
+    "new_arrivals": {
+      "type": "new-arrivals",
+      "settings": {
+        "heading": "New arrivals",
+        "cta_label": "Shop new in",
+        "cta_link": "shopify://collections/new-in",
+        "collection": "new-in",
+        "limit": 14,
+        "speed": 34,
+        "pause_on_hover": true
+      }
     }
   },
   "order": [
-    "category_cards"
+    "category_cards",
+    "new_arrivals"
   ]
 }

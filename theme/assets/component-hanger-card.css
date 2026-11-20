@@ -1,0 +1,105 @@
+/* Hanger card (components/home/NewIn.module.css .hanger/.card/.info, NewInPage.module.css .hanger/.card/.info/.name/.price) */
+.hanger-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ink);
+  text-decoration: none;
+  transform-origin: 50% 0;
+  transition: transform 1.1s var(--spring-hanger);
+}
+
+.hanger-card--ticker {
+  width: 250px;
+}
+
+.hanger-card--grid {
+  align-self: start;
+  justify-self: start;
+  width: 100%;
+  cursor: pointer;
+}
+
+.hanger-card__hook {
+  display: block;
+  flex: none;
+}
+
+.hanger-card__card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  height: 300px;
+  padding: 22px;
+  overflow: clip;
+  border-radius: 24px;
+}
+
+.hanger-card--grid .hanger-card__card {
+  width: 100%;
+}
+
+.hanger-card__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.hanger-card__info {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 4px 0;
+}
+
+.hanger-card__name,
+.hanger-card__price {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.08px;
+  color: var(--ink);
+  white-space: pre;
+}
+
+.hanger-card__name {
+  flex: 1 0 0;
+  width: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Grid: names run long, so they show in full and wrap (NewInPage.module.css .name). */
+.hanger-card--grid .hanger-card__name {
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  overflow-wrap: break-word;
+}
+
+/* Swing: framer whileHover rotate 5deg, spring bounce .55 / 1.1s, origin top. */
+@media (hover: hover) {
+  .hanger-card:hover {
+    transform: rotate(5deg);
+  }
+}
+
+.hanger-card:focus-visible {
+  transform: rotate(5deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hanger-card {
+    transition: none;
+  }
+
+  .hanger-card:hover,
+  .hanger-card:focus-visible {
+    transform: none;
+  }
+}

@@ -1,0 +1,66 @@
+/* components/home/NewIn.module.css */
+.new-arrivals {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+  width: 100%;
+  padding: 120px 0 140px;
+  overflow: clip;
+}
+
+.new-arrivals__rack {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.new-arrivals__rail {
+  position: absolute;
+  z-index: 0;
+  top: 13px;
+  left: 0;
+  right: 0;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(#cfcac1 0%, #8e8980 55%, #5c5850 100%);
+  box-shadow: 0 2px 4px #17140f26;
+}
+
+.new-arrivals__ticker {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  padding: 0 0 24px;
+  overflow: clip;
+  touch-action: pan-y;
+}
+
+/* Ticker.tsx <m.ul> */
+.new-arrivals__track {
+  display: flex;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  will-change: transform;
+}
+
+.new-arrivals__track > li {
+  margin: 0;
+  padding: 0;
+}
+
+.new-arrivals__list {
+  display: flex;
+  gap: 28px;
+  width: min-content;
+}
+
+@media (max-width: 809.98px) {
+  .new-arrivals {
+    gap: 40px;
+    padding: 80px 0 96px;
+  }
+}

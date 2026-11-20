@@ -1,0 +1,68 @@
+{%- comment -%}
+  Hanger card: hook SVG over a tinted card with the front cut-out, name + price underneath
+  (components/home/NewIn.tsx, reused by components/new-in/NewInPage.tsx). The whole link swings
+  5deg from the top on hover / keyboard focus.
+
+  Parameters:
+  - product  (required)
+  - loading  (optional) 'lazy' (default) | 'eager'
+  - sizes    (optional) sizes attribute for the cut-out. Default: ticker '206px', grid '(max-width: 809.98px) 90vw, 280px'
+  - class    (optional) extra classes on the link (e.g. a grid layout hook)
+  - context  (optional) 'ticker' (default) | 'grid'
+             ticker: fixed 250px wide, product name on one line with ellipsis.
+             grid:   fills its grid cell (width 100%), name wraps, pointer cursor.
+             The grid LAYOUT (4/3/2/1 columns, gaps, section wrapper) is NOT in this snippet; see docs/parity/new-arrivals.md "For task 3D".
+
+  Tint: product.metafields.custom.tint (color metafield), fallback #09F in the ticker (like NewIn.tsx).
+        In the grid context there is no fallback (NewInPage.tsx uses `p.tint ?? undefined`, i.e. transparent).
+
+  CSS: the section must load {{ 'component-hanger-card.css' | asset_url | stylesheet_tag }}.
+  Cloned copies made by ticker.js get tabindex="-1" and aria-hidden on their wrappers.
+
+  Usage: {% render 'hanger-card', product: product, context: 'ticker' %}
+{%- endcomment -%}
+{%- liquid
+  assign hc_context = context | default: 'ticker'
+  assign hc_tint = product.metafields.custom.tint.value | default: ''
+  if hc_tint == blank
+    if hc_context == 'ticker'
+      assign hc_tint = '#09F'
+    endif
+  endif
+  assign hc_loading = loading | default: 'lazy'
+  if sizes != blank
+    assign hc_sizes = sizes
+  elsif hc_context == 'grid'
+    assign hc_sizes = '(max-width: 809.98px) 90vw, 280px'
+  else
+    assign hc_sizes = '206px'
+  endif
+-%}
+<a
+  href="{{ product.url }}"
+  class="hanger-card hanger-card--{{ hc_context }}{% if class != blank %} {{ class }}{% endif %}"
+  draggable="false"
+>
+  <svg class="hanger-card__hook" viewBox="0 0 120 62" width="120" height="62" fill="none" aria-hidden="true" focusable="false">
+    <path d="M60 30V24.5c0-3.2 6.5-4.6 6.5-11a6.5 6.5 0 1 0-13 0" stroke="#17140F" stroke-width="3" stroke-linecap="round"/>
+    <path d="M60 30 L10 56.5 c-3.4 1.8-2.4 4.5 1.5 4.5 h97 c3.9 0 4.9-2.7 1.5-4.5 Z" stroke="#17140F" stroke-width="3" stroke-linejoin="round" fill="none"/>
+  </svg>
+  <div class="hanger-card__card"{% if hc_tint != blank %} style="background: {{ hc_tint | escape }}"{% endif %}>
+    {%- comment -%} Decorative: the name is visible text in the same link. cutout-image treats a blank alt as "use default", so a placeholder is swapped for alt="". {%- endcomment -%}
+    {%- capture hc_img -%}
+      {%- render 'cutout-image',
+        product: product,
+        view: 'front',
+        widths: '360,480,640',
+        sizes: hc_sizes,
+        loading: hc_loading,
+        alt: 'hc-decorative'
+      -%}
+    {%- endcapture -%}
+    {{- hc_img | replace: 'alt="hc-decorative"', 'alt=""' -}}
+  </div>
+  <div class="hanger-card__info">
+    <p class="hanger-card__name">{{ product.title | escape }}</p>
+    <p class="hanger-card__price">{% render 'price', price: product.price %}</p>
+  </div>
+</a>
