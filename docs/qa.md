@@ -18,7 +18,7 @@ Severity: **critical** = page broken / wrong content / blocks a task · **major*
 |---|---|---|---|---|
 | A parity | 0 | 0 | 4 (1 not applicable) | ✅ reported |
 | B functions | – | – | – | pending |
-| C accessibility | – | – | – | pending |
+| C accessibility | 0 | 6 (A1–A6) | 13 (A7–A19) | ✅ reported |
 | D performance + editor | 0 | 0 | 9 perf/editor (M1–M7, E1–E3, E5) | ✅ reported |
 
 ---
@@ -44,7 +44,33 @@ _pending_
 
 ## C — Accessibility
 
-_pending_
+Method: fixture page with the real theme CSS + `header.js` + `cart-drawer.js` in headless Chromium (keyboard runs + axe-core wcag2a/aa/2.1aa/best-practice); code review for the rest; WCAG contrast computed from the tokens. **Verified in the fixture:** tab order (skip link → logo → bag → menu → main); closed header drawer and bag layer not tabbable (`inert`); phone menu Escape + focus return; bag drawer focus-in, Tab/Shift+Tab trap, Escape/×/scrim close, focus restore, scroll lock released. One `h1` per template; landmarks, dialogs, form labels/autocomplete/aria-invalid on customer/search/password forms; decorative images `alt=""`; reduced-motion paths everywhere (ticker, hero auto-shuffle, campaign cycle, intro, curtain, receipts all stop).
+
+**No critical findings** (nothing blocks a keyboard or screen-reader user from completing a task).
+
+| # | Sev | Where | Finding | Origin | Decision |
+|---|---|---|---|---|---|
+| A1 | major | Footer, all pages | Focus ring is ink on ink (invisible) | inherited | **Fix**: paper-coloured ring inside the footer |
+| A2 | major | All pages | Header not in a `<header>` landmark (axe `region`) | inherited | **Fix**: `<header>` wrapper |
+| A3 | major | Footer newsletter | Error not announced; no `aria-invalid`/`aria-describedby`; hidden error text always in the a11y tree | inherited | **Fix** |
+| A4 | major | Bag drawer, hero bar | Text at ink .55 / .6 opacity fails 4.5:1 (3.97–4.47) | inherited values | **Shad** — fixing = slightly darker text (≥ .62 bag, ≈ .7 hero). Default: keep parity |
+| A5 | major | Product | Sold-out size is visual-only; disabled add button leaves the tab order so its explanation can't be reached; label/image changes silent | inherited | **Fix**: `aria-disabled` + visually-hidden "sold out", polite live region for the button label |
+| A6 | major | Home campaign (desktop) | Hidden look cards' CTAs still tabbable; keyboard focus doesn't pause the 4s auto-cycle (WCAG 2.2.2); no `aria-pressed` on tags | inherited | **Fix**: inactive floats `inert`/`visibility:hidden` after fade; focusin pauses; `aria-pressed` |
+| A7 | minor | Hero chooser | × and successful add drop focus to `<body>`; add→drawer close can't restore focus | theme | **Fix**: return focus to the CTA |
+| A8 | minor | Bag drawer | `<aside role="dialog">` invalid role (axe) | inherited | **Fix**: `div` |
+| A9 | minor | Bag drawer | `.cart-line__remove` contrast | inherited | with A4 |
+| A10 | minor | Bag / cart page | Stepper/remove labels lack the product name; cart-page qty input label; qty change not announced | mostly inherited | **Fix** |
+| A11 | minor | Cart line, shop-the-look thumbs, collections list | Image alt repeats adjacent visible text | inherited | **Fix**: decorative |
+| A12 | minor | Pagination | `nav` labelled "Page N" | theme | **Fix**: "Pagination" |
+| A13 | minor | Gift card | `aria-labelledby` on a role-less div; QR has no name; copy announced twice | theme | **Fix** |
+| A14 | minor | Home ticker | Auto-scroll pauses on hover/focus only; no visible pause control (2.2.2) | inherited | **Shad** — a pause button is a visible addition. Default: keep (reduced motion stops it) |
+| A15 | minor | Header | "Bag, 1 items" plural; no `aria-haspopup="dialog"`; toggle label + aria-expanded double signal | inherited | **Fix** plural + haspopup; keep label |
+| A16 | minor | Nav over dark footer | Pill links 3.42:1 over ink | inherited | Keep (parity) |
+| A17 | minor | Hero, campaign | Reduced-motion read once at load | theme | Keep (low impact) |
+| A18 | minor | Intro | If `scoop-intro.js` fails to load, scroll stays locked | theme | **Fix** (Opus, head-config failsafe) |
+| A19 | minor | Customer/search/password forms | Field border `--ink-line` 1.29:1 (UI needs 3:1) | theme (no reference) | **Fix** in `component-form.css`; PDP option borders = parity, keep |
+
+Contrast table: see the QA-C report in the session log; key results — ink on paper/pastels 12–17:1, `--ink-62` on paper 4.95, on strawberry/blueberry 4.42 (inherited fail), footer text 4.93–8.51, `#a8321e` 4.45–6.69.
 
 ## D — Performance + editor
 
