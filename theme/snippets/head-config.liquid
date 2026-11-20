@@ -4,7 +4,7 @@
 
   html[data-intro-playing] is set when the intro will play on this page view:
   - settings.intro_enabled, never in the theme editor, never on password / gift card
-  - a 10s failsafe removes it if scoop-intro.js doesn't run
+  - a 15s failsafe removes it if scoop-intro.js doesn't run
   - settings.intro_play_on: all_but_product (reference behaviour) | home_only | once_per_session
 {%- endcomment -%}
 {%- liquid
@@ -57,10 +57,10 @@
     } catch (e) {}
     document.documentElement.setAttribute('data-intro-playing', '');
     // Failsafe: if scoop-intro.js never runs (blocked/failed), release the
-    // intro state (and its scroll lock) well after the longest intro (~9.3s at speed 0.5).
+    // intro state (and its scroll lock) well after the longest intro (~9.4s at speed 0.5; 15s leaves room for a slow script load).
     setTimeout(function () {
       document.documentElement.removeAttribute('data-intro-playing');
-    }, 10000);
+    }, 15000);
   })();
   {%- endif %}
 </script>
