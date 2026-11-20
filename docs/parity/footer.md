@@ -148,3 +148,7 @@ Class mapping: `.footer`->`.footer`, `.newsletter`->`.footer__newsletter`, `.tit
 | Error id + description (A3) | `snippets/newsletter-form.liquid`: error `id="FooterNewsletterError"`, input `aria-describedby` to it; `aria-invalid="true"` when server state is bad. |
 | Error exposure (A3) | Error has `role="alert"`, `aria-hidden="true"` unless bad (layout/22px height and opacity fade untouched). |
 | Client state (A3) | `assets/footer.js` `setState()` toggles `data-state`, input `aria-invalid`, error `aria-hidden`, and re-inserts the text so the alert announces each time. |
+
+## QA N1 fix
+
+`aria-describedby="FooterNewsletterError"` is now set only in the bad state: `snippets/newsletter-form.liquid` (server bad state, with `aria-invalid`) and `assets/footer.js` `setState()` (added on bad, removed otherwise), so the hidden error text is never read as the description of a valid field.

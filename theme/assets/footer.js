@@ -19,8 +19,13 @@
         this.setState = (state) => {
           this.setAttribute('data-state', state);
           var bad = state === 'bad';
-          if (bad) this.input.setAttribute('aria-invalid', 'true');
-          else this.input.removeAttribute('aria-invalid');
+          if (bad) {
+            this.input.setAttribute('aria-invalid', 'true');
+            this.input.setAttribute('aria-describedby', 'FooterNewsletterError');
+          } else {
+            this.input.removeAttribute('aria-invalid');
+            this.input.removeAttribute('aria-describedby');
+          }
           if (this.error) {
             if (bad) {
               // Re-insert the text so role="alert" announces it each time it appears.

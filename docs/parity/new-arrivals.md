@@ -83,3 +83,7 @@ Strings: "New arrivals", "Shop new in" are section settings defaults (schema); n
 ## QA Q3 addition (M6): ticker.js
 
 `assets/ticker.js` `syncLoop()`: the rAF loop starts only while the ticker is on screen (IntersectionObserver), the tab is visible (`visibilitychange`) and reduced motion is off; it is cancelled otherwise and re-armed on each of those changes. `tick()` is unchanged while running, so visible behaviour is identical. Drag still renders directly.
+
+## QA E2 addition
+
+`sections/new-arrivals.liquid` schema: `collection` setting gains `info` "Pick after adding the section — presets can't include products/collections."

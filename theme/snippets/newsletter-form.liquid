@@ -31,8 +31,8 @@
         required
         autocomplete="email"
         aria-label="{{ 'newsletter.label' | t }}"
-        aria-describedby="FooterNewsletterError"
         {% if state == 'bad' %}
+          aria-describedby="FooterNewsletterError"
           aria-invalid="true"
         {% endif %}
         placeholder="{{ placeholder }}"
