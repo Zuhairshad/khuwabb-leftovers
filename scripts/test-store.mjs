@@ -248,8 +248,8 @@ for (const width of WIDTHS) {
     for (let i = 1; i < n; i += 2) await selects.nth(i).selectOption({ index: 1 })
     await page.click("[data-look-add]")
     await wait(900)
-    const badge = await page.locator("[data-bag-button]").getAttribute("aria-label")
-    check(`${tag} fixture: add the look adds both pieces`, badge === "Bag, 2 items", badge)
+    const badge = (await page.locator("[data-bag-button]").innerText()).replace(/\s+/g, " ").trim()
+    check(`${tag} fixture: add the look adds both pieces`, badge === "Bag 2 items", badge)
     await shot(page, width, "look-added")
     await ctx.close()
   }

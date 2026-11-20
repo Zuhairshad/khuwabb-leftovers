@@ -29,7 +29,7 @@ function Word({ children, from }: { children: string; from: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] })
   const x = useTransform(scrollYProgress, [0, 1], [from, 0])
-  const opacity = useTransform(scrollYProgress, [0, 1], [0.2, 1])
+  const opacity = useTransform(scrollYProgress, [0, 1], [0.5, 1])
   return (
     <m.div ref={ref} style={{ x, opacity }}>
       <h1 className={styles.word}>{children}</h1>

@@ -50,11 +50,12 @@ export function BagButton() {
 
   return (
     <>
-      <button type="button" className={styles.button} data-code-component onClick={() => setOpen(true)} aria-label={`Bag, ${count} items`} data-bag-button>
+      <button type="button" className={styles.button} data-code-component onClick={() => setOpen(true)} data-bag-button>
         Bag
         <span className={styles.badge} data-bump={bump || undefined}>
           {count}
         </span>
+        <span className={styles.srOnly}> items</span>
       </button>
       {mounted && createPortal(<BagDrawer open={open} onClose={() => setOpen(false)} />, document.body)}
     </>

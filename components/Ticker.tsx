@@ -96,7 +96,7 @@ export function Ticker({
           </div>
         </li>
         {Array.from({ length: copies }, (_, i) => (
-          <li key={i} aria-hidden>
+          <li key={i} aria-hidden inert>
             <div className={listClassName}>{children}</div>
           </li>
         ))}

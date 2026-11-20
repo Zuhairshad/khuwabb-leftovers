@@ -635,7 +635,7 @@ export function ScoopReels({ config }: { config: ReelsConfig }) {
         <div className={styles.right}>
           <div className={styles.total}>
             <span className={styles.totalLabel}>The look</span>
-            <span className={styles.totalValue} style={{ opacity: allSettled ? 1 : 0.35 }}>
+            <span className={styles.totalValue} style={{ opacity: allSettled ? 1 : 0.7 }}>
               {formatPrice(total)}
             </span>
           </div>

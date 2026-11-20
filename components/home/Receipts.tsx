@@ -67,7 +67,7 @@ export function Receipts() {
                   <p>{formatPrice(total)}</p>
                 </div>
                 <div className={styles.dash} />
-                <div className={styles.stars} aria-label="5 stars">
+                <div className={styles.stars} role="img" aria-label="5 stars">
                   {Array.from({ length: 5 }, (_, s) => (
                     <Star key={s} />
                   ))}

@@ -343,3 +343,13 @@
   opacity: 0.3;
   cursor: not-allowed;
 }
+
+/* Read by screen readers only: the button reads "Bag 2 items". */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
