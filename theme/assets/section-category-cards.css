@@ -1,0 +1,219 @@
+/*
+ * Category cards "Find your fit" (components/home/Flavours.module.css).
+ * Markup: sections/category-cards.liquid. Open state: [data-open] (category-cards.js).
+ * Spring (framer bounce .15 / .9s) = .9s var(--spring-cards).
+ */
+.category-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  width: 100%;
+  padding: 136px 0 120px;
+  overflow: clip;
+}
+
+.category-cards__scoops {
+  display: flex;
+  width: 100%;
+  max-width: 1280px;
+  padding: 0 32px;
+}
+
+.category-cards__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 560px;
+}
+
+.category-cards__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  flex: 1 0 0;
+  width: 1px;
+  height: 100%;
+  padding: 24px;
+  overflow: clip;
+  border-radius: 28px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: flex-grow 0.9s var(--spring-cards);
+}
+
+.category-cards__card[data-open] {
+  flex: 2.6 0 0;
+}
+
+.category-cards__piece {
+  position: absolute;
+  inset: 0 0 72px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.category-cards__cutout {
+  position: relative;
+  height: 44%;
+  width: auto;
+  /* Wide photos would overflow a narrow closed card; cap the width and let the image scale down. */
+  max-width: calc(100% - 32px);
+  transform: rotate(calc(var(--tilt, -1) * 4deg));
+  transition:
+    height 0.9s var(--spring-cards),
+    transform 0.9s var(--spring-cards);
+}
+
+.category-cards__card[data-open] .category-cards__cutout {
+  height: 78%;
+  transform: rotate(calc(var(--tilt, -1) * 6deg));
+}
+
+.category-cards__cutout img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.category-cards__caption {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 12px;
+  width: 100%;
+  height: 100px;
+  opacity: 0;
+  transition: opacity 0.9s var(--spring-cards);
+}
+
+.category-cards__card[data-open] .category-cards__caption {
+  opacity: 1;
+}
+
+.category-cards__name {
+  flex: 1 0 0;
+  width: 1px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 25.2px;
+  letter-spacing: -0.12px;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.category-cards__count {
+  display: flex;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.category-cards__count p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19.6px;
+  color: var(--ink);
+  white-space: pre;
+}
+
+.category-cards__side {
+  position: absolute;
+  z-index: 2;
+  bottom: 211px;
+  left: -163px;
+  width: 400px;
+  margin: 0;
+  transform: rotate(-90deg);
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 25.2px;
+  letter-spacing: -0.12px;
+  color: var(--ink);
+  text-align: left;
+  white-space: pre-wrap;
+  opacity: 1;
+  transition: opacity 0.9s var(--spring-cards);
+}
+
+.category-cards__card[data-open] .category-cards__side {
+  opacity: 0;
+}
+
+/* Below desktop every card is a full-width tile; all captions show, no hover/open effect. */
+@media (max-width: 1199.98px) {
+  .category-cards__row {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+
+  .category-cards__card,
+  .category-cards__card[data-open] {
+    flex: none;
+    width: 100%;
+    height: 300px;
+    transition: none;
+  }
+
+  .category-cards__piece {
+    bottom: 64px;
+  }
+
+  .category-cards__cutout,
+  .category-cards__card[data-open] .category-cards__cutout {
+    height: 86%;
+    transform: rotate(calc(var(--tilt, -1) * 4deg));
+    transition: none;
+  }
+
+  .category-cards__caption,
+  .category-cards__card[data-open] .category-cards__caption {
+    opacity: 1;
+    transition: none;
+  }
+
+  .category-cards__side {
+    display: none;
+  }
+
+  .category-cards__name {
+    font-size: 20px;
+    line-height: 21px;
+    letter-spacing: -0.1px;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .category-cards {
+    gap: 36px;
+    padding: 112px 0 80px;
+  }
+
+  .category-cards__scoops {
+    padding: 0 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-cards__card,
+  .category-cards__cutout,
+  .category-cards__caption,
+  .category-cards__side {
+    transition: none;
+  }
+}

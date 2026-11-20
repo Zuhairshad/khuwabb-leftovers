@@ -1,4 +1,84 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "category_cards": {
+      "type": "category-cards",
+      "blocks": {
+        "cat_gym": {
+          "type": "category",
+          "settings": {
+            "title": "Gym wear",
+            "collection": "gym-wear",
+            "link": "",
+            "tint": "#d5e5be",
+            "cover_product": "gym-co-ords-set",
+            "cover_colour": "Light Pink",
+            "tilt": "-1"
+          }
+        },
+        "cat_trousers": {
+          "type": "category",
+          "settings": {
+            "title": "Trousers",
+            "collection": "trousers",
+            "link": "",
+            "tint": "#f5e7a6",
+            "cover_product": "wide-leg-trouser-two-full-stripes",
+            "cover_colour": "Cherry",
+            "tilt": "1"
+          }
+        },
+        "cat_jackets": {
+          "type": "category",
+          "settings": {
+            "title": "Jackets",
+            "collection": "jackets",
+            "link": "",
+            "tint": "#c9d2f2",
+            "cover_product": "womens-high-shine-vinyl-puffer-jacket",
+            "cover_colour": "Red",
+            "tilt": "-1"
+          }
+        },
+        "cat_dresses": {
+          "type": "category",
+          "settings": {
+            "title": "Dresses",
+            "collection": "dresses",
+            "link": "",
+            "tint": "#f6c9cf",
+            "cover_product": "womens-boat-neck-long-sleeve-maxi-dress",
+            "cover_colour": "Maroon",
+            "tilt": "1"
+          }
+        },
+        "cat_newin": {
+          "type": "category",
+          "settings": {
+            "title": "New in",
+            "collection": "new-in",
+            "link": "",
+            "tint": "#f7d2b8",
+            "cover_product": "womens-hooded-full-sleeve-cropped-puffer-jacket",
+            "cover_colour": "Olive",
+            "tilt": "-1"
+          }
+        }
+      },
+      "block_order": [
+        "cat_gym",
+        "cat_trousers",
+        "cat_jackets",
+        "cat_dresses",
+        "cat_newin"
+      ],
+      "settings": {
+        "heading": "Find your fit",
+        "cta_label": "All collections",
+        "cta_link": "/collections/all"
+      }
+    }
+  },
+  "order": [
+    "category_cards"
+  ]
 }

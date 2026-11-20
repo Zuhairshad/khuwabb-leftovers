@@ -1,0 +1,148 @@
+{{ 'component-section-heading.css' | asset_url | stylesheet_tag }}
+{{ 'component-arrow-button.css' | asset_url | stylesheet_tag }}
+{{ 'section-category-cards.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'category-cards.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign cc_open_set = false
+-%}
+<section class="category-cards" data-section="flavours">
+  {%- render 'section-heading',
+    title: section.settings.heading,
+    cta_label: section.settings.cta_label,
+    cta_href: section.settings.cta_link
+  -%}
+  <div class="category-cards__scoops" data-appear="lift">
+    <category-cards class="category-cards__row">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign cc_collection = block.settings.collection
+          assign cc_show = true
+          if cc_collection != blank and cc_collection.products_count == 0
+            assign cc_show = false
+          endif
+        -%}
+        {%- if cc_show -%}
+          {%- liquid
+            assign cc_title = block.settings.title
+            assign cc_product = block.settings.cover_product
+            assign cc_colour = block.settings.cover_colour
+            if cc_colour == blank and cc_product != blank
+              assign cc_opt = cc_product.options_by_name['Color']
+              if cc_opt
+                assign cc_colour = cc_opt.values.first
+              endif
+            endif
+            assign cc_norm = cc_colour | strip | downcase
+            assign cc_ratio = 0.8
+            if cc_product != blank
+              assign cc_media = cc_product.featured_media
+              for cc_m in cc_product.media
+                if cc_m.media_type != 'image'
+                  continue
+                endif
+                assign cc_parts = cc_m.alt | split: '|'
+                if cc_parts.size < 2
+                  continue
+                endif
+                assign cc_a = cc_parts[0] | strip | downcase
+                assign cc_b = cc_parts[1] | strip | downcase
+                if cc_a == cc_norm and cc_b == 'front'
+                  assign cc_media = cc_m
+                  break
+                endif
+              endfor
+              if cc_media != blank
+                assign cc_ratio = cc_media.preview_image.width | times: 1.0 | divided_by: cc_media.preview_image.height | round: 4
+              endif
+            endif
+            assign cc_link = block.settings.link | default: '/collections/all'
+            assign cc_tilt = block.settings.tilt | default: '-1' | times: 1
+          -%}
+          <a
+            href="{{ cc_link }}"
+            class="category-cards__card"
+            data-card="{{ cc_title | escape }}"
+            {% unless cc_open_set %}data-open{% endunless %}
+            style="--tilt: {{ cc_tilt }};{% if block.settings.tint != blank %} background: {{ block.settings.tint }};{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            {%- assign cc_open_set = true -%}
+            <div class="category-cards__piece">
+              <div class="category-cards__cutout" style="aspect-ratio: {{ cc_ratio }};">
+                {%- if cc_product != blank -%}
+                  {%- render 'cutout-image',
+                    product: cc_product,
+                    colour: cc_colour,
+                    view: 'front',
+                    sizes: '(max-width: 809px) 45vw, (max-width: 1199px) 30vw, 360px',
+                    alt: ''
+                  -%}
+                {%- endif -%}
+              </div>
+            </div>
+            <div class="category-cards__caption">
+              <h3 class="category-cards__name">{{ cc_title }}</h3>
+              {%- if cc_collection != blank -%}
+                <div class="category-cards__count">
+                  <p>{{ 'general.piece' | t: count: cc_collection.products_count }}</p>
+                </div>
+              {%- endif -%}
+            </div>
+            <h3 class="category-cards__side" aria-hidden="true">{{ cc_title }}</h3>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </category-cards>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Category cards",
+  "tag": "div",
+  "class": "category-cards-section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Find your fit" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "All collections" },
+    { "type": "url", "id": "cta_link", "label": "Button link" }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Gym wear" },
+        { "type": "collection", "id": "collection", "label": "Collection (product count)", "info": "Cards whose collection has no products are hidden." },
+        { "type": "url", "id": "link", "label": "Link", "info": "Blank links to all products." },
+        { "type": "color", "id": "tint", "label": "Tint", "default": "#d5e5be" },
+        { "type": "product", "id": "cover_product", "label": "Cover product" },
+        { "type": "text", "id": "cover_colour", "label": "Cover colour", "info": "Exact Color option value. Blank uses the first colour.", "default": "Light Pink" },
+        {
+          "type": "select",
+          "id": "tilt",
+          "label": "Tilt",
+          "options": [
+            { "value": "-1", "label": "Lean left" },
+            { "value": "1", "label": "Lean right" }
+          ],
+          "default": "-1"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category cards",
+      "blocks": [
+        { "type": "category", "settings": { "title": "Gym wear", "tint": "#d5e5be", "cover_colour": "Light Pink", "tilt": "-1" } },
+        { "type": "category", "settings": { "title": "Trousers", "tint": "#f5e7a6", "cover_colour": "Cherry", "tilt": "1" } },
+        { "type": "category", "settings": { "title": "Jackets", "tint": "#c9d2f2", "cover_colour": "Red", "tilt": "-1" } },
+        { "type": "category", "settings": { "title": "Dresses", "tint": "#f6c9cf", "cover_colour": "Maroon", "tilt": "1" } },
+        { "type": "category", "settings": { "title": "New in", "tint": "#f7d2b8", "cover_colour": "Olive", "tilt": "-1" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
