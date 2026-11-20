@@ -66,8 +66,8 @@
           <div class="gift-card__code">
             <code id="GiftCardCode" class="gift-card__code-value">{{ gc_code }}</code>
           </div>
-          <button type="button" class="button button--secondary button--small gift-card__copy" data-copy-button data-copied-label="{{ 'gift_card.copied' | t | escape }}" data-label="{{ 'gift_card.copy' | t | escape }}">
-            <span data-copy-label>{{ 'gift_card.copy' | t }}</span>
+          <button type="button" class="button button--secondary button--small gift-card__copy" aria-label="{{ 'gift_card.copy' | t | escape }}" data-copy-button data-copied-label="{{ 'gift_card.copied' | t | escape }}" data-label="{{ 'gift_card.copy' | t | escape }}">
+            <span data-copy-label aria-hidden="true">{{ 'gift_card.copy' | t }}</span>
           </button>
           <span class="visually-hidden" role="status" aria-live="polite" data-copy-status></span>
         </div>
@@ -109,10 +109,12 @@
         var timer;
 
         function done() {
+          label.textContent = button.getAttribute('data-copied-label');
           status.textContent = button.getAttribute('data-copied-label');
           button.setAttribute('data-copied', '');
           clearTimeout(timer);
           timer = setTimeout(function () {
+            label.textContent = button.getAttribute('data-label');
             status.textContent = '';
             button.removeAttribute('data-copied');
           }, 2000);

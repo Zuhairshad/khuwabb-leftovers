@@ -51,4 +51,4 @@ All via `customer.*` (existing) plus `bag.start_shopping`, `general.pagination.*
 - No-JS: province select stays hidden; errors on edit forms are not auto-reopened.
 
 ## Q4 QA fixes (A19)
-Customer forms share component-form.css: `.field__input` / `.button--secondary` borders now `rgba(23, 20, 15, 0.45)` for 3:1 contrast. Deliberate deviation from the React `--ink-line` hairline.
+Customer forms share component-form.css: `.field__input` / `.button--secondary` borders now `rgba(23, 20, 15, 0.52)` for 3:1 contrast. Deliberate deviation from the React `--ink-line` hairline.

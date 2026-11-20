@@ -51,5 +51,5 @@ Strings: `gift_card.title/code/copy/copied/expires/disabled/expired/print/shop`;
 ## Q4 QA fixes (A13, A19)
 - Code row is `role="group"` labelled by "Code" (aria-labelledby moved off the plain div).
 - QR container `role="img"` with `aria-label` = `gift_card.qr_code` (default "Gift card QR code"). Proposed locale key: `gift_card.qr_code`.
-- "Copied" is announced once via the `role="status"` live region; the button label no longer changes (still gets `data-copied` styling).
-- component-form.css: `.field__input` and `.button--secondary` borders `rgba(23, 20, 15, 0.45)` (~3.3:1) for WCAG 1.4.11. PDP option borders untouched (parity).
+- "Copied" label shows visually for 2s (label span aria-hidden, button has stable aria-label from gift_card.copy), so only the role=status region announces it.
+- component-form.css: `.field__input` and `.button--secondary` borders `rgba(23, 20, 15, 0.52)` (3.69:1 white, 3.34:1 paper) for WCAG 1.4.11. PDP option borders untouched (parity).

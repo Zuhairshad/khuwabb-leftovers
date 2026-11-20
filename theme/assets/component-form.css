@@ -7,12 +7,12 @@
  * Classes
  *   .field                 column wrapper (gap 8, margin-bottom 16)
  *   .field__label          14px/500 label, --ink-62
- *   .field__input          input / select / textarea: pill, h50, white, 1px rgba(23,20,15,.45) border
+ *   .field__input          input / select / textarea: pill, h50, white, 1px rgba(23,20,15,.52) border
  *                          (textarea: min-height 120, radius 24). Invalid: [aria-invalid="true"]
  *   .field__error          13px #a8321e message (link with aria-describedby)
  *   .field--checkbox       row layout (checkbox + label), gap 10, 15px
  *   .button                primary pill, h56, ink bg / paper text, 16px/600
- *   .button--secondary     white bg, ink text, 1px rgba(23,20,15,.45) border
+ *   .button--secondary     white bg, ink text, 1px rgba(23,20,15,.52) border
  *   .button--small         h44, padding 0 20px, 15px
  *   .button--full          width 100%
  *   .form-message          14px/1.5 notice box (radius 18)
@@ -36,7 +36,7 @@
   width: 100%;
   height: 50px;
   padding: 0 22px;
-  border: 1px solid rgba(23, 20, 15, 0.45);
+  border: 1px solid rgba(23, 20, 15, 0.52);
   border-radius: 999px;
   background-color: var(--white);
   color: var(--ink);
@@ -127,7 +127,7 @@ select.field__input {
 .button--secondary {
   background: var(--white);
   color: var(--ink);
-  border: 1px solid rgba(23, 20, 15, 0.45);
+  border: 1px solid rgba(23, 20, 15, 0.52);
 }
 
 .button--small {
