@@ -6,6 +6,8 @@ visually and behaviourally, built on branch `themecode`.
 
 **Branch rule (owner decision):** all work stays on `themecode` only. Never open a PR to `main` and never merge into `main`. The theme is uploaded to the store from `themecode` (`theme/` folder; see docs/stage-b.md).
 
+**Commit rule (owner decision):** every commit is authored and committed as `Zuhair Shad <123764183+Zuhairshad@users.noreply.github.com>` (set `git config user.name/user.email` in each new checkout), with no `Co-Authored-By: Claude` or `Claude-Session` lines in the message.
+
 - Store: `citbkj-yj.myshopify.com` (see `lib/shopify-config.mjs`).
 - Reference site: the Next.js app (local `npm run dev` on :3000, or https://khuwabb-leftovers.vercel.app).
 - Planning docs: `docs/audit.md` (what the Next.js app does) and `docs/mapping.md` (how it maps to the theme).
