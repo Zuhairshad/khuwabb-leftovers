@@ -60,7 +60,7 @@
             {%- endfor -%}
             <div class="reviews-receipts__dash"></div>
             <div class="reviews-receipts__line reviews-receipts__total">
-              <p class="reviews-receipts__line-name">Total</p>
+              <p class="reviews-receipts__line-name">{{ 'receipts.total' | t }}</p>
               <p>{% render 'price', price: rr_total %}</p>
             </div>
             <div class="reviews-receipts__dash"></div>

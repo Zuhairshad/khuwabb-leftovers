@@ -18,10 +18,13 @@ class SiteHeader extends HTMLElement {
 
     this.onToggle = () => this.set(!this.isOpen())
     this.onKey = (e) => {
-      if (e.key === 'Escape' && this.isOpen()) {
+      if (!this.isOpen()) return
+      if (e.key === 'Escape') {
         this.set(false)
         this.toggle.focus()
+        return
       }
+      if (e.key === 'Tab') this.trapTab(e)
     }
     this.onDrawerClick = (e) => {
       if (e.target.closest('a')) this.set(false)
@@ -51,6 +54,34 @@ class SiteHeader extends HTMLElement {
 
   isOpen() {
     return this.pill.hasAttribute('data-open')
+  }
+
+  // Focus trap group while the drawer is open: the toggle button + the drawer's
+  // links. Mirrors cart-drawer.js focusables(), scoped to toggle + drawer.
+  focusables() {
+    const links = Array.from(this.drawer.querySelectorAll('a[href]')).filter(
+      (el) => el.offsetParent !== null || el === document.activeElement
+    )
+    return [this.toggle, ...links]
+  }
+
+  trapTab(e) {
+    const items = this.focusables()
+    if (!items.length) return
+    const first = items[0]
+    const last = items[items.length - 1]
+    const active = document.activeElement
+    const index = items.indexOf(active)
+    if (index === -1) {
+      e.preventDefault()
+      first.focus()
+    } else if (e.shiftKey && active === first) {
+      e.preventDefault()
+      last.focus()
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault()
+      first.focus()
+    }
   }
 
   set(open) {

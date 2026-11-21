@@ -143,6 +143,89 @@
     "keySelectors": []
   },
   {
+    "name": "hero-shuffle",
+    "ref": "/",
+    "theme": "/",
+    "actions": [
+      {
+        "type": "click",
+        "selector": "[data-shuffle]"
+      },
+      {
+        "type": "wait",
+        "ms": 2500
+      }
+    ],
+    "keySelectors": [],
+    "sections": [
+      {
+        "name": "hero",
+        "ref": "[data-section=\"hero\"]",
+        "theme": "[data-section=\"hero\"]"
+      }
+    ]
+  },
+  {
+    "name": "flavours-hover",
+    "ref": "/",
+    "theme": "/",
+    "viewports": [
+      "desktop"
+    ],
+    "actions": [
+      {
+        "type": "hover",
+        "selector": "[data-card=\"Jackets\"]"
+      },
+      {
+        "type": "wait",
+        "ms": 900
+      }
+    ],
+    "keySelectors": [],
+    "sections": []
+  },
+  {
+    "name": "shop-card-hover",
+    "ref": "/shop",
+    "theme": "/collections/all",
+    "viewports": [
+      "desktop"
+    ],
+    "actions": [
+      {
+        "type": "hover",
+        "selector": "[data-section=\"products\"] a > div > div"
+      },
+      {
+        "type": "wait",
+        "ms": 900
+      }
+    ],
+    "keySelectors": [],
+    "sections": []
+  },
+  {
+    "name": "new-in-hanger-hover",
+    "ref": "/new-in",
+    "theme": "/collections/new-in",
+    "viewports": [
+      "desktop"
+    ],
+    "actions": [
+      {
+        "type": "hover",
+        "selector": "[data-section=\"new-in-grid\"] a > div"
+      },
+      {
+        "type": "wait",
+        "ms": 1200
+      }
+    ],
+    "keySelectors": [],
+    "sections": []
+  },
+  {
     "name": "404",
     "ref": "/this-page-does-not-exist",
     "theme": "/this-page-does-not-exist",

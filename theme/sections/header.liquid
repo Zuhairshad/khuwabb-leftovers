@@ -17,9 +17,9 @@
       <a href="{{ link.url }}">{{ link.title | escape }}</a>
     {%- endfor -%}
   {%- else -%}
-    <a href="{{ routes.all_products_collection_url }}">Shop</a>
-    <a href="{{ routes.collections_url }}/new-in">New in</a>
-    <a href="{{ routes.root_url }}#looks">Lookbook</a>
+    <a href="{{ routes.all_products_collection_url }}">{{ 'nav.shop' | t }}</a>
+    <a href="{{ routes.collections_url }}/new-in">{{ 'nav.new_in' | t }}</a>
+    <a href="{{ routes.root_url }}#looks">{{ 'nav.lookbook' | t }}</a>
   {%- endif -%}
 {%- endcapture -%}
 
@@ -55,7 +55,7 @@
             </a>
           {%- endif -%}
 
-          <button type="button" class="bag-button" data-code-component data-bag-button aria-haspopup="dialog" aria-label="{{ 'bag.button_label' | t: count: cart.item_count }}"><span>{{ 'bag.button' | t }}</span><span class="bag-button__badge" data-bag-count>{{ cart.item_count }}</span></button>
+          <button type="button" class="bag-button" data-code-component data-bag-button aria-haspopup="dialog" aria-label="{{ 'bag.button_label' | t: count: cart.item_count }}"><span>{{ 'bag.button' | t }}</span> <span class="bag-button__badge" data-bag-count>{{ cart.item_count }}</span></button>
 
           <button
             type="button"

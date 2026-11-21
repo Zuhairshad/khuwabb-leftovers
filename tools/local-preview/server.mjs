@@ -70,6 +70,8 @@ const FORM_ACTIONS = {
   product: "/cart/add", customer_login: "/account/login", create_customer: "/account", recover_customer_password: "/account/recover",
   reset_customer_password: "/account/reset", activate_customer_password: "/account/activate", customer_address: "/account/addresses",
   customer: "/contact", contact: "/contact", storefront_password: "/password", new_comment: "/blogs/comments", localization: "/localization", cart: "/cart",
+  // Real Shopify posts guest checkout to the login endpoint with checkout_url/guest fields.
+  guest_login: "/account/login",
 }
 engine.registerTag("form", class extends Tag {
   constructor(token, remain, liquid, parser) {
@@ -302,9 +304,30 @@ async function renderSection(type, data, globals, { static: isStatic, groupClass
   return `<${tag} id="shopify-section-${data.id}" class="${cls}">${html}</${tag}>`
 }
 
-// ---------------------------------------------------------------- cart (in memory)
-const cart = { items: [], note: "" }
-function cartObject(store) {
+// ---------------------------------------------------------------- cart (in memory, per visitor)
+// Each browser context gets its own cart via a `cart=<id>` cookie, so parallel compare/QA runs
+// (separate contexts, separate cookie jars) never see each other's bag count. A request sent with
+// no cookie (e.g. curl) gets a fresh empty cart; a request that sends a known cart cookie reuses it.
+const carts = new Map()
+function parseCookies(req) {
+  const out = {}
+  for (const part of String(req.headers.cookie ?? "").split(";")) {
+    const i = part.indexOf("=")
+    if (i < 0) continue
+    out[part.slice(0, i).trim()] = decodeURIComponent(part.slice(i + 1).trim())
+  }
+  return out
+}
+function getCart(req, res) {
+  let id = parseCookies(req).cart
+  if (!id) id = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`
+  if (!carts.has(id)) {
+    carts.set(id, { items: [], note: "" })
+    res.setHeader("Set-Cookie", `cart=${id}; Path=/; SameSite=Lax`)
+  }
+  return carts.get(id)
+}
+function cartObject(store, cart) {
   const items = cart.items.map((li) => {
     const p = store.products.find((x) => x.variants.some((v) => v.id === li.id))
     const v = p.variants.find((x) => x.id === li.id)
@@ -338,11 +361,12 @@ function themeSettings(g) {
   return resolveSettings(defs, cur, g)
 }
 
-async function globalsFor(req, url, extra = {}) {
+async function globalsFor(req, res, url, extra = {}) {
   const cat = await loadCatalog()
   const store = buildStore(cat, { selectedVariantId: url.searchParams.get("variant") })
   const g = { all_products: store.all_products, collections: store.collections, linklists: store.linklists }
   const origin = `http://${req.headers.host}`
+  const cart = getCart(req, res)
   return {
     ...g, store,
     settings: themeSettings(g),
@@ -350,15 +374,15 @@ async function globalsFor(req, url, extra = {}) {
     routes: { root_url: "/", account_url: "/account", account_login_url: "/account/login", account_logout_url: "/account/logout", account_register_url: "/account/register", account_addresses_url: "/account/addresses", collections_url: "/collections", all_products_collection_url: "/collections/all", search_url: "/search", predictive_search_url: "/search/suggest", cart_url: "/cart", cart_add_url: "/cart/add", cart_change_url: "/cart/change", cart_clear_url: "/cart/clear", cart_update_url: "/cart/update", product_recommendations_url: "/recommendations/products" },
     request: { locale: { iso_code: "en", primary: true }, design_mode: false, visual_preview_mode: false, origin, host: req.headers.host, path: url.pathname, page_type: extra.template?.name ?? "", query: Object.fromEntries(url.searchParams) },
     localization: { language: { iso_code: "en" }, country: { iso_code: "PK", currency: { iso_code: "PKR" } } },
-    cart: cartObject(store), customer: null, canonical_url: origin + url.pathname, page_title: "Khuwabb", page_description: "",
+    cart: cartObject(store, cart), customer: null, canonical_url: origin + url.pathname, page_title: "Khuwabb", page_description: "",
     content_for_header: `<script>window.Shopify = { shop: "local-preview", locale: "en", currency: { active: "PKR", rate: "1.0" }, routes: { root: "/" } };</script>`,
     content_for_additional_checkout_buttons: "", additional_checkout_buttons: false,
     ...extra,
   }
 }
 
-async function renderPage(req, url, route) {
-  const g = await globalsFor(req, url, route.objects?.(null) ?? {})
+async function renderPage(req, res, url, route) {
+  const g = await globalsFor(req, res, url, route.objects?.(null) ?? {})
   if (route.objects) Object.assign(g, route.objects(g.store))
   g.template = { name: route.template, suffix: route.suffix ?? null, directory: route.template.startsWith("customers") ? "customers" : null }
   g.template.name = route.template.replace(/^customers\//, "")
@@ -382,7 +406,22 @@ async function renderPage(req, url, route) {
   return engine.render(engine.parse(pre(read(lf)), lf), {}, { globals: { ...g, content_for_layout: content } })
 }
 
-function route(pathname, store) {
+// Mock `search`: matches product title / product_type / tags / variant option values,
+// case-insensitive. Reuses the same product drop as everywhere else (products already carry
+// object_type: "product" from buildStore), so main-search.liquid's `| where: 'object_type', ...`
+// and product-card rendering work unchanged. An empty query means search.performed is false.
+function searchObject(store, q) {
+  const terms = String(q ?? "").trim()
+  if (!terms) return { performed: false, terms: "", results: [], results_count: 0, types: [] }
+  const needle = terms.toLowerCase()
+  const results = store.products.filter((p) => {
+    const haystack = [p.title, p.type, ...(p.tags ?? []), ...((p.options_with_values ?? []).flatMap((o) => o.values ?? []))]
+    return haystack.some((v) => String(v ?? "").toLowerCase().includes(needle))
+  })
+  return { performed: true, terms, results, results_count: results.length, types: [...new Set(results.map((r) => r.object_type))] }
+}
+
+function route(pathname, store, url) {
   let m
   if (pathname === "/") return { template: "index" }
   if ((m = /^\/products\/([^/]+)\/?$/.exec(pathname))) {
@@ -396,7 +435,7 @@ function route(pathname, store) {
     return { template: "collection", suffix, objects: (s) => (s ? { collection: s.collections[h] ?? null, page_title: s.collections[h]?.title } : {}), need: (s) => !!s.collections[h] }
   }
   if (pathname === "/cart") return { template: "cart" }
-  if (pathname === "/search") return { template: "search" }
+  if (pathname === "/search") return { template: "search", objects: (s) => (s ? { search: searchObject(s, url?.searchParams.get("q")) } : {}) }
   if (pathname === "/password") return { template: "password" }
   if ((m = /^\/pages\/([^/]+)/.exec(pathname))) return { template: "page", objects: () => ({ page: { title: m[1].replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase()), handle: m[1], content: "<p>This is a placeholder page in the local preview.</p>", url: pathname } }) }
   if (/^\/blogs\/[^/]+\/[^/]+/.test(pathname)) return { template: "article", objects: () => ({ blog: mockBlog(), article: mockBlog().articles[0] }) }
@@ -440,11 +479,29 @@ async function body(req) {
     for (const part of raw.split(`--${b}`)) { const m = /name="([^"]+)"\r\n\r\n([\s\S]*?)\r\n$/.exec(part); if (m) out[m[1]] = m[2] }
     return out
   }
-  return Object.fromEntries(new URLSearchParams(raw))
+  return parseFormBody(raw)
+}
+// urlencoded bodies with Shopify's bracket conventions: `updates[]=5` (repeated → ordered array,
+// matches Dawn's name="updates[]" and the documented /cart contract) and `updates[<key>]=5`
+// (keyed object, variant id or cart line key) both come out right; plain `foo=bar` is untouched.
+function parseFormBody(raw) {
+  const out = {}
+  for (const [key, value] of new URLSearchParams(raw)) {
+    const m = /^([^[]+)\[([^\]]*)\]$/.exec(key)
+    if (!m) { out[key] = value; continue }
+    const [, base, sub] = m
+    if (sub === "") {
+      (out[base] = Array.isArray(out[base]) ? out[base] : []).push(value)
+    } else {
+      if (typeof out[base] !== "object" || Array.isArray(out[base])) out[base] = {}
+      out[base][sub] = value
+    }
+  }
+  return out
 }
 
-async function sectionsMap(req, url, ids) {
-  const g = await globalsFor(req, url, { template: { name: "cart" } })
+async function sectionsMap(req, res, url, ids) {
+  const g = await globalsFor(req, res, url, { template: { name: "cart" } })
   const out = {}
   for (const id of String(ids).split(",").map((s) => s.trim()).filter(Boolean)) {
     out[id] = existsSync(join(THEME, "sections", `${id}.liquid`)) ? await renderSection(id, { id, type: id, settings: {} }, g, { static: true }) : null
@@ -452,20 +509,34 @@ async function sectionsMap(req, url, ids) {
   return out
 }
 
+// Applies Shopify's two /cart[/update] update forms in place, then drops zero-quantity lines.
+function applyCartUpdates(cart, updates) {
+  if (Array.isArray(updates)) {
+    updates.forEach((q, i) => { if (cart.items[i]) cart.items[i].quantity = Number(q) })
+  } else if (updates && typeof updates === "object") {
+    for (const [k, q] of Object.entries(updates)) {
+      const li = cart.items.find((x) => x.key === k || String(x.id) === k)
+      if (li) li.quantity = Number(q)
+    }
+  }
+  cart.items = cart.items.filter((x) => x.quantity > 0)
+}
+
 let lineSeq = 0
 async function cartApi(req, res, url, path) {
   const cat = await loadCatalog()
   const store = buildStore(cat)
+  const cart = getCart(req, res)
   const isJs = path.endsWith(".js")
   const op = path.replace(/\.js$/, "")
   const finish = async (status, payload, sectionsParam) => {
     if (!isJs) { res.writeHead(302, { Location: "/cart" }); return res.end() }
-    if (sectionsParam) payload.sections = await sectionsMap(req, url, sectionsParam)
+    if (sectionsParam) payload.sections = await sectionsMap(req, res, url, sectionsParam)
     sendJson(res, status, payload)
   }
   if (req.method === "GET" && op === "/cart" && isJs) {
-    const payload = cartJson(cartObject(store))
-    if (url.searchParams.get("sections")) payload.sections = await sectionsMap(req, url, url.searchParams.get("sections"))
+    const payload = cartJson(cartObject(store, cart))
+    if (url.searchParams.get("sections")) payload.sections = await sectionsMap(req, res, url, url.searchParams.get("sections"))
     return sendJson(res, 200, payload)
   }
   const b = req.method === "POST" ? await body(req) : Object.fromEntries(url.searchParams)
@@ -482,7 +553,7 @@ async function cartApi(req, res, url, path) {
       else cart.items.push((li = { key: `${vid}:local${++lineSeq}`, id: vid, quantity: Number(it.quantity ?? 1) }))
       added.push(li.key)
     }
-    const c = cartJson(cartObject(store))
+    const c = cartJson(cartObject(store, cart))
     const payload = b.items ? { items: c.items.filter((i) => added.includes(i.key)) } : c.items.find((i) => i.key === added[0])
     return finish(200, payload, b.sections)
   }
@@ -491,18 +562,18 @@ async function cartApi(req, res, url, path) {
     let idx = b.line ? Number(b.line) - 1 : cart.items.findIndex((x) => x.key === String(b.id) || String(x.id) === String(b.id))
     if (idx < 0 || idx >= cart.items.length) return sendJson(res, 400, { status: 400, message: "Cart Error", description: "No valid id or line parameter" })
     if (q <= 0) cart.items.splice(idx, 1); else cart.items[idx].quantity = q
-    return finish(200, cartJson(cartObject(store)), b.sections)
+    return finish(200, cartJson(cartObject(store, cart)), b.sections)
   }
-  if (op === "/cart/update") {
-    const updates = b.updates ?? {}
-    for (const [k, q] of Object.entries(updates)) {
-      const i = cart.items.findIndex((x) => x.key === k || String(x.id) === k)
-      if (i >= 0) Number(q) <= 0 ? cart.items.splice(i, 1) : (cart.items[i].quantity = Number(q))
-    }
+  // Both the documented Shopify contract (`/cart` form post with `updates[]`, ordered, one per
+  // cart line — Dawn's name="updates[]") and the AJAX contract (`/cart/update(.js)` with
+  // `updates[<key or variant id>]`) land here; a bare POST to `/cart` redirects back to it after
+  // updating, matching Shopify (isJs is false for a plain form post, so `finish` redirects).
+  if (op === "/cart" || op === "/cart/update") {
+    applyCartUpdates(cart, b.updates)
     if (b.note != null) cart.note = b.note
-    return finish(200, cartJson(cartObject(store)), b.sections)
+    return finish(200, cartJson(cartObject(store, cart)), b.sections)
   }
-  if (op === "/cart/clear") { cart.items = []; return finish(200, cartJson(cartObject(store)), b.sections) }
+  if (op === "/cart/clear") { cart.items = []; return finish(200, cartJson(cartObject(store, cart)), b.sections) }
   return null
 }
 
@@ -525,18 +596,18 @@ const server = http.createServer(async (req, res) => {
     if (path !== "/" && (extname(path) || (!path.startsWith("/products/") && !path.startsWith("/collections"))) && sendFile(res, join(ROOT, "public", decodeURIComponent(path).replace(/\.\./g, "")), Number(url.searchParams.get("width")) || 0)) return
 
     const cat = await loadCatalog()
-    let r = route(path, buildStore(cat))
+    let r = route(path, buildStore(cat), url)
     let status = 200
     if (r?.need && !r.need(buildStore(cat))) r = null
     if (!r) { r = { template: "404" }; status = 404 }
     if (url.searchParams.get("section_id")) {
       const id = url.searchParams.get("section_id")
-      const g = await globalsFor(req, url)
+      const g = await globalsFor(req, res, url)
       if (r.objects) Object.assign(g, r.objects(g.store))
       return send(res, 200, await renderSection(id, { id, type: id, settings: {} }, g, { static: true }))
     }
-    if (url.searchParams.get("sections") && req.method === "GET") return sendJson(res, 200, await sectionsMap(req, url, url.searchParams.get("sections")))
-    const html = await renderPage(req, url, r)
+    if (url.searchParams.get("sections") && req.method === "GET") return sendJson(res, 200, await sectionsMap(req, res, url, url.searchParams.get("sections")))
+    const html = await renderPage(req, res, url, r)
     send(res, status, html)
   } catch (e) {
     console.error(`${req.method} ${req.url}\n`, e)

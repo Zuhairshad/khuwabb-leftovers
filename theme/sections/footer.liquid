@@ -49,17 +49,17 @@
           {%- else -%}
             {%- case i -%}
               {%- when 1 -%}
-                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">All collections</a></p>
-                <p class="footer__link"><a href="{{ routes.collections_url }}/new-in">New in</a></p>
-                <p class="footer__link"><a href="{{ routes.root_url }}#looks">Lookbook</a></p>
+                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">{{ 'footer.all_collections' | t }}</a></p>
+                <p class="footer__link"><a href="{{ routes.collections_url }}/new-in">{{ 'nav.new_in' | t }}</a></p>
+                <p class="footer__link"><a href="{{ routes.root_url }}#looks">{{ 'nav.lookbook' | t }}</a></p>
               {%- when 2 -%}
-                <p class="footer__link"><a href="mailto:{{ email }}?subject=Size%20guide">Size guide</a></p>
-                <p class="footer__link"><a href="mailto:{{ email }}?subject=Exchange">7-day exchange</a></p>
+                <p class="footer__link"><a href="mailto:{{ email }}?subject=Size%20guide">{{ 'footer.size_guide' | t }}</a></p>
+                <p class="footer__link"><a href="mailto:{{ email }}?subject=Exchange">{{ 'footer.exchange' | t }}</a></p>
                 <p class="footer__link"><a href="mailto:{{ email }}">{{ email }}</a></p>
               {%- else -%}
-                <p class="footer__link"><a href="{{ routes.root_url }}">Born in Lahore</a></p>
-                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">Delivery across Pakistan</a></p>
-                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">Cash on delivery</a></p>
+                <p class="footer__link"><a href="{{ routes.root_url }}">{{ 'footer.born_in_lahore' | t }}</a></p>
+                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">{{ 'footer.delivery' | t }}</a></p>
+                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">{{ 'footer.cash_on_delivery' | t }}</a></p>
             {%- endcase -%}
           {%- endif -%}
         </div>

@@ -1,6 +1,10 @@
 {
+  "404": {
+    "title": "Page not found",
+    "text": "This page has slipped off the rail.",
+    "cta": "Back to the shop"
+  },
   "general": {
-    "home": "Home",
     "piece": {
       "one": "{{ count }} piece",
       "other": "{{ count }} pieces"
@@ -21,7 +25,6 @@
   "accessibility": {
     "skip_to_content": "Skip to content",
     "close": "Close",
-    "logo_home": "Khuwabb leftover — home",
     "open_menu": "Open menu",
     "close_menu": "Close menu",
     "search": "Search",
@@ -37,18 +40,14 @@
       "one": "Bag, {{ count }} item",
       "other": "Bag, {{ count }} items"
     },
-    "title": "Your bag",
     "empty": "Your bag is empty.",
     "start_shopping": "Start shopping",
     "subtotal": "Subtotal",
     "checkout": "Checkout",
     "remove": "Remove",
-    "one_less": "One less",
-    "one_more": "One more",
     "colour_size": "{{ colour }} · Size {{ size }}",
     "not_available": "Not available to order",
     "no_longer_available": "No longer available",
-    "note_ready": "Cash on delivery. Delivery charges are shown at checkout.",
     "note_unavailable": "Remove the pieces that are sold out or no longer available.",
     "note_paused": "Online checkout is paused right now.",
     "free_delivery_away": "{{ amount }} away from free delivery",
@@ -74,9 +73,7 @@
     "description": "Description",
     "fabric": "Fabric",
     "care": "Care",
-    "size_guide": "Size guide",
-    "set_gymwear": "Gymwear · top and leggings, sold as a set",
-    "set_coord": "Co-ord set · top and bottom"
+    "size_guide": "Size guide"
   },
   "reels": {
     "add_the_look": "Add the look",
@@ -98,11 +95,6 @@
       "other": "{{ count }} results for “{{ terms }}”"
     },
     "no_results": "Nothing found for “{{ terms }}”."
-  },
-  "404": {
-    "title": "Page not found",
-    "text": "This page has slipped off the rail.",
-    "cta": "Back to the shop"
   },
   "customer": {
     "login": {
@@ -233,5 +225,21 @@
       "success": "Your comment was posted.",
       "success_moderated": "Your comment was posted. It will appear once approved."
     }
+  },
+  "nav": {
+    "shop": "Shop",
+    "new_in": "New in",
+    "lookbook": "Lookbook"
+  },
+  "footer": {
+    "all_collections": "All collections",
+    "size_guide": "Size guide",
+    "exchange": "7-day exchange",
+    "born_in_lahore": "Born in Lahore",
+    "delivery": "Delivery across Pakistan",
+    "cash_on_delivery": "Cash on delivery"
+  },
+  "receipts": {
+    "total": "Total"
   }
 }

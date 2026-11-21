@@ -11,7 +11,8 @@ const STABILISE_CSS = `
 *,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;transition:none!important;caret-color:transparent!important}
 #preview-bar-iframe,#PBarNextFrameWrapper,.shopify-section-preview-bar,#shopify-pc__banner,
 [id*="cookie" i][role="dialog"],[id*="cookie" i][aria-modal],
-[role="dialog"]:not([data-bag-drawer]):not([data-look-chooser]):not([data-bag-drawer] [role="dialog"]){display:none!important}
+[role="dialog"]:not([data-bag-drawer]):not([data-look-chooser]):not([data-bag-drawer] [role="dialog"]),
+.skip-link,.skip-to-content-link{display:none!important}
 `
 
 // Seed 11 (mapping G23). Math.random and window.reelsRandom get independent

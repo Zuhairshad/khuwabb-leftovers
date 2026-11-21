@@ -19,14 +19,14 @@ Then edit `CLAUDE.md`: change `**Current stage: A**` to `**Current stage: B**`, 
 
 ## 1. Store data (main session runs, Shad approves)
 
-**Approved by Zuhair (2026-11-20): additive plan.** Run `npm run store-setup -- --dry-run`, then `npm run store-setup -- --apply` (additive only). In additive mode this creates 5 `custom.*` metafield definitions; fills `custom.*` metafields on existing products **only where unset** (kept additive by owner decision); creates 6 collections UNPUBLISHED; creates menus `khuwabb-main`, `footer-shop`, `footer-help`, `footer-khuwabb`. Everything else (productType, 118 cut-out media + variant images, publishing collections, redirects, existing-definition pin/access) waits for `--go-live` after client approval. After apply: report created items, failures, backup folder and undo file.
+**Approved by Zuhair (2026-11-20): additive plan.** Run `node tools/store-setup/setup.mjs --backup --store-check citbkj-yj`, then `node tools/store-setup/setup.mjs --dry-run`, then `node tools/store-setup/setup.mjs --apply --store-check citbkj-yj` (additive only; `--apply` refuses to run without a backup from the last 24h). In additive mode this creates 5 `custom.*` metafield definitions; fills `custom.*` metafields on existing products **only where unset** (kept additive by owner decision); creates 6 collections UNPUBLISHED; creates menus `khuwabb-main`, `footer-shop`, `footer-help`, `footer-khuwabb`. Everything else (productType, 118 cut-out media + variant images, publishing collections, redirects, existing-definition pin/access) waits for `--go-live` after client approval. After apply: report created items, failures, backup folder and undo file.
 
 ```bash
 SHOPIFY_ADMIN_TOKEN=… node tools/store-setup/setup.mjs --dry-run
 ```
 
 - Review the diff. Several Admin API shapes were written from memory (`productUpdate(media:)`, `ProductVariantAppendMediaInput`, `MenuItemCreateInput`, `collectionByIdentifier`, `publishedOnPublication`, files lookup) — any GraphQL error here goes back to a Sonnet agent owning `tools/store-setup/**`.
-- When the dry run is clean: `… setup.mjs --apply`, then a second `--dry-run` must show no changes (idempotent).
+- When the dry run is clean: `… setup.mjs --apply --store-check citbkj-yj`, then a second `--dry-run` must show no changes (idempotent).
 - Check in admin: 118 media with `<Color> | <view>` alts, variant images, collections (`new-in` titled "New arrivals"), 4 menus, 4 redirects, metafield definitions; shop name "Khuwabb".
 
 ## 2. Theme preview (main session, background, once)
