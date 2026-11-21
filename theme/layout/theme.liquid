@@ -4,8 +4,7 @@
     {%- render 'head-meta' -%}
     {%- render 'head-config' -%}
     {%- render 'head-fonts' -%}
-    {{ 'tokens.css' | asset_url | stylesheet_tag }}
-    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {%- render 'head-styles' -%}
     {{ 'section-header.css' | asset_url | preload_tag: as: 'style' }}
     {%- if template.name == 'index' -%}
       {{ 'section-hero-reels.css' | asset_url | preload_tag: as: 'style' }}

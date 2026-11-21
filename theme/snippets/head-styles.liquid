@@ -1,3 +1,9 @@
+{%- comment -%}
+  Global tokens + base rules, inlined in <head> so first paint doesn't wait on
+  two extra stylesheet requests (Lighthouse render-blocking, Stage B L3).
+  Formerly assets/tokens.css and assets/base.css. Owned by the main session.
+{%- endcomment -%}
+<style>
 /*
  * Khuwabb design tokens. Values are copied exactly from the Next.js reference
  * (app/globals.css :root, see docs/audit.md §1). Owned by the main session.
@@ -59,3 +65,143 @@
     --page-gutter: 20px;
   }
 }
+
+/*
+ * Global base rules, ported from app/globals.css (docs/audit.md §1.2).
+ * Owned by the main session. Section styles live in section-*.css.
+ */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+  font-weight: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+[data-section] {
+  font-feature-settings: var(--text-features);
+}
+
+[data-code-component] {
+  font-feature-settings: normal;
+}
+
+/* ---- Theme additions (not in the reference; no visual change) ---- */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 10001;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 500;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+main:focus {
+  outline: none;
+}
+
+.page-width {
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 var(--page-gutter);
+}
+
+/*
+ * Appear (components/Appear.tsx). assets/appear.js toggles [data-shown] on
+ * [data-appear] when the element enters/leaves the viewport (replays both ways).
+ * Hidden states only apply under html.js so content shows if scripts fail.
+ * rise: from {opacity 0, y 40}, delay .1s, 1.1s ease-out, amount .3
+ * lift: from {opacity 0, y 80, scale .98}, 1.4s ease-out, amount .2
+ */
+[data-appear] {
+  transition-property: opacity, transform;
+  transition-timing-function: var(--ease-out);
+}
+
+.js [data-appear="rise"] {
+  opacity: 0;
+  transform: translateY(40px);
+  transition-duration: 1.1s;
+  transition-delay: 0.1s;
+}
+
+.js [data-appear="lift"] {
+  opacity: 0;
+  transform: translateY(80px) scale(0.98);
+  transition-duration: 1.4s;
+}
+
+.js [data-appear][data-shown] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-appear] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+</style>

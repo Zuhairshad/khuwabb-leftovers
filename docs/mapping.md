@@ -297,10 +297,10 @@ Settings: `show_thumbs` checkbox true; `restock_note` text `This colour is sold 
 ### 5.2 `config/settings_schema.json`
 `theme_info` (name Khuwabb, version, author), **Brand**: `logo` image, `favicon` image; **Store**: `currency_prefix` text `Rs.`, `contact_email` text `khuwabb@gmail.com`, `checkout_enabled` checkbox true; **Social**: `social_instagram_link` `https://instagram.com`, `social_tiktok_link` `https://tiktok.com`, `social_pinterest_link` `https://pinterest.com` (placeholders as in source). Colours/type are **not** exposed as settings — tokens are fixed in CSS for parity [default].
 
-### 5.3 `assets/tokens.css`
+### 5.3 Tokens (now inlined in `snippets/head-styles.liquid`, Stage B L3; formerly `assets/tokens.css`)
 Exactly audit §1.1 (15 vars) with `--font-display: "Clash Display", <fallback face>, sans-serif` and `--font-body: "Satoshi", <fallback face>, sans-serif`; plus the shared easings from §1.5 as vars (`--ease-out`, `--ease-in-out: cubic-bezier(.65,0,.35,1)`, `--ease-exit: cubic-bezier(.76,0,.24,1)`, `--ease-spin: cubic-bezier(.35,.05,.2,1)`), `--page-width: 1280px`, `--page-gutter: 32px` (`20px` ≤ 809.98px), and spring approximations as `linear()` vars (`--spring-nav`, `--spring-arrow`, `--spring-cards`, `--spring-hanger`, `--spring-receipt`, `--spring-label`, `--spring-label-hover`, `--spring-cutout`). Breakpoints documented in a comment (CSS vars can't be used in media queries): 809.98 / 810–1199.98 / 639.98.
 
-### 5.4 `assets/base.css`
+### 5.4 Base rules (now inlined in `snippets/head-styles.liquid`; formerly `assets/base.css`)
 globals.css rules (audit §1.2) verbatim; `[data-section]` font features; `.visually-hidden`; skip link; `:focus-visible` outline `2px solid var(--ink)` offset 2 (new, a11y); `[data-appear]` hidden/shown states for `rise` and `lift` (transform/opacity, durations, delays, ease) with reduced-motion override; `.page-width` helper (max-width 1280, padding 0 32 / 0 20).
 
 ### 5.5 Locales

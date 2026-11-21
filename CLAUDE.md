@@ -16,7 +16,7 @@ visually and behaviourally, built on branch `themecode`.
 - Everything else runs on Sonnet 5.5 subagents (repo-auditor, theme-builder, qa-tester, or general-purpose with model: sonnet): reading code, building sections/snippets/JS, building tools, running compares, fixing diffs, testing.
 - Opus does not write section/snippet code itself. If an agent's output is wrong, Opus sends it back with specific feedback instead of fixing it directly.
 - Run independent agents in parallel. Give each agent a disjoint list of files it owns. Two agents never own the same file.
-- Shared files are owned by Opus only: layout/theme.liquid, config/settings_schema.json, config/settings_data.json, locales/*.json, assets/base.css, assets/tokens.css, snippets/head-*.liquid, templates/**/*.json, sections/*-group.json (all under `theme/`).
+- Shared files are owned by Opus only: layout/theme.liquid, config/settings_schema.json, config/settings_data.json, locales/*.json, snippets/head-*.liquid (incl. head-styles.liquid = the global tokens + base CSS, inlined), templates/**/*.json, sections/*-group.json (all under `theme/`).
 - Max 4 agents in parallel at once (the compare tool runs browsers).
 - After each batch: Opus reads every report, merges shared-file changes, runs `shopify theme check` once, and decides the next batch.
 
