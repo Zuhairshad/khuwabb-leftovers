@@ -35,7 +35,7 @@ Breakpoints as source: tablet `min-width:810px and max-width:1199.98px`, phone `
 | :67-75 `.grid` | `.new-in__grid` |
 | :77-85 `.hanger`, :87-90 svg, :92-102 `.card`, :104-109 `.card img`, :111-136 info/name/price | existing `component-hanger-card.css` (context grid), loaded by main-collection-hangers |
 | :138-155 tablet | tablet block (photo 300x400, h1 84, p 19, 3 cols) |
-| :157-205 phone (+ info column block) | phone block (page padding 100/16 -> header top / grid bottom 96, gap 44 -> grid top, header column gap 28, photo 100x380, h1 54, p 17, grid 2 cols gap 40/12); info column rules are in hanger-card CSS |
+| :157-205 phone (+ info column block) | phone block (page padding 100/16 -> header top / grid bottom 96, gap 44 -> grid top, header column gap 28, photo 100x380, h1 54, p 17, grid 2 cols gap 40/12); info column rules (column, gap 2, name flex none / width 100%, NewInPage.module.css:195-205) are in component-hanger-card.css, `.hanger-card--grid` phone block (added in F5; previously missing, made mobile grid 132px taller) |
 
 ## Behaviour
 | Source | Theme |

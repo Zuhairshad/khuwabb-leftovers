@@ -82,6 +82,19 @@
   overflow-wrap: break-word;
 }
 
+/* Phone grid (NewInPage.module.css:155-166): two narrow columns, price goes under the name. Grid context only; ticker unchanged. */
+@media (max-width: 809.98px) {
+  .hanger-card--grid .hanger-card__info {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .hanger-card--grid .hanger-card__name {
+    flex: none;
+    width: 100%;
+  }
+}
+
 /* Swing: framer whileHover rotate 5deg, spring bounce .55 / 1.1s, origin top. */
 @media (hover: hover) {
   .hanger-card:hover {

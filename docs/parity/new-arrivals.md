@@ -76,7 +76,7 @@ Strings: "New arrivals", "Shop new in" are section settings defaults (schema); n
 - Load `component-hanger-card.css`.
 - Section root `data-section="new-in-grid"` wrapping the grid (NewInPage.tsx:35).
 - `.grid` (NewInPage.module.css:67-75): `display:grid; grid-template-columns: repeat(4, minmax(220px,1fr)); grid-auto-rows: minmax(0,1fr); gap: 64px 28px; justify-content:start; width:100%; max-width:1216px`.
-- Breakpoints: `min-width:810px and max-width:1199.98px` -> 3 columns `minmax(200px,1fr)`; `max-width:809.98px` rules (read NewInPage.module.css:157+ for the phone columns/gaps).
+- Breakpoints: `min-width:810px and max-width:1199.98px` -> 3 columns `minmax(200px,1fr)`; `max-width:809.98px` rules (read NewInPage.module.css:157+ for the phone columns/gaps). Phone info column (NewInPage.module.css:195-205: `.info` column gap 2, `.name` flex none width 100%) lives in component-hanger-card.css under `.hanger-card--grid` in `@media (max-width: 809.98px)`; ticker context untouched.
 - Pass `sizes` suited to the column width if different from the default `(max-width: 809.98px) 90vw, 280px`.
 - No ticker.js, no rail.
 
