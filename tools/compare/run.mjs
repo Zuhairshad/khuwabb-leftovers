@@ -51,7 +51,7 @@ async function main() {
   }
 
   await mkdir(outDir, { recursive: true })
-  const browser = await chromium.launch({ headless: !args.headed })
+  const browser = await chromium.launch({ headless: !args.headed, ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}) })
   const rows = []
   try {
     for (const page of pages) {
