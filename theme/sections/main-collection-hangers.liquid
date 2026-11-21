@@ -2,9 +2,9 @@
 {{ 'section-new-in.css' | asset_url | stylesheet_tag }}
 
 {%- paginate collection.products by section.settings.products_per_page -%}
-  <section class="new-in new-in--grid" data-section="new-in-grid">
+  <section class="new-in new-in--grid">
     {%- if collection.products.size > 0 -%}
-      <div class="new-in__grid">
+      <div class="new-in__grid" data-section="new-in-grid">
         {%- for product in collection.products -%}
           {% render 'hanger-card', product: product, context: 'grid', sizes: '(max-width: 809.98px) 45vw, 280px' %}
         {%- endfor -%}

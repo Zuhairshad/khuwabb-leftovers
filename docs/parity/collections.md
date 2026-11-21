@@ -82,3 +82,8 @@ Breakpoints as source: tablet `min-width:810px and max-width:1199.98px`, phone `
 |---|---|
 | Sections limited to collection template (E1) | `enabled_on.templates: ["collection"]` in main-collection-grid, main-collection-hangers, collection-intro, new-in-header schemas |
 | Pagination nav label (A12) | `general.pagination.label` in main-collection-grid, main-collection-hangers |
+
+## Stage B fix F2: New In hook depth
+- `data-section="new-in-grid"` now sits on the inner `.new-in__grid` (max-width 1216, padding 0, gap `64px 28px`; phone `40px 12px`), matching the reference's inner grid element. The outer padded `<section class="new-in new-in--grid">` no longer carries a hook.
+- `data-section="new-in-page"` stays on the header section root (`sections/new-in-header.liquid`): the reference's page wrapper contains both header and grid, but two Shopify sections cannot share one wrapper. The compare tool should map the section names accordingly.
+- Empty collection: no grid element is rendered, so no `new-in-grid` hook (the source always renders the grid).

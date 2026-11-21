@@ -37,7 +37,7 @@ Spring `{bounce .15, duration .9}` = `.9s var(--spring-cards)` (tokens.css).
 | `animate flexGrow` 1 / 2.6 / 0 stacked (L57) | C `.category-cards__card` `transition: flex-grow .9s var(--spring-cards)`; `[data-open]` flex 2.6; stacked: `flex: none`, transition none |
 | cutout height 44% / 78% / 86% stacked (L71) | C `.category-cards__cutout`, `[data-open] .cutout`, media query, each with `.9s` spring on `height` |
 | tilt = `tilt * (open && !stacked ? 6 : 4)` (L50) | S `--tilt` (block `tilt`, -1/1) on the card; C `rotate(calc(var(--tilt) * 4deg))`, open `* 6deg`, stacked `* 4deg`; transition on `transform` |
-| aspect-ratio from image ratio (L69) | S inline `aspect-ratio` = width/height of the cover colour's `front` media (alt `<Colour> \| front`, else `featured_media`; 0.8 if no product) |
+| aspect-ratio from image ratio (L69) | S inline `aspect-ratio` = width/height of the cover colour's `front` media (alt `<Colour> \| front`, else `featured_media`; 0.8 if no product, or if the media has no preview_image width/height; ratio is only used when both are > 0, never 0) |
 | caption opacity `shown ? 1 : 0` (L76) | C `.category-cards__caption` 0, `[data-open]` 1, stacked always 1; `.9s` spring |
 | side label opacity `shown ? 0 : 1`, aria-hidden (L84) | C `.category-cards__side` 1 / `[data-open]` 0; stacked `display: none`; S `aria-hidden="true"` |
 | `stacked` via useMedia (JS) | C media query `max-width: 1199.98px` only, no JS, no flash |
