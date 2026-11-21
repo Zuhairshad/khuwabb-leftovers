@@ -1,7 +1,8 @@
 // Mock Shopify objects built from the repo's local catalog (no network).
+// images.mjs (dimensions, ?width= variants) is documented in tools/compare/README.md "Preview mock notes".
 import { readFileSync, existsSync } from "node:fs"
 import { resolve } from "node:path"
-import sharp from "sharp"
+import { imageSize } from "./images.mjs"
 import { Drop } from "liquidjs"
 import { ROOT, loadLocal, COLLECTIONS, MENUS } from "../store-setup/lib/data.mjs"
 
@@ -17,8 +18,8 @@ export async function loadCatalog() {
   const products = readJson("data/products.json")
   const sizes = {}
   await Promise.all(media.map(async (m) => {
-    const meta = await sharp(resolve(ROOT, m.file)).metadata()
-    sizes[m.file] = { width: meta.width, height: meta.height }
+    // Real dimensions from the file header (cached), as Shopify returns for media.
+    sizes[m.file] = imageSize(resolve(ROOT, m.file)) ?? { width: 0, height: 0 }
   }))
   cache = { items, media, shopify, products, sizes }
   return cache

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Visual compare: Next.js reference vs Shopify theme.
 // Usage: node run.mjs [page ...] [--viewport desktop|mobile] [--ref-url URL] [--theme-url URL]
-//        [--settle ms] [--tolerance px] [--strict] [--headed] [--pages file.json] [--out dir]
+//        [--settle ms] [--no-force-reveal] [--tolerance px] [--strict] [--headed] [--pages file.json] [--out dir]
 import { chromium } from "playwright"
 import { mkdir, readFile, writeFile, rm } from "node:fs/promises"
 import { dirname, join, resolve } from "node:path"
@@ -21,6 +21,7 @@ function parseArgs(argv) {
     const val = () => argv[++i]
     if (a === "--strict") o.strict = true
     else if (a === "--headed") o.headed = true
+    else if (a === "--no-force-reveal") o.noForceReveal = true
     else if (a === "--viewport") o.viewport = val()
     else if (a === "--ref-url") o.refUrl = val()
     else if (a === "--theme-url") o.themeUrl = val()
@@ -64,7 +65,7 @@ async function main() {
         const dir = join(outDir, page.name, vp)
         await rm(dir, { recursive: true, force: true })
         await mkdir(dir, { recursive: true })
-        const common = { browser, vpName: vp, actions: page.actions || [], keySelectors: keys, sections: sectionCfg, settleMs }
+        const common = { browser, vpName: vp, actions: page.actions || [], keySelectors: keys, sections: sectionCfg, settleMs, forceReveal: !args.noForceReveal }
         const [ref, theme] = await Promise.all([
           page.ref == null ? null : captureSide({ ...common, side: "ref", baseUrl: refUrl, path: page.ref }),
           page.theme == null ? null : captureSide({ ...common, side: "theme", baseUrl: themeUrl, path: page.theme }),
@@ -111,6 +112,7 @@ async function main() {
             sec.note = !ref ? "no reference" : !theme ? "no theme" : !r ? "missing on ref" : !t ? "missing on theme" : !r.found || !t.found ? `not found on ${!r.found ? "ref" : "theme"}` : "capture failed"
             if (ref && theme && r && !r.found) sec.note = "not found on ref"
             if (ref && theme && t && !t.found) sec.note = "not found on theme"
+            if (r?.hidden || t?.hidden) sec.note = `not captured (hidden${r?.hidden && t?.hidden ? " on both" : r?.hidden ? " on ref" : " on theme"})`
           }
           row.sections.push(sec)
         }

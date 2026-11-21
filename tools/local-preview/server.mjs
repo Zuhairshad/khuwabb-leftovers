@@ -6,6 +6,7 @@ import { readFileSync, existsSync, statSync, createReadStream } from "node:fs"
 import { resolve, extname, join } from "node:path"
 import { Liquid, Tag, Value } from "liquidjs"
 import { ROOT } from "../store-setup/lib/data.mjs"
+import { imageObject, pickVariant } from "./images.mjs"
 import { loadCatalog, buildStore, handleize, colorObj } from "./data.mjs"
 
 const PORT = Number(process.env.PORT || 9292)
@@ -259,7 +260,9 @@ function resolveSetting(def, v, g) {
     case "link_list": return (v && g.linklists[v]) || null
     case "color": return v ? colorObj(v) : null
     case "url": return typeof v === "string" ? v.replace(/^shopify:\/\/(products|collections|pages|blogs)\//, "/$1/").replace(/^shopify:\/\/collections$/, "/collections") : v ?? null
-    case "image_picker": case "video": case "video_url": return v || null
+    // image_picker: a string naming a file under public/ becomes an image object with real width/height.
+    case "image_picker": return (typeof v === "string" && v.startsWith("/") && imageObject(v)) || v || null
+    case "video": case "video_url": return v || null
     case "checkbox": return v ?? false
     default: return v ?? null
   }
@@ -413,7 +416,13 @@ const mockGiftCard = () => ({ code: "ABCD EFGH IJKL MNOP", last_four_characters:
 
 // ---------------------------------------------------------------- HTTP
 const MIME = { ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".woff": "font/woff", ".ico": "image/x-icon", ".gif": "image/gif", ".avif": "image/avif" }
-function sendFile(res, file) {
+function sendFile(res, file, width) {
+  // `?width=N` (from image_url/image_tag): serve a pre-sized variant from data/image-sizes.json when one exists.
+  if (width) {
+    const rel = "/" + file.slice(join(ROOT, "public").length + 1)
+    const v = pickVariant(rel, width)
+    if (v !== rel) file = join(ROOT, "public", v)
+  }
   if (!existsSync(file) || !statSync(file).isFile()) return false
   res.writeHead(200, { "Content-Type": MIME[extname(file).toLowerCase()] ?? "application/octet-stream", "Cache-Control": "no-cache" })
   createReadStream(file).pipe(res)
@@ -513,7 +522,7 @@ const server = http.createServer(async (req, res) => {
     if (path === "/contact" && req.method === "POST") { const back = (req.headers.referer ?? "/").split("?")[0].split("#")[0]; res.writeHead(302, { Location: `${back}?customer_posted=true#newsletter` }); return res.end() }
     if (path === "/account" || path.startsWith("/account/addresses") || path.startsWith("/account/orders")) { res.writeHead(302, { Location: "/account/login" }); return res.end() }
     if (path === "/account/logout") { res.writeHead(302, { Location: "/" }); return res.end() }
-    if (path !== "/" && (extname(path) || (!path.startsWith("/products/") && !path.startsWith("/collections"))) && sendFile(res, join(ROOT, "public", decodeURIComponent(path).replace(/\.\./g, "")))) return
+    if (path !== "/" && (extname(path) || (!path.startsWith("/products/") && !path.startsWith("/collections"))) && sendFile(res, join(ROOT, "public", decodeURIComponent(path).replace(/\.\./g, "")), Number(url.searchParams.get("width")) || 0)) return
 
     const cat = await loadCatalog()
     let r = route(path, buildStore(cat))

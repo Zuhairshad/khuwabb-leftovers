@@ -11,7 +11,7 @@ const STABILISE_CSS = `
 *,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;transition:none!important;caret-color:transparent!important}
 #preview-bar-iframe,#PBarNextFrameWrapper,.shopify-section-preview-bar,#shopify-pc__banner,
 [id*="cookie" i][role="dialog"],[id*="cookie" i][aria-modal],
-[role="dialog"]:not([data-bag-drawer]):not([data-look-chooser]){display:none!important}
+[role="dialog"]:not([data-bag-drawer]):not([data-look-chooser]):not([data-bag-drawer] [role="dialog"]){display:none!important}
 `
 
 // Seed 11 (mapping G23). Math.random and window.reelsRandom get independent
@@ -24,14 +24,57 @@ const SEED_SCRIPT = `
 })()
 `
 
+// Force-reveal (on by default, --no-force-reveal disables). Scroll reveals (framer
+// whileInView / the theme's appear.js) hide content until an IntersectionObserver reports it
+// in view, and replay on exit. Instead of overriding inline opacity/transform (which would
+// lose resting poses such as CareLabels' tilt, and would touch semantic hidden states), every
+// IntersectionObserver is replaced by one that reports each observed element as fully
+// intersecting once, right after observe(). The page's own code then animates to its real end
+// state and never replays. Semantic states (closed drawers, inactive cards, scroll-linked
+// opacity, hover/click state) are driven by other code and stay untouched. Installed before
+// any page script via addInitScript.
+const FORCE_REVEAL_SCRIPT = `
+(() => {
+  const Real = window.IntersectionObserver
+  if (!Real || window.__forceReveal) return
+  window.__forceReveal = true
+  function FakeIO(cb, opts) {
+    const els = new Set()
+    this.root = (opts && opts.root) || null
+    this.rootMargin = (opts && opts.rootMargin) || "0px"
+    this.thresholds = [].concat((opts && opts.threshold) || 0)
+    this.observe = (el) => {
+      if (els.has(el)) return
+      els.add(el)
+      setTimeout(() => {
+        if (!els.has(el)) return
+        const r = el.getBoundingClientRect()
+        cb([{ target: el, isIntersecting: true, intersectionRatio: 1, time: performance.now(), boundingClientRect: r, intersectionRect: r, rootBounds: null }], this)
+      }, 0)
+    }
+    this.unobserve = (el) => els.delete(el)
+    this.disconnect = () => els.clear()
+    this.takeRecords = () => []
+  }
+  FakeIO.prototype = Real.prototype
+  window.IntersectionObserver = FakeIO
+})()
+`
+
+// Fallback for the theme: make sure every [data-appear] carries [data-shown].
+const SHOW_APPEAR_FN = () => {
+  for (const el of document.querySelectorAll("[data-appear]:not([data-shown])")) el.setAttribute("data-shown", "")
+}
+
 const merge = (action, side) => ({ ...action, ...(action[side] || {}) })
 
 async function settle(page, ms) {
   await page.waitForTimeout(ms)
 }
 
-export async function stabilise(page, settleMs, side) {
+export async function stabilise(page, settleMs, side, forceReveal = true) {
   await page.addStyleTag({ content: STABILISE_CSS }).catch(() => {})
+  if (forceReveal) await page.evaluate(SHOW_APPEAR_FN).catch(() => {})
   await page.evaluate(() => document.fonts && document.fonts.ready).catch(() => {})
   await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {})
   await page
@@ -65,11 +108,43 @@ async function warmScroll(page) {
     .catch(() => {})
 }
 
+/**
+ * Click, then wait for `until` (a selector that must appear); if it doesn't, click again.
+ * Early clicks can land before React hydration (no handler yet), so retry for ~8s.
+ * A toggle that already reached `until` is never clicked again.
+ */
+async function clickUntil(page, selector, until) {
+  const loc = page.locator(selector).first()
+  if (!until) return loc.click({ timeout: 5000 })
+  for (let i = 0; i < 10; i++) {
+    if (await page.locator(until).first().count()) break
+    await loc.click({ timeout: 5000 }).catch(() => {})
+    await page.waitForSelector(until, { timeout: 800, state: "attached" }).catch(() => {})
+  }
+  await page.waitForSelector(until, { timeout: 2000, state: "attached" })
+}
+
+/** Wait until the first matching element has a box that lies inside the viewport. */
+async function waitInViewport(page, selector) {
+  await page
+    .waitForFunction(
+      (sel) => {
+        const el = document.querySelector(sel)
+        if (!el) return false
+        const r = el.getBoundingClientRect()
+        return r.width > 0 && r.height > 0 && r.left >= -1 && r.top >= -1 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1
+      },
+      selector,
+      { timeout: 4000 },
+    )
+    .catch(() => {})
+}
+
 async function runAction(page, raw, side) {
   const a = merge(raw, side)
   switch (a.type) {
     case "click":
-      await page.locator(a.selector).first().click({ timeout: 5000 })
+      await clickUntil(page, a.selector, a.until)
       break
     case "hover":
       await page.locator(a.selector).first().hover({ timeout: 5000 })
@@ -83,8 +158,8 @@ async function runAction(page, raw, side) {
       break
     }
     case "openDrawer":
-      await page.locator("[data-bag-button]").first().click({ timeout: 5000 })
-      await page.waitForSelector("[data-bag-drawer][data-open]", { timeout: 5000 })
+      await clickUntil(page, "[data-bag-button]", "[data-bag-drawer][data-open]")
+      await waitInViewport(page, "[data-bag-drawer] [role=dialog], [data-bag-drawer][role=dialog], [data-bag-drawer] aside")
       break
     case "scroll":
       if (a.selector) await page.locator(a.selector).first().scrollIntoViewIfNeeded({ timeout: 5000 })
@@ -102,7 +177,7 @@ async function runAction(page, raw, side) {
  * Capture one side. Returns { errors, status, shots: {viewport, full}, styles }.
  * Never throws for page-level problems; they are collected in `errors`.
  */
-export async function captureSide({ browser, side, baseUrl, path, vpName, actions, keySelectors, sections, settleMs }) {
+export async function captureSide({ browser, side, baseUrl, path, vpName, actions, keySelectors, sections, settleMs, forceReveal = true }) {
   const errors = []
   const vp = VIEWPORTS[vpName]
   const context = await browser.newContext({
@@ -115,10 +190,11 @@ export async function captureSide({ browser, side, baseUrl, path, vpName, action
   const res = { errors, status: null, shots: {}, styles: {}, sections: [] }
   try {
     await page.addInitScript(SEED_SCRIPT)
+    if (forceReveal) await page.addInitScript(FORCE_REVEAL_SCRIPT)
     const url = new URL(path, baseUrl).toString()
     const resp = await page.goto(url, { waitUntil: "load", timeout: 45000 })
     res.status = resp ? resp.status() : null
-    await stabilise(page, settleMs, side)
+    await stabilise(page, settleMs, side, forceReveal)
     await warmScroll(page)
     await settle(page, 200)
     for (const raw of actions || []) {
@@ -129,7 +205,8 @@ export async function captureSide({ browser, side, baseUrl, path, vpName, action
         errors.push(`${side}: action ${raw.type}${raw.selector ? " " + raw.selector : ""} failed: ${String(e.message).split("\n")[0]}`)
       }
     }
-    await stabilise(page, settleMs, side)
+    await stabilise(page, settleMs, side, forceReveal)
+    if (forceReveal) await settle(page, 1600) // let the forced reveals finish (longest is 1.4s + delay)
     // Informational only: the ref's whileInView reveals stay hidden in full-page shots.
     res.shots.viewport = await page.screenshot({ fullPage: false })
     res.shots.full = await page.screenshot({ fullPage: true })
@@ -153,6 +230,17 @@ export async function captureSide({ browser, side, baseUrl, path, vpName, action
         const n = document.querySelector('[data-section="nav"]')
         if (n) n.style.visibility = hide ? "hidden" : ""
       }, hide).catch(() => {})
+    // Visible = rendered with a non-zero box (closed drawers etc. are display:none / 0x0).
+    const isHidden = (sel) =>
+      page
+        .evaluate((sel) => {
+          const el = document.querySelector(sel)
+          if (!el) return false
+          const r = el.getBoundingClientRect()
+          const cs = getComputedStyle(el)
+          return r.width === 0 || r.height === 0 || cs.display === "none" || cs.visibility === "hidden"
+        }, sel)
+        .catch(() => false)
     const reveal = async (sel) => {
       const ok = await page
         .evaluate((sel) => {
@@ -171,6 +259,11 @@ export async function captureSide({ browser, side, baseUrl, path, vpName, action
       const entry = { name: sec.name, selector: sel, found: false, shot: null }
       res.sections.push(entry)
       try {
+        if (await isHidden(sel)) {
+          entry.found = true
+          entry.hidden = true // not captured (hidden): reported as a note, not an error
+          continue
+        }
         entry.found = await reveal(sel)
         if (!entry.found) continue
         await hideNav(sec.name !== "nav" && sel !== '[data-section="nav"]')

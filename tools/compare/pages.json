@@ -41,6 +41,18 @@
     "keySelectors": [
       "[data-section=\"new-in-page\"] h1",
       "[data-section=\"new-in-grid\"]"
+    ],
+    "sections": [
+      {
+        "name": "new-in header",
+        "ref": "[data-section=\"new-in-page\"] > :first-child",
+        "theme": "[data-section=\"new-in-page\"]"
+      },
+      {
+        "name": "new-in grid",
+        "ref": "[data-section=\"new-in-grid\"]",
+        "theme": "[data-section=\"new-in-grid\"]"
+      }
     ]
   },
   {
@@ -95,7 +107,8 @@
     "actions": [
       {
         "type": "click",
-        "selector": "[data-menu-toggle]"
+        "selector": "[data-menu-toggle]",
+        "until": "[data-menu-toggle][aria-expanded=\"true\"]"
       }
     ],
     "keySelectors": [
