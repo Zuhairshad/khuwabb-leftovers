@@ -142,6 +142,39 @@ Shared-file fixes by the main session: head-config (no intro on password/gift ca
 
 ---
 
+## Stage B (local preview) — visual compare + Lighthouse, 2026-11-21
+
+Run in this repo against the Next.js production build (:3000) and the offline theme preview (`npm run theme:local`, :9292, LiquidJS + mock data from the same catalog). Not the real store: no Shopify CDN/compression, no Shopify-injected scripts.
+
+**Visual compare (all pages × 1440 + 390, reveals forced to end state):** every reference page matches.
+
+| Page | Worst section diff (desktop / mobile) | Verdict |
+|---|---|---|
+| Home | 0.04% / 0.44% (excluding expected below) | close |
+| Shop (`/collections/all`) | 0.10% / 0.34% | matches |
+| New In | 0.18% / 0.55% (header 0.00%) | matches |
+| Product / variant selected | 0.22% / 0.22% | matches |
+| Cart drawer, mobile menu | panel/menu identical (full-page ~2% = ticker phase) | matches |
+
+Expected differences (not defects): home New arrivals ticker phase (first-card styles identical), "Wear the dream" words at their reduced-motion end state, 404 designed page vs Next default (G18), image anti-aliasing.
+
+Fixed in this pass: New In mobile card layout (missing phone rule; grid was 132 px taller), category-card cut-out ratio, New In grid hook depth, font preloads fetched twice (7 → 4 requests, ~148 → 82 KB), global CSS inlined (2 fewer blocking requests), hero LCP priority + payload (home HTML 169 → 142 KB raw, hero JSON 54 → 21 KB); compare tool now captures reveals, open drawer and menu.
+
+**Lighthouse (performance, median of 5, quiet machine):**
+
+| Page | Mobile ref | Mobile theme | Desktop ref / theme |
+|---|---|---|---|
+| Home | 78 (70–79) | 77 (74–79) | 100 / 100 |
+| Shop | 91 (87–92) | 89 (80–91) | 100 / 100 |
+| New In | 93 (90–95) | 89 (88–89) | 100 / 100 |
+| Product | 87 (84–87) | **93** (91–94) | 99 / 100 |
+
+Fonts identical (4 requests, ~80 KB); CLS ≤ 0.02; theme TBT ≤ ref everywhere. The preview serves HTML/CSS/JS uncompressed (~0.3–0.8 s of mobile FCP); estimated real Shopify mobile: home 78–86, shop 90–95, New In 90–94, product 93–97, minus 3–8 points if Shopify-injected app/analytics scripts are heavy — **measure on the store**.
+
+Open (minor): home loads ~1 MB more image bytes than the reference (67 vs 47 images, 1977 vs 966 KB) — cause not yet isolated (hero ring idle-loading vs sizes vs preview image sizing); New In LCP 300–600 ms behind (header photo). Assets aren't minified (Shopify doesn't minify theme assets; ~15–40 KB raw).
+
+---
+
 ## Stage B — must be verified on the real store
 
 Run order: `tools/store-setup --dry-run` → `--apply` → `shopify theme dev --path theme` → `npm run compare`.
