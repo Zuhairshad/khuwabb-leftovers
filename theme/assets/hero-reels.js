@@ -127,7 +127,12 @@
       } catch (e) {
         return null
       }
-      var cfg = Object.assign({}, data.config, { tops: data.tops || [], bottoms: data.bottoms || [], shoes: [], flavours: data.flavours || [] })
+      // Rows arrive as { order: [id...], pieces: { id: { name, price, src?, srcset? } } } (each piece once).
+      var expand = function (row) {
+        var map = (row && row.pieces) || {}
+        return ((row && row.order) || []).map(function (id) { return Object.assign({ id: id }, map[id]) })
+      }
+      var cfg = Object.assign({}, data.config, { tops: expand(data.tops), bottoms: expand(data.bottoms), shoes: [], flavours: data.flavours || [] })
       var pieces = { tops: cfg.tops, bottoms: cfg.bottoms }
       var flavours = cfg.flavours
       var strings = data.strings || {}
@@ -188,7 +193,8 @@
         var p = pieces[row][i]
         var img = node && node.querySelector('img')
         if (!img || !p || img.getAttribute('src')) return
-        img.setAttribute('srcset', p.srcset)
+        if (!p.src) return
+        if (p.srcset) img.setAttribute('srcset', p.srcset)
         img.setAttribute('src', p.src)
         img.setAttribute('alt', p.name)
         loaded[row].add(i)

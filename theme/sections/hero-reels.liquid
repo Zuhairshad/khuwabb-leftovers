@@ -13,9 +13,10 @@
 
 {%- liquid
   assign hr_set = section.settings.set_product
-  assign hr_widths = '360,480,640,960' | split: ','
+  assign hr_widths = '360,480,640' | split: ','
   assign hr_rows = 'tops,bottoms' | split: ','
   assign hr_rendered = '|'
+  assign hr_need = '|'
   assign hr_products_json = ''
   assign hr_tops = ''
   assign hr_bottoms = ''
@@ -142,8 +143,57 @@
         assign hr_key = '|' | append: hr_p.handle | append: '|'
         unless hr_rendered contains hr_key
           assign hr_rendered = hr_rendered | append: hr_p.handle | append: '|'
+          comment
+            Compact chooser record (title, url, price, colour names, sizes, variants). The shared product-json
+            snippet also carries every colour's image URLs, which the chooser never reads.
+          endcomment
+          assign hr_si = -1
+          assign hr_sopt = hr_p.options_by_name['Size']
+          if hr_sopt
+            assign hr_si = hr_sopt.position | minus: 1
+          endif
           capture hr_pj
-            render 'product-json', product: hr_p
+            echo '{"title":'
+            echo hr_p.title | json
+            echo ',"url":'
+            echo hr_p.url | json
+            echo ',"price":' | append: hr_p.price | append: ',"colours":['
+            for hr_cn in hr_names
+              echo '{"name":'
+              echo hr_cn | json
+              echo '}'
+              unless forloop.last
+                echo ','
+              endunless
+            endfor
+            echo '],"sizes":['
+            if hr_sopt
+              for hr_sv in hr_sopt.values
+                echo hr_sv | json
+                unless forloop.last
+                  echo ','
+                endunless
+              endfor
+            endif
+            echo '],"variants":{'
+            for hr_v in hr_p.variants
+              if hr_ci >= 0
+                assign hr_vcn = hr_v.options[hr_ci]
+              else
+                assign hr_vcn = 'Default'
+              endif
+              if hr_si >= 0
+                assign hr_vsn = hr_v.options[hr_si]
+              else
+                assign hr_vsn = 'Default'
+              endif
+              echo hr_vcn | append: ' / ' | append: hr_vsn | json
+              echo ':{"id":' | append: hr_v.id | append: ',"available":' | append: hr_v.available | append: '}'
+              unless forloop.last
+                echo ','
+              endunless
+            endfor
+            echo '}}'
           endcapture
           if hr_products_json != ''
             assign hr_products_json = hr_products_json | append: ','
@@ -309,6 +359,14 @@
         {%- if hr_row == 'tops' -%}
           {%- assign hr_park = 0 | minus: hr_park -%}
         {%- endif -%}
+        {%- comment -%}
+          fetchpriority="high" goes on the one photo that is the biggest thing painted first: the centre of the
+          parked spot while the intro plays (the row spins in from there), else piece 0.
+        {%- endcomment -%}
+        {%- assign hr_first_idx = 0 -%}
+        {%- if hr_intro and hr_n > 0 -%}
+          {%- assign hr_first_idx = hr_park | modulo: hr_n | plus: hr_n | modulo: hr_n -%}
+        {%- endif -%}
         {%- for hr_rec in hr_arr -%}
           {%- assign hr_f = hr_rec | split: '~~' -%}
           {%- assign hr_idx = forloop.index0 -%}
@@ -325,7 +383,7 @@
             {%- assign hr_load = true -%}
           {%- endif -%}
           {%- assign hr_fp = '' -%}
-          {%- if hr_idx == 0 -%}
+          {%- if hr_idx == hr_first_idx -%}
             {%- assign hr_fp = 'high' -%}
           {%- endif -%}
           {%- if hr_intro and hr_load == false -%}
@@ -341,6 +399,9 @@
               {%- assign hr_load = true -%}
             {%- endif -%}
           {%- endif -%}
+          {%- unless hr_load -%}
+            {%- assign hr_need = hr_need | append: hr_row | append: '~' | append: hr_f[0] | append: '|' -%}
+          {%- endunless -%}
           <div class="hero-reels__piece" data-row="{{ hr_row }}" data-idx="{{ hr_idx }}">
             {%- if hr_load -%}
               <img
@@ -352,7 +413,7 @@
                 alt="{{ hr_f[2] | escape }}"
                 draggable="false"
                 decoding="async"
-                {% if hr_fp != blank %}fetchpriority="high"{% endif %}
+                {% if hr_fp != blank %}fetchpriority="high" loading="eager"{% endif %}
               >
             {%- else -%}
               <img
@@ -426,6 +487,49 @@
       </div>
     </div>
 
+    {%- comment -%}
+      Row JSON: "order" is the ring of piece ids; "pieces" holds each id once. src / srcset are only included for
+      ids that have a slot rendered without an image (JS fills those from here); name and price drive tags and total.
+    {%- endcomment -%}
+    {%- for hr_row in hr_rows -%}
+      {%- if hr_row == 'tops' -%}
+        {%- assign hr_arr = hr_tops_arr -%}
+      {%- else -%}
+        {%- assign hr_arr = hr_bottoms_arr -%}
+      {%- endif -%}
+      {%- assign hr_emit = '|' -%}
+      {%- capture hr_row_json -%}
+        {"order": [
+          {%- for hr_rec in hr_arr -%}
+            {%- assign hr_f = hr_rec | split: '~~' -%}
+            {{ hr_f[0] | json }}{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ], "pieces": {
+          {%- assign hr_first_piece = true -%}
+          {%- for hr_rec in hr_arr -%}
+            {%- assign hr_f = hr_rec | split: '~~' -%}
+            {%- assign hr_ekey = '|' | append: hr_f[0] | append: '|' -%}
+            {%- unless hr_emit contains hr_ekey -%}
+              {%- assign hr_emit = hr_emit | append: hr_f[0] | append: '|' -%}
+              {%- assign hr_nkey = '|' | append: hr_row | append: '~' | append: hr_f[0] | append: '|' -%}
+              {%- unless hr_first_piece -%},{%- endunless -%}
+              {%- assign hr_first_piece = false -%}
+              {{ hr_f[0] | json }}: {"name": {{ hr_f[2] | json }}, "price": {{ hr_f[3] }}
+              {%- if hr_need contains hr_nkey -%}
+                , "src": {{ hr_f[4] | json }}, "srcset": {{ hr_f[5] | json }}
+              {%- endif -%}
+              }
+            {%- endunless -%}
+          {%- endfor -%}
+        }}
+      {%- endcapture -%}
+      {%- if hr_row == 'tops' -%}
+        {%- assign hr_tops_json = hr_row_json -%}
+      {%- else -%}
+        {%- assign hr_bottoms_json = hr_row_json -%}
+      {%- endif -%}
+    {%- endfor -%}
+
     <script type="application/json" data-hero-reels-data>
       {
         "config": {
@@ -445,18 +549,8 @@
             {"name": {{ block.settings.name | json }}, "color": {{ block.settings.color | append: '' | json }}}{% unless forloop.last %},{% endunless %}
           {%- endfor -%}
         ],
-        "tops": [
-          {%- for hr_rec in hr_tops_arr -%}
-            {%- assign hr_f = hr_rec | split: '~~' -%}
-            {"id": {{ hr_f[0] | json }}, "handle": {{ hr_f[1] | json }}, "name": {{ hr_f[2] | json }}, "price": {{ hr_f[3] }}, "src": {{ hr_f[4] | json }}, "srcset": {{ hr_f[5] | json }}, "width": {{ hr_f[6] }}, "height": {{ hr_f[7] }}}{% unless forloop.last %},{% endunless %}
-          {%- endfor -%}
-        ],
-        "bottoms": [
-          {%- for hr_rec in hr_bottoms_arr -%}
-            {%- assign hr_f = hr_rec | split: '~~' -%}
-            {"id": {{ hr_f[0] | json }}, "handle": {{ hr_f[1] | json }}, "name": {{ hr_f[2] | json }}, "price": {{ hr_f[3] }}, "src": {{ hr_f[4] | json }}, "srcset": {{ hr_f[5] | json }}, "width": {{ hr_f[6] }}, "height": {{ hr_f[7] }}}{% unless forloop.last %},{% endunless %}
-          {%- endfor -%}
-        ],
+        "tops": {{ hr_tops_json }},
+        "bottoms": {{ hr_bottoms_json }},
         "products": { {{ hr_products_json }} },
         "strings": {
           "addTheLook": {{ 'reels.add_the_look' | t | json }},
