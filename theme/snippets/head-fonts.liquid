@@ -3,9 +3,18 @@
   Fallback faces are the metric-matched Arial faces Next generates, so layout
   is stable while the woff2 files load. Owned by the main session.
 {%- endcomment -%}
-{{ 'clash-display-600.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
-{{ 'satoshi-400.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
-{{ 'satoshi-500.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{%- comment -%}
+  Hand-written preloads (not preload_tag): font preloads must carry crossorigin
+  + type or the browser can't reuse them for the CORS @font-face fetch and
+  downloads every face twice (Stage B L4: 7 font requests vs the reference's 4).
+  All four faces are preloaded, as next/font does in the reference.
+{%- endcomment -%}
+{% # theme-check-disable AssetPreload %}
+<link rel="preload" href="{{ 'clash-display-600.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ 'clash-display-700.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ 'satoshi-400.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ 'satoshi-500.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+{% # theme-check-enable AssetPreload %}
 <style>
   @font-face {
     font-family: "clashDisplay";
