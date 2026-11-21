@@ -6,7 +6,15 @@
   Parity table: docs/parity/hero-reels.md.
 
   Piece records are strings while building (fields joined by ~~, records by ^^):
-  id ~~ handle ~~ name ~~ price ~~ src ~~ srcset ~~ width ~~ height
+  id ~~ handle ~~ name ~~ price ~~ src ~~ srcset ~~ width ~~ height ~~ fit
+
+  Garment fit (ScoopReels.tsx:14, 207-212, 218-246, 257-269): the reference carries a per-piece
+  `fit: "any" | "men" | "women"` used by the look's drag/shuffle "pull the other rows onto a
+  matching fit" logic. Khuwabb is a women's-only catalogue with no men's/women's split, so Hero.tsx
+  (the reference's data source) hardcodes `fit: "any"` on every piece it builds — the fit machinery
+  is ported in full (below + hero-reels.js) but is inert with today's catalogue, exactly like the
+  reference. `hr_fit` reads an optional `fit:men` / `fit:women` product tag so the mechanism is
+  live the moment such a tag exists; no product has one today, so output is unchanged (parity).
 {%- endcomment -%}
 {{ 'section-hero-reels.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'hero-reels.js' | asset_url }}" defer></script>
@@ -56,6 +64,20 @@
         assign hr_ci = -1
         assign hr_names = 'Default' | split: ','
       endif
+
+      comment
+        Garment fit (ScoopReels.tsx:14): optional "fit:men" / "fit:women" product tag, else "any"
+        (the reference's current default for every piece — see the comment at the top of this file).
+      endcomment
+      assign hr_fit = 'any'
+      for hr_tag in hr_p.tags
+        assign hr_tag_norm = hr_tag | strip | downcase
+        if hr_tag_norm == 'fit:men' or hr_tag_norm == 'fit:man'
+          assign hr_fit = 'men'
+        elsif hr_tag_norm == 'fit:women' or hr_tag_norm == 'fit:woman'
+          assign hr_fit = 'women'
+        endif
+      endfor
 
       assign hr_group = ''
       assign hr_group_size = 0
@@ -125,7 +147,7 @@
           endif
           assign hr_th = hr_top_w | times: hr_ph | plus: 0.0 | divided_by: hr_pw | round
 
-          assign hr_rec = hr_p.handle | append: '#' | append: hr_name | append: '~~' | append: hr_p.handle | append: '~~' | append: hr_p.title | append: '~~' | append: hr_p.price | append: '~~' | append: hr_top_u | append: '~~' | append: hr_srcset | append: '~~' | append: hr_top_w | append: '~~' | append: hr_th
+          assign hr_rec = hr_p.handle | append: '#' | append: hr_name | append: '~~' | append: hr_p.handle | append: '~~' | append: hr_p.title | append: '~~' | append: hr_p.price | append: '~~' | append: hr_top_u | append: '~~' | append: hr_srcset | append: '~~' | append: hr_top_w | append: '~~' | append: hr_th | append: '~~' | append: hr_fit
           assign hr_group = hr_group | append: hr_rec | append: '^^'
           assign hr_group_size = hr_group_size | plus: 1
 
@@ -514,7 +536,8 @@
               {%- assign hr_nkey = '|' | append: hr_row | append: '~' | append: hr_f[0] | append: '|' -%}
               {%- unless hr_first_piece -%},{%- endunless -%}
               {%- assign hr_first_piece = false -%}
-              {{ hr_f[0] | json }}: {"name": {{ hr_f[2] | json }}, "price": {{ hr_f[3] }}
+              {%- assign hr_pfit = hr_f[8] | default: 'any' -%}
+              {{ hr_f[0] | json }}: {"name": {{ hr_f[2] | json }}, "price": {{ hr_f[3] }}, "fit": {{ hr_pfit | json }}
               {%- if hr_need contains hr_nkey -%}
                 , "src": {{ hr_f[4] | json }}, "srcset": {{ hr_f[5] | json }}
               {%- endif -%}

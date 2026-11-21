@@ -156,7 +156,7 @@ Run in this repo against the Next.js production build (:3000) and the offline th
 | Product / variant selected | 0.22% / 0.22% | matches |
 | Cart drawer, mobile menu | panel/menu identical (full-page ~2% = ticker phase) | matches |
 
-Expected differences (not defects): home New arrivals ticker phase (first-card styles identical), "Wear the dream" words at their reduced-motion end state, 404 designed page vs Next default (G18), image anti-aliasing.
+Expected differences (not defects): home New arrivals ticker phase (first-card styles identical), "Wear the dream" words at their reduced-motion end state, 404 designed page vs Next default (G18), image anti-aliasing, `hero-shuffle` bottom-row landing piece (lead decision 2026-11-21: the reference's `reelsRandom()` reads `Math.random()` after Next.js hydration has already drawn twice, so the seeded streams are offset by 2; same piece list, same frame and layout, both land on a valid outfit; see docs/parity/hero-reels.md).
 
 Fixed in this pass: New In mobile card layout (missing phone rule; grid was 132 px taller), category-card cut-out ratio, New In grid hook depth, font preloads fetched twice (7 → 4 requests, ~148 → 82 KB), global CSS inlined (2 fewer blocking requests), hero LCP priority + payload (home HTML 169 → 142 KB raw, hero JSON 54 → 21 KB); compare tool now captures reveals, open drawer and menu.
 

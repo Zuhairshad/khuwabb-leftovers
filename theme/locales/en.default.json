@@ -241,5 +241,11 @@
   },
   "receipts": {
     "total": "Total"
+  },
+  "meta": {
+    "home_tagline_html": "Women’s pret & couture",
+    "all_collections": "All collections",
+    "page": "Page {{ number }}",
+    "default_description": "Clothes that feel like a dream you never want to wake up from. Born in Lahore."
   }
 }

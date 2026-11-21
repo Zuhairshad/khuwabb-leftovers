@@ -4,20 +4,23 @@
 {%- endcomment -%}
 {%- liquid
   assign brand = shop.name
+  assign tagline = 'meta.home_tagline_html' | t
+  assign page_label = 'meta.page' | t: number: current_page
+  assign default_description = 'meta.default_description' | t
   if template.name == 'index'
-    assign title = brand | append: ' — Women’s pret & couture'
+    assign title = brand | append: ' — ' | append: tagline
   elsif template.name == 'collection' and collection.handle == 'all'
-    assign title = 'All collections · ' | append: brand
+    assign title = 'meta.all_collections' | t | append: ' · ' | append: brand
   else
     assign title = page_title | append: ' · ' | append: brand
     if current_tags
       assign title = page_title | append: ' – ' | append: current_tags | join: ', ' | append: ' · ' | append: brand
     endif
     if current_page != 1
-      assign title = title | append: ' – Page ' | append: current_page
+      assign title = title | append: ' – ' | append: page_label
     endif
   endif
-  assign description = page_description | default: 'Clothes that feel like a dream you never want to wake up from. Born in Lahore.'
+  assign description = page_description | default: default_description
 -%}
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">

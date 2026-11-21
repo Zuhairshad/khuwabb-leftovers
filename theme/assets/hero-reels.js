@@ -182,7 +182,7 @@
       })
       var st = {}
       ROWS.forEach(function (r) {
-        st[r] = { off: 0, vel: 0, drag: false, lastX: 0, lastT: 0, moved: 0, tween: null, spring: null, pointerId: undefined, downTarget: null }
+        st[r] = { off: 0, vel: 0, drag: false, lastX: 0, lastT: 0, moved: 0, tween: null, spring: null, pointerId: undefined, downTarget: null, user: false }
       })
       var lastInteraction = 0
 
@@ -300,15 +300,70 @@
         return ((Math.round(st[row].off) % n) + n) % n
       }
 
+      // Garment fit (ScoopReels.tsx:207-212): wrap-safe lookup + "any" matches anything.
+      function fitAt(row, i) {
+        var list = pieces[row]
+        if (!list.length) return 'any'
+        var idx = ((i % list.length) + list.length) % list.length
+        var p = list[idx]
+        return (p && p.fit) || 'any'
+      }
+      function compatible(a, b) {
+        return a === 'any' || b === 'any' || a === b
+      }
+
+      // After a row is moved by hand, pull the other rows onto a matching fit (:218-246).
+      function reconcile(moved) {
+        var fit = fitAt(moved, centreIndex(moved))
+        if (fit === 'any') {
+          for (var fi = 0; fi < ROWS.length; fi++) {
+            var fr = ROWS[fi]
+            if (fr === moved) continue
+            var f = fitAt(fr, centreIndex(fr))
+            if (f !== 'any') {
+              fit = f
+              break
+            }
+          }
+        }
+        if (fit === 'any') return
+        ROWS.forEach(function (r, ri) {
+          if (r === moved) return
+          var n = pieces[r].length
+          if (!n || compatible(fitAt(r, centreIndex(r)), fit)) return
+          var best = 1e9
+          for (var i = 0; i < n; i++) {
+            if (!compatible(fitAt(r, i), fit)) continue
+            var d = Math.round(wrap(i - st[r].off, n))
+            if (Math.abs(d) < Math.abs(best)) best = d
+          }
+          if (best !== 1e9) {
+            tweenTo(r, Math.round(st[r].off) + best, reduced ? 1 : 750 + Math.abs(best) * 90, false, 160 + ri * 110)
+            settled[r] = false
+          }
+        })
+      }
+
       function go(row, by) {
         if (!pieces[row].length) return
         lastInteraction = performance.now()
+        st[row].user = true
         tweenTo(row, nearest(row) + by, reduced ? 1 : 650 + Math.abs(by) * 90, false)
         settled[row] = false
         ui()
       }
 
       function shuffle(intro) {
+        // Garment fit (ScoopReels.tsx:257-258): one shared fit for the whole look, drawn before
+        // the per-row loop so the seeded reelsRandom stream matches the reference draw-for-draw.
+        var fits = []
+        ROWS.forEach(function (row) {
+          pieces[row].forEach(function (p) {
+            var f = (p && p.fit) || 'any'
+            if (f !== 'any' && fits.indexOf(f) === -1) fits.push(f)
+          })
+        })
+        var fit = fits.length ? fits[Math.floor(rnd() * fits.length)] : 'any'
         ROWS.forEach(function (row, ri) {
           var list = pieces[row]
           var n = list.length
@@ -321,7 +376,7 @@
             return list[i] && list[i].id.split('#')[0]
           }
           var distinct = new Set(list.map(function (_, i) { return product(i) })).size > 1
-          for (var i = 0; i < n; i++) if ((i !== now || n === 1) && (!distinct || product(i) !== product(now))) options.push(i)
+          for (var i = 0; i < n; i++) if (compatible(fitAt(row, i), fit) && (i !== now || n === 1) && (!distinct || product(i) !== product(now))) options.push(i)
           // The intro always lands on each row's first piece; later shuffles are random.
           var target = intro ? 0 : options.length ? options[Math.floor(rnd() * options.length)] : now
           var dir = SPIN_DIR[row]
@@ -424,6 +479,13 @@
           }
         })
 
+        ROWS.forEach(function (row) {
+          if (nextSettled[row] && !shownSettled[row] && st[row].user) {
+            st[row].user = false
+            reconcile(row)
+          }
+        })
+
         if (ROWS.some(function (r) { return nextIndex[r] !== shownIndex[r] || nextSettled[r] !== shownSettled[r] })) {
           var allDone = ROWS.every(function (r) { return nextSettled[r] || !pieces[r].length })
           shownIndex = nextIndex
@@ -479,6 +541,7 @@
           var s = st[row]
           if (!s.drag || s.pointerId !== e.pointerId) return
           s.drag = false
+          s.user = true
           lastInteraction = performance.now()
           if (s.moved < 6) {
             // A tap on a side piece brings it to the centre.
