@@ -53,10 +53,9 @@
                 endif
               endfor
               if cc_media != blank
-                assign cc_w = cc_media.preview_image.width | plus: 0
-                assign cc_h = cc_media.preview_image.height | plus: 0
-                if cc_w > 0 and cc_h > 0
-                  assign cc_ratio = cc_w | times: 1.0 | divided_by: cc_h | round: 4
+                assign cc_r = cc_media.preview_image.aspect_ratio | plus: 0
+                if cc_r > 0
+                  assign cc_ratio = cc_r | round: 4
                 endif
               endif
             endif
