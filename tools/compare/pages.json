@@ -17,7 +17,27 @@
       "[data-section=\"receipts\"]",
       "[data-section=\"care-labels\"]",
       "[data-section=\"footer\"]",
-      "[data-bag-button]"
+      "[data-bag-button]",
+      {
+        "name": "new-in first card",
+        "ref": "[data-section=\"new-in\"] ul > li:first-child a",
+        "theme": "[data-section=\"new-in\"] ul > li:first-child a"
+      },
+      {
+        "name": "new-in first card box",
+        "ref": "[data-section=\"new-in\"] ul > li:first-child a > :nth-child(2)",
+        "theme": "[data-section=\"new-in\"] ul > li:first-child a > :nth-child(2)"
+      },
+      {
+        "name": "new-in first card name",
+        "ref": "[data-section=\"new-in\"] ul > li:first-child a > :nth-child(3) > p:first-child",
+        "theme": "[data-section=\"new-in\"] ul > li:first-child a > :nth-child(3) > p:first-child"
+      },
+      {
+        "name": "new-in first card price",
+        "ref": "[data-section=\"new-in\"] ul > li:first-child a > :nth-child(3) > p:nth-child(2)",
+        "theme": "[data-section=\"new-in\"] ul > li:first-child a > :nth-child(3) > p:nth-child(2)"
+      }
     ]
   },
   {
@@ -46,7 +66,7 @@
       {
         "name": "new-in header",
         "ref": "[data-section=\"new-in-page\"] > :first-child",
-        "theme": "[data-section=\"new-in-page\"]"
+        "theme": "[data-section=\"new-in-page\"] > .new-in__header"
       },
       {
         "name": "new-in grid",
