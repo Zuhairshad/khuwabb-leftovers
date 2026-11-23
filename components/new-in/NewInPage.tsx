@@ -3,7 +3,7 @@
 import { m } from "framer-motion"
 import { photo, productHref, products } from "@/lib/catalog"
 import { ProductPrice } from "@/components/product/ProductPrice"
-import { Hook } from "../home/NewIn"
+import { hangerPhotoStyle, Hook } from "../home/NewIn"
 import styles from "./NewInPage.module.css"
 import { atLeast, responsive } from "@/lib/img"
 
@@ -43,7 +43,7 @@ export function NewInPage() {
           >
             <Hook />
             <div className={styles.card} style={{ background: p.tint ?? undefined }}>
-              <img src={atLeast(photo(p).src, 360)} alt={p.name} draggable={false} loading="lazy" decoding="async" />
+              <img style={hangerPhotoStyle(p.slug)} src={atLeast(photo(p).src, 360)} alt={p.name} draggable={false} loading="lazy" decoding="async" />
             </div>
             <div className={styles.info}>
               <p className={styles.name}>{p.name}</p>
