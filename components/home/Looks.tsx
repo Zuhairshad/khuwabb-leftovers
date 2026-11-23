@@ -1,6 +1,7 @@
 import looks from "@/data/looks.json"
 import { getProduct, photo, productHref, type Product } from "@/lib/catalog"
 import { formatPrice } from "@/lib/format"
+import { ProductPrice } from "@/components/product/ProductPrice"
 import { ArrowButton } from "../ArrowButton"
 import { SectionHeader } from "./SectionHeader"
 import styles from "./Looks.module.css"
@@ -60,7 +61,7 @@ export function Looks() {
                         <p className={styles.pieceName}>{p.name}</p>
                         <p className={styles.colour}>{colour}</p>
                       </div>
-                      <p className={styles.price}>{formatPrice(p.price)}</p>
+                      <p className={styles.price}><ProductPrice price={p.price} compareAt={p.compareAt} /></p>
                     </a>
                   ))}
                 </div>

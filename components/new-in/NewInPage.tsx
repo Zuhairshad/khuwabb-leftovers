@@ -2,7 +2,7 @@
 
 import { m } from "framer-motion"
 import { photo, productHref, products } from "@/lib/catalog"
-import { formatPrice } from "@/lib/format"
+import { ProductPrice } from "@/components/product/ProductPrice"
 import { Hook } from "../home/NewIn"
 import styles from "./NewInPage.module.css"
 import { atLeast, responsive } from "@/lib/img"
@@ -47,7 +47,7 @@ export function NewInPage() {
             </div>
             <div className={styles.info}>
               <p className={styles.name}>{p.name}</p>
-              <p className={styles.price}>{formatPrice(p.price)}</p>
+              <p className={styles.price}><ProductPrice price={p.price} compareAt={p.compareAt} /></p>
             </div>
           </m.a>
         ))}

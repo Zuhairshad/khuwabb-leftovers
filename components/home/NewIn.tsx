@@ -2,7 +2,7 @@
 
 import { m } from "framer-motion"
 import { photo, productHref, products } from "@/lib/catalog"
-import { formatPrice } from "@/lib/bag"
+import { ProductPrice } from "@/components/product/ProductPrice"
 import { Ticker } from "../Ticker"
 import { SectionHeader } from "./SectionHeader"
 import styles from "./NewIn.module.css"
@@ -42,7 +42,7 @@ export function NewIn() {
               </div>
               <div className={styles.info}>
                 <p className={styles.name}>{p.name}</p>
-                <p>{formatPrice(p.price)}</p>
+                <p><ProductPrice price={p.price} compareAt={p.compareAt} /></p>
               </div>
             </m.a>
           ))}

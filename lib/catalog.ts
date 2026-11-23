@@ -61,14 +61,22 @@ export const shopifyHandle = (slug: string) => (SHOPIFY_HANDLES as Record<string
 const NEUTRAL_TINT = "rgb(213, 229, 190)"
 const NEW_IN_WINDOW_MS = 30 * 24 * 60 * 60 * 1000
 
+function shopifyPrices(variants: ShopifyProduct["variants"]): Pick<Product, "price" | "compareAt"> {
+  const lowest = variants.reduce<ShopifyProduct["variants"][number] | undefined>((current, variant) => {
+    if (typeof variant.price !== "number") return current
+    return !current || variant.price < current.price ? variant : current
+  }, undefined)
+  return { price: lowest?.price ?? null, compareAt: lowest?.compareAt ?? null }
+}
+
 // Builds a full Product straight from Shopify for a handle products.json
 // doesn't cover. Shopify-only products get their photos from the product's
 // featured/variant images (no local photography), one "front" view per
 // colour. Returns null when there isn't enough to show (no image, or no
 // variant with a confirmed price).
 function fromShopifyOnly(handle: string, s: ShopifyProduct): Product | null {
-  const priced = s.variants.filter((v) => typeof v.price === "number")
-  if (!priced.length) return null
+  const pricing = shopifyPrices(s.variants)
+  if (pricing.price === null) return null
 
   const imageFor = (colourName: string) =>
     s.variants.find((v) => v.colour === colourName && v.image?.url)?.image ?? s.featuredImage ?? s.images?.find((i) => i?.url) ?? null
@@ -87,7 +95,6 @@ function fromShopifyOnly(handle: string, s: ShopifyProduct): Product | null {
   const variants: Record<string, Variant> = {}
   for (const v of s.variants) variants[`${v.colour} / ${v.size}`] = { shopifyId: v.id, available: v.available }
 
-  const prices = priced.map((v) => v.price)
   const createdAt = s.createdAt ? Date.parse(s.createdAt) : NaN
   const newIn = !!s.tags?.includes("new-in") || (!Number.isNaN(createdAt) && Date.now() - createdAt < NEW_IN_WINDOW_MS)
 
@@ -97,8 +104,7 @@ function fromShopifyOnly(handle: string, s: ShopifyProduct): Product | null {
     name: s.title,
     category: s.productType || "New In",
     soldAs: "single",
-    price: prices.length ? Math.min(...prices) : null,
-    compareAt: null,
+    ...pricing,
     sizes: s.sizes,
     colours,
     variants,
@@ -119,8 +125,7 @@ function withShopify(p: Product): Product {
   const colours = s.colours.flatMap((name) => p.colours.filter((c) => c.name === name))
   const variants: Record<string, Variant> = {}
   for (const v of s.variants) variants[`${v.colour} / ${v.size}`] = { shopifyId: v.id, available: v.available }
-  const prices = s.variants.map((v) => v.price)
-  return { ...p, name: s.title, price: prices.length ? Math.min(...prices) : null, compareAt: null, sizes: s.sizes, colours, variants }
+  return { ...p, name: s.title, ...shopifyPrices(s.variants), sizes: s.sizes, colours, variants }
 }
 
 // Every handle products.json already maps to a site slug (directly or via

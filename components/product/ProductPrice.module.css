@@ -1,0 +1,11 @@
+.prices {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.45em;
+}
+
+.original {
+  font-size: 0.85em;
+  opacity: 0.75;
+}

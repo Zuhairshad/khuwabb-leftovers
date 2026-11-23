@@ -3,7 +3,7 @@
 import { m } from "framer-motion"
 import { photo, productHref, products } from "@/lib/catalog"
 import { atLeast } from "@/lib/img"
-import { formatPrice } from "@/lib/format"
+import { ProductPrice } from "@/components/product/ProductPrice"
 import styles from "./ProductGrid.module.css"
 
 const rise = { duration: 1.1, ease: [0.22, 1, 0.36, 1] } as const
@@ -34,7 +34,7 @@ export function ProductGrid() {
           </div>
           <div className={styles.info}>
             <p className={styles.name}>{p.name}</p>
-            <p className={styles.price}>{formatPrice(p.price)}</p>
+            <p className={styles.price}><ProductPrice price={p.price} compareAt={p.compareAt} /></p>
           </div>
         </m.a>
       ))}

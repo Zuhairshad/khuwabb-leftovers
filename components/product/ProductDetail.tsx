@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { addToBag } from "@/lib/bag"
 import { canOrder, getProduct, photo, type View } from "@/lib/catalog"
-import { formatPrice } from "@/lib/format"
+import { ProductPrice } from "@/components/product/ProductPrice"
 import styles from "./ProductDetail.module.css"
 import { atLeast, responsive } from "@/lib/img"
 
@@ -53,8 +53,7 @@ export function ProductDetail({ slug }: { slug: string }) {
         <p className={styles.category}>{p.soldAs === "set" ? (p.category === "Gymwear" ? "Gymwear · top and leggings, sold as a set" : "Co-ord set · top and bottom") : p.category}</p>
         <h1 className={styles.name}>{p.name}</h1>
         <p className={styles.price}>
-          {formatPrice(p.price)}
-          {typeof p.compareAt === "number" && typeof p.price === "number" && p.compareAt > p.price && <s>{formatPrice(p.compareAt)}</s>}
+          <ProductPrice price={p.price} compareAt={p.compareAt} />
         </p>
 
         <fieldset className={styles.group}>

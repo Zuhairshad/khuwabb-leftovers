@@ -96,16 +96,8 @@
 }
 
 .price {
-  display: flex;
-  gap: 10px;
-  align-items: baseline;
   font-size: 22px;
   font-weight: 500;
-}
-
-.price s {
-  font-size: 16px;
-  color: var(--ink-62);
 }
 
 .group {
