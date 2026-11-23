@@ -4,12 +4,36 @@ import { Footer } from "@/components/Footer"
 import { MotionProvider } from "@/components/MotionProvider"
 import { Nav } from "@/components/Nav"
 import { ScoopIntro } from "@/components/ScoopIntro"
+import { absoluteUrl, SITE_URL } from "@/lib/site"
 import { clashDisplay, satoshi } from "./fonts"
 import "./globals.css"
 
+const TITLE = "Khuwabb · Women's pret & couture"
+const DESCRIPTION = "Clothes that feel like a dream you never want to wake up from. Born in Lahore."
+
 export const metadata: Metadata = {
-  title: "Khuwabb · Women's pret & couture",
-  description: "Clothes that feel like a dream you never want to wake up from. Born in Lahore.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/",
+    siteName: "Khuwabb",
+    locale: "en_PK",
+    images: [{ url: absoluteUrl("/brand/wear-the-dream.jpg") }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [absoluteUrl("/brand/wear-the-dream.jpg")],
+  },
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } }
+    : {}),
 }
 
 export const viewport: Viewport = {

@@ -15,9 +15,18 @@ const QUERY = `query Catalog($after: String) {
     pageInfo { hasNextPage endCursor }
     nodes {
       handle title availableForSale
+      description
+      productType
+      tags
+      createdAt
       options { name optionValues { name } }
+      featuredImage { url altText width height }
+      images(first: 20) { nodes { url altText width height } }
       variants(first: 100) {
-        nodes { id availableForSale price { amount currencyCode } compareAtPrice { amount } selectedOptions { name value } }
+        nodes {
+          id availableForSale price { amount currencyCode } compareAtPrice { amount } selectedOptions { name value }
+          image { url altText width height }
+        }
       }
     }
   }
@@ -48,10 +57,17 @@ try {
   const out = {}
   for (const p of products) {
     const opt = (name) => p.options.find((o) => o.name === name)?.optionValues.map((v) => v.name) ?? []
+    const image = (img) => (img ? { url: img.url, altText: img.altText ?? null, width: img.width ?? null, height: img.height ?? null } : null)
     out[p.handle] = {
       title: p.title,
       colours: opt("Color"),
       sizes: opt("Size"),
+      description: p.description || null,
+      productType: p.productType || null,
+      tags: p.tags ?? [],
+      createdAt: p.createdAt,
+      featuredImage: image(p.featuredImage),
+      images: p.images.nodes.map(image),
       variants: p.variants.nodes.map((v) => ({
         id: v.id.split("/").pop(),
         colour: v.selectedOptions.find((o) => o.name === "Color")?.value ?? "",
@@ -59,6 +75,7 @@ try {
         price: Number(v.price.amount),
         compareAt: v.compareAtPrice ? Number(v.compareAtPrice.amount) : null,
         available: v.availableForSale,
+        image: image(v.image),
       })),
     }
   }

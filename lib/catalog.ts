@@ -29,16 +29,85 @@ export type Product = {
 // orderable. Never honoured in a production build.
 const FIXTURE = process.env.NODE_ENV !== "production" && process.env.NEXT_PUBLIC_CATALOG_FIXTURE === "orderable"
 
+type ShopifyImage = { url: string; altText: string | null; width: number | null; height: number | null }
 type ShopifyProduct = {
   title: string
   colours: string[]
   sizes: string[]
-  variants: { id: string; colour: string; size: string; price: number; compareAt: number | null; available: boolean }[]
+  description?: string | null
+  productType?: string | null
+  tags?: string[]
+  createdAt?: string
+  featuredImage?: ShopifyImage | null
+  images?: (ShopifyImage | null)[]
+  variants: {
+    id: string
+    colour: string
+    size: string
+    price: number
+    compareAt: number | null
+    available: boolean
+    image?: ShopifyImage | null
+  }[]
 }
 const SHOPIFY = (shopify as unknown as { products: Record<string, ShopifyProduct> }).products
 
 /** Shopify's handle for a site product. */
 export const shopifyHandle = (slug: string) => (SHOPIFY_HANDLES as Record<string, string>)[slug] ?? slug
+
+// A product that exists in Shopify but has no products.json entry has no
+// hand-photographed colours or copy — reuse a pastel already in rotation
+// rather than inventing a new one.
+const NEUTRAL_TINT = "rgb(213, 229, 190)"
+const NEW_IN_WINDOW_MS = 30 * 24 * 60 * 60 * 1000
+
+// Builds a full Product straight from Shopify for a handle products.json
+// doesn't cover. Shopify-only products get their photos from the product's
+// featured/variant images (no local photography), one "front" view per
+// colour. Returns null when there isn't enough to show (no image, or no
+// variant with a confirmed price).
+function fromShopifyOnly(handle: string, s: ShopifyProduct): Product | null {
+  const priced = s.variants.filter((v) => typeof v.price === "number")
+  if (!priced.length) return null
+
+  const imageFor = (colourName: string) =>
+    s.variants.find((v) => v.colour === colourName && v.image?.url)?.image ?? s.featuredImage ?? s.images?.find((i) => i?.url) ?? null
+
+  const colourNames = s.colours.length ? s.colours : [""]
+  const colours: Colour[] = colourNames
+    .map((name) => {
+      const img = imageFor(name)
+      if (!img?.url) return null
+      const ratio = img.width && img.height ? img.width / img.height : null
+      return { name: name || s.title, image: img.url, views: { front: img.url }, ratio } as Colour
+    })
+    .filter((c): c is Colour => !!c)
+  if (!colours.length) return null
+
+  const variants: Record<string, Variant> = {}
+  for (const v of s.variants) variants[`${v.colour} / ${v.size}`] = { shopifyId: v.id, available: v.available }
+
+  const prices = priced.map((v) => v.price)
+  const createdAt = s.createdAt ? Date.parse(s.createdAt) : NaN
+  const newIn = !!s.tags?.includes("new-in") || (!Number.isNaN(createdAt) && Date.now() - createdAt < NEW_IN_WINDOW_MS)
+
+  return {
+    id: handle,
+    slug: handle,
+    name: s.title,
+    category: s.productType || "New In",
+    soldAs: "single",
+    price: prices.length ? Math.min(...prices) : null,
+    compareAt: null,
+    sizes: s.sizes,
+    colours,
+    variants,
+    details: { description: s.description ?? null, fabric: null, care: null, sizeChart: null },
+    tint: NEUTRAL_TINT,
+    newIn,
+    sourceUrl: null,
+  }
+}
 
 // Shopify owns name, price, colours, sizes, variant IDs and stock
 // (data/shopify.json, synced before each build). The site keeps its photos,
@@ -54,7 +123,17 @@ function withShopify(p: Product): Product {
   return { ...p, name: s.title, price: prices.length ? Math.min(...prices) : null, compareAt: null, sizes: s.sizes, colours, variants }
 }
 
-export const products: Product[] = (data as unknown as Product[]).map(withShopify).map((p) =>
+// Every handle products.json already maps to a site slug (directly or via
+// SHOPIFY_HANDLES) is "covered". Any Shopify handle left over is a product
+// that only exists in Shopify, appended with its own Shopify-sourced photos.
+const hand = data as unknown as Product[]
+const coveredHandles = new Set(hand.map((p) => shopifyHandle(p.slug)))
+const shopifyOnly = Object.entries(SHOPIFY)
+  .filter(([handle]) => !coveredHandles.has(handle))
+  .map(([handle, s]) => fromShopifyOnly(handle, s))
+  .filter((p): p is Product => !!p)
+
+export const products: Product[] = [...hand.map(withShopify), ...shopifyOnly].map((p) =>
   FIXTURE
     ? {
         ...p,
