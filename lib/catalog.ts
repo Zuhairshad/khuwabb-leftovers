@@ -56,9 +56,9 @@ const SHOPIFY = (shopify as unknown as { products: Record<string, ShopifyProduct
 export const shopifyHandle = (slug: string) => (SHOPIFY_HANDLES as Record<string, string>)[slug] ?? slug
 
 // A product that exists in Shopify but has no products.json entry has no
-// hand-photographed colours or copy — reuse a pastel already in rotation
-// rather than inventing a new one.
-const NEUTRAL_TINT = "rgb(213, 229, 190)"
+// hand-picked tint — cycle through the pastels the hand-made products use,
+// so neighbouring cards differ like they do in the original grid.
+const TINTS = ["rgb(213, 229, 190)", "rgb(246, 201, 207)", "rgb(201, 210, 242)", "rgb(247, 210, 184)", "rgb(245, 231, 166)"]
 const NEW_IN_WINDOW_MS = 30 * 24 * 60 * 60 * 1000
 
 function shopifyPrices(variants: ShopifyProduct["variants"]): Pick<Product, "price" | "compareAt"> {
@@ -109,7 +109,7 @@ function fromShopifyOnly(handle: string, s: ShopifyProduct): Product | null {
     colours,
     variants,
     details: { description: s.description ?? null, fabric: null, care: null, sizeChart: null },
-    tint: NEUTRAL_TINT,
+    tint: TINTS[0],
     newIn,
     sourceUrl: null,
   }
@@ -137,6 +137,7 @@ const shopifyOnly = Object.entries(SHOPIFY)
   .filter(([handle]) => !coveredHandles.has(handle))
   .map(([handle, s]) => fromShopifyOnly(handle, s))
   .filter((p): p is Product => !!p)
+  .map((p, i) => ({ ...p, tint: TINTS[i % TINTS.length] }))
 
 export const products: Product[] = [...hand.map(withShopify), ...shopifyOnly].map((p) =>
   FIXTURE

@@ -50,7 +50,8 @@ and click **Create webhook**. Create one webhook per event below (repeat
 
 For each one, set:
 - **Format**: JSON
-- **URL**: `https://<your-site-domain>/api/shopify-webhook`
+- **URL**: `https://khuwabb-export-factory-leftovers.vercel.app/api/shopify-webhook`
+  (once the real domain is connected, change it to `https://<real domain>/api/shopify-webhook`)
 - **Webhook API version**: 2026-10 (matches `SHOPIFY_API_VERSION` in
   `lib/shopify-config.mjs` — if that file is ever bumped to a newer version,
   update these webhooks to match)
@@ -77,7 +78,7 @@ up correctly (whether or not it actually starts a build depends on the
 request to the endpoint directly:
 
 ```
-SHOPIFY_WEBHOOK_SECRET=<the secret> node scripts/test-webhook.mjs https://<your-site-domain>/api/shopify-webhook
+SHOPIFY_WEBHOOK_SECRET=<the secret> node scripts/test-webhook.mjs https://khuwabb-export-factory-leftovers.vercel.app/api/shopify-webhook
 ```
 
 Add `--bad-signature` to confirm the endpoint correctly rejects a request
