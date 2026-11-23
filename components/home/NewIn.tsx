@@ -2,7 +2,7 @@
 
 import { m } from "framer-motion"
 import type { CSSProperties } from "react"
-import { newArrivals, photo, productHref } from "@/lib/catalog"
+import { newArrivals, photo, productHref, type Product } from "@/lib/catalog"
 import { ProductPrice } from "@/components/product/ProductPrice"
 import { Ticker } from "../Ticker"
 import { SectionHeader } from "./SectionHeader"
@@ -10,7 +10,21 @@ import styles from "./NewIn.module.css"
 import { atLeast } from "@/lib/img"
 import { LaterImg } from "../LaterImg"
 
-const NEW_IN = newArrivals.slice(0, 14)
+// Keep the newest items first within each category and alternate categories on the rack.
+const categories = new Map<string, Product[]>()
+for (const product of newArrivals) {
+  const key = /^(Activewear|Activewear Sets|Gymwear|Leggings)$/.test(product.category)
+    ? "Activewear"
+    : product.category
+  const group = categories.get(key) ?? []
+  group.push(product)
+  categories.set(key, group)
+}
+
+const groups = [...categories.values()]
+const NEW_IN = Array.from({ length: Math.max(0, ...groups.map((group) => group.length)) }, (_, index) =>
+  groups.flatMap((group) => group.slice(index, index + 1)),
+).flat()
 
 // These source images place the top on the left and the trousers on the right.
 export function hangerPhotoStyle(slug: string): CSSProperties | undefined {
