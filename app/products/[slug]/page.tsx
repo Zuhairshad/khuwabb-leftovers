@@ -1,9 +1,12 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { ProductDetail } from "@/components/product/ProductDetail"
-import { getProduct, photo, productHref, products } from "@/lib/catalog"
+import { anyOrderable, getProduct, photo, productHref, products } from "@/lib/catalog"
 import { breadcrumbJsonLd, jsonLd, productJsonLd } from "@/lib/jsonld"
 import { absoluteUrl, trimTo } from "@/lib/site"
+import { ProductGrid } from "@/components/shop/ProductGrid"
+import { SectionHeader } from "@/components/home/SectionHeader"
+import styles from "./recommendations.module.css"
 
 type Params = { params: Promise<{ slug: string }> }
 
@@ -39,6 +42,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export default async function ProductPage({ params }: Params) {
   const p = getProduct((await params).slug)
   if (!p) notFound()
+  const available = products.filter((item) => item.id !== p.id && anyOrderable(item) && photo(item).src)
+  const related = [
+    ...available.filter((item) => item.category === p.category),
+    ...available.filter((item) => item.category !== p.category),
+  ].slice(0, 4)
   const breadcrumb = breadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
@@ -49,6 +57,12 @@ export default async function ProductPage({ params }: Params) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(productJsonLd(p)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumb) }} />
       <ProductDetail slug={p.slug} />
+      {related.length > 0 && (
+        <section className={styles.section} aria-label="You may also like">
+          <SectionHeader title="You may also like" cta={{ href: "/shop", label: "Shop all" }} />
+          <ProductGrid items={related} eager={false} />
+        </section>
+      )}
     </>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { m } from "framer-motion"
-import { photo, productHref, products } from "@/lib/catalog"
+import { photo, productHref, products, type Product } from "@/lib/catalog"
 import { atLeast } from "@/lib/img"
 import { ProductPrice } from "@/components/product/ProductPrice"
 import styles from "./ProductGrid.module.css"
@@ -10,10 +10,10 @@ const rise = { duration: 1.1, ease: [0.22, 1, 0.36, 1] } as const
 
 // Every product as an arched "scoop" card; each card rises in as it enters
 // and its cut-out pops on hover.
-export function ProductGrid() {
+export function ProductGrid({ items = products, eager = true }: { items?: Product[]; eager?: boolean }) {
   return (
     <div className={styles.grid}>
-      {products.map((p, i) => (
+      {items.map((p, i) => (
         <m.a
           key={p.id}
           href={productHref(p)}
@@ -29,7 +29,7 @@ export function ProductGrid() {
               className={styles.cutout}
               whileHover={{ rotate: -3, scale: 1.08, y: -6, transition: { type: "spring", bounce: 0.45, duration: 0.9 } }}
             >
-              <img src={atLeast(photo(p).src, 360)} alt={p.name} draggable={false} loading={i < 4 ? "eager" : "lazy"} decoding="async" />
+              <img src={atLeast(photo(p).src, 360)} alt={p.name} draggable={false} loading={eager && i < 4 ? "eager" : "lazy"} decoding="async" />
             </m.div>
           </div>
           <div className={styles.info}>
