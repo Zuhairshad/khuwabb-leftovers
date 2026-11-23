@@ -1,14 +1,13 @@
 "use client"
 
 import { m } from "framer-motion"
-import { photo, productHref, products } from "@/lib/catalog"
+import { newArrivals, photo, productHref } from "@/lib/catalog"
 import { ProductPrice } from "@/components/product/ProductPrice"
 import { hangerPhotoStyle, Hook } from "../home/NewIn"
 import styles from "./NewInPage.module.css"
 import { atLeast, responsive } from "@/lib/img"
 
 const ease = [0.22, 1, 0.36, 1] as const
-const NEW_IN = products.filter((p) => p.newIn)
 
 export function NewInPage() {
   return (
@@ -33,7 +32,7 @@ export function NewInPage() {
       </div>
 
       <div className={styles.grid} data-section="new-in-grid">
-        {NEW_IN.map((p) => (
+        {newArrivals.map((p) => (
           <m.a
             key={p.id}
             href={productHref(p)}

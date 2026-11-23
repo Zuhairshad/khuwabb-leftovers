@@ -2,7 +2,7 @@
 
 import { m } from "framer-motion"
 import type { CSSProperties } from "react"
-import { photo, productHref, products } from "@/lib/catalog"
+import { newArrivals, photo, productHref } from "@/lib/catalog"
 import { ProductPrice } from "@/components/product/ProductPrice"
 import { Ticker } from "../Ticker"
 import { SectionHeader } from "./SectionHeader"
@@ -10,7 +10,7 @@ import styles from "./NewIn.module.css"
 import { atLeast } from "@/lib/img"
 import { LaterImg } from "../LaterImg"
 
-const NEW_IN = products.filter((p) => p.newIn).slice(0, 14)
+const NEW_IN = newArrivals.slice(0, 14)
 
 // These source images place the top on the left and the trousers on the right.
 export function hangerPhotoStyle(slug: string): CSSProperties | undefined {

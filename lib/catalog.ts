@@ -149,6 +149,16 @@ export const products: Product[] = [...hand.map(withShopify), ...shopifyOnly].ma
     : p,
 )
 
+// Both New Arrivals views use the same Shopify creation dates.
+export const newArrivals = products
+  .filter((product) => product.newIn)
+  .map((product) => ({
+    product,
+    createdAt: Date.parse(SHOPIFY[shopifyHandle(product.slug)]?.createdAt ?? "") || 0,
+  }))
+  .sort((a, b) => b.createdAt - a.createdAt)
+  .map(({ product }) => product)
+
 const bySlug = new Map(products.map((p) => [p.slug, p]))
 export const getProduct = (slug: string | null | undefined) => (slug ? bySlug.get(slug) : undefined)
 
