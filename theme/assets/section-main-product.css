@@ -107,9 +107,6 @@ product-form {
 }
 
 .product__price {
-  display: flex;
-  gap: 10px;
-  align-items: baseline;
   font-size: 22px;
   font-weight: 500;
 }

@@ -8,17 +8,33 @@
   - sizes   (optional) default '(max-width: 809.98px) 45vw, 290px'
   - appear  (optional) true (default) | false. true = card rises in on scroll (data-appear="card", appear.js, amount .15)
   - class   (optional) extra classes on the link
+  - index   (optional) position in the grid (e.g. forloop.index0), used only to pick the tint fallback below
 
-  Tint: product.metafields.custom.tint (no fallback, like `p.tint ?? undefined`).
+  Tint: product.metafields.custom.tint. Blank -> rotate through the pastels lib/catalog.ts gives
+  Shopify-only products (TINTS), picked by `index` when given, else `product.id | modulo: 5`
+  (lib/catalog.ts: products.json products keep their hand-picked tint; Shopify-only ones rotate).
   CSS: the section must load {{ 'section-main-collection-grid.css' | asset_url | stylesheet_tag }} (product-card rules live there)
-  and appear.js is already loaded globally.
+  and {{ 'component-product-price.css' | asset_url | stylesheet_tag }}; appear.js is already loaded globally.
 
-  Usage: {% render 'product-card', product: product, loading: 'eager' %}
+  Usage: {% render 'product-card', product: product, loading: 'eager', index: forloop.index0 %}
 {%- endcomment -%}
 {%- liquid
+  assign pc_tints = 'rgb(213, 229, 190)|rgb(246, 201, 207)|rgb(201, 210, 242)|rgb(247, 210, 184)|rgb(245, 231, 166)' | split: '|'
   assign pc_tint = product.metafields.custom.tint.value | default: ''
+  if pc_tint == blank
+    assign pc_tint_idx = index
+    if pc_tint_idx == blank
+      assign pc_tint_idx = product.id | modulo: 5
+    endif
+    assign pc_tint_idx = pc_tint_idx | modulo: 5
+    assign pc_tint = pc_tints[pc_tint_idx]
+  endif
   assign pc_sizes = sizes | default: '(max-width: 809.98px) 45vw, 290px'
   assign pc_loading = loading | default: 'lazy'
+
+  # Lowest-priced variant's compare-at (lib/catalog.ts shopifyPrices picks the lowest-priced variant's compareAt).
+  assign pc_compare_variant = product.variants | where: 'price', product.price_min | first
+  assign pc_compare_at = pc_compare_variant.compare_at_price
 -%}
 <a
   href="{{ product.url }}"
@@ -40,6 +56,6 @@
   </div>
   <div class="product-card__info">
     <p class="product-card__name">{{ product.title | escape }}</p>
-    <p class="product-card__price">{% render 'price', price: product.price %}</p>
+    <p class="product-card__price">{% render 'product-price', price: product.price, compare_at: pc_compare_at %}</p>
   </div>
 </a>

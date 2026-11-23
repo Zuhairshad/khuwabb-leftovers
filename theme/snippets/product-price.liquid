@@ -1,0 +1,36 @@
+{%- comment -%}
+  Original + sale price (components/product/ProductPrice.tsx): when there's a compare-at price
+  above the current price, the struck-through original renders FIRST, then the current price.
+  Uses the `price` snippet for formatting (same Rs.#,### rules), so it's independent of the
+  store's money format.
+
+  Parameters:
+  - price      (required) current price, in cents. blank -> empty output.
+  - compare_at (optional) compare-at price, in cents. Shown struck through only when > price.
+
+  CSS: this snippet does NOT load its stylesheet. Any section that renders it (directly or via
+  product-card / hanger-card) must include once:
+    {{ 'component-product-price.css' | asset_url | stylesheet_tag }}
+
+  Usage: {% render 'product-price', price: product.price, compare_at: pc_compare_at %}
+{%- endcomment -%}
+{%- if price != blank -%}
+  {%- liquid
+    assign pp_show_compare = false
+    if compare_at != blank and compare_at > price
+      assign pp_show_compare = true
+    endif
+  -%}
+  {%- capture pp_current -%}{% render 'price', price: price %}{%- endcapture -%}
+  {%- assign pp_current = pp_current | strip -%}
+  {%- if pp_show_compare -%}
+    {%- capture pp_original -%}{% render 'price', price: compare_at %}{%- endcapture -%}
+    {%- assign pp_original = pp_original | strip -%}
+  {%- endif -%}
+  <span class="product-price">
+    {%- if pp_show_compare -%}
+      <s class="product-price__original" aria-label="Original price {{ pp_original }}">{{ pp_original }}</s>
+    {%- endif -%}
+    <span>{{ pp_current }}</span>
+  </span>
+{%- endif -%}

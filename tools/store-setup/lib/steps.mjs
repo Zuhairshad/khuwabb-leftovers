@@ -8,7 +8,7 @@
 // descriptions, redirects, pinning+storefront access on existing definitions).
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
-import { ROOT, DEFINITIONS, COLLECTIONS, MENUS, REDIRECTS, FILES, EMAIL } from "./data.mjs"
+import { ROOT, DEFINITIONS, COLLECTIONS, MENUS, REDIRECTS, FILES, EMAIL, SHOPIFY_ONLY_TINTS } from "./data.mjs"
 import { collectionsCreatedByScript } from "./undo-log.mjs"
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -42,7 +42,11 @@ const newStat = () => ({ created: 0, updated: 0, unchanged: 0, errors: 0 })
 
 async function shopProducts(ctx) {
   if (ctx.cache.products) return ctx.cache.products
-  const nodes = await ctx.api.all(async (after) => (await ctx.api.gql(`query($after:String){products(first:50,after:$after){nodes{id handle title productType descriptionHtml metafields(first:20,namespace:"custom"){nodes{key value type}}} pageInfo{hasNextPage endCursor}}}`, { after })).products)
+  // No sortKey is given, so this relies on the Admin API's default product order (documented as
+  // ID ascending, same default as the Storefront `products` query that scripts/sync-shopify.mjs
+  // uses to build data/shopify.json) — needed so the Shopify-only tint rotation below lines up
+  // with lib/catalog.ts's. UNTESTED against a live store; verify order before trusting go-live.
+  const nodes = await ctx.api.all(async (after) => (await ctx.api.gql(`query($after:String){products(first:50,after:$after){nodes{id handle title productType descriptionHtml tags metafields(first:20,namespace:"custom"){nodes{key value type}}} pageInfo{hasNextPage endCursor}}}`, { after })).products)
   return (ctx.cache.products = new Map(nodes.map((n) => [n.handle, n])))
 }
 
@@ -106,6 +110,7 @@ const products = {
     `[additive] per product: write custom.tint/category_line/fabric/care/size_guide ONLY for keys that are currently unset in Shopify (existing different value → report "[skip] differs", never overwritten, even with --go-live)`,
     `[go-live] per product: productType → category (default mode only reports a mismatch)`,
     ...(flags.descriptions ? [`[go-live] --descriptions: fill descriptionHtml only where Shopify's is empty (default mode, even with --descriptions, only reports)`] : []),
+    `[additive] Shopify-only products (not in products.json, by handle): write custom.tint ONLY if currently unset, rotating through the same 5 pastels as lib/catalog.ts's TINTS, assigned by index in the live Admin API product list order after removing products.json-covered handles — mirrors lib/catalog.ts's Object.entries(data/shopify.json.products) ordering; an existing different value is reported "[skip] differs", never overwritten`,
     ...local.shopifyHandles.filter((h) => !local.items.some((i) => i.handle === h)).map((h) => `[report-only] ${h} is in data/shopify.json but not data/products.json`),
   ],
   async run(ctx) {
@@ -151,7 +156,30 @@ const products = {
             return { after: { productType: input.productType ?? sp.productType, metafieldsSet: sets.map((m) => m.key) }, undo }
           } })
     }
-    for (const [h] of shop) if (!ctx.local.items.some((i) => i.handle === h)) report(ctx, `${h}: in Shopify but NOT in products.json (left untouched)`)
+    // Shopify-only products (exist live, no products.json entry): rotate custom.tint through
+    // the same 5 pastels lib/catalog.ts uses for them, in the same index order — the live
+    // product list here in place of data/shopify.json's. Unset-only, same as every other field
+    // above: an existing different value is reported, never overwritten.
+    const coveredHandles = new Set(ctx.local.items.map((i) => i.handle))
+    let tintIndex = 0
+    for (const [h, sp] of shop) {
+      if (coveredHandles.has(h)) continue
+      const tint = SHOPIFY_ONLY_TINTS[tintIndex % SHOPIFY_ONLY_TINTS.length]
+      const idx = tintIndex++
+      report(ctx, `${h}: in Shopify but NOT in products.json (left untouched, except custom.tint below)`)
+      const have = new Map(sp.metafields.nodes.map((m) => [m.key, m.value]))
+      const cur = have.get("tint")
+      if (cur != null && cur !== "") {
+        if (cur.toLowerCase() !== tint.toLowerCase()) report(ctx, `${h}: custom.tint differs ("${cur}" vs desired "${tint}", rotation index ${idx}) — [skip] differs, never overwritten; review by hand`)
+        else st.unchanged++
+        continue
+      }
+      await act(ctx, st, `${h}: custom.tint (was unset) → "${tint}" [Shopify-only, rotation index ${idx}]`, () => ctx.api.mutate(
+        `mutation($p:ProductUpdateInput!){productUpdate(product:$p){product{id} userErrors{field message}}}`,
+        { p: { id: sp.id, metafields: [{ namespace: "custom", key: "tint", type: "color", value: tint }] } }, "productUpdate"), "updated",
+        { step: "products", op: "productUpdate", target: h, before: { metafields: [{ key: "tint", value: null }] },
+          after: () => ({ after: { metafieldsSet: ["tint"] }, undo: [{ mutation: "metafieldsDelete", variables: { metafields: [{ ownerId: sp.id, namespace: "custom", key: "tint" }] } }] }) })
+    }
     return st
   },
 }
@@ -256,12 +284,25 @@ const media = {
 }
 
 // ---------------------------------------------------------------- collections
+const ruleSetFor = (c) => c.manual ? null
+  : c.tag ? { appliedDisjunctively: true, rules: [{ column: "TAG", relation: "EQUALS", condition: c.tag }] }
+  : { appliedDisjunctively: false, rules: [{ column: "TYPE", relation: "EQUALS", condition: c.type }] }
+const describeWanted = (c) => c.manual ? "manual"
+  : c.tag ? `automated, rule TAG equals "${c.tag}" (disjunctive)${c.sortOrder ? `, sortOrder ${c.sortOrder}` : ""}`
+  : `automated, rule TYPE equals "${c.type}"`
+const describeExisting = (ex) => ex.ruleSet
+  ? `rule ${ex.ruleSet.rules.map((r) => `${r.column} ${r.relation} ${r.condition}`).join(" & ")} (disjunctive=${ex.ruleSet.appliedDisjunctively}), sortOrder ${ex.sortOrder ?? "unknown"}`
+  : "manual (no rule)"
+
 const collections = {
   plan: (local, flags) => [
     ...COLLECTIONS.map((c) => c.manual
       ? `[additive] create manual collection "${c.title}" (${c.handle}) UNPUBLISHED if its handle doesn't exist yet; add ${local.items.filter((i) => i.newIn).length} newIn product(s) [additive, only if this script created it]`
-      : `[additive] create smart collection "${c.title}" (${c.handle}) UNPUBLISHED if its handle doesn't exist yet: product type = "${c.type}"`),
-    `[report-only] if a collection's handle already exists: report only — never add products, publish, or change its rules`,
+      : c.tag
+        ? `[additive] create automated collection "${c.title}" (${c.handle}) UNPUBLISHED if its handle doesn't exist yet: rule TAG equals "${c.tag}" (disjunctive), sortOrder ${c.sortOrder} — built with the legacy CollectionInput.ruleSet shape (Collection.ruleSet is deprecated in 2026-10 in favour of CollectionCreateInput.sources, but ruleSet is still documented as functional; the sources shape is unverified against this store, so ruleSet was kept for consistency with the TYPE collections below — see README)`
+        : `[additive] create smart collection "${c.title}" (${c.handle}) UNPUBLISHED if its handle doesn't exist yet: product type = "${c.type}"`),
+    `[additive] give every products.json product with newIn:true the Shopify tag "new-in" (tagsAdd, never removes other tags) if it doesn't already have it — keeps it in the "new-in" collection now that collection's rule is TAG equals "new-in", and matches the storefront's own tag-based newIn check`,
+    `[report-only] if a collection's handle already exists: report only — never add products, publish, or change its rules/sortOrder (for "new-in": reports exactly what would need to change — convert to automated TAG equals "new-in" + sortOrder CREATED_DESC — if it's still the old manual collection)`,
     `[publish-new-collections / go-live] publish ONLY collections this script created (recorded in this run or in tools/store-setup/out/undo-*.jsonl) to the Online Store publication; a pre-existing collection is never published by this script`,
   ],
   async run(ctx) {
@@ -271,15 +312,32 @@ const collections = {
     if (!online) { ctx.errors.push(`no "Online Store" publication found (have: ${pubs.map((p) => p.name).join(", ")})`); st.errors++ }
     const shop = await shopProducts(ctx)
     const scriptCreated = new Set(ctx.store ? collectionsCreatedByScript(ctx.store) : [])
-    const Q = `query($h:String!,$pub:ID!){collectionByIdentifier(identifier:{handle:$h}){id title ruleSet{appliedDisjunctively rules{column relation condition}} products(first:250){nodes{id}} publishedOnPublication(publicationId:$pub)}}`
+    // Additive, independent of collection creation/existence: every products.json newIn product
+    // gets the Shopify tag "new-in" if it doesn't have it yet (tagsAdd only adds; it never
+    // touches other tags). This is what keeps newIn products in "new-in" once that collection's
+    // rule is TAG equals "new-in" (see COLLECTIONS in lib/data.mjs), and it mirrors the
+    // storefront's own tag-based `newIn` check in lib/catalog.ts.
+    for (const it of ctx.local.items.filter((i) => i.newIn)) {
+      const sp = shop.get(it.handle)
+      if (!sp) continue // already reported as missing-from-Shopify by the products step
+      if ((sp.tags ?? []).includes("new-in")) { st.unchanged++; continue }
+      await act(ctx, st, `${it.handle}: add tag "new-in" (tagsAdd)`, () => ctx.api.mutate(
+        `mutation($id:ID!,$t:[String!]!){tagsAdd(id:$id,tags:$t){node{id} userErrors{field message}}}`,
+        { id: sp.id, t: ["new-in"] }, "tagsAdd"), "updated",
+        { step: "collections", op: "tagsAdd", target: it.handle, before: { tags: sp.tags ?? [] },
+          after: () => ({ after: { tags: [...(sp.tags ?? []), "new-in"] }, undo: { mutation: "tagsRemove", variables: { id: sp.id, tags: ["new-in"] } } }) })
+    }
+    const Q = `query($h:String!,$pub:ID!){collectionByIdentifier(identifier:{handle:$h}){id title sortOrder ruleSet{appliedDisjunctively rules{column relation condition}} products(first:250){nodes{id}} publishedOnPublication(publicationId:$pub)}}`
     for (const c of COLLECTIONS) {
       let ex = (await ctx.api.gql(Q, { h: c.handle, pub: online?.id ?? "gid://shopify/Publication/0" })).collectionByIdentifier
       let id = ex?.id
       let createdThisRun = false
       if (!ex) {
         const input = { title: c.title, handle: c.handle }
-        if (!c.manual) input.ruleSet = { appliedDisjunctively: false, rules: [{ column: "TYPE", relation: "EQUALS", condition: c.type }] }
-        await act(ctx, st, `create ${c.manual ? "manual" : "smart"} collection "${c.title}" (${c.handle}) [UNPUBLISHED]`, async () => {
+        const rs = ruleSetFor(c)
+        if (rs) input.ruleSet = rs
+        if (c.sortOrder) input.sortOrder = c.sortOrder
+        await act(ctx, st, `create ${c.manual ? "manual" : "automated"} collection "${c.title}" (${c.handle}) [UNPUBLISHED]`, async () => {
           const r = await ctx.api.mutate(`mutation($i:CollectionInput!){collectionCreate(input:$i){collection{id} userErrors{field message}}}`, { i: input }, "collectionCreate")
           id = r.collection.id
           return r
@@ -289,8 +347,10 @@ const collections = {
         if (id) { createdThisRun = true; scriptCreated.add(c.handle) }
       } else {
         const r = ex.ruleSet?.rules ?? []
-        const ok = c.manual ? !ex.ruleSet : r.length === 1 && r[0].column === "TYPE" && r[0].relation === "EQUALS" && r[0].condition === c.type
-        if (!ok) report(ctx, `collection ${c.handle} exists with different type/rules than desired; left unchanged — fix by hand if wrong`)
+        const ok = c.manual ? !ex.ruleSet
+          : c.tag ? ex.ruleSet?.appliedDisjunctively === true && r.length === 1 && r[0].column === "TAG" && r[0].relation === "EQUALS" && r[0].condition === c.tag && (!c.sortOrder || ex.sortOrder === c.sortOrder)
+          : r.length === 1 && r[0].column === "TYPE" && r[0].relation === "EQUALS" && r[0].condition === c.type
+        if (!ok) report(ctx, `collection ${c.handle} exists but is ${describeExisting(ex)} — wanted ${describeWanted(c)}; left unchanged (fix by hand)`)
         else report(ctx, `collection ${c.handle} already exists — report only, not modified`)
         st.unchanged++
       }

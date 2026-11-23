@@ -6,9 +6,19 @@
         "show_thumbs": true,
         "restock_note": "This colour is sold out right now. Message {email} to ask about a restock."
       }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You may also like",
+        "cta_label": "Shop all",
+        "cta_href": "/collections/all",
+        "limit": 4
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "related-products"
   ]
 }

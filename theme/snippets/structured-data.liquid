@@ -1,0 +1,53 @@
+{%- comment -%}
+  Structured data (lib/jsonld.ts): Organization + WebSite on the home page, a BreadcrumbList
+  (Home → Shop → product) on product pages. Product JSON-LD itself already renders in
+  sections/main-product.liquid, so it is not duplicated here. Rendered once from
+  snippets/head-meta.liquid: {% render 'structured-data' %}.
+{%- endcomment -%}
+{%- liquid
+  assign sd_logo = 'logo.png' | asset_url
+  unless sd_logo contains 'https:'
+    assign sd_logo = 'https:' | append: sd_logo
+  endunless
+-%}
+{%- if template.name == 'index' -%}
+<script type="application/ld+json">
+  {%- liquid
+    echo '{"@context":"https://schema.org","@type":"Organization","name":'
+    echo shop.name | json
+    echo ',"url":'
+    echo shop.url | json
+    echo ',"logo":'
+    echo sd_logo | json
+    echo '}'
+  -%}
+</script>
+<script type="application/ld+json">
+  {%- liquid
+    echo '{"@context":"https://schema.org","@type":"WebSite","name":'
+    echo shop.name | json
+    echo ',"url":'
+    echo shop.url | json
+    echo '}'
+  -%}
+</script>
+{%- elsif template.name == 'product' -%}
+<script type="application/ld+json">
+  {%- liquid
+    assign sd_shop_url = shop.url | append: '/collections/all'
+    echo '{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":'
+    echo 'Home' | json
+    echo ',"item":'
+    echo shop.url | json
+    echo '},{"@type":"ListItem","position":2,"name":'
+    echo 'Shop' | json
+    echo ',"item":'
+    echo sd_shop_url | json
+    echo '},{"@type":"ListItem","position":3,"name":'
+    echo product.title | json
+    echo ',"item":'
+    echo canonical_url | json
+    echo '}]}'
+  -%}
+</script>
+{%- endif -%}

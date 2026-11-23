@@ -1,12 +1,20 @@
 {{ 'component-hanger-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-price.css' | asset_url | stylesheet_tag }}
 {{ 'section-new-in.css' | asset_url | stylesheet_tag }}
 
 {%- paginate collection.products by section.settings.products_per_page -%}
   <section class="new-in new-in--grid">
     {%- if collection.products.size > 0 -%}
+      {%- comment -%}
+        Newest first (no category mixing — components/new-in/NewInPage.tsx
+        just renders `newArrivals` in order). This sorts each page of
+        results; store-setup sets the "new-in" collection's own sort order to
+        "Date, new to old" too, so later pages stay newest-first as well.
+      {%- endcomment -%}
+      {%- assign nc_sorted = collection.products | sort: 'created_at' | reverse -%}
       <div class="new-in__grid" data-section="new-in-grid">
-        {%- for product in collection.products -%}
-          {% render 'hanger-card', product: product, context: 'grid', sizes: '(max-width: 809.98px) 45vw, 280px' %}
+        {%- for product in nc_sorted -%}
+          {% render 'hanger-card', product: product, context: 'grid', sizes: '(max-width: 809.98px) 45vw, 280px', index: forloop.index0 %}
         {%- endfor -%}
       </div>
       {%- if paginate.pages > 1 -%}

@@ -15,14 +15,75 @@ data, or is customer-visible on the live theme, needs `--go-live` (and some thin
 | Step | Default `--apply` (additive only) | With `--go-live` | Admin API calls |
 |---|---|---|---|
 | `definitions` | Create missing `custom.*` definitions (pinned, storefront `PUBLIC_READ`) | On an **existing** definition: set storefront `PUBLIC_READ` + pin (default mode only reports it). Type mismatch is always an error, never auto-fixed | `metafieldDefinitions`, `metafieldDefinitionCreate`, `metafieldDefinitionUpdate`, `metafieldDefinitionPin` |
-| `products` | Write `custom.tint` / `category_line` / `fabric` / `care` / `size_guide` only for keys **currently unset** on the product. An existing *different* value is reported `[skip] differs` and never overwritten — not even with `--go-live` | `productType` changes to match the catalog; `--descriptions` fills `descriptionHtml` only where Shopify's is empty | `products`, `productUpdate` |
+| `products` | Write `custom.tint` / `category_line` / `fabric` / `care` / `size_guide` only for keys **currently unset** on the product. An existing *different* value is reported `[skip] differs` and never overwritten — not even with `--go-live`. Also: for products that exist in Shopify but have **no** `data/products.json` entry, write `custom.tint` (unset-only, same rule) from a 5-colour rotation — see "Tints for Shopify-only products" below | `productType` changes to match the catalog; `--descriptions` fills `descriptionHtml` only where Shopify's is empty | `products`, `productUpdate` |
 | `media` | Reports only (nothing uploaded, nothing linked) | Uploads each colour × view photo and sets variant media to the colour's front image. A variant that already has a **different** media attached is skipped and reported, never detached | `stagedUploadsCreate`, `productUpdate(product, media)`, `productVariantAppendMedia` |
-| `collections` | Creates a collection **only if its handle doesn't exist**, **UNPUBLISHED**. If the handle exists: reports only — never adds products, never publishes, never changes rules. Adding products to a manual collection (`new-in`) is additive but only for collections this script created | Also publishes collections this script created | `publications`, `collectionByIdentifier`, `collectionCreate`, `collectionAddProducts` |
+| `collections` | Creates a collection **only if its handle doesn't exist**, **UNPUBLISHED**. If the handle exists: reports only — never adds products, never publishes, never changes rules/sort order. `new-in` is an **automated** collection (rule `TAG equals "new-in"`, disjunctive, `sortOrder CREATED_DESC`) — see "The `new-in` collection" below. Additively tags every `newIn:true` product `new-in` via `tagsAdd` (independent of whether the collection itself exists yet) | Also publishes collections this script created | `publications`, `collectionByIdentifier`, `collectionCreate`, `tagsAdd` |
 | `menus` | Create-only, by handle. If the handle already exists: reports differences, does nothing (`menuUpdate` is never called). Main menu handle is `khuwabb-main` ("Main menu") — the store's own `main-menu` is never read for writing or modified | — (menus has no go-live-only ops) | `menus`, `menuCreate` |
 | `redirects` | Reports only | Creates a redirect only if the path has none yet. An existing path with a different target is reported, never updated (`urlRedirectUpdate` is never called) | `urlRedirects`, `urlRedirectCreate` |
 | `files` (only with `--files`) | Uploads brand images not already present (optional; the theme has asset fallbacks) | — | `files`, `stagedUploadsCreate`, `fileCreate` |
 
 Class of every operation, as shown in `--plan`: `[additive]`, `[go-live]`, `[publish-new-collections]`, or `[report-only]`.
+
+## The `new-in` collection
+
+As of 2026-11, `new-in` (handle) / "New arrivals" (title) is defined in `lib/data.mjs`'s
+`COLLECTIONS` as an **automated** collection, not manual: rule `TAG equals "new-in"`,
+`appliedDisjunctively: true`, `sortOrder: CREATED_DESC` (newest first). Reasoning:
+
+- **Why automated now, not manual-with-adds**: the headless site (`lib/catalog.ts`) already
+  treats a product as New In if it's tagged `new-in` (or in `products.json` with `newIn: true`,
+  or created in the last 30 days). A tag-ruled smart collection matches that definition exactly
+  and stays correct on its own as new products are tagged, instead of needing a script run every
+  time a product should join or leave it.
+- **How `products.json`'s `newIn: true` products stay in it**: the `collections` step
+  additively tags every such product `new-in` via `tagsAdd` (which only *adds* a tag — it never
+  touches the product's other tags), every run, regardless of whether this step created the
+  collection itself. `tagsAdd` is not denylisted (it's purely additive); its reverse, `tagsRemove`,
+  **is** denylisted (added to `lib/api.mjs`'s `DENYLIST`) and is only ever called by `undo.mjs`.
+- **`CollectionInput.ruleSet` vs the new `CollectionCreateInput.sources`**: the 2026-10 Admin API
+  deprecates `Collection.ruleSet` in favour of `Collection.sources`, and `collectionCreate(input:)`
+  in favour of `collectionCreate(collection:)` with a `sources` list (e.g.
+  `CollectionSourceInclusionConditionProductTag`). Per Shopify's docs, the legacy `input`/`ruleSet`
+  shape is deprecated but **still functional** in 2026-10 ("a `ruleSet` rule maps to an equivalent
+  source condition"). This script **keeps the legacy `ruleSet` shape**, the same one already used
+  (untouched) for the `jackets`/`trousers`/`dresses`/`gym-wear`/`co-ord-sets` TYPE collections,
+  rather than switching to the new `sources` input — the new shape's exact field names could only
+  be confirmed via Shopify's public docs (not this repo) and not against a real `collectionCreate`
+  call on this store, so it's treated as unverified. If `ruleSet` is ever retired for real,
+  migrate `ruleSetFor()` in `lib/steps.mjs` and the `collectionCreate` mutation body in the
+  `collections` step to `collection:`/`sources`.
+- **Pre-existing `new-in` collection (the common case — it was manual before this change)**: per
+  the "never modify an existing collection" rule, the script **never** converts it automatically.
+  It is only **reported**: `--dry-run`/`--apply` print exactly what differs (current rule/manual,
+  current `sortOrder`, vs. the wanted automated TAG rule + `CREATED_DESC`) so the owner can decide
+  whether to delete and let the script recreate it, or edit it by hand in the admin (Collections →
+  new-in → edit conditions to "Product tag" "is equal to" "new-in", match type "any", sort "Date
+  created (newest first)"). The newIn-product tagging (`tagsAdd`) still runs either way, additively.
+
+## Tints for Shopify-only products
+
+`lib/catalog.ts` gives every Shopify product that has **no** `data/products.json` entry a
+pastel `tint` from a fixed 5-colour rotation (`TINTS`, by index `i % 5`), computed over
+`Object.entries(data/shopify.json.products)` **after** removing handles covered by
+`data/products.json` (via `SHOPIFY_HANDLES`). Those tints only exist in the frontend bundle's
+memory, not in Shopify — new in 2026-11, the `products` step also writes them to Shopify as the
+`custom.tint` metafield (unset-only, exactly like the other per-product fields in this step), so
+they're visible to anything else reading the Admin API and so a value, once set, won't silently
+drift if the rotation changes later. Order: `SHOPIFY_ONLY_TINTS` in `lib/data.mjs` is the same 5
+`rgb(...)` strings as `lib/catalog.ts`'s `TINTS`, converted to hex (`custom.tint` is a `color`
+metafield); kept in sync by hand — if either list changes, change the other. The rotation index
+is assigned by walking the **live Admin API product list**, in the order
+`shopProducts()`/`products(first:50,after:...)` returns it (no explicit `sortKey`), skipping any
+handle that's in `ctx.local.items` (i.e. covered by `products.json`). This mirrors
+`scripts/sync-shopify.mjs`, which also queries `products(first:100,after:...)` with no explicit
+`sortKey` to build `data/shopify.json`, and `lib/catalog.ts`, which walks that file's insertion
+order — so the assumption is that the Admin and Storefront `products` queries use the same
+default order (documented as `ID` ascending for both). **This is unverified against the live
+store** — if the real two orders ever disagree, the Shopify-only tint rotation here will not
+match the one the storefront computes at build time for the same products. Treat this the same
+as the other "Known API-shape risks" below: check it against a real `--dry-run` before trusting
+`--apply --go-live` for this part, and note that a value already set is never changed even if
+the order is later found to disagree (unset-only, never-overwrite).
 
 ## Modes and flags
 
@@ -61,8 +122,10 @@ with `--no-backup-check`.
 A fixed list of mutations that change or remove existing/customer-visible data —
 `menuUpdate`, `menuDelete`, `urlRedirectUpdate`, `urlRedirectDelete`, `productDelete`,
 `collectionDelete`, `productVariantDetachMedia`, `metafieldsDelete`, `fileDelete`,
-`productDeleteMedia`, `collectionUpdate`, `publishableUnpublish` — throws if called without an
-explicit `allow:true`. `setup.mjs` never passes it; only `undo.mjs` does.
+`productDeleteMedia`, `collectionUpdate`, `publishableUnpublish`, `tagsRemove` — throws if
+called without an explicit `allow:true`. `setup.mjs` never passes it; only `undo.mjs` does.
+(`tagsAdd` is **not** denylisted — it only adds a tag, never removes one, so it's additive like
+everything else `setup.mjs` calls directly.)
 
 ## Backup (`--backup`, read-only)
 
@@ -94,7 +157,8 @@ products entry can be `[metafieldsDelete]`, `[metafieldsDelete, metafieldsDelete
 `metafieldDefinitionDelete(deleteAllAssociatedMetafields:false)`; created collection →
 `collectionDelete`; published → `publishableUnpublish`; `collectionAddProducts` on a
 script-created collection → no separate undo (deleting the collection covers it; recorded for
-the audit trail anyway); created menu → `menuDelete`; created redirect → `urlRedirectDelete`;
+the audit trail anyway); `tagsAdd` (new-in tagging, and any future caller) → `tagsRemove` with
+the same tag(s); created menu → `menuDelete`; created redirect → `urlRedirectDelete`;
 created file → `fileDelete`.
 
 ```
@@ -220,3 +284,14 @@ Run order matters only a little: `definitions` before `products`; `products` bef
 - `resourcePublicationsV2`, `metafieldDefinitions(ownerType:...)` for non-`PRODUCT` owner types,
   and the `files` union fragments in the backup step are likewise unverified against a live
   store.
+- `new-in` collection's `ruleSet` with `column: TAG` (and `CollectionInput.sortOrder`): the shape
+  (`{appliedDisjunctively, rules:[{column:"TAG", relation:"EQUALS", condition:"new-in"}]}`) mirrors
+  the already-used `TYPE` rule shape and Shopify's docs confirm `TAG` is a valid `column` and that
+  legacy `ruleSet` still works in 2026-10 — but it hasn't been run against this store. See "The
+  `new-in` collection" above for why the new `sources`/`CollectionCreateInput` shape was not used
+  instead.
+- `tagsAdd(id, tags)` / `tagsRemove(id, tags)`: standard, stable Admin API mutations, but also
+  unverified against this store (no network calls were made while building this feature).
+- Shopify-only `custom.tint` rotation order (`products` step, live `products(first:50,after:...)`
+  with no explicit `sortKey`, assumed to default to `ID` ascending, same as the Storefront query
+  `scripts/sync-shopify.mjs` uses): unverified — see "Tints for Shopify-only products" above.

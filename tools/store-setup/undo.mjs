@@ -102,6 +102,7 @@ function undoQueryFor(mutation) {
     publishableUnpublish: `mutation($id:ID!,$input:[PublicationInput!]!){publishableUnpublish(id:$id,input:$input){userErrors{field message}}}`,
     menuDelete: `mutation($id:ID!){menuDelete(id:$id){deletedMenuId userErrors{field message}}}`,
     urlRedirectDelete: `mutation($id:ID!){urlRedirectDelete(id:$id){deletedUrlRedirectId userErrors{field message}}}`,
+    tagsRemove: `mutation($id:ID!,$tags:[String!]!){tagsRemove(id:$id,tags:$tags){node{id} userErrors{field message}}}`,
   }
   const q = bodies[mutation]
   if (!q) throw new Error(`no undo mutation body known for "${mutation}"`)

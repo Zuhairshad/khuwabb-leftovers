@@ -18,6 +18,14 @@ export function rgbToHex(s) {
   return "#" + [m[1], m[2], m[3]].map((n) => (+n).toString(16).padStart(2, "0")).join("")
 }
 
+// Same five pastels, in the same order, as lib/catalog.ts's TINTS — keep both lists in sync by
+// hand if either changes. lib/catalog.ts assigns these by index (i % 5) to products that are in
+// Shopify but not in data/products.json, in the order of Object.entries(data/shopify.json
+// .products) after removing handles covered by data/products.json (via SHOPIFY_HANDLES). The
+// `products` step mirrors that here for custom.tint, using the live Admin API product list in
+// place of data/shopify.json (see README "Tints for Shopify-only products").
+export const SHOPIFY_ONLY_TINTS = ["rgb(213, 229, 190)", "rgb(246, 201, 207)", "rgb(201, 210, 242)", "rgb(247, 210, 184)", "rgb(245, 231, 166)"].map(rgbToHex)
+
 // Parse colour [name, folder] pairs out of scripts/build-khuwabb-data.mjs
 // (that file writes data/products.json on import, so it is parsed, not imported).
 export function parseBuildScriptColours() {
@@ -90,7 +98,12 @@ export const COLLECTIONS = [
   { handle: "dresses", title: "Dresses", type: "Dresses" },
   { handle: "gym-wear", title: "Gym wear", type: "Gymwear" },
   { handle: "co-ord-sets", title: "Co-ord sets", type: "Co-ord Set" },
-  { handle: "new-in", title: "New arrivals", manual: true },
+  // Automated (not manual) since 2026-11: rule TAG equals "new-in", disjunctive, sorted
+  // CREATED_DESC (newest first). Built with the legacy CollectionInput.ruleSet shape (same as
+  // the TYPE collections above) rather than the new CollectionCreateInput.sources shape that
+  // 2026-10 prefers — ruleSet is deprecated but documented as still functional in 2026-10, and
+  // the sources shape couldn't be verified against this store. See README "new-in collection".
+  { handle: "new-in", title: "New arrivals", tag: "new-in", sortOrder: "CREATED_DESC" },
 ]
 
 const M = `mailto:${EMAIL}`

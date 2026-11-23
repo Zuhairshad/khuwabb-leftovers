@@ -15,7 +15,7 @@ export class UserErrors extends Error {
 export const DENYLIST = new Set([
   "menuUpdate", "menuDelete", "urlRedirectUpdate", "urlRedirectDelete", "productDelete", "collectionDelete",
   "productVariantDetachMedia", "metafieldsDelete", "fileDelete", "productDeleteMedia", "collectionUpdate",
-  "publishableUnpublish",
+  "publishableUnpublish", "tagsRemove",
 ])
 
 export class DenylistedMutation extends Error {

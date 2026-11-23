@@ -1,0 +1,76 @@
+{%- comment -%}
+  "You may also like" (app/products/[slug]/page.tsx `related` + recommendations.module.css):
+  other products that have a price, any orderable variant and an image, same product.type
+  first then the rest, in catalog (collections.all) order within each group, max
+  section.settings.limit (default 4). Rendered with the shop page's arch card/grid
+  (product-card.liquid + section-main-collection-grid.css, reused rather than re-declared here).
+  Hidden entirely when there are no eligible products.
+
+  Eligibility mirrors lib/catalog.ts: anyOrderable (price set + an available variant) + photo(p).src:
+    product.id != this product, product.price > 0, product.available, product.featured_media.
+
+  Note: collections.all.products is capped at 50 items per loop without {% paginate %}. This store
+  has ~40 products, so the cap is never hit; if the catalog grows past 50, wrap this in paginate.
+{%- endcomment -%}
+{{ 'section-main-collection-grid.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-section-heading.css' | asset_url | stylesheet_tag }}
+{{ 'component-arrow-button.css' | asset_url | stylesheet_tag }}
+{{ 'section-related-products.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign rp_current = product
+  assign rp_limit = section.settings.limit | default: 4
+  assign rp_used = ''
+  assign rp_count = 0
+-%}
+{%- capture rp_cards -%}
+  {%- for rp_p in collections.all.products limit: 50 -%}
+    {%- if rp_count >= rp_limit -%}
+      {%- break -%}
+    {%- endif -%}
+    {%- if rp_p.id != rp_current.id and rp_p.price > 0 and rp_p.available and rp_p.featured_media and rp_p.type == rp_current.type -%}
+      {%- assign rp_used = rp_used | append: rp_p.id | append: '|' -%}
+      {% render 'product-card', product: rp_p, loading: 'lazy', index: rp_count %}
+      {%- assign rp_count = rp_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- for rp_p in collections.all.products limit: 50 -%}
+    {%- if rp_count >= rp_limit -%}
+      {%- break -%}
+    {%- endif -%}
+    {%- assign rp_key = rp_p.id | append: '|' -%}
+    {%- assign rp_is_used = false -%}
+    {%- if rp_used contains rp_key -%}
+      {%- assign rp_is_used = true -%}
+    {%- endif -%}
+    {%- if rp_p.id != rp_current.id and rp_p.price > 0 and rp_p.available and rp_p.featured_media and rp_is_used == false -%}
+      {% render 'product-card', product: rp_p, loading: 'lazy', index: rp_count %}
+      {%- assign rp_count = rp_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if rp_count > 0 -%}
+  <section class="related-products" data-section="related-products" aria-label="{{ section.settings.heading | escape }}">
+    {% render 'section-heading', title: section.settings.heading, cta_label: section.settings.cta_label, cta_href: section.settings.cta_href %}
+    <div class="related-products__grid collection-grid__grid">
+      {{ rp_cards }}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Related products",
+  "tag": "div",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "You may also like" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Shop all" },
+    { "type": "url", "id": "cta_href", "label": "CTA link", "default": "/collections/all" },
+    { "type": "range", "id": "limit", "label": "Max products", "min": 1, "max": 8, "step": 1, "default": 4 }
+  ],
+  "presets": [{ "name": "Related products" }]
+}
+{% endschema %}

@@ -1,6 +1,7 @@
 {{ 'component-section-heading.css' | asset_url | stylesheet_tag }}
 {{ 'component-arrow-button.css' | asset_url | stylesheet_tag }}
 {{ 'component-hanger-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-price.css' | asset_url | stylesheet_tag }}
 {{ 'section-new-arrivals.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'ticker.js' | asset_url }}" defer></script>
 
@@ -13,12 +14,59 @@
   if na_cta == blank
     assign na_cta = na_collection.url | default: '/collections/new-in'
   endif
-  assign na_limit = section.settings.limit | default: 14
+  assign na_limit = section.settings.limit | default: 50
   assign na_speed = section.settings.speed | default: 34
   assign na_factor = 1
   if section.settings.pause_on_hover
     assign na_factor = 0
   endif
+
+  # Rack order mirrors components/home/NewIn.tsx: newest first (Shopify
+  # created_at desc), then round-robin across category groups so the rack
+  # alternates instead of clumping a single category. Activewear, Activewear
+  # Sets, Gymwear and Leggings count as one "Activewear" group; groups are
+  # taken in the order they first appear among the newest products.
+  assign na_sorted = na_collection.products | sort: 'created_at' | reverse
+
+  # Each product gets a sort key "<rank in its group>|<group position>|<handle>":
+  # rank = how many newer products share its group, group position = when the
+  # group first appears. Sorting those keys gives the round-robin directly (all
+  # rank-0 items in group order, then all rank-1 items...), with no cap on the
+  # number of groups.
+  # na_groups is "¦key1¦key2¦…¦"; na_seen gets "¦key¦x" per product so splitting it on
+  # "¦key¦" counts the newer products already in that group (Liquid drops trailing
+  # empty pieces, hence the "x" filler).
+  assign na_groups = '¦'
+  assign na_seen = 'x'
+  assign na_entries = ''
+  for na_p in na_sorted
+    assign na_key = na_p.type
+    if na_key == 'Activewear' or na_key == 'Activewear Sets' or na_key == 'Gymwear' or na_key == 'Leggings'
+      assign na_key = 'Activewear'
+    endif
+    assign na_needle = '¦' | append: na_key | append: '¦'
+    unless na_groups contains na_needle
+      assign na_groups = na_groups | append: na_key | append: '¦'
+    endunless
+    assign na_group_list = na_groups | split: '¦'
+    for na_k in na_group_list
+      if na_k == na_key
+        assign na_group_pos = forloop.index0 | plus: 1000
+        break
+      endif
+    endfor
+    assign na_rank = na_seen | split: na_needle | size | plus: 999
+    assign na_seen = na_seen | append: na_needle | append: 'x'
+    assign na_entries = na_entries | append: na_rank | append: '|' | append: na_group_pos | append: '|' | append: na_p.handle | append: '¦'
+  endfor
+  assign na_entries = na_entries | split: '¦' | sort
+
+  assign na_handles = ''
+  for na_entry in na_entries limit: na_limit
+    assign na_handle = na_entry | split: '|' | last
+    assign na_handles = na_handles | append: na_handle | append: '¦'
+  endfor
+  assign na_handles = na_handles | split: '¦'
 -%}
 
 <section class="new-arrivals" data-section="new-in">
@@ -39,8 +87,9 @@
         <ul class="new-arrivals__track" data-ticker-track>
           <li data-ticker-set>
             <div class="new-arrivals__list" data-ticker-measure>
-              {%- for product in na_collection.products limit: na_limit -%}
-                {% render 'hanger-card', product: product, context: 'ticker' %}
+              {%- for na_handle in na_handles -%}
+                {%- assign na_product = na_sorted | where: 'handle', na_handle | first -%}
+                {% render 'hanger-card', product: na_product, context: 'ticker', index: forloop.index0 %}
               {%- endfor -%}
             </div>
           </li>
@@ -59,7 +108,7 @@
     { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop new in" },
     { "type": "url", "id": "cta_link", "label": "Button link" },
     { "type": "collection", "id": "collection", "label": "Collection", "info": "Pick after adding the section — presets can't include products/collections." },
-    { "type": "range", "id": "limit", "label": "Products", "min": 4, "max": 20, "step": 1, "default": 14 },
+    { "type": "range", "id": "limit", "label": "Products", "info": "The headless site no longer caps New Arrivals, so the max here covers the whole rack.", "min": 4, "max": 50, "step": 1, "default": 50 },
     { "type": "range", "id": "speed", "label": "Speed", "min": 10, "max": 80, "step": 1, "unit": "px/s", "default": 34 },
     { "type": "checkbox", "id": "pause_on_hover", "label": "Pause on hover", "default": true }
   ],

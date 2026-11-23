@@ -116,3 +116,13 @@
     transform: none;
   }
 }
+
+/* One garment per hanger (components/home/NewIn.tsx hangerPhotoStyle): seam-detail-co-ords-set and
+   gym-co-ords-set source photos put the top on the left, trousers on the right — show just the
+   trousers (right side) instead of squashing both pieces into the hanger. */
+.hanger-card__card img.hanger-card__cutout--one-garment {
+  width: auto;
+  aspect-ratio: 0.42;
+  object-fit: cover;
+  object-position: right;
+}

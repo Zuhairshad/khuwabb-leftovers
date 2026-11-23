@@ -12,22 +12,33 @@
              ticker: fixed 250px wide, product name on one line with ellipsis.
              grid:   fills its grid cell (width 100%), name wraps, pointer cursor.
              The grid LAYOUT (4/3/2/1 columns, gaps, section wrapper) is NOT in this snippet; see docs/parity/new-arrivals.md "For task 3D".
+  - index    (optional) position in the list (e.g. forloop.index0), used only to pick the tint fallback below
 
-  Tint: product.metafields.custom.tint (color metafield), fallback #09F in the ticker (like NewIn.tsx).
-        In the grid context there is no fallback (NewInPage.tsx uses `p.tint ?? undefined`, i.e. transparent).
+  Tint: product.metafields.custom.tint. Blank -> rotate through the pastels lib/catalog.ts gives
+  Shopify-only products (TINTS), picked by `index` when given, else `product.id | modulo: 5`
+  (replaces the old fixed '#09F' ticker fallback / no-fallback grid case).
 
-  CSS: the section must load {{ 'component-hanger-card.css' | asset_url | stylesheet_tag }}.
+  One garment per hanger (components/home/NewIn.tsx hangerPhotoStyle): for `seam-detail-co-ords-set`
+  and `gym-co-ords-set` the source photo has the top on the left and the trousers on the right, so
+  the cut-out is cropped to just the trousers (right side) instead of showing both pieces.
+
+  CSS: the section must load {{ 'component-hanger-card.css' | asset_url | stylesheet_tag }} and
+  {{ 'component-product-price.css' | asset_url | stylesheet_tag }}.
   Cloned copies made by ticker.js get tabindex="-1" and aria-hidden on their wrappers.
 
-  Usage: {% render 'hanger-card', product: product, context: 'ticker' %}
+  Usage: {% render 'hanger-card', product: product, context: 'ticker', index: forloop.index0 %}
 {%- endcomment -%}
 {%- liquid
   assign hc_context = context | default: 'ticker'
+  assign hc_tints = 'rgb(213, 229, 190)|rgb(246, 201, 207)|rgb(201, 210, 242)|rgb(247, 210, 184)|rgb(245, 231, 166)' | split: '|'
   assign hc_tint = product.metafields.custom.tint.value | default: ''
   if hc_tint == blank
-    if hc_context == 'ticker'
-      assign hc_tint = '#09F'
+    assign hc_tint_idx = index
+    if hc_tint_idx == blank
+      assign hc_tint_idx = product.id | modulo: 5
     endif
+    assign hc_tint_idx = hc_tint_idx | modulo: 5
+    assign hc_tint = hc_tints[hc_tint_idx]
   endif
   assign hc_loading = loading | default: 'lazy'
   if sizes != blank
@@ -37,6 +48,15 @@
   else
     assign hc_sizes = '206px'
   endif
+
+  assign hc_cutout_class = nil
+  if product.handle == 'seam-detail-co-ords-set' or product.handle == 'gym-co-ords-set'
+    assign hc_cutout_class = 'hanger-card__cutout--one-garment'
+  endif
+
+  # Lowest-priced variant's compare-at (lib/catalog.ts shopifyPrices picks the lowest-priced variant's compareAt).
+  assign hc_compare_variant = product.variants | where: 'price', product.price_min | first
+  assign hc_compare_at = hc_compare_variant.compare_at_price
 -%}
 <a
   href="{{ product.url }}"
@@ -55,11 +75,12 @@
       widths: '360,480,640',
       sizes: hc_sizes,
       loading: hc_loading,
-      decorative: true
+      decorative: true,
+      class: hc_cutout_class
     -%}
   </div>
   <div class="hanger-card__info">
     <p class="hanger-card__name">{{ product.title | escape }}</p>
-    <p class="hanger-card__price">{% render 'price', price: product.price %}</p>
+    <p class="hanger-card__price">{% render 'product-price', price: product.price, compare_at: hc_compare_at %}</p>
   </div>
 </a>

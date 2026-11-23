@@ -245,6 +245,15 @@
         "empty_cta_link": "/collections/all"
       }
     },
+    "sale_marquee": {
+      "type": "sale-marquee",
+      "settings": {
+        "highlight": "20% off",
+        "text": "Export factory leftovers",
+        "link": "/collections/all",
+        "speed": 32
+      }
+    },
     "shop_the_look": {
       "type": "shop-the-look",
       "blocks": {
@@ -407,6 +416,7 @@
   },
   "order": [
     "hero",
+    "sale_marquee",
     "category_cards",
     "new_arrivals",
     "campaign_moods",

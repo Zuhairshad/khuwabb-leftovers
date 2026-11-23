@@ -1,0 +1,64 @@
+/* Port of components/home/SaleMarquee.module.css. */
+
+.sale-marquee {
+  display: block;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 0;
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.15vw, 17px);
+  line-height: 1.35;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sale-marquee:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: -5px;
+}
+
+.sale-marquee__track {
+  display: flex;
+  width: max-content;
+  min-width: 200%;
+  animation: sale-marquee-scroll var(--sale-marquee-speed, 32s) linear infinite;
+}
+
+.sale-marquee__group {
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: space-around;
+}
+
+.sale-marquee__message {
+  display: inline-flex;
+  gap: clamp(14px, 2.2vw, 34px);
+  align-items: center;
+  padding-inline-start: clamp(14px, 2.2vw, 34px);
+  white-space: nowrap;
+}
+
+.sale-marquee__dot {
+  color: #d5e5be;
+}
+
+.sale-marquee__static {
+  display: none;
+  padding-inline: 12px;
+  text-align: center;
+}
+
+.sale-marquee:hover .sale-marquee__track,
+.sale-marquee:focus-visible .sale-marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes sale-marquee-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sale-marquee__track { display: none; }
+  .sale-marquee__static { display: block; }
+}

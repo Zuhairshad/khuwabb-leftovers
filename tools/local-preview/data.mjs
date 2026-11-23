@@ -100,7 +100,7 @@ export function buildStore(cat, { selectedVariantId } = {}) {
     return c
   }
   for (const c of COLLECTIONS) {
-    const prods = c.manual ? list.filter((p) => p.newIn) : list.filter((p) => p.type === c.type)
+    const prods = c.manual ? list.filter((p) => p.newIn) : c.tag ? list.filter((p) => p.tags.includes(c.tag)) : list.filter((p) => p.type === c.type)
     mk(c.handle, c.title, prods)
   }
   const all = mk("all", "Products", list)

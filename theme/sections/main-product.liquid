@@ -1,4 +1,5 @@
 {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-price.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-form.js' | asset_url }}" defer></script>
 
 {%- liquid
@@ -85,6 +86,11 @@
   assign mp_guide_text = mp_guide | strip_html | strip
   assign mp_desc_text = product.description | strip_html | strip
   assign mp_start = product.selected_or_first_available_variant
+
+  # Sale price (components/product/ProductDetail.tsx): compare-at of the lowest-priced variant
+  # (same variant product.price already reflects), shown struck through only when it's higher.
+  assign mp_compare_variant = product.variants | where: 'price', product.price_min | first
+  assign mp_compare_at = mp_compare_variant.compare_at_price
 -%}
 
 {%- capture mp_img -%}
@@ -148,7 +154,7 @@
         <p class="product__category">{{ mp_line }}</p>
       {%- endif -%}
       <h1 class="product__name">{{ product.title }}</h1>
-      <p class="product__price">{% render 'price', price: product.price %}</p>
+      <p class="product__price">{% render 'product-price', price: product.price, compare_at: mp_compare_at %}</p>
 
       {%- if mp_color_opt -%}
         <fieldset class="product__group">

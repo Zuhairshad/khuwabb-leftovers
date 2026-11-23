@@ -1,0 +1,10 @@
+/*
+ * "You may also like" (app/products/[slug]/recommendations.module.css .section). The heading
+ * (component-section-heading.css) and card grid (section-main-collection-grid.css
+ * .collection-grid__grid / .product-card*) are reused as-is; this file only owns the wrapper.
+ */
+.related-products {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 32px) 96px;
+}

@@ -1,0 +1,12 @@
+/* Original + sale price (components/product/ProductPrice.module.css). Used by snippets/product-price.liquid. */
+.product-price {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.45em;
+}
+
+.product-price__original {
+  font-size: 0.85em;
+  opacity: 0.75;
+}

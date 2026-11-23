@@ -10,6 +10,7 @@
 {%- endcomment -%}
 {{ 'component-section-heading.css' | asset_url | stylesheet_tag }}
 {{ 'component-arrow-button.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-price.css' | asset_url | stylesheet_tag }}
 {{ 'section-shop-the-look.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
@@ -111,6 +112,9 @@
                     assign piece_colour_enc = cur_c | url_encode
                     assign piece_href = cur_p.url | append: '?colour=' | append: piece_colour_enc
                   endif
+                  # Lowest-priced variant's compare-at (lib/catalog.ts shopifyPrices).
+                  assign piece_compare_variant = cur_p.variants | where: 'price', cur_p.price_min | first
+                  assign piece_compare_at = piece_compare_variant.compare_at_price
                 -%}
                 <a href="{{ piece_href }}" class="shop-the-look__piece">
                   <div class="shop-the-look__thumb">
@@ -130,7 +134,7 @@
                       <p class="shop-the-look__colour">{{ cur_c }}</p>
                     {%- endif -%}
                   </div>
-                  <p class="shop-the-look__price">{% render 'price', price: cur_p.price %}</p>
+                  <p class="shop-the-look__price">{% render 'product-price', price: cur_p.price, compare_at: piece_compare_at %}</p>
                 </a>
               {%- endif -%}
             {%- endfor -%}
