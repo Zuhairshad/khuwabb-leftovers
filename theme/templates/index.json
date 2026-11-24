@@ -412,6 +412,16 @@
         "l4"
       ],
       "settings": {}
+    },
+    "instagram_feed": {
+      "type": "instagram-feed",
+      "settings": {
+        "heading": "Follow the dream",
+        "cta_label": "Follow on Instagram",
+        "profile_url": "",
+        "feed_url": "https://khuwabb-export-factory-leftovers.vercel.app/api/instagram",
+        "limit": 12
+      }
     }
   },
   "order": [
@@ -422,6 +432,7 @@
     "campaign_moods",
     "shop_the_look",
     "reviews_receipts",
-    "care_labels"
+    "care_labels",
+    "instagram_feed"
   ]
 }
