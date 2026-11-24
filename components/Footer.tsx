@@ -3,6 +3,7 @@
 import { m } from "framer-motion"
 import curtain from "@/data/fitting-curtain.json"
 import { FittingCurtain } from "./FittingCurtain"
+import { INSTAGRAM_URL } from "@/lib/site"
 import { NewsletterForm } from "./NewsletterForm"
 import styles from "./Footer.module.css"
 
@@ -36,7 +37,7 @@ const COLUMNS = [
 ]
 
 const SOCIAL = [
-  { name: "Instagram", href: "https://instagram.com", icon: "/icons/instagram.svg" },
+  { name: "Instagram", href: INSTAGRAM_URL, icon: "/icons/instagram.svg" },
   { name: "Tiktok", href: "https://tiktok.com", icon: "/icons/tiktok.svg" },
   { name: "Pinterest", href: "https://pinterest.com", icon: "/icons/pinterest.svg" },
 ]

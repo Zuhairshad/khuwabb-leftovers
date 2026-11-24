@@ -13,3 +13,7 @@ export function trimTo(text: string, max = 155) {
   const lastSpace = cut.lastIndexOf(" ")
   return `${cut.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`
 }
+
+// The brand's Instagram profile, used by the home-page feed and the footer
+// icon. Set NEXT_PUBLIC_INSTAGRAM_URL once the account link is final.
+export const INSTAGRAM_URL = process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com"

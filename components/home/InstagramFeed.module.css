@@ -1,0 +1,152 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+  width: 100%;
+  padding-top: 120px;
+}
+
+/* Edge-to-edge row of 9:16 tiles; scrolls sideways when there are more
+   posts than fit. */
+.strip {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+.tile {
+  position: relative;
+  flex: 0 0 calc(100% / 6);
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  background: var(--ink-line);
+  scroll-snap-align: start;
+}
+
+.link {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -4px;
+}
+
+.media,
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out);
+}
+
+/* Fades in over the cover frame once it actually plays, so there's no
+   black flash while it loads. */
+.video {
+  opacity: 0;
+  transition:
+    opacity 0.4s var(--ease-out),
+    transform 0.8s var(--ease-out);
+}
+
+.video[data-playing] {
+  opacity: 1;
+}
+
+.badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  color: var(--white);
+  filter: drop-shadow(0 1px 3px rgba(23, 20, 15, 0.45));
+  pointer-events: none;
+}
+
+.hover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(23, 20, 15, 0.28);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.glyph {
+  width: 36px;
+  height: 36px;
+  background: var(--white);
+  -webkit-mask: url(/icons/instagram.svg) center / contain no-repeat;
+  mask: url(/icons/instagram.svg) center / contain no-repeat;
+}
+
+@media (hover: hover) {
+  .link:hover .media,
+  .link:hover .video {
+    transform: scale(1.04);
+  }
+
+  .link:hover .hover {
+    opacity: 1;
+  }
+}
+
+.link:focus-visible .hover {
+  opacity: 1;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .section {
+    padding-top: 96px;
+  }
+
+  .tile {
+    flex-basis: 25%;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .section {
+    gap: 32px;
+    padding-top: 72px;
+  }
+
+  .tile {
+    flex-basis: calc(100% / 2.4);
+  }
+
+  .badge {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media,
+  .video,
+  .hover {
+    transition: none;
+  }
+
+  .link:hover .media,
+  .link:hover .video {
+    transform: none;
+  }
+}
