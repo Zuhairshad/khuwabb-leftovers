@@ -33,6 +33,9 @@ const nextConfig = {
       { source: "/collections/all", destination: "/shop", permanent: true },
       { source: "/collections", destination: "/shop", permanent: true },
       { source: "/collections/:handle", destination: "/shop", permanent: true },
+      // The Shopify store's pages for these two live at /pages/<handle>.
+      { source: "/pages/size-guide", destination: "/size-guide", permanent: true },
+      { source: "/pages/exchange", destination: "/exchange", permanent: true },
       // No cart page: the bag is a drawer opened from the nav, not a route.
       { source: "/cart", destination: "/shop", permanent: true },
     ]

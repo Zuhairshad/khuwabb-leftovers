@@ -8,6 +8,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/"), lastModified: now, changeFrequency: "weekly", priority: 1 },
     { url: absoluteUrl("/shop"), lastModified: now, changeFrequency: "daily", priority: 0.9 },
     { url: absoluteUrl("/new-in"), lastModified: now, changeFrequency: "daily", priority: 0.8 },
+    { url: absoluteUrl("/size-guide"), lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: absoluteUrl("/exchange"), lastModified: now, changeFrequency: "monthly", priority: 0.4 },
   ]
   const productRoutes: MetadataRoute.Sitemap = products.map((p) => ({
     url: absoluteUrl(productHref(p)),

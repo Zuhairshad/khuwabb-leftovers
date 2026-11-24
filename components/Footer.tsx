@@ -9,7 +9,8 @@ import styles from "./Footer.module.css"
 
 const EMAIL = "khuwabb@gmail.com"
 
-const COLUMNS = [
+// A link without an href renders as plain text.
+const COLUMNS: { title: string; links: { label: string; href?: string }[] }[] = [
   {
     title: "Shop",
     links: [
@@ -21,17 +22,17 @@ const COLUMNS = [
   {
     title: "Help",
     links: [
-      { label: "Size guide", href: `mailto:${EMAIL}?subject=Size%20guide` },
-      { label: "7-day exchange", href: `mailto:${EMAIL}?subject=Exchange` },
+      { label: "Size guide", href: "/size-guide" },
+      { label: "7-day exchange", href: "/exchange" },
       { label: EMAIL, href: `mailto:${EMAIL}` },
     ],
   },
   {
     title: "Khuwabb",
     links: [
-      { label: "Born in Lahore", href: "/" },
-      { label: "Delivery across Pakistan", href: "/shop" },
-      { label: "Cash on delivery", href: "/shop" },
+      { label: "Born in Lahore" },
+      { label: "Delivery across Pakistan" },
+      { label: "Cash on delivery" },
     ],
   },
 ]
@@ -62,7 +63,7 @@ export function Footer() {
               <p className={styles.heading}>{col.title}</p>
               {col.links.map((l) => (
                 <p key={l.label} className={styles.link}>
-                  <a href={l.href}>{l.label}</a>
+                  {l.href ? <a href={l.href}>{l.label}</a> : l.label}
                 </p>
               ))}
             </div>

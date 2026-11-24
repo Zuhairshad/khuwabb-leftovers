@@ -38,6 +38,12 @@ motion and layout of the original design kept intact.
 - **Product pages** (`/products/<slug>`) — front / side / back photos per
   colour, colour and size selection, description. Product pages open
   directly, without the intro.
+- **Size guide** (`/size-guide`) — every chart from the product catalog in cm
+  and inches with garment diagrams, a "how we measure" guide and a numeric
+  size map; the cm / inches switch is pure CSS. Data lives in
+  `data/size-guide.json`.
+- **7-day exchange** (`/exchange`) — how exchanges work. Wording is a draft;
+  confirm it before launch.
 - **Bag** — slide-out drawer shared across pages (stored in `localStorage`).
 - **One product source** — Home, Shop, New In, product pages and the bag all
   read `data/products.json`; nothing is duplicated.
