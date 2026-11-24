@@ -418,8 +418,8 @@
       "settings": {
         "heading": "Follow the dream",
         "cta_label": "Follow on Instagram",
-        "profile_url": "",
-        "feed_url": "https://khuwabb-export-factory-leftovers.vercel.app/api/instagram",
+        "profile_url": "https://www.instagram.com/khuwabb.co/",
+        "feed_url": "https://feeds.behold.so/DYiknpiQu0FUjlvSPBMQ",
         "limit": 12
       }
     }

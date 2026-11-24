@@ -74,7 +74,7 @@
         "type": "text",
         "id": "social_instagram_link",
         "label": "Instagram",
-        "default": "https://instagram.com"
+        "default": "https://www.instagram.com/khuwabb.co/"
       },
       {
         "type": "text",
