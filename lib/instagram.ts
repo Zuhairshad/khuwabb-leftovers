@@ -1,10 +1,12 @@
 // Latest Instagram posts and reels for the home-page feed (and, through
 // /api/instagram, for the Shopify theme's copy of the same section).
 //
-// Reads the Instagram API with Instagram Login using a long-lived access
-// token in INSTAGRAM_ACCESS_TOKEN. Without a token (or if Instagram is down)
-// it returns null and the section shows the brand photos below instead, so
-// the page never breaks. New posts show up within REVALIDATE seconds.
+// Reads a Behold.so JSON feed: connect the Instagram account at behold.so,
+// create a JSON feed and put its link in BEHOLD_FEED_URL. Behold handles the
+// Instagram login and keeps the feed fresh. Without the link (or if Behold is
+// down) this returns null and the section shows the brand photos below
+// instead, so the page never breaks. New posts show up within REVALIDATE
+// seconds.
 
 import { INSTAGRAM_URL } from "./site"
 
@@ -25,51 +27,52 @@ export type InstagramPost = {
   timestamp: string | null
 }
 
-type Media = {
-  id: string
+type Size = { mediaUrl?: string }
+type BeholdPost = {
+  id: string | number
+  permalink?: string
+  mediaType?: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM"
+  mediaUrl?: string
+  thumbnailUrl?: string
+  sizes?: { small?: Size; medium?: Size; large?: Size; full?: Size }
   caption?: string
-  media_type: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM"
-  media_url?: string
-  thumbnail_url?: string
-  permalink: string
+  prunedCaption?: string
   timestamp?: string
-  children?: { data: { media_type: Media["media_type"]; media_url?: string; thumbnail_url?: string }[] }
 }
 
-const FIELDS = "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,children{media_type,media_url,thumbnail_url}"
-
-function toPost(m: Media): InstagramPost | null {
-  // A carousel's own media_url is its first slide; if that slide is a video
-  // the cover frame lives on the child, so look there.
-  const first = m.media_type === "CAROUSEL_ALBUM" ? m.children?.data?.[0] : undefined
-  const type = first?.media_type ?? m.media_type
-  const src = first ?? m
-  const isVideo = type === "VIDEO"
-  const image = isVideo ? src.thumbnail_url : src.media_url
-  if (!image) return null
+function toPost(p: BeholdPost): InstagramPost | null {
+  const isVideo = p.mediaType === "VIDEO"
+  // Behold's resized copies are images even for reels (the cover frame);
+  // mediaUrl is the video itself for a reel.
+  const image = p.sizes?.medium?.mediaUrl || p.sizes?.large?.mediaUrl || (isVideo ? p.thumbnailUrl : p.mediaUrl) || p.thumbnailUrl
+  if (!image || !p.permalink) return null
   return {
-    id: m.id,
-    kind: m.media_type === "CAROUSEL_ALBUM" ? "carousel" : isVideo ? "video" : "image",
+    id: String(p.id),
+    kind: isVideo ? "video" : p.mediaType === "CAROUSEL_ALBUM" ? "carousel" : "image",
     image,
-    video: isVideo && m.media_type === "VIDEO" ? (m.media_url ?? null) : null,
-    href: m.permalink,
-    caption: (m.caption ?? "").trim(),
-    timestamp: m.timestamp ?? null,
+    video: isVideo ? (p.mediaUrl ?? null) : null,
+    href: p.permalink,
+    caption: (p.prunedCaption || p.caption || "").trim(),
+    timestamp: p.timestamp ?? null,
   }
 }
 
 export async function getInstagramPosts(limit = 12): Promise<InstagramPost[] | null> {
-  const token = process.env.INSTAGRAM_ACCESS_TOKEN
-  if (!token) return null
-  const url = `https://graph.instagram.com/me/media?fields=${encodeURIComponent(FIELDS)}&limit=${limit}&access_token=${encodeURIComponent(token)}`
+  const feedUrl = process.env.BEHOLD_FEED_URL
+  if (!feedUrl) return null
   try {
-    const res = await fetch(url, { next: { revalidate: REVALIDATE, tags: ["instagram"] } })
+    const res = await fetch(feedUrl, { next: { revalidate: REVALIDATE, tags: ["instagram"] } })
     if (!res.ok) {
-      console.error(`Instagram feed: HTTP ${res.status}`, (await res.text()).slice(0, 300))
+      console.error(`Instagram feed: Behold responded ${res.status}`)
       return null
     }
-    const body = (await res.json()) as { data?: Media[] }
-    const posts = (body.data ?? []).map(toPost).filter((p): p is InstagramPost => p !== null)
+    const data = (await res.json()) as BeholdPost[] | { posts?: BeholdPost[] }
+    // Newer Behold feeds wrap posts in { posts: [...] }; older ones are a plain array.
+    const raw = Array.isArray(data) ? data : (data.posts ?? [])
+    const posts = raw
+      .map(toPost)
+      .filter((p): p is InstagramPost => p !== null)
+      .slice(0, limit)
     return posts.length ? posts : null
   } catch (err) {
     console.error("Instagram feed: request failed", err)
