@@ -3,6 +3,8 @@
 
 {%- liquid
   assign email = settings.contact_email
+  assign size_guide_mailto = 'mailto:' | append: email | append: '?subject=Size%20guide'
+  assign exchange_mailto = 'mailto:' | append: email | append: '?subject=Exchange'
   assign fallback_titles = 'Shop,Help,Khuwabb' | split: ','
 -%}
 
@@ -44,7 +46,12 @@
           <p class="footer__heading">{{ heading }}</p>
           {%- if has_links -%}
             {%- for link in menu.links -%}
-              <p class="footer__link"><a href="{{ link.url }}">{{ link.title }}</a></p>
+              {%- comment -%} Column 3 (Khuwabb) is plain text: the menu supplies the lines, not links. {%- endcomment -%}
+              {%- if i == 3 -%}
+                <p class="footer__link">{{ link.title }}</p>
+              {%- else -%}
+                <p class="footer__link"><a href="{{ link.url }}">{{ link.title }}</a></p>
+              {%- endif -%}
             {%- endfor -%}
           {%- else -%}
             {%- case i -%}
@@ -53,13 +60,14 @@
                 <p class="footer__link"><a href="{{ routes.collections_url }}/new-in">{{ 'nav.new_in' | t }}</a></p>
                 <p class="footer__link"><a href="{{ routes.root_url }}#looks">{{ 'nav.lookbook' | t }}</a></p>
               {%- when 2 -%}
-                <p class="footer__link"><a href="mailto:{{ email }}?subject=Size%20guide">{{ 'footer.size_guide' | t }}</a></p>
-                <p class="footer__link"><a href="mailto:{{ email }}?subject=Exchange">{{ 'footer.exchange' | t }}</a></p>
+                {%- comment -%} The pages are created by tools/store-setup (step "pages"); until they exist, fall back to email. {%- endcomment -%}
+                <p class="footer__link"><a href="{{ pages['size-guide'].url | default: size_guide_mailto }}">{{ 'footer.size_guide' | t }}</a></p>
+                <p class="footer__link"><a href="{{ pages['exchange'].url | default: exchange_mailto }}">{{ 'footer.exchange' | t }}</a></p>
                 <p class="footer__link"><a href="mailto:{{ email }}">{{ email }}</a></p>
               {%- else -%}
-                <p class="footer__link"><a href="{{ routes.root_url }}">{{ 'footer.born_in_lahore' | t }}</a></p>
-                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">{{ 'footer.delivery' | t }}</a></p>
-                <p class="footer__link"><a href="{{ routes.all_products_collection_url }}">{{ 'footer.cash_on_delivery' | t }}</a></p>
+                <p class="footer__link">{{ 'footer.born_in_lahore' | t }}</p>
+                <p class="footer__link">{{ 'footer.delivery' | t }}</p>
+                <p class="footer__link">{{ 'footer.cash_on_delivery' | t }}</p>
             {%- endcase -%}
           {%- endif -%}
         </div>

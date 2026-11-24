@@ -6,7 +6,7 @@ Sources are local: `data/products.json`, `data/shopify.json`, `scripts/build-khu
 
 **The store is LIVE** (published theme `khuwabb-theme-v2.6`). Default `--apply` is therefore
 **additive-only**: it may only add things a customer can't see yet (unpublished collections,
-metafield values where none existed, new definitions/menus). Anything that changes existing
+metafield values where none existed, new definitions/menus/pages). Anything that changes existing
 data, or is customer-visible on the live theme, needs `--go-live` (and some things also need
 `--publish-new-collections`). See "Modes and flags" below.
 
@@ -19,6 +19,7 @@ data, or is customer-visible on the live theme, needs `--go-live` (and some thin
 | `media` | Reports only (nothing uploaded, nothing linked) | Uploads each colour × view photo and sets variant media to the colour's front image. A variant that already has a **different** media attached is skipped and reported, never detached | `stagedUploadsCreate`, `productUpdate(product, media)`, `productVariantAppendMedia` |
 | `collections` | Creates a collection **only if its handle doesn't exist**, **UNPUBLISHED**. If the handle exists: reports only — never adds products, never publishes, never changes rules/sort order. `new-in` is an **automated** collection (rule `TAG equals "new-in"`, disjunctive, `sortOrder CREATED_DESC`) — see "The `new-in` collection" below. Additively tags every `newIn:true` product `new-in` via `tagsAdd` (independent of whether the collection itself exists yet) | Also publishes collections this script created | `publications`, `collectionByIdentifier`, `collectionCreate`, `tagsAdd` |
 | `menus` | Create-only, by handle. If the handle already exists: reports differences, does nothing (`menuUpdate` is never called). Main menu handle is `khuwabb-main` ("Main menu") — the store's own `main-menu` is never read for writing or modified | — (menus has no go-live-only ops) | `menus`, `menuCreate` |
+| `pages` | Create-only, by handle: `size-guide` ("Size guide", template suffix `size-guide`) and `exchange` ("7-day exchange", template suffix `exchange`), both **published** with an **empty body** (the theme's `page.size-guide.json` / `page.exchange.json` templates render all content). If the handle already exists: reports a different template suffix/title, does nothing (`pageUpdate` is never called). Runs right after `menus` | — (pages has no go-live-only ops) | `pages`, `pageCreate` |
 | `redirects` | Reports only | Creates a redirect only if the path has none yet. An existing path with a different target is reported, never updated (`urlRedirectUpdate` is never called) | `urlRedirects`, `urlRedirectCreate` |
 | `files` (only with `--files`) | Uploads brand images not already present (optional; the theme has asset fallbacks) | — | `files`, `stagedUploadsCreate`, `fileCreate` |
 
@@ -120,7 +121,7 @@ with `--no-backup-check`.
 ## Pre-write guard (denylist)
 
 A fixed list of mutations that change or remove existing/customer-visible data —
-`menuUpdate`, `menuDelete`, `urlRedirectUpdate`, `urlRedirectDelete`, `productDelete`,
+`menuUpdate`, `menuDelete`, `pageUpdate`, `pageDelete`, `urlRedirectUpdate`, `urlRedirectDelete`, `productDelete`,
 `collectionDelete`, `productVariantDetachMedia`, `metafieldsDelete`, `fileDelete`,
 `productDeleteMedia`, `collectionUpdate`, `publishableUnpublish`, `tagsRemove` — throws if
 called without an explicit `allow:true`. `setup.mjs` never passes it; only `undo.mjs` does.
@@ -130,7 +131,7 @@ everything else `setup.mjs` calls directly.)
 ## Backup (`--backup`, read-only)
 
 Writes `tools/store-setup/out/backups/<store>-<ISO timestamp>/`:
-`products.json`, `collections.json`, `menus.json`, `redirects.json`,
+`products.json`, `collections.json`, `menus.json`, `pages.json`, `redirects.json`,
 `metafield-definitions.json` (product + other owner types), `files.json`, `shop.json`,
 `manifest.json`. Everything is paginated. Nothing here is a write to Shopify.
 
@@ -158,7 +159,7 @@ products entry can be `[metafieldsDelete]`, `[metafieldsDelete, metafieldsDelete
 `collectionDelete`; published → `publishableUnpublish`; `collectionAddProducts` on a
 script-created collection → no separate undo (deleting the collection covers it; recorded for
 the audit trail anyway); `tagsAdd` (new-in tagging, and any future caller) → `tagsRemove` with
-the same tag(s); created menu → `menuDelete`; created redirect → `urlRedirectDelete`;
+the same tag(s); created menu → `menuDelete`; created page → `pageDelete`; created redirect → `urlRedirectDelete`;
 created file → `fileDelete`.
 
 ```
@@ -180,12 +181,13 @@ successful run's paired pending/done lines are not flagged.
 - `media`: `read_products`, `write_products`
 - `collections`: `read_products`, `write_products`, `read_publications`, `write_publications`
 - `menus`: `read_online_store_navigation`, `write_online_store_navigation`
+- `pages`: `read_content`, `write_content`
 - `redirects`: `read_online_store_navigation`, `write_online_store_navigation`
 - `files`: `read_files`, `write_files`
 - `--backup` additionally benefits from `read_themes` (optional, read-only — to inspect the
   live theme's config/settings by hand; not called by this script)
 
-All at once: `read_products,write_products,read_publications,write_publications,read_online_store_navigation,write_online_store_navigation,read_files,write_files,read_themes`.
+All at once: `read_products,write_products,read_publications,write_publications,read_online_store_navigation,write_online_store_navigation,read_content,write_content,read_files,write_files,read_themes`.
 
 ## Create the token
 
@@ -260,11 +262,11 @@ Run order matters only a little: `definitions` before `products`; `products` bef
   that change existing data or are visible on the live theme.
 - `--store-check <handle>` aborts before any write if it doesn't match the store.
 - `--apply` refuses to run without a backup from the last 24h (override: `--no-backup-check`).
-- Denylisted mutations (menu/redirect/collection/file/metafield deletes and updates, variant
+- Denylisted mutations (menu/page/redirect/collection/file/metafield deletes and updates, variant
   media detach, `publishableUnpublish`) can only be called from `undo.mjs`.
 - Idempotent: matches by product handle, media alt, definition key, collection handle, menu
-  handle, redirect path, file name. A second `--apply` should report 0 created / 0 updated.
-  Existing collections/menus/redirects/definitions that differ from what this script wants are
+  handle, page handle, redirect path, file name. A second `--apply` should report 0 created / 0 updated.
+  Existing collections/menus/pages/redirects/definitions that differ from what this script wants are
   **reported**, never auto-changed.
 - Exit code is non-zero if any operation failed. GraphQL `userErrors` are printed per
   operation; throttling and 5xx are retried with backoff.

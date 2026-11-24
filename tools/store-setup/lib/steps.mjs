@@ -3,12 +3,12 @@
 // when ctx.apply, and only the ops its tag allows for the current flags).
 //
 // Default --apply is additive-only: it may only add things a customer can't see yet (new
-// metafield values where none existed, new UNPUBLISHED collections, new menus/definitions).
+// metafield values where none existed, new UNPUBLISHED collections, new menus/pages/definitions).
 // --go-live unlocks the customer-visible / data-changing ops (publishing, media, productType,
 // descriptions, redirects, pinning+storefront access on existing definitions).
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
-import { ROOT, DEFINITIONS, COLLECTIONS, MENUS, REDIRECTS, FILES, EMAIL, SHOPIFY_ONLY_TINTS } from "./data.mjs"
+import { ROOT, DEFINITIONS, COLLECTIONS, MENUS, PAGES, REDIRECTS, FILES, EMAIL, SHOPIFY_ONLY_TINTS } from "./data.mjs"
 import { collectionsCreatedByScript } from "./undo-log.mjs"
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -414,6 +414,31 @@ const menus = {
   },
 }
 
+// ---------------------------------------------------------------------- pages
+const pages = {
+  // Create-only: an existing handle is reported, never updated. pageUpdate is never called.
+  // Pages are created published with an empty body; the theme's page.<templateSuffix>.json
+  // template renders all the content. Needs read_content / write_content.
+  plan: () => PAGES.map((p) => `[additive] create page ${p.handle} "${p.title}" (template suffix ${p.templateSuffix}, published, empty body) if its handle doesn't exist [create-only: if it exists, report differences and do nothing]`),
+  async run(ctx) {
+    const st = newStat()
+    const existing = await ctx.api.all(async (after) => (await ctx.api.gql(`query($after:String){pages(first:250,after:$after){nodes{id handle title templateSuffix isPublished} pageInfo{hasNextPage endCursor}}}`, { after })).pages)
+    for (const p of PAGES) {
+      const ex = existing.find((e) => e.handle === p.handle)
+      if (!ex) {
+        await act(ctx, st, `create page ${p.handle}`, () => ctx.api.mutate(`mutation($page:PageCreateInput!){pageCreate(page:$page){page{id} userErrors{field message}}}`, { page: { title: p.title, handle: p.handle, templateSuffix: p.templateSuffix, isPublished: true, body: "" } }, "pageCreate"), "created",
+          { step: "pages", op: "pageCreate", target: p.handle, before: null,
+            after: (r) => ({ after: { id: r.page.id }, createdIds: [r.page.id], undo: { mutation: "pageDelete", variables: { id: r.page.id } } }) })
+        continue
+      }
+      if ((ex.templateSuffix ?? "") === p.templateSuffix && ex.title === p.title) { st.unchanged++; continue }
+      report(ctx, `page ${p.handle} exists with template suffix "${ex.templateSuffix ?? ""}" and title "${ex.title}" (desired suffix "${p.templateSuffix}", title "${p.title}"${ex.isPublished ? "" : "; also unpublished"}) — not modified (create-only; pageUpdate is never called)`)
+      st.unchanged++
+    }
+    return st
+  },
+}
+
 // ------------------------------------------------------------------ redirects
 const redirects = {
   // Only matters once the new pages exist → go-live only. Existing path with a different
@@ -460,6 +485,6 @@ const files = {
   },
 }
 
-export const STEPS = { definitions, products, media, collections, menus, redirects, files }
-export const DEFAULT_STEPS = ["definitions", "products", "media", "collections", "menus", "redirects"]
+export const STEPS = { definitions, products, media, collections, menus, pages, redirects, files }
+export const DEFAULT_STEPS = ["definitions", "products", "media", "collections", "menus", "pages", "redirects"]
 export { EMAIL }

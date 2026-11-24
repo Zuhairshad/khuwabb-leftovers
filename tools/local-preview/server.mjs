@@ -437,7 +437,7 @@ function route(pathname, store, url) {
   if (pathname === "/cart") return { template: "cart" }
   if (pathname === "/search") return { template: "search", objects: (s) => (s ? { search: searchObject(s, url?.searchParams.get("q")) } : {}) }
   if (pathname === "/password") return { template: "password" }
-  if ((m = /^\/pages\/([^/]+)/.exec(pathname))) return { template: "page", objects: () => ({ page: { title: m[1].replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase()), handle: m[1], content: "<p>This is a placeholder page in the local preview.</p>", url: pathname } }) }
+  if ((m = /^\/pages\/([^/]+)/.exec(pathname))) return { template: existsSync(resolve(THEME, `templates/page.${m[1]}.json`)) ? `page.${m[1]}` : "page", objects: () => ({ page: { title: m[1].replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase()), handle: m[1], content: existsSync(resolve(THEME, `templates/page.${m[1]}.json`)) ? "" : "<p>This is a placeholder page in the local preview.</p>", url: pathname } }) }
   if (/^\/blogs\/[^/]+\/[^/]+/.test(pathname)) return { template: "article", objects: () => ({ blog: mockBlog(), article: mockBlog().articles[0] }) }
   if (/^\/blogs\/[^/]+\/?$/.test(pathname)) return { template: "blog", objects: () => ({ blog: mockBlog() }) }
   if (pathname === "/account/login") return { template: "customers/login" }

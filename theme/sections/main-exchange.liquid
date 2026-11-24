@@ -1,0 +1,102 @@
+{{ 'component-arrow-button.css' | asset_url | stylesheet_tag }}
+{{ 'section-info-page.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  # Mirrors components/info/Exchange.tsx on main. DRAFT wording: it only builds on what the store
+  # already promises (7-day exchange, cash on delivery, delivery across Pakistan, support by email).
+  # Confirm the conditions match how exchanges are actually handled. Anything added in the page
+  # editor (Online Store > Pages > 7-day exchange) shows under "More details".
+  assign email = settings.contact_email
+  assign size_guide_url = pages['size-guide'].url | default: '/pages/size-guide'
+-%}
+
+<div class="info-page" data-section="exchange">
+  <header class="info-page__header">
+    <p class="info-page__eyebrow">Help</p>
+    <h1 class="info-page__title" data-appear="rise">{{ section.settings.heading | default: page.title | escape }}</h1>
+    <p class="info-page__lede">{{ section.settings.lede | escape }}</p>
+  </header>
+
+  <section class="info-page__section" aria-labelledby="exchange-how">
+    <h2 class="info-page__heading" id="exchange-how">How it works</h2>
+    <ol class="info-page__steps">
+      <li>
+        <div class="info-page__body">
+          <strong>Message us within 7 days</strong>
+          <span>Email {{ email }} within 7 days of your order arriving. Tell us your order number, the piece, the size you have and the size or colour you would like instead.</span>
+        </div>
+      </li>
+      <li>
+        <div class="info-page__body">
+          <strong>We confirm</strong>
+          <span>We check that the piece you want is in stock and tell you how to send yours back to us.</span>
+        </div>
+      </li>
+      <li>
+        <div class="info-page__body">
+          <strong>Send it back, get your new piece</strong>
+          <span>Pack the piece up in its original packaging and send it to us. Once it arrives and we have checked it, we send out your replacement.</span>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="info-page__section" aria-labelledby="exchange-what">
+    <h2 class="info-page__heading" id="exchange-what">What can be exchanged</h2>
+    <ul class="info-page__list info-page__body">
+      <li>Pieces that are unworn, unwashed and free of marks, perfume or make-up.</li>
+      <li>Pieces with their original tags and packaging.</li>
+      <li>Size or colour swaps for something we have in stock.</li>
+    </ul>
+  </section>
+
+  <section class="info-page__section" aria-labelledby="exchange-wrong">
+    <h2 class="info-page__heading" id="exchange-wrong">Damaged or not what you ordered?</h2>
+    <div class="info-page__body">
+      <p>If your piece arrives damaged, or is not the one you ordered, email us photos within 7 days and we will put it right with a replacement.</p>
+    </div>
+  </section>
+
+  <section class="info-page__section" aria-labelledby="exchange-size">
+    <h2 class="info-page__heading" id="exchange-size">Not sure of your size?</h2>
+    <div class="info-page__body">
+      <p>Our <a href="{{ size_guide_url }}">size guide</a> has the measurements of every piece in centimetres and inches. Compare them with something you already love wearing. Ordered with cash on delivery? Exchanges work the same way.</p>
+    </div>
+  </section>
+
+  {%- if page.content != blank -%}
+    <section class="info-page__section" aria-labelledby="exchange-more">
+      <h2 class="info-page__heading" id="exchange-more">More details</h2>
+      <div class="info-page__body">{{ page.content }}</div>
+    </section>
+  {%- endif -%}
+
+  <section class="info-page__cta">
+    <h2 class="info-page__heading">Need a hand?</h2>
+    <p>Write to us and we will help you sort the right size or colour.</p>
+    <div class="info-page__cta-actions">
+      {%- if email != blank -%}
+        {%- assign cta_href = 'mailto:' | append: email | append: '?subject=Exchange' -%}
+        {%- render 'arrow-button', href: cta_href, label: 'Email us' -%}
+      {%- endif -%}
+      <a class="info-page__cta-link" href="{{ size_guide_url }}">View the size guide</a>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "7-day exchange",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "7-day exchange" },
+    {
+      "type": "textarea",
+      "id": "lede",
+      "label": "Intro",
+      "default": "Wrong size or not quite right? Tell us within 7 days of your order arriving and we will swap it."
+    }
+  ],
+  "presets": []
+}
+{% endschema %}

@@ -1,0 +1,73 @@
+{{ 'component-arrow-button.css' | asset_url | stylesheet_tag }}
+{{ 'section-size-guide.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  # Mirrors components/size-guide/SizeGuide.tsx on main. The charts themselves are generated into
+  # snippets/size-guide-body.liquid from data/size-guide.json (node tools/size-guide/build.mjs).
+  assign email = settings.contact_email
+  assign exchange_url = pages['exchange'].url | default: '/pages/exchange'
+-%}
+
+<div class="size-guide" data-section="size-guide">
+  <header class="size-guide__header">
+    <p class="size-guide__eyebrow">Size &amp; fit</p>
+    <h1 class="size-guide__title" data-appear="rise">{{ page.title | default: 'Size guide' | escape }}</h1>
+    <p class="size-guide__lede">{{ section.settings.intro | escape }}</p>
+  </header>
+
+  <div class="size-guide__bar">
+    <fieldset class="size-guide__units">
+      <legend class="size-guide__sr-only">Units</legend>
+      <input class="size-guide__unit-input" type="radio" name="size-guide-unit" id="size-guide-unit-cm" checked>
+      <label class="size-guide__unit-label" for="size-guide-unit-cm">cm</label>
+      <input class="size-guide__unit-input size-guide__unit-in" type="radio" name="size-guide-unit" id="size-guide-unit-in">
+      <label class="size-guide__unit-label" for="size-guide-unit-in">inches</label>
+    </fieldset>
+    <nav class="size-guide__jump" aria-label="Jump to a category">
+      <a href="#trousers-joggers">Trousers &amp; joggers</a>
+      <a href="#co-ord-sets">Co-ord sets</a>
+      <a href="#dresses">Dresses</a>
+      <a href="#jackets">Jackets</a>
+    </nav>
+  </div>
+
+  {%- render 'size-guide-body' -%}
+
+  <section class="size-guide__help">
+    <h2 class="size-guide__help-title">{{ section.settings.help_heading | escape }}</h2>
+    <p>{{ section.settings.help_text | escape }}</p>
+    <div class="size-guide__help-actions">
+      {%- if email != blank -%}
+        {%- assign help_href = 'mailto:' | append: email | append: '?subject=Size%20help' -%}
+        {%- render 'arrow-button', href: help_href, label: section.settings.help_cta, tone: 'light' -%}
+      {%- endif -%}
+      <a class="size-guide__help-link" href="{{ exchange_url }}">{{ section.settings.help_link_label | escape }}</a>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Size guide",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Every chart in this guide shows garment measurements, taken with the piece laid flat, in both centimetres and inches. Compare them with a similar piece you already own and love the fit of. Measurements marked “flat” are taken across the front; double them for the full circumference."
+    },
+    { "type": "header", "content": "Help box" },
+    { "type": "text", "id": "help_heading", "label": "Heading", "default": "Still not sure?" },
+    {
+      "type": "textarea",
+      "id": "help_text",
+      "label": "Text",
+      "default": "Email us the piece you like and a measurement from something that fits you well, and we’ll help you pick. Changed your mind after it arrives? Sizes can be swapped within 7 days."
+    },
+    { "type": "text", "id": "help_cta", "label": "Button label", "default": "Email us" },
+    { "type": "text", "id": "help_link_label", "label": "Link label", "default": "How the 7-day exchange works" }
+  ],
+  "presets": []
+}
+{% endschema %}

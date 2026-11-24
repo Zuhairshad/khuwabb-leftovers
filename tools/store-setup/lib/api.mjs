@@ -13,7 +13,7 @@ export class UserErrors extends Error {
 // Mutations that change or remove existing/customer-visible data. setup.mjs never calls these
 // directly (the per-step rewrite avoided every one); only undo.mjs may, passing allow:true.
 export const DENYLIST = new Set([
-  "menuUpdate", "menuDelete", "urlRedirectUpdate", "urlRedirectDelete", "productDelete", "collectionDelete",
+  "menuUpdate", "menuDelete", "pageUpdate", "pageDelete", "urlRedirectUpdate", "urlRedirectDelete", "productDelete", "collectionDelete",
   "productVariantDetachMedia", "metafieldsDelete", "fileDelete", "productDeleteMedia", "collectionUpdate",
   "publishableUnpublish", "tagsRemove",
 ])

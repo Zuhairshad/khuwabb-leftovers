@@ -2,7 +2,7 @@
 // Replay an undo log (tools/store-setup/out/undo-<store>-<ts>.jsonl) in reverse order.
 // Dry-run (default) prints each undo that would run. --apply actually calls the mutations,
 // using the denylist allow option (these are exactly the denylisted ops: menuDelete,
-// collectionDelete, publishableUnpublish, urlRedirectDelete, fileDelete,
+// pageDelete, collectionDelete, publishableUnpublish, urlRedirectDelete, fileDelete,
 // productVariantDetachMedia, metafieldsDelete, productUpdate restoring old values, etc).
 import { parseArgs } from "node:util"
 import { makeClient, checkStore } from "./lib/api.mjs"
@@ -101,6 +101,7 @@ function undoQueryFor(mutation) {
     collectionDelete: `mutation($input:CollectionDeleteInput!){collectionDelete(input:$input){deletedCollectionId userErrors{field message}}}`,
     publishableUnpublish: `mutation($id:ID!,$input:[PublicationInput!]!){publishableUnpublish(id:$id,input:$input){userErrors{field message}}}`,
     menuDelete: `mutation($id:ID!){menuDelete(id:$id){deletedMenuId userErrors{field message}}}`,
+    pageDelete: `mutation($id:ID!){pageDelete(id:$id){deletedPageId userErrors{field message}}}`,
     urlRedirectDelete: `mutation($id:ID!){urlRedirectDelete(id:$id){deletedUrlRedirectId userErrors{field message}}}`,
     tagsRemove: `mutation($id:ID!,$tags:[String!]!){tagsRemove(id:$id,tags:$tags){node{id} userErrors{field message}}}`,
   }

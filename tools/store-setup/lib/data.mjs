@@ -112,8 +112,15 @@ const M = `mailto:${EMAIL}`
 export const MENUS = [
   { handle: "khuwabb-main", title: "Main menu", items: [["Shop", "/collections/all"], ["New in", "/collections/new-in"], ["Lookbook", "/#looks"]] },
   { handle: "footer-shop", title: "Shop", items: [["All collections", "/collections/all"], ["New in", "/collections/new-in"], ["Lookbook", "/#looks"]] },
-  { handle: "footer-help", title: "Help", items: [["Size guide", `${M}?subject=Size%20guide`], ["7-day exchange", `${M}?subject=Exchange`], [EMAIL, M]] },
+  { handle: "footer-help", title: "Help", items: [["Size guide", "/pages/size-guide"], ["7-day exchange", "/pages/exchange"], [EMAIL, M]] },
   { handle: "footer-khuwabb", title: "Khuwabb", items: [["Born in Lahore", "/"], ["Delivery across Pakistan", "/collections/all"], ["Cash on delivery", "/collections/all"]] },
+]
+
+// Online Store pages the theme's page templates (theme/templates/page.<suffix>.json) hang off.
+// Create-only, by handle (like MENUS). body is empty: the templates render all the content.
+export const PAGES = [
+  { handle: "size-guide", title: "Size guide", templateSuffix: "size-guide" },
+  { handle: "exchange", title: "7-day exchange", templateSuffix: "exchange" },
 ]
 
 export const REDIRECTS = [

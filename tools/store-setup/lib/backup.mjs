@@ -56,6 +56,11 @@ async function backupMenus(api) {
     `query($after:String){menus(first:50,after:$after){nodes{id handle title items{title type url resourceId items{title type url resourceId}}} pageInfo{hasNextPage endCursor}}}`, { after })).menus)
 }
 
+async function backupPages(api) {
+  return api.all(async (after) => (await api.gql(
+    `query($after:String){pages(first:250,after:$after){nodes{id handle title templateSuffix isPublished body} pageInfo{hasNextPage endCursor}}}`, { after })).pages)
+}
+
 async function backupRedirects(api) {
   return api.all(async (after) => (await api.gql(
     `query($after:String){urlRedirects(first:250,after:$after){nodes{id path target} pageInfo{hasNextPage endCursor}}}`, { after })).urlRedirects)
@@ -96,6 +101,7 @@ export async function runBackup(ctx, store) {
     ["products.json", backupProducts(ctx.api)],
     ["collections.json", backupCollections(ctx.api, pubId)],
     ["menus.json", backupMenus(ctx.api)],
+    ["pages.json", backupPages(ctx.api)],
     ["redirects.json", backupRedirects(ctx.api)],
     ["metafield-definitions.json", backupDefinitions(ctx.api)],
     ["files.json", backupFiles(ctx.api)],
