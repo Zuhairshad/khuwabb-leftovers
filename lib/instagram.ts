@@ -1,18 +1,19 @@
 // Latest Instagram posts and reels for the home-page feed (and, through
 // /api/instagram, for the Shopify theme's copy of the same section).
 //
-// Reads a Behold.so JSON feed: connect the Instagram account at behold.so,
-// create a JSON feed and put its link in BEHOLD_FEED_URL. Behold handles the
-// Instagram login and keeps the feed fresh. Without the link (or if Behold is
-// down) this returns null and the section shows the brand photos below
-// instead, so the page never breaks. New posts show up within REVALIDATE
-// seconds.
+// Reads the brand's Behold.so JSON feed (behold.so handles the Instagram
+// login and keeps the feed fresh). The link is public by design, so it lives
+// here; BEHOLD_FEED_URL overrides it. If Behold is down this returns null and
+// the section shows the brand photos below instead, so the page never breaks.
+// New posts show up within REVALIDATE seconds.
 
 import { INSTAGRAM_URL } from "./site"
 
 export { INSTAGRAM_URL }
 
 export const REVALIDATE = 900
+
+const BEHOLD_FEED_URL = "https://feeds.behold.so/DYiknpiQu0FUjlvSPBMQ"
 
 export type InstagramPost = {
   id: string
@@ -58,8 +59,7 @@ function toPost(p: BeholdPost): InstagramPost | null {
 }
 
 export async function getInstagramPosts(limit = 12): Promise<InstagramPost[] | null> {
-  const feedUrl = process.env.BEHOLD_FEED_URL
-  if (!feedUrl) return null
+  const feedUrl = process.env.BEHOLD_FEED_URL || BEHOLD_FEED_URL
   try {
     const res = await fetch(feedUrl, { next: { revalidate: REVALIDATE, tags: ["instagram"] } })
     if (!res.ok) {
