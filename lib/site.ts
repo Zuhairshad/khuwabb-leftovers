@@ -3,7 +3,7 @@
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://khuwabb-export-factory-leftovers.vercel.app").replace(/\/+$/, "")
 
 // Shopify CDN image URLs (and anything else already absolute) are returned
-// unchanged — prefixing SITE_URL onto them would double them up.
+// unchanged - prefixing SITE_URL onto them would double them up.
 export const absoluteUrl = (path = "/") => (/^https?:\/\//.test(path) ? path : `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`)
 
 // Trims to ~max chars without cutting mid-word, for meta descriptions.

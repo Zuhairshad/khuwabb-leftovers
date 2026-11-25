@@ -2,6 +2,10 @@ import data from "@/data/products.json"
 import shopify from "@/data/shopify.json"
 import { SHOPIFY_HANDLES } from "./shopify-config.mjs"
 
+// Product text comes from the Shopify admin; the brand writes without em dashes, so one typed there is
+// swapped for a comma before it reaches the page.
+const noEmDash = (text: string) => text.replace(/\s*(?:\u2014|&mdash;)\s*/g, ", ")
+
 // The one product source for Home, Shop, New In, product pages and the bag.
 // Built by scripts/build-khuwabb-data.mjs; nothing here invents data.
 
@@ -56,7 +60,7 @@ const SHOPIFY = (shopify as unknown as { products: Record<string, ShopifyProduct
 export const shopifyHandle = (slug: string) => (SHOPIFY_HANDLES as Record<string, string>)[slug] ?? slug
 
 // A product that exists in Shopify but has no products.json entry has no
-// hand-picked tint — cycle through the pastels the hand-made products use,
+// hand-picked tint - cycle through the pastels the hand-made products use,
 // so neighbouring cards differ like they do in the original grid.
 const TINTS = ["rgb(213, 229, 190)", "rgb(246, 201, 207)", "rgb(201, 210, 242)", "rgb(247, 210, 184)", "rgb(245, 231, 166)"]
 const NEW_IN_WINDOW_MS = 30 * 24 * 60 * 60 * 1000
@@ -108,7 +112,7 @@ function fromShopifyOnly(handle: string, s: ShopifyProduct): Product | null {
     sizes: s.sizes,
     colours,
     variants,
-    details: { description: s.description ?? null, fabric: null, care: null, sizeChart: null },
+    details: { description: s.description ? noEmDash(s.description) : null, fabric: null, care: null, sizeChart: null },
     tint: TINTS[0],
     newIn,
     sourceUrl: null,

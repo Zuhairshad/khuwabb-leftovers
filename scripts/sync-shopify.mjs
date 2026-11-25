@@ -1,5 +1,5 @@
 // Pulls the live catalog from Shopify (Storefront API, no token) into
-// data/shopify.json: per product handle — title, price, colour/size options
+// data/shopify.json: per product handle - title, price, colour/size options
 // in Shopify's order, and every variant's ID, options and availability.
 //
 //   node scripts/sync-shopify.mjs
@@ -42,7 +42,7 @@ async function fetchAll() {
       body: JSON.stringify({ query: QUERY, variables: { after } }),
     })
     const served = res.headers.get("x-shopify-api-version")
-    if (served && served !== SHOPIFY_API_VERSION) throw new Error(`Shopify served API ${served}, expected ${SHOPIFY_API_VERSION} — update SHOPIFY_API_VERSION`)
+    if (served && served !== SHOPIFY_API_VERSION) throw new Error(`Shopify served API ${served}, expected ${SHOPIFY_API_VERSION} - update SHOPIFY_API_VERSION`)
     const json = await res.json()
     if (!res.ok || json.errors) throw new Error(`Shopify ${res.status}: ${JSON.stringify(json.errors ?? json)}`)
     const page = json.data.products

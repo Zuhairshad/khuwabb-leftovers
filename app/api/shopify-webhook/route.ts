@@ -77,7 +77,7 @@ export async function POST(req: Request) {
     return Response.json({ ok: false, error: "not configured" }, { status: 500 })
   }
 
-  // Read the raw body before any parsing — the signature covers exactly these bytes.
+  // Read the raw body before any parsing - the signature covers exactly these bytes.
   const rawBody = await req.text()
   const valid = verifySignature(rawBody, req.headers.get("x-shopify-hmac-sha256"), secret)
   if (!valid) {
@@ -91,10 +91,10 @@ export async function POST(req: Request) {
     return Response.json({ ok: true, action: "ignored" })
   }
 
-  // Without a hook URL nothing can be triggered — tell Shopify now rather
+  // Without a hook URL nothing can be triggered - tell Shopify now rather
   // than claim "queued" and do nothing.
   if (!process.env.VERCEL_DEPLOY_HOOK_URL) {
-    console.error(`shopify-webhook: ${topic} could not trigger — VERCEL_DEPLOY_HOOK_URL is not set`)
+    console.error(`shopify-webhook: ${topic} could not trigger - VERCEL_DEPLOY_HOOK_URL is not set`)
     return Response.json({ ok: false, error: "not configured" }, { status: 500 })
   }
 

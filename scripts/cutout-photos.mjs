@@ -129,7 +129,7 @@ async function cutout({ data, maxH, type = "image/webp" }) {
     if (p >= w) stack.push(p - w)
     if (p < w * (h - 1)) stack.push(p + w)
   }
-  // Soft edge: the band just inside the outline (up to 6px — the studio
+  // Soft edge: the band just inside the outline (up to 6px - the studio
   // shots carry a light halo around each garment) is a blend of garment and
   // white background. Each band pixel's opacity is worked out against the
   // garment's typical colour deeper inside (median of nearby interior

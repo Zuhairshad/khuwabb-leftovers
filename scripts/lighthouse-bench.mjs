@@ -26,7 +26,7 @@ const RUNS = Number(opt("runs", "3"))
 const ROUTES = opt("routes", "/,/shop,/new-in,/products/wide-leg-trouser-two-full-stripes").split(",")
 const DEVICES = opt("devices", "mobile,desktop").split(",")
 // "simulate" (default, what PageSpeed Insights uses) or "devtools" (real
-// network/CPU throttling in the browser — a supplementary check).
+// network/CPU throttling in the browser - a supplementary check).
 const THROTTLING = opt("throttling", "simulate")
 const OUT = join(fileURLToPath(new URL("../", import.meta.url)), "perf", LABEL)
 const CHROME = process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -80,7 +80,7 @@ for (const route of ROUTES)
 
 const f = (s, d = 0, unit = "") => `${s.median.toFixed(d)}${unit} (${s.min.toFixed(d)}–${s.max.toFixed(d)})`
 const md = [
-  `# Lighthouse — ${LABEL}`,
+  `# Lighthouse - ${LABEL}`,
   "",
   `${new Date().toISOString()} · ${BASE} · throttling: ${THROTTLING} · Lighthouse ${(await import("lighthouse/package.json", { with: { type: "json" } })).default.version} · ${RUNS} runs each, fresh headless Chrome per run · local production server (not PageSpeed Insights)`,
   "",

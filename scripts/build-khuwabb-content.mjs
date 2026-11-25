@@ -1,6 +1,6 @@
 // Section data for the Khuwabb homepage, built from data/products.json.
 // Copy comes from khuwabb.com (19 Nov 2026). Photos stay the template's until
-// the real ones arrive. Reviews are DRAFTS, flagged `draft: true` — replace
+// the real ones arrive. Reviews are DRAFTS, flagged `draft: true` - replace
 // with genuine customer reviews before launch.
 import { readFileSync, writeFileSync } from "node:fs"
 
@@ -38,7 +38,7 @@ const lookOf = (name, note, slugs) => {
 }
 const counterLooks = [
   lookOf("Campus days", "Easy wide trousers and a cropped gilet for early lectures.", ["ribbed-drawstring-wide-leg-trouser", "womens-hooded-sleeveless-cropped-puffer-jacket", "wide-leg-trouser-three-half-stripes"]),
-  lookOf("Weekend plans", "Off-duty, on point — a soft jogger and a glossy puffer.", ["shape-high-waist-wide-leg-jogger", "ladies-vinyl-jacket", "wide-leg-trouser-two-full-stripes"]),
+  lookOf("Weekend plans", "Off-duty, on point - a soft jogger and a glossy puffer.", ["shape-high-waist-wide-leg-jogger", "ladies-vinyl-jacket", "wide-leg-trouser-two-full-stripes"]),
   lookOf("Brunch dates", "Two easy maxis and a statement panelled trouser.", ["womens-side-pocket-cotton-maxi-dress", "boat-neck-long-sleeve-maxi-dress", "women-trouser-two-full-panels"]),
   lookOf("Work mode", "Sharp seams and clean wide-leg trousers.", ["seam-detail-co-ords-set", "cargo-pocket-trouser-for-women", "women-trouser-two-full-panels"]),
   lookOf("Winter layers", "Cropped puffers for chilly days.", ["womens-hooded-full-sleeve-cropped-puffer-jacket", "ladies-vinyl-jacket", "ribbed-drawstring-wide-leg-trouser"]),
@@ -58,9 +58,9 @@ writeFileSync("data/gelato-counter.json", JSON.stringify(counter, null, 2) + "\n
 // owner's lookbook photo (public/brand/looks) and the pieces worn in it.
 const looksOrig = orig("looks.json")
 const looks = [
-  { slug: "daily-edit", name: "Daily edit", description: "A cropped puffer gilet over the ribbed drawstring trouser — easy layers for every day.", pieces: [["womens-hooded-sleeveless-cropped-puffer-jacket", "Beige"], ["ribbed-drawstring-wide-leg-trouser", "Black"]] },
+  { slug: "daily-edit", name: "Daily edit", description: "A cropped puffer gilet over the ribbed drawstring trouser - easy layers for every day.", pieces: [["womens-hooded-sleeveless-cropped-puffer-jacket", "Beige"], ["ribbed-drawstring-wide-leg-trouser", "Black"]] },
   { slug: "off-duty", name: "Off duty", description: "The olive cropped puffer with our cream high-waist jogger. Soft, warm and weekend-ready.", pieces: [["womens-hooded-full-sleeve-cropped-puffer-jacket", "Olive"], ["shape-high-waist-wide-leg-jogger", "Cream"]] },
-  { slug: "street-ready", name: "Street ready", description: "High shine meets sporty stripes — the black vinyl puffer with the two-stripe wide-leg trouser.", pieces: [["ladies-vinyl-jacket", "Black"], ["wide-leg-trouser-two-full-stripes", "Blue"]] },
+  { slug: "street-ready", name: "Street ready", description: "High shine meets sporty stripes - the black vinyl puffer with the two-stripe wide-leg trouser.", pieces: [["ladies-vinyl-jacket", "Black"], ["wide-leg-trouser-two-full-stripes", "Blue"]] },
   { slug: "brunch-dates", name: "Brunch dates", description: "The boat-neck maxi in maroon: sleek, long-sleeved and made for long lunches.", pieces: [["boat-neck-long-sleeve-maxi-dress", "Maroon"]] },
 ].map((l, i) => ({
   id: l.slug,
@@ -77,7 +77,7 @@ for (const l of looks)
   }
 writeFileSync("data/looks.json", JSON.stringify(looks, null, 2) + "\n")
 
-// Reviews: DRAFT copy written for layout only — not real customers.
+// Reviews: DRAFT copy written for layout only - not real customers.
 const receipts = [
   { order: "Order KH-1042 · 14 Oct 2026", lines: ["seam-detail-co-ords-set", "ribbed-drawstring-wide-leg-trouser"], quote: "“The co-ord is so comfortable I wore it to class three days running. Cash on delivery made it easy too.”", by: "Ayesha, Lahore", tilt: -3 },
   { order: "Order KH-1107 · 29 Oct 2026", lines: ["ladies-vinyl-jacket", "shape-high-waist-wide-leg-jogger"], quote: "“Exchanged a size within the week, no fuss. The jogger is the comfiest thing I own.”", by: "Hamza, Karachi", tilt: 2 },

@@ -139,7 +139,7 @@ export function ScoopReels({ config }: { config: ReelsConfig }) {
   const [settled, setSettled] = useState<Record<Row, boolean>>({ tops: !cfg.intro, bottoms: !cfg.intro, shoes: !cfg.intro })
   const [flavourIndex, setFlavourIndex] = useState(0)
   // Photos load for the pieces on screen first (the centre and one either
-  // side — all a phone shows; wider screens add a second either side after
+  // side - all a phone shows; wider screens add a second either side after
   // mount); the rest of the ring loads once the page is idle, long before
   // the first spin brings them into view.
   const near = (offset: number, n: number, reach = 1) => new Set(Array.from({ length: n }, (_, i) => i).filter((i) => Math.abs(wrap(i - offset, n)) <= reach))
@@ -372,7 +372,7 @@ export function ScoopReels({ config }: { config: ReelsConfig }) {
           const y = row === "shoes" ? layout.cy - 6 : layout.cy - layout.h * 0.12
           // Phones hug the right edge. Placed with a transform from the left
           // (not `right:`), so a name changing length never moves the box's
-          // origin — no layout shift while the reels spin.
+          // origin - no layout shift while the reels spin.
           const tx = mobile ? width - tw - 14 : x
           tag.style.transform = `translate3d(${tx.toFixed(1)}px, ${y.toFixed(1)}px, 0)`
         }

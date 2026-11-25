@@ -28,7 +28,7 @@ const md = [
   "",
   "| Product | Orderable | Missing details | Photos needed |",
   "| --- | --- | --- | --- |",
-  ...rows.map((r) => `| ${r.name} | ${r.orderable ? "yes" : "no"} | ${r.missing.join(", ") || "—"} | ${r.photos.map((f) => `\`${f}\``).join("<br>") || "—"} |`),
+  ...rows.map((r) => `| ${r.name} | ${r.orderable ? "yes" : "no"} | ${r.missing.join(", ") || "-"} | ${r.photos.map((f) => `\`${f}\``).join("<br>") || "-"} |`),
   "",
 ].join("\n")
 

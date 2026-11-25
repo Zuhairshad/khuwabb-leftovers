@@ -11,7 +11,7 @@
 # Routes and widths are fixed per the perf-pass spec; interaction states are
 # included (no --no-interactions). Reuses scripts/compare-pages.mjs (with
 # COMPARE_BASELINE=1 so both sides use the rebuild's own selectors) and
-# scripts/test-store.mjs (against AFTER only — the orderable fixture catalog
+# scripts/test-store.mjs (against AFTER only - the orderable fixture catalog
 # needs a dev server, which production builds don't have).
 set -euo pipefail
 
@@ -86,7 +86,7 @@ if [[ -f "$DIFF_FILE" ]]; then
   if [[ -n "$FLAGGED" ]]; then
     echo "$FLAGGED"
   else
-    echo "none — all sections/states within 1%"
+    echo "none - all sections/states within 1%"
   fi
 else
   echo "no diff-summary.txt found at $DIFF_FILE"

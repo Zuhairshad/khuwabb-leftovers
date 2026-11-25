@@ -1,8 +1,8 @@
 // Builds the logo assets from the supplied square logo (white background).
 //   node scripts/make-logo.mjs ["Khuwabb logo.png"]
-// public/brand/logo.png  — calligraphy + "khuwabb" wordmark (tagline dropped:
+// public/brand/logo.png  - calligraphy + "khuwabb" wordmark (tagline dropped:
 //                          unreadable at nav size), for the nav.
-// app/icon.png (512), app/apple-icon.png (180) — the calligraphy mark alone,
+// app/icon.png (512), app/apple-icon.png (180) - the calligraphy mark alone,
 //                          centred on white, for the favicon / home-screen icon.
 import { readFileSync, writeFileSync } from "node:fs"
 import { chromium } from "playwright"

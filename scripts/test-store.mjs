@@ -26,7 +26,7 @@ const PRODUCT = "/products/wide-leg-trouser-two-full-stripes"
 const results = []
 const check = (name, ok, detail = "") => {
   results.push({ name, ok: !!ok, detail })
-  console.log(`${ok ? "PASS" : "FAIL"}  ${name}${detail ? ` — ${detail}` : ""}`)
+  console.log(`${ok ? "PASS" : "FAIL"}  ${name}${detail ? ` - ${detail}` : ""}`)
 }
 const wait = (ms) => new Promise((r) => setTimeout(r, ms))
 

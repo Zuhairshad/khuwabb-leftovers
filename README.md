@@ -1,6 +1,6 @@
 # Khuwabb storefront
 
-Online store for **Khuwabb** — women's pret and everyday wear, born in Lahore.
+Online store for **Khuwabb** - women's pret and everyday wear, born in Lahore.
 Built with Next.js, hand-written React components and CSS Modules, with the
 motion and layout of the original design kept intact.
 
@@ -28,35 +28,35 @@ motion and layout of the original design kept intact.
 
 ## Features
 
-- **Home** — "khuwabb" slot-machine intro, outfit reels (jacket over trouser,
+- **Home** - "khuwabb" slot-machine intro, outfit reels (jacket over trouser,
   plus the black gym set) with a Shuffle button and an "Add the look"
   chooser, *Find your fit* category cards, a New arrivals hanger ticker,
   the *Wear the dream* campaign with mood looks, *Shop the look* outfits,
   reviews and care labels.
-- **Shop** (`/shop`) — every product on arched cards.
-- **New In** (`/new-in`) — hanger grid of new arrivals.
-- **Product pages** (`/products/<slug>`) — front / side / back photos per
+- **Shop** (`/shop`) - every product on arched cards.
+- **New In** (`/new-in`) - hanger grid of new arrivals.
+- **Product pages** (`/products/<slug>`) - front / side / back photos per
   colour, colour and size selection, description. Product pages open
   directly, without the intro.
-- **Size guide** (`/size-guide`) — every chart from the product catalog in cm
+- **Size guide** (`/size-guide`) - every chart from the product catalog in cm
   and inches with garment diagrams, a "how we measure" guide and a numeric
   size map; the cm / inches switch is pure CSS. Data lives in
   `data/size-guide.json`.
-- **7-day exchange** (`/exchange`) — how exchanges work. Wording is a draft;
+- **7-day exchange** (`/exchange`) - how exchanges work. Wording is a draft;
   confirm it before launch.
-- **Bag** — slide-out drawer shared across pages (stored in `localStorage`).
-- **One product source** — Home, Shop, New In, product pages and the bag all
+- **Bag** - slide-out drawer shared across pages (stored in `localStorage`).
+- **One product source** - Home, Shop, New In, product pages and the bag all
   read `data/products.json`; nothing is duplicated.
 - Responsive from 390 px phones to wide desktops; respects
   `prefers-reduced-motion`.
 
 ### Screenshots
 
-**Find your fit** — category cards that open on hover
+**Find your fit** - category cards that open on hover
 
 ![Find your fit category cards: Gym wear, Trousers, Jackets, Dresses, New in](docs/screenshots/find-your-fit.webp)
 
-**Shop the look** — complete outfits from the catalog, with the lookbook photo
+**Shop the look** - complete outfits from the catalog, with the lookbook photo
 
 ![Shop the look card: Daily edit, a beige cropped puffer gilet over a black ribbed trouser](docs/screenshots/shop-the-look.webp)
 
@@ -145,10 +145,10 @@ scripts/                  Catalog, image, test and benchmark tooling (below)
 
 The catalog is generated, so edit the sources and rebuild:
 
-1. **Products** — names, categories, prices, sizes, colours and descriptions
+1. **Products** - names, categories, prices, sizes, colours and descriptions
    live in `scripts/build-khuwabb-data.mjs`. Prices, colours and sizes come
    from the owner's catalog notes.
-2. **Confirmed store details** — Shopify variant IDs, stock, fabric, care and
+2. **Confirmed store details** - Shopify variant IDs, stock, fabric, care and
    size charts go in `data/catalog-overrides.json`:
 
    ```json
@@ -161,7 +161,7 @@ The catalog is generated, so edit the sources and rebuild:
    }
    ```
 
-3. **Photos** — supplied studio photos (white background) are turned into
+3. **Photos** - supplied studio photos (white background) are turned into
    transparent cut-outs, then into responsive sizes:
 
    ```bash

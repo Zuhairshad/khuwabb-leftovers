@@ -4,7 +4,7 @@ The site's prices, variants and stock come from a snapshot taken at the last
 deploy (`scripts/sync-shopify.mjs`, run on every build). If you change a
 product or its stock in Shopify, the site won't show it until the next
 deploy. This webhook makes Shopify trigger that deploy automatically, so
-changes show up on their own within a few minutes — no need to redeploy by
+changes show up on their own within a few minutes - no need to redeploy by
 hand.
 
 ## One-time setup
@@ -13,7 +13,7 @@ hand.
 
 In Vercel: **Project → Settings → Git → Deploy Hooks**. Create a hook, name
 it (e.g. "Shopify stock refresh"), set the branch to `main`, and copy the
-URL it gives you. Keep this tab open — you'll paste the URL in the next step.
+URL it gives you. Keep this tab open - you'll paste the URL in the next step.
 
 ### 2. Add Vercel environment variables
 
@@ -53,11 +53,11 @@ For each one, set:
 - **URL**: `https://khuwabb-export-factory-leftovers.vercel.app/api/shopify-webhook`
   (once the real domain is connected, change it to `https://<real domain>/api/shopify-webhook`)
 - **Webhook API version**: 2026-10 (matches `SHOPIFY_API_VERSION` in
-  `lib/shopify-config.mjs` — if that file is ever bumped to a newer version,
+  `lib/shopify-config.mjs` - if that file is ever bumped to a newer version,
   update these webhooks to match)
 
 The signing key used to verify these webhooks is shown near the bottom of
-the **Notifications** page, under "Webhooks" — copy it into
+the **Notifications** page, under "Webhooks" - copy it into
 `SHOPIFY_WEBHOOK_SECRET` in Vercel (step 2).
 
 ### 4. Redeploy once
@@ -95,7 +95,7 @@ triggered a build, was skipped, or failed.
 - Rapid edits (e.g. updating stock on several variants at once) collapse
   into one or two builds, not one per edit.
 - Checkout itself always uses Shopify's live stock, regardless of how stale
-  the site's snapshot is — so a customer can never buy something that's
+  the site's snapshot is - so a customer can never buy something that's
   actually out of stock, even in the few minutes before the next build picks
   up a change.
 - Each triggered build uses Vercel build minutes, so very frequent Shopify

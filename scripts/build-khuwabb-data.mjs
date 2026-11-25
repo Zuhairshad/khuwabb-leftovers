@@ -1,7 +1,7 @@
-// Builds data/products.json — the one catalog every page and the bag read.
+// Builds data/products.json - the one catalog every page and the bag read.
 //
 // Source of truth: the owner's handwritten catalog (WhatsApp photos of the
-// notebook, 19 Nov 2026) — names, prices, colours and sizes per product — and
+// notebook, 19 Nov 2026) - names, prices, colours and sizes per product - and
 // the supplied photos in Khuwabb_Color_Variants/, cut out by
 // scripts/cutout-photos.mjs into public/products/<slug>/<colour>/<view>.webp.
 //
