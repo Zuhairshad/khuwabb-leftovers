@@ -81,9 +81,61 @@ export function buildStore(cat, { selectedVariantId } = {}) {
         care: meta(it.care, "multi_line_text_field"),
         size_guide: meta(it.sizeChart ? sizeChartHtml(it.sizeChart) : null, "rich_text_field"),
       } },
-      template_suffix: null, object_type: "product", newIn: it.newIn, _src: src,
+      template_suffix: null, object_type: "product", newIn: it.newIn, _src: src, created_at: sp.createdAt ?? null,
     }
     byHandle[p.handle] = p
+    list.push(p)
+  })
+
+  // Every other product in the Shopify sync (data/shopify.json) is in the store too: the headless site
+  // lists them all, so the theme preview must as well. They have no cut-out photography, only the
+  // photos uploaded in Shopify (served from Shopify's CDN, so these need an internet connection).
+  Object.keys(cat.shopify).filter((h) => !byHandle[h]).forEach((handle, n) => {
+    const sp = cat.shopify[handle]
+    const pid = 9100000 + n
+    const seen = new Map()
+    const addImage = (im) => {
+      if (!im?.url || seen.has(im.url)) return seen.get(im.url) ?? null
+      const img = { src: im.url, url: im.url, width: im.width, height: im.height, alt: im.altText ?? "", aspect_ratio: im.width / im.height, id: ++mediaId }
+      const m = { id: img.id, media_type: "image", alt: img.alt, src: im.url, url: im.url, width: im.width, height: im.height, aspect_ratio: img.aspect_ratio, position: seen.size + 1, preview_image: img }
+      seen.set(im.url, m)
+      return m
+    }
+    addImage(sp.featuredImage); sp.images.forEach(addImage); sp.variants.forEach((v) => addImage(v.image))
+    const media = [...seen.values()]
+    const variants = sp.variants.map((v, j) => ({
+      id: Number(v.id), title: `${v.colour} / ${v.size}`, name: `${sp.title} - ${v.colour} / ${v.size}`,
+      options: [v.colour, v.size], option1: v.colour, option2: v.size, option3: null,
+      available: !!v.available, price: Math.round(v.price * 100),
+      compare_at_price: v.compareAt ? Math.round(v.compareAt * 100) : null,
+      featured_media: v.image ? seen.get(v.image.url) ?? null : null, featured_image: v.image ? seen.get(v.image.url)?.preview_image ?? null : null,
+      image: v.image ? seen.get(v.image.url)?.preview_image ?? null : null,
+      sku: `${handle}-${handleize(v.colour)}-${v.size}`.toUpperCase(), url: `/products/${handle}?variant=${v.id}`,
+      product_id: pid, position: j + 1, inventory_management: "shopify", requires_shipping: true, weight: 0, barcode: "",
+    }))
+    const selected = variants.find((v) => String(v.id) === String(selectedVariantId)) ?? null
+    const firstAvail = variants.find((v) => v.available) ?? variants[0]
+    const current = selected ?? firstAvail
+    const optionDefs = [["Color", sp.colours], ["Size", sp.sizes]]
+    const options_with_values = optionDefs.map(([name, values], k) => ({ name, position: k + 1, values, selected_value: current ? current.options[k] : null }))
+    const prices = variants.map((v) => v.price)
+    const tags = sp.tags ?? []
+    const p = {
+      id: pid, title: sp.title, handle, url: `/products/${handle}`, type: sp.productType ?? "",
+      vendor: "Khuwabb", tags,
+      description: sp.description ? `<p>${esc(sp.description)}</p>` : "", content: "",
+      price: Math.min(...prices), price_min: Math.min(...prices), price_max: Math.max(...prices), price_varies: new Set(prices).size > 1,
+      compare_at_price: null, compare_at_price_max: 0, compare_at_price_min: 0,
+      available: variants.some((v) => v.available),
+      options: optionDefs.map(([k]) => k), options_with_values,
+      options_by_name: Object.fromEntries(options_with_values.map((o) => [o.name, o])),
+      has_only_default_variant: false, variants, selected_variant: selected,
+      selected_or_first_available_variant: current, first_available_variant: firstAvail,
+      media, featured_media: media[0] ?? null, images: media.map((m) => m.preview_image), featured_image: media[0]?.preview_image ?? null,
+      metafields: { custom: { tint: null, category_line: null, fabric: null, care: null, size_guide: null } },
+      template_suffix: null, object_type: "product", newIn: tags.includes("new-in"), _src: null, created_at: sp.createdAt ?? null,
+    }
+    byHandle[handle] = p
     list.push(p)
   })
 
@@ -100,7 +152,8 @@ export function buildStore(cat, { selectedVariantId } = {}) {
     return c
   }
   for (const c of COLLECTIONS) {
-    const prods = c.manual ? list.filter((p) => p.newIn) : c.tag ? list.filter((p) => p.tags.includes(c.tag)) : list.filter((p) => p.type === c.type)
+    let prods = c.manual ? list.filter((p) => p.newIn) : c.tag ? list.filter((p) => p.tags.includes(c.tag)) : list.filter((p) => p.type === c.type)
+    if (c.sortOrder === "CREATED_DESC") prods = [...prods].sort((a, b) => Date.parse(b.created_at ?? "") - Date.parse(a.created_at ?? ""))
     mk(c.handle, c.title, prods)
   }
   const all = mk("all", "Products", list)
