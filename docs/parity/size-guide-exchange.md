@@ -19,7 +19,8 @@ React source (on `main`): `components/size-guide/SizeGuide.tsx` + `.module.css`,
 
 ## Going live in Shopify
 1. Create the pages: `node tools/store-setup/setup.mjs --apply --store-check citbkj-yj --only pages` (needs `read_content`/`write_content` scopes; see tools/store-setup/README.md), or in admin: Online Store > Pages > Add page "Size guide" (template `page.size-guide`) and "7-day exchange" (template `page.exchange`).
-2. The `footer-help` menu already exists on the store with `mailto:` links; the store-setup `menus` step is create-only and will not change it. Edit it once in admin (Online Store > Navigation > footer-help): Size guide → `/pages/size-guide`, 7-day exchange → `/pages/exchange`.
+2. Nothing to edit in the footer menu: if the store's existing `footer-help` menu still has the old `mailto:` links, `sections/footer.liquid` swaps "Size guide" / "7-day exchange" to the pages as soon as those pages exist (and keeps the email links until then). You can still edit the menu in admin if you prefer.
+3. Until the pages exist in the store, `/pages/size-guide` and `/pages/exchange` 404 and the footer keeps its email links. That is what a local `shopify theme dev` shows against a store that hasn't had the pages step applied.
 
 ## Not matched
 - Sticky bar offset and scroll margins assume the fixed nav pill (same as React).

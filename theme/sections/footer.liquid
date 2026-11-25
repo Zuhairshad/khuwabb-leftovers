@@ -5,6 +5,8 @@
   assign email = settings.contact_email
   assign size_guide_mailto = 'mailto:' | append: email | append: '?subject=Size%20guide'
   assign exchange_mailto = 'mailto:' | append: email | append: '?subject=Exchange'
+  assign size_guide_title = 'footer.size_guide' | t
+  assign exchange_title = 'footer.exchange' | t
   assign fallback_titles = 'Shop,Help,Khuwabb' | split: ','
 -%}
 
@@ -50,7 +52,14 @@
               {%- if i == 3 -%}
                 <p class="footer__link">{{ link.title }}</p>
               {%- else -%}
-                <p class="footer__link"><a href="{{ link.url }}">{{ link.title }}</a></p>
+                {%- assign link_href = link.url -%}
+                {%- comment -%} Help menus made before the pages existed point these two at email; use the pages as soon as they exist. {%- endcomment -%}
+                {%- if i == 2 and link.title == size_guide_title and pages['size-guide'] != blank -%}
+                  {%- assign link_href = pages['size-guide'].url -%}
+                {%- elsif i == 2 and link.title == exchange_title and pages['exchange'] != blank -%}
+                  {%- assign link_href = pages['exchange'].url -%}
+                {%- endif -%}
+                <p class="footer__link"><a href="{{ link_href }}">{{ link.title }}</a></p>
               {%- endif -%}
             {%- endfor -%}
           {%- else -%}

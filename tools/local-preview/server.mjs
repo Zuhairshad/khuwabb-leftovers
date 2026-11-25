@@ -364,7 +364,9 @@ function themeSettings(g) {
 async function globalsFor(req, res, url, extra = {}) {
   const cat = await loadCatalog()
   const store = buildStore(cat, { selectedVariantId: url.searchParams.get("variant") })
-  const g = { all_products: store.all_products, collections: store.collections, linklists: store.linklists }
+  // Pages the theme has a page.<handle> template for (they are created in the store by tools/store-setup, step "pages").
+  const pages = Object.fromEntries(["size-guide", "exchange"].filter((h) => existsSync(resolve(THEME, `templates/page.${h}.json`))).map((h) => [h, { handle: h, url: `/pages/${h}`, title: h }]))
+  const g = { all_products: store.all_products, collections: store.collections, linklists: store.linklists, pages }
   const origin = `http://${req.headers.host}`
   const cart = getCart(req, res)
   return {
