@@ -244,7 +244,7 @@
         if (totalEl) {
           var t = formatMoney(total)
           if (totalEl.textContent !== t) totalEl.textContent = t
-          totalEl.style.opacity = allSettled() ? '1' : '0.35'
+          totalEl.style.opacity = allSettled() ? '1' : '0.7'
         }
         if (ctaText && ctaEl) {
           var label = lookNow().length ? ctaEl.dataset.ctaLabel : ctaEl.dataset.emptyLabel

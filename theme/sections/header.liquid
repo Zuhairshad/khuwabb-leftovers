@@ -39,7 +39,7 @@
               height="{{ logo.height }}"
             >
           {%- else -%}
-            <img src="{{ 'logo.png' | asset_url }}" alt="" width="365" height="256">
+            <img src="{{ 'logo-162h.webp' | asset_url }}" alt="" width="231" height="162">
           {%- endif -%}
           <span>{{ section.settings.logo_label | escape }}</span>
         </a>
@@ -55,7 +55,7 @@
             </a>
           {%- endif -%}
 
-          <button type="button" class="bag-button" data-code-component data-bag-button aria-haspopup="dialog" aria-label="{{ 'bag.button_label' | t: count: cart.item_count }}"><span>{{ 'bag.button' | t }}</span> <span class="bag-button__badge" data-bag-count>{{ cart.item_count }}</span></button>
+          <button type="button" class="bag-button" data-code-component data-bag-button aria-haspopup="dialog"><span>{{ 'bag.button' | t }}</span> <span class="bag-button__badge" data-bag-count>{{ cart.item_count }}</span><span class="visually-hidden" data-bag-noun> {{ 'bag.items_noun' | t: count: cart.item_count }}</span></button>
 
           <button
             type="button"
@@ -105,7 +105,7 @@
       "type": "text",
       "id": "logo_aria",
       "label": "Logo link label (screen readers)",
-      "default": "Khuwabb leftover — home"
+      "default": "Khuwabb leftover, home"
     },
     {
       "type": "link_list",

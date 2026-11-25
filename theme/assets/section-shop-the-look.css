@@ -102,9 +102,9 @@
   letter-spacing: -0.01em;
   /* Sits on a merchant-set tint (block `tint`), so the shared --ink-62 (62% ink)
      can drop under 4.5:1 against light tints (e.g. #c9d2f2 -> 4.41:1). Bumped to
-     64% ink locally (does not touch the shared --ink-62 token used elsewhere):
+     70% ink locally (Looks.module.css, 0eed997) (does not touch the shared --ink-62 token used elsewhere):
      #c9d2f2 -> 4.68:1, #f6c9cf -> 4.71:1, #d5e5be -> 4.93:1, #f5e7a6 -> 5.06:1. */
-  color: rgba(23, 20, 15, 0.64);
+  color: rgba(23, 20, 15, 0.7);
 }
 
 .shop-the-look__pieces {
@@ -209,7 +209,12 @@
     padding: 0 20px;
   }
 
+  /* Cards are taller than a phone screen, so they scroll normally here:
+     stacking would slide the next card over the pieces before they're seen
+     (Looks.module.css, f9118ad). */
   .shop-the-look__look {
+    position: relative;
+    top: auto;
     flex-direction: column;
     gap: 20px;
     height: auto;
@@ -237,5 +242,42 @@
 
   .shop-the-look__description {
     font-size: 17px;
+  }
+
+  /* Price under the name, so names get the full row. */
+  .shop-the-look__piece {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    grid-template-areas: "thumb text" "thumb price";
+    align-items: center;
+    column-gap: 14px;
+    row-gap: 4px;
+  }
+
+  .shop-the-look__thumb {
+    grid-area: thumb;
+    width: 64px;
+    height: 64px;
+  }
+
+  .shop-the-look__thumb img {
+    width: 54px;
+    height: 54px;
+  }
+
+  .shop-the-look__text {
+    grid-area: text;
+    width: auto;
+    align-self: end;
+  }
+
+  .shop-the-look__price {
+    grid-area: price;
+    align-self: start;
+    font-size: 15px;
+  }
+
+  .shop-the-look__actions {
+    align-items: center;
   }
 }

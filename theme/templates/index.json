@@ -109,7 +109,7 @@
           "type": "mood",
           "settings": {
             "name": "Weekend plans",
-            "note": "Off-duty, on point — a soft jogger and a glossy puffer.",
+            "note": "Off-duty, on point: a soft jogger and a glossy puffer.",
             "color": "#f6c9cf",
             "x": 20,
             "y": 89,
@@ -261,7 +261,7 @@
           "type": "look",
           "settings": {
             "title": "Daily edit",
-            "description": "A cropped puffer gilet over the ribbed drawstring trouser — easy layers for every day.",
+            "description": "A cropped puffer gilet over the ribbed drawstring trouser. Easy layers for every day.",
             "tint": "#c9d2f2",
             "fallback_image": "daily-edit",
             "image_alt": "The Daily edit look: Hooded Sleeveless Cropped Puffer Jacket in Beige with Ribbed Drawstring Wide Leg Trouser in Black",
@@ -289,7 +289,7 @@
           "type": "look",
           "settings": {
             "title": "Street ready",
-            "description": "High shine meets sporty stripes — the black vinyl puffer with the two-stripe wide-leg trouser.",
+            "description": "High shine meets sporty stripes: the black vinyl puffer with the two-stripe wide-leg trouser.",
             "tint": "#d5e5be",
             "fallback_image": "street-ready",
             "image_alt": "The Street ready look: Ladies Vinyl Jacket in Black with Wide Leg Trouser with Two Full Stripes in Blue",

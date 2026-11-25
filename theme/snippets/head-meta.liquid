@@ -1,5 +1,5 @@
 {%- comment -%}
-  Meta tags. Titles follow the reference: home "Khuwabb — Women's pret & couture",
+  Meta tags. Titles follow the reference: home "Khuwabb · Women's pret & couture",
   other pages "<title> · Khuwabb" (docs/audit.md §2). Owned by the main session.
 {%- endcomment -%}
 {%- liquid
@@ -8,7 +8,7 @@
   assign page_label = 'meta.page' | t: number: current_page
   assign default_description = 'meta.default_description' | t
   if template.name == 'index'
-    assign title = brand | append: ' — ' | append: tagline
+    assign title = brand | append: ' · ' | append: tagline
   elsif template.name == 'collection' and collection.handle == 'all'
     assign title = 'meta.all_collections' | t | append: ' · ' | append: brand
   else

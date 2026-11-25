@@ -233,9 +233,10 @@ class CartDrawer extends HTMLElement {
         this.bumpTimer = setTimeout(() => badge.removeAttribute('data-bump'), 600)
       }
     })
-    document.querySelectorAll('[data-bag-button]').forEach((button) => {
-      const template = count === 1 ? strings.bagButtonOne || strings.bagButton : strings.bagButton
-      if (template) button.setAttribute('aria-label', template.replace('[count]', String(count)))
+    // The button's name is its visible text ("Bag 2") plus a screen-reader-only noun.
+    const noun = count === 1 ? strings.bagNounOne || strings.bagNoun : strings.bagNoun
+    document.querySelectorAll('[data-bag-button] [data-bag-noun]').forEach((el) => {
+      if (noun) el.textContent = ' ' + noun
     })
   }
 }

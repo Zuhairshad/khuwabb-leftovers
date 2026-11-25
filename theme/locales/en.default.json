@@ -40,6 +40,10 @@
       "one": "Bag, {{ count }} item",
       "other": "Bag, {{ count }} items"
     },
+    "items_noun": {
+      "one": "item",
+      "other": "items"
+    },
     "empty": "Your bag is empty.",
     "start_shopping": "Start shopping",
     "subtotal": "Subtotal",
@@ -65,7 +69,7 @@
     "sizes_coming_soon": "Sizes coming soon.",
     "choose_size": "Choose a size",
     "add_to_bag": "Add to bag",
-    "added": "Added — add another",
+    "added": "Added. Add another",
     "sold_out": "Sold out",
     "sold_out_colour": "Sold out in this colour",
     "sold_out_size": "Sold out in this size",

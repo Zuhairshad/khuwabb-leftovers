@@ -128,6 +128,7 @@ class MarqueeTicker extends HTMLElement {
         li.removeAttribute('data-ticker-set');
         li.setAttribute('data-ticker-clone', '');
         li.setAttribute('aria-hidden', 'true');
+        li.setAttribute('inert', '');
         li.querySelectorAll('[data-ticker-measure]').forEach((m) => m.removeAttribute('data-ticker-measure'));
         li.querySelectorAll('a, button, [tabindex]').forEach((el) => el.setAttribute('tabindex', '-1'));
         this.track.appendChild(li);

@@ -34,7 +34,7 @@
   {%- if count == 0 -%}
     <div class="cart-drawer__empty main-cart__empty">
       <div class="cart-drawer__empty-arch">
-        <img src="{{ 'empty-bag.webp' | asset_url }}" alt="" width="320" height="400" loading="lazy" decoding="async">
+        <img src="{{ 'empty-bag.webp' | asset_url }}" alt="" width="340" height="392" loading="lazy" decoding="async">
       </div>
       <div class="cart-drawer__empty-text">{{ section.settings.empty_text | escape }}</div>
       <a href="{{ section.settings.empty_cta_link | default: routes.all_products_collection_url }}" class="cart-drawer__empty-cta">

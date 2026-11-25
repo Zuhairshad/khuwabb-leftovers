@@ -383,7 +383,7 @@
       const vh = window.innerHeight;
       const progress = r.height > 0 ? clamp((vh - r.top) / r.height, 0, 1) : 1;
       this.style.transform = `translateX(${this.from * (1 - progress)}px)`;
-      this.style.opacity = String(0.2 + 0.8 * progress);
+      this.style.opacity = String(0.5 + 0.5 * progress);
     }
   }
 
