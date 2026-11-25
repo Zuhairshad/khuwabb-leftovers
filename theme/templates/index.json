@@ -60,6 +60,18 @@
             "tint": "#f7d2b8",
             "cover_product": "womens-hooded-full-sleeve-cropped-puffer-jacket",
             "cover_colour": "Olive",
+            "tilt": "1"
+          }
+        },
+        "cat_tops": {
+          "type": "category",
+          "settings": {
+            "title": "Tops",
+            "collection": "tops",
+            "link": "",
+            "tint": "#f5e7a6",
+            "cover_product": "premium-velvet-high-neck-top-women",
+            "cover_colour": "Purple",
             "tilt": "-1"
           }
         }
@@ -69,6 +81,7 @@
         "cat_trousers",
         "cat_jackets",
         "cat_dresses",
+        "cat_tops",
         "cat_newin"
       ],
       "settings": {
