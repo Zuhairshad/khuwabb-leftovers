@@ -3,7 +3,7 @@
 import { m } from "framer-motion"
 import { useState } from "react"
 import { BELOW_DESKTOP, useMedia } from "@/lib/useMedia"
-import { getProduct, products, type Product } from "@/lib/catalog"
+import { categoryGroup, getProduct, products, type Product } from "@/lib/catalog"
 import { Appear } from "../Appear"
 import { SectionHeader } from "./SectionHeader"
 import styles from "./Flavours.module.css"
@@ -22,11 +22,12 @@ const cover = (slug: string, colour: string) => {
 }
 
 const CATEGORIES: Category[] = [
-  { name: "Gym wear", match: (p) => p.category === "Gymwear", tint: "var(--pistachio)", ...cover("gym-co-ords-set", "Light Pink"), tilt: -1 },
-  { name: "Trousers", match: (p) => p.category === "Trousers", tint: "var(--lemon)", ...cover("wide-leg-trouser-two-full-stripes", "Cherry"), tilt: 1 },
-  { name: "Jackets", match: (p) => p.category === "Jackets", tint: "var(--blueberry)", ...cover("ladies-vinyl-jacket", "Red"), tilt: -1 },
-  { name: "Dresses", match: (p) => p.category === "Dresses", tint: "var(--strawberry)", ...cover("boat-neck-long-sleeve-maxi-dress", "Maroon"), tilt: 1 },
-  { name: "New in", match: (p) => p.newIn, tint: "var(--peach)", ...cover("womens-hooded-full-sleeve-cropped-puffer-jacket", "Olive"), tilt: -1 },
+  { name: "Gym wear", match: (p) => categoryGroup(p.category) === "Gym wear", tint: "var(--pistachio)", ...cover("gym-co-ords-set", "Light Pink"), tilt: -1 },
+  { name: "Trousers", match: (p) => categoryGroup(p.category) === "Trousers", tint: "var(--lemon)", ...cover("wide-leg-trouser-two-full-stripes", "Cherry"), tilt: 1 },
+  { name: "Jackets", match: (p) => categoryGroup(p.category) === "Jackets", tint: "var(--blueberry)", ...cover("ladies-vinyl-jacket", "Red"), tilt: -1 },
+  { name: "Dresses", match: (p) => categoryGroup(p.category) === "Dresses", tint: "var(--strawberry)", ...cover("boat-neck-long-sleeve-maxi-dress", "Maroon"), tilt: 1 },
+  { name: "Tops", match: (p) => categoryGroup(p.category) === "Tops", tint: "var(--lemon)", ...cover("premium-velvet-high-neck-top-women", "Purple"), tilt: -1 },
+  { name: "New in", match: (p) => p.newIn, tint: "var(--peach)", ...cover("womens-hooded-full-sleeve-cropped-puffer-jacket", "Olive"), tilt: 1 },
 ]
 
 const counts = Object.fromEntries(CATEGORIES.map((c) => [c.name, products.filter(c.match).length]))

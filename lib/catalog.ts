@@ -187,3 +187,32 @@ export function photo(p: Product, colour?: string) {
 
 export const productHref = (p: Product) => `/products/${p.slug}`
 export const colourList = (p: Product) => p.colours.map((c) => c.name).join(" · ")
+
+// The home "Find your fit" cards group by Shopify collection, not the raw
+// category/productType string: Shopify-only products use finer productTypes
+// than the hand-built categories, so several map to the same card.
+export type CategoryGroup = "Gym wear" | "Trousers" | "Jackets" | "Dresses" | "Tops" | "Co-ord sets"
+const CATEGORY_GROUPS: Record<string, CategoryGroup> = {
+  Gymwear: "Gym wear",
+  Leggings: "Gym wear",
+  Activewear: "Gym wear",
+  "Activewear Sets": "Gym wear",
+  Trousers: "Trousers",
+  Jackets: "Jackets",
+  Shackets: "Jackets",
+  "Jackets and Hoodies": "Jackets",
+  "Puffer Jacket": "Jackets",
+  "Sleeveless Puffer Jacket": "Jackets",
+  "Women's Jacket": "Jackets",
+  Dresses: "Dresses",
+  "Maxi Dress": "Dresses",
+  Tops: "Tops",
+  Sweaters: "Tops",
+  Bodysuits: "Tops",
+  Playsuits: "Tops",
+  "Co-ord Set": "Co-ord sets",
+  Tracksuits: "Co-ord sets",
+}
+export function categoryGroup(category: string): CategoryGroup | null {
+  return CATEGORY_GROUPS[category] ?? null
+}
