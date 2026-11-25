@@ -1,6 +1,6 @@
 /*
  * Shared form + button components (Shopify-only pages: customer, search, password, gift card).
- * No React source — built from the design system (assets/tokens.css). Pill look borrowed from
+ * No React source - built from the design system (assets/tokens.css). Pill look borrowed from
  * section-footer.css (.newsletter-form__input/__button) and the PDP buttons (section-main-product.css);
  * error colour #a8321e / 13px from section-cart-drawer.css (.cart-line__error).
  *

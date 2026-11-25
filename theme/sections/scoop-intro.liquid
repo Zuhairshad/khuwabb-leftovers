@@ -32,11 +32,12 @@
   assign up_dur = 1.0 | times: k | round: 3
   assign in_dur = 0.7 | times: k | round: 3
 
-  assign arch_w = 88.0 | divided_by: n | round: 2
-  assign spin_end_raw = spins | minus: 1 | times: 100.0 | divided_by: spins
-  assign spin_over_add = 7.0 | divided_by: spins
-  assign spin_over = spin_end_raw | plus: spin_over_add | round: 4
-  assign spin_end = spin_end_raw | round: 4
+  comment
+    The arch width and the reel's final offset are computed in CSS (calc) from --spins and the letter
+    count, not here: Liquid's divided_by floors integer operands (and some engines treat 100.0 as an
+    integer), which left the reel ~0.7 of a percent short and showed the previous cell's colour as a
+    strip above each letter.
+  endcomment
   assign last_a = spins | minus: 1
 -%}
 
@@ -47,7 +48,7 @@
     {% if section.settings.lock_scroll %}data-lock{% endif %}
     data-total="{{ total }}"
     aria-hidden="true"
-    style="--arch-w: min({{ arch_w }}vw, 250px, 43.48vh); --spin-end: -{{ spin_end }}%; --spin-overshoot: -{{ spin_over }}%; animation: siBg {{ bg_dur }}s cubic-bezier(0.65,0,0.35,1) {{ bg_delay }}s forwards, siOut 0.01s linear {{ out_delay }}s forwards;"
+    style="--arch-w: min(calc(88vw / {{ n }}), 250px, 43.48vh); --spins: {{ spins }}; --spin-end: calc(-100% * (var(--spins) - 1) / var(--spins)); --spin-overshoot: calc(-100% * ((var(--spins) - 1) + 0.07) / var(--spins)); animation: siBg {{ bg_dur }}s cubic-bezier(0.65,0,0.35,1) {{ bg_delay }}s forwards, siOut 0.01s linear {{ out_delay }}s forwards;"
   >
     <div class="scoop-intro__row">
       {%- for i in (0..7) -%}

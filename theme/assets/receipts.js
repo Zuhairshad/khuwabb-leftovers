@@ -1,5 +1,5 @@
 /*
- * <receipt-drag> — free 2D drag with momentum (Receipts.tsx: framer `drag` + `dragMomentum`, no
+ * <receipt-drag> - free 2D drag with momentum (Receipts.tsx: framer `drag` + `dragMomentum`, no
  * bounds). Wraps one receipt; moves itself with the CSS `translate` property (the receipt inside
  * keeps its own rotate/entrance).
  *

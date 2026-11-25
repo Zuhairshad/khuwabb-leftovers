@@ -1,5 +1,5 @@
 /*
- * care-labels — port of components/home/CareLabels.module.css (line refs = that file).
+ * care-labels - port of components/home/CareLabels.module.css (line refs = that file).
  * Entrance/hover = CareLabels.tsx variants, driven by appear.js (data-appear="label",
  * data-appear-amount .3 -> data-shown, toggled both ways).
  */

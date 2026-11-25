@@ -11,7 +11,7 @@
   Garment fit (ScoopReels.tsx:14, 207-212, 218-246, 257-269): the reference carries a per-piece
   `fit: "any" | "men" | "women"` used by the look's drag/shuffle "pull the other rows onto a
   matching fit" logic. Khuwabb is a women's-only catalogue with no men's/women's split, so Hero.tsx
-  (the reference's data source) hardcodes `fit: "any"` on every piece it builds — the fit machinery
+  (the reference's data source) hardcodes `fit: "any"` on every piece it builds - the fit machinery
   is ported in full (below + hero-reels.js) but is inert with today's catalogue, exactly like the
   reference. `hr_fit` reads an optional `fit:men` / `fit:women` product tag so the mechanism is
   live the moment such a tag exists; no product has one today, so output is unchanged (parity).
@@ -67,7 +67,7 @@
 
       comment
         Garment fit (ScoopReels.tsx:14): optional "fit:men" / "fit:women" product tag, else "any"
-        (the reference's current default for every piece — see the comment at the top of this file).
+        (the reference's current default for every piece - see the comment at the top of this file).
       endcomment
       assign hr_fit = 'any'
       for hr_tag in hr_p.tags

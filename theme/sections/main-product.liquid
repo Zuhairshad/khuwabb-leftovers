@@ -84,7 +84,11 @@
   assign mp_care = product.metafields.custom.care.value | append: '' | strip
   assign mp_guide = product.metafields.custom.size_guide | metafield_tag
   assign mp_guide_text = mp_guide | strip_html | strip
-  assign mp_desc_text = product.description | strip_html | strip
+  comment
+    The brand writes without em dashes: one typed in the Shopify admin is swapped for a comma.
+  endcomment
+  assign mp_description = product.description | replace: ' — ', ', ' | replace: ' &mdash; ', ', ' | replace: '—', ', ' | replace: '&mdash;', ', '
+  assign mp_desc_text = mp_description | strip_html | strip
   assign mp_start = product.selected_or_first_available_variant
 
   # Sale price (components/product/ProductDetail.tsx): compare-at of the lowest-priced variant
@@ -220,7 +224,7 @@
       {%- if mp_desc_text != blank or mp_fabric != blank or mp_care != blank or mp_guide_text != blank -%}
         <dl class="product__facts">
           {%- if mp_desc_text != blank -%}
-            <div><dt>{{ 'product.description' | t }}</dt><dd>{{ product.description }}</dd></div>
+            <div><dt>{{ 'product.description' | t }}</dt><dd>{{ mp_description }}</dd></div>
           {%- endif -%}
           {%- if mp_fabric != blank -%}
             <div><dt>{{ 'product.fabric' | t }}</dt><dd>{{ mp_fabric | escape | newline_to_br }}</dd></div>
@@ -279,7 +283,7 @@
     echo ',"url":'
     echo canonical_url | json
     echo ',"description":'
-    echo product.description | strip_html | strip_newlines | strip | json
+    echo mp_description | strip_html | strip_newlines | strip | json
     echo ',"brand":{"@type":"Brand","name":'
     echo shop.name | json
     echo '},"image":['
