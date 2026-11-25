@@ -1,4 +1,4 @@
-// Offline preview of theme/ — renders the Liquid theme with LiquidJS against mock
+// Offline preview of theme/: renders the Liquid theme with LiquidJS against mock
 // store data from data/*.json. No Shopify login, nothing is uploaded.
 // Not a full Shopify: checkout, customer accounts and real inventory are mocked.
 import http from "node:http"
@@ -567,7 +567,7 @@ async function cartApi(req, res, url, path) {
     return finish(200, cartJson(cartObject(store, cart)), b.sections)
   }
   // Both the documented Shopify contract (`/cart` form post with `updates[]`, ordered, one per
-  // cart line — Dawn's name="updates[]") and the AJAX contract (`/cart/update(.js)` with
+  // cart line, Dawn's name="updates[]") and the AJAX contract (`/cart/update(.js)` with
   // `updates[<key or variant id>]`) land here; a bare POST to `/cart` redirects back to it after
   // updating, matching Shopify (isJs is false for a plain form post, so `finish` redirects).
   if (op === "/cart" || op === "/cart/update") {

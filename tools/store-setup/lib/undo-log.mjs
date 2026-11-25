@@ -18,7 +18,7 @@ export function makeUndoLogger(path) {
   const write = (entry) => appendFileSync(path, JSON.stringify(entry) + "\n")
   return {
     path,
-    // Returns {id} — pass it back into the matching done()/failed() call for this op.
+    // Returns {id}: pass it back into the matching done()/failed() call for this op.
     pending({ step, op, target, before }) {
       const id = `${Date.now().toString(36)}-${++seq}`
       write({ id, ts: new Date().toISOString(), status: "pending", step, op, target, before })

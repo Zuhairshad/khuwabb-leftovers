@@ -28,7 +28,7 @@ Stage A (Claude Code web, current):
 - Verification = code parity, not screenshots: every style, class, breakpoint, state and piece of copy in the React source must have a matching place in the theme. Agents record this in docs/parity/<section>.md.
 - Try `npx -y @shopify/cli@latest theme check`. If it can't install or run, note it in the report and continue.
 
-Stage B (local terminal) — runbook: docs/stage-b.md
+Stage B (local terminal), runbook: docs/stage-b.md
 - `shopify theme dev` runs once, started by the main session, in the background. Agents never start their own.
 - The compare tool is the source of truth for visual match.
 

@@ -49,11 +49,11 @@ entries.forEach((e, idx) => {
 })
 
 const failed = entries.filter((e) => e.status === "failed")
-if (orphanedPending.length) { console.log(`\n!! ${orphanedPending.length} ORPHANED PENDING entr${orphanedPending.length === 1 ? "y" : "ies"} (no matching done/failed — mutation may have half-applied; check by hand):`); for (const e of orphanedPending) console.log(`   ${e.ts} ${e.step}.${e.op} target=${e.target}`) }
+if (orphanedPending.length) { console.log(`\n!! ${orphanedPending.length} ORPHANED PENDING entr${orphanedPending.length === 1 ? "y" : "ies"} (no matching done/failed, mutation may have half-applied; check by hand):`); for (const e of orphanedPending) console.log(`   ${e.ts} ${e.step}.${e.op} target=${e.target}`) }
 if (failed.length) { console.log(`\n!! ${failed.length} FAILED entr${failed.length === 1 ? "y" : "ies"} (never succeeded, nothing to undo):`); for (const e of failed) console.log(`   ${e.ts} ${e.step}.${e.op} target=${e.target}: ${e.message}`) }
 
 // undo can be a single {mutation,variables} (most steps) or a list of them, oldest-first
-// (products: metafieldsDelete per unset key, then productUpdate restoring productType) — run
+// (products: metafieldsDelete per unset key, then productUpdate restoring productType), run
 // in REVERSE within the entry too.
 const hasUndo = (u) => (Array.isArray(u) ? u.some((x) => x?.mutation) : !!u?.mutation)
 const undoOpsReversed = (u) => (Array.isArray(u) ? [...u].reverse() : [u]).filter((x) => x?.mutation)
@@ -74,7 +74,7 @@ if (apply) {
     for (const { mutation, variables } of undoOpsReversed(e.undo)) {
       console.log(`  [undo] ${e.step}.${e.op} target=${e.target} → ${mutation}`)
       try {
-        // allow:true — undo.mjs is the one place permitted to call denylisted mutations.
+        // allow:true: undo.mjs is the one place permitted to call denylisted mutations.
         await api.mutate(undoQueryFor(mutation), variables, mutation, { allow: true })
         console.log(`  [done]  ${mutation}`)
       } catch (err) { errors++; console.log(`  [ERROR] ${mutation} for ${e.step}.${e.op} target=${e.target}: ${err.message}`) }

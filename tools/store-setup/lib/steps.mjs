@@ -44,7 +44,7 @@ async function shopProducts(ctx) {
   if (ctx.cache.products) return ctx.cache.products
   // No sortKey is given, so this relies on the Admin API's default product order (documented as
   // ID ascending, same default as the Storefront `products` query that scripts/sync-shopify.mjs
-  // uses to build data/shopify.json) — needed so the Shopify-only tint rotation below lines up
+  // uses to build data/shopify.json); needed so the Shopify-only tint rotation below lines up
   // with lib/catalog.ts's. UNTESTED against a live store; verify order before trusting go-live.
   const nodes = await ctx.api.all(async (after) => (await ctx.api.gql(`query($after:String){products(first:50,after:$after){nodes{id handle title productType descriptionHtml tags metafields(first:20,namespace:"custom"){nodes{key value type}}} pageInfo{hasNextPage endCursor}}}`, { after })).products)
   return (ctx.cache.products = new Map(nodes.map((n) => [n.handle, n])))
@@ -75,7 +75,7 @@ const definitions = {
       const wantsAccess = ex.access?.storefront !== "PUBLIC_READ", wantsPin = ex.pinnedPosition == null
       if (!wantsAccess && !wantsPin) { st.unchanged++; continue }
       if (!ctx.goLive) {
-        report(ctx, `custom.${d.key} exists${wantsAccess ? "; storefront access is not PUBLIC_READ" : ""}${wantsPin ? "; not pinned" : ""} — would set with --go-live`)
+        report(ctx, `custom.${d.key} exists${wantsAccess ? "; storefront access is not PUBLIC_READ" : ""}${wantsPin ? "; not pinned" : ""}, would set with --go-live`)
         st.unchanged++
         continue
       }
@@ -110,7 +110,7 @@ const products = {
     `[additive] per product: write custom.tint/category_line/fabric/care/size_guide ONLY for keys that are currently unset in Shopify (existing different value → report "[skip] differs", never overwritten, even with --go-live)`,
     `[go-live] per product: productType → category (default mode only reports a mismatch)`,
     ...(flags.descriptions ? [`[go-live] --descriptions: fill descriptionHtml only where Shopify's is empty (default mode, even with --descriptions, only reports)`] : []),
-    `[additive] Shopify-only products (not in products.json, by handle): write custom.tint ONLY if currently unset, rotating through the same 5 pastels as lib/catalog.ts's TINTS, assigned by index in the live Admin API product list order after removing products.json-covered handles — mirrors lib/catalog.ts's Object.entries(data/shopify.json.products) ordering; an existing different value is reported "[skip] differs", never overwritten`,
+    `[additive] Shopify-only products (not in products.json, by handle): write custom.tint ONLY if currently unset, rotating through the same 5 pastels as lib/catalog.ts's TINTS, assigned by index in the live Admin API product list order after removing products.json-covered handles (mirrors lib/catalog.ts's Object.entries(data/shopify.json.products) ordering); an existing different value is reported "[skip] differs", never overwritten`,
     ...local.shopifyHandles.filter((h) => !local.items.some((i) => i.handle === h)).map((h) => `[report-only] ${h} is in data/shopify.json but not data/products.json`),
   ],
   async run(ctx) {
@@ -127,19 +127,19 @@ const products = {
         if (cur == null || cur === "") sets.push(m)
         else if (cur.toLowerCase() !== m.value.toLowerCase()) skips.push({ key: m.key, cur })
       }
-      for (const s of skips) report(ctx, `${it.handle}: custom.${s.key} differs ("${s.cur}" vs desired "${(desiredMetafields(it).find((m) => m.key === s.key) ?? {}).value}") — [skip] differs, never overwritten; review by hand`)
+      for (const s of skips) report(ctx, `${it.handle}: custom.${s.key} differs ("${s.cur}" vs desired "${(desiredMetafields(it).find((m) => m.key === s.key) ?? {}).value}"), [skip] differs, never overwritten; review by hand`)
       const diffs = []
       if (sets.length) { input.metafields = sets.map((m) => ({ namespace: "custom", ...m })); diffs.push(...sets.map((m) => `custom.${m.key} (was unset) → "${m.value.slice(0, 50)}"`)) }
       let typeChangeOnly = false
       if (sp.productType !== it.productType) {
         if (ctx.goLive) { input.productType = it.productType; diffs.push(`productType "${sp.productType}" → "${it.productType}"`) }
-        else { report(ctx, `${it.handle}: productType "${sp.productType}" → "${it.productType}" — would set with --go-live`); typeChangeOnly = true }
+        else { report(ctx, `${it.handle}: productType "${sp.productType}" → "${it.productType}", would set with --go-live`); typeChangeOnly = true }
       }
       if (ctx.flags.descriptions) {
         const empty = !sp.descriptionHtml?.replace(/<[^>]*>/g, "").trim()
         if (empty && it.description) {
           if (ctx.goLive) { input.descriptionHtml = `<p>${esc(it.description)}</p>`; diffs.push("descriptionHtml (was empty)") }
-          else report(ctx, `${it.handle}: descriptionHtml is empty — would fill with --go-live --descriptions`)
+          else report(ctx, `${it.handle}: descriptionHtml is empty, would fill with --go-live --descriptions`)
         }
       }
       if (!diffs.length) { if (!typeChangeOnly) st.unchanged++; continue }
@@ -148,7 +148,7 @@ const products = {
         `mutation($p:ProductUpdateInput!){productUpdate(product:$p){product{id} userErrors{field message}}}`, { p: input }, "productUpdate"), "updated",
         { step: "products", op: "productUpdate", target: it.handle, before,
           // undo is a LIST of ops, run in reverse by undo.mjs: one metafieldsDelete per key
-          // that had no prior value (there's nothing to "restore" — it didn't exist), plus a
+          // that had no prior value (there's nothing to "restore", it didn't exist), plus a
           // productUpdate restoring productType, only when productType was actually changed.
           after: () => {
             const undo = sets.map((m) => ({ mutation: "metafieldsDelete", variables: { metafields: [{ ownerId: sp.id, namespace: "custom", key: m.key }] } }))
@@ -157,7 +157,7 @@ const products = {
           } })
     }
     // Shopify-only products (exist live, no products.json entry): rotate custom.tint through
-    // the same 5 pastels lib/catalog.ts uses for them, in the same index order — the live
+    // the same 5 pastels lib/catalog.ts uses for them, in the same index order: the live
     // product list here in place of data/shopify.json's. Unset-only, same as every other field
     // above: an existing different value is reported, never overwritten.
     const coveredHandles = new Set(ctx.local.items.map((i) => i.handle))
@@ -170,7 +170,7 @@ const products = {
       const have = new Map(sp.metafields.nodes.map((m) => [m.key, m.value]))
       const cur = have.get("tint")
       if (cur != null && cur !== "") {
-        if (cur.toLowerCase() !== tint.toLowerCase()) report(ctx, `${h}: custom.tint differs ("${cur}" vs desired "${tint}", rotation index ${idx}) — [skip] differs, never overwritten; review by hand`)
+        if (cur.toLowerCase() !== tint.toLowerCase()) report(ctx, `${h}: custom.tint differs ("${cur}" vs desired "${tint}", rotation index ${idx}), [skip] differs, never overwritten; review by hand`)
         else st.unchanged++
         continue
       }
@@ -217,7 +217,7 @@ const media = {
     for (const [h, ms] of Object.entries(byP)) {
       lines.push(`[go-live] ${h}: upload ${ms.length} images via stagedUploadsCreate + productUpdate(media) (default mode only reports): ${ms.map((m) => `"${m.alt}"`).join(", ")}`)
       const cols = [...new Set(ms.map((m) => m.colour))]
-      lines.push(`[go-live] ${h}: productVariantAppendMedia — each variant → its colour's front image (${cols.join(", ")}); a variant with a DIFFERENT media already attached is skipped and reported, never detached`)
+      lines.push(`[go-live] ${h}: productVariantAppendMedia: each variant → its colour's front image (${cols.join(", ")}); a variant with a DIFFERENT media already attached is skipped and reported, never detached`)
     }
     return lines
   },
@@ -261,7 +261,7 @@ const media = {
         if (!f) { if (ctx.goLive) report(ctx, `${handle}: no front image for variant colour "${colour}"`); continue }
         const existingId = v.media.nodes[0]?.id
         if (existingId === f.id) { st.unchanged++; continue }
-        if (existingId) { report(ctx, `${handle}: variant "${colour}" already has a different media (${existingId}) attached — skipped, not detached; review by hand`); continue }
+        if (existingId) { report(ctx, `${handle}: variant "${colour}" already has a different media (${existingId}) attached, skipped, not detached; review by hand`); continue }
         links.push({ variantId: v.id, mediaIds: [f.id], f })
       }
       if (!links.length) continue
@@ -299,10 +299,10 @@ const collections = {
     ...COLLECTIONS.map((c) => c.manual
       ? `[additive] create manual collection "${c.title}" (${c.handle}) UNPUBLISHED if its handle doesn't exist yet; add ${local.items.filter((i) => i.newIn).length} newIn product(s) [additive, only if this script created it]`
       : c.tag
-        ? `[additive] create automated collection "${c.title}" (${c.handle}) UNPUBLISHED if its handle doesn't exist yet: rule TAG equals "${c.tag}" (disjunctive), sortOrder ${c.sortOrder} — built with the legacy CollectionInput.ruleSet shape (Collection.ruleSet is deprecated in 2026-10 in favour of CollectionCreateInput.sources, but ruleSet is still documented as functional; the sources shape is unverified against this store, so ruleSet was kept for consistency with the TYPE collections below — see README)`
+        ? `[additive] create automated collection "${c.title}" (${c.handle}) UNPUBLISHED if its handle doesn't exist yet: rule TAG equals "${c.tag}" (disjunctive), sortOrder ${c.sortOrder}, built with the legacy CollectionInput.ruleSet shape (Collection.ruleSet is deprecated in 2026-10 in favour of CollectionCreateInput.sources, but ruleSet is still documented as functional; the sources shape is unverified against this store, so ruleSet was kept for consistency with the TYPE collections below, see README)`
         : `[additive] create smart collection "${c.title}" (${c.handle}) UNPUBLISHED if its handle doesn't exist yet: product type = "${c.type}"`),
-    `[additive] give every products.json product with newIn:true the Shopify tag "new-in" (tagsAdd, never removes other tags) if it doesn't already have it — keeps it in the "new-in" collection now that collection's rule is TAG equals "new-in", and matches the storefront's own tag-based newIn check`,
-    `[report-only] if a collection's handle already exists: report only — never add products, publish, or change its rules/sortOrder (for "new-in": reports exactly what would need to change — convert to automated TAG equals "new-in" + sortOrder CREATED_DESC — if it's still the old manual collection)`,
+    `[additive] give every products.json product with newIn:true the Shopify tag "new-in" (tagsAdd, never removes other tags) if it doesn't already have it: keeps it in the "new-in" collection now that collection's rule is TAG equals "new-in", and matches the storefront's own tag-based newIn check`,
+    `[report-only] if a collection's handle already exists: report only, never add products, publish, or change its rules/sortOrder (for "new-in": reports exactly what would need to change, convert to automated TAG equals "new-in" + sortOrder CREATED_DESC, if it's still the old manual collection)`,
     `[publish-new-collections / go-live] publish ONLY collections this script created (recorded in this run or in tools/store-setup/out/undo-*.jsonl) to the Online Store publication; a pre-existing collection is never published by this script`,
   ],
   async run(ctx) {
@@ -350,8 +350,8 @@ const collections = {
         const ok = c.manual ? !ex.ruleSet
           : c.tag ? ex.ruleSet?.appliedDisjunctively === true && r.length === 1 && r[0].column === "TAG" && r[0].relation === "EQUALS" && r[0].condition === c.tag && (!c.sortOrder || ex.sortOrder === c.sortOrder)
           : r.length === 1 && r[0].column === "TYPE" && r[0].relation === "EQUALS" && r[0].condition === c.type
-        if (!ok) report(ctx, `collection ${c.handle} exists but is ${describeExisting(ex)} — wanted ${describeWanted(c)}; left unchanged (fix by hand)`)
-        else report(ctx, `collection ${c.handle} already exists — report only, not modified`)
+        if (!ok) report(ctx, `collection ${c.handle} exists but is ${describeExisting(ex)}, wanted ${describeWanted(c)}; left unchanged (fix by hand)`)
+        else report(ctx, `collection ${c.handle} already exists, report only, not modified`)
         st.unchanged++
       }
       // In a dry run nothing is actually created, so treat "doesn't exist yet" as "this run
@@ -368,11 +368,11 @@ const collections = {
           { step: "collections", op: "collectionAddProducts", target: c.handle, before: { productIds: [...have] },
             after: () => ({ after: { addedProductIds: add }, undo: { mutation: null, note: "covered by deleting the collection (collectionCreate undo above); recorded here for the audit trail" } }) })
       } else if (c.manual && !scriptMade) {
-        report(ctx, `${c.handle}: pre-existing manual collection — not adding products (only done for collections this script created)`)
+        report(ctx, `${c.handle}: pre-existing manual collection, not adding products (only done for collections this script created)`)
       }
       const canPublish = ctx.goLive || ctx.publishNewCollections
       if (online && !ex?.publishedOnPublication) {
-        if (!scriptMade) report(ctx, `${c.handle}: not published — pre-existing collection, this script never publishes those`)
+        if (!scriptMade) report(ctx, `${c.handle}: not published, pre-existing collection, this script never publishes those`)
         else if (!canPublish) report(ctx, `${c.handle}: would publish with --publish-new-collections or --go-live (script-created collection)`)
         else await act(ctx, st, `publish "${c.handle}" to Online Store [script-created]`, async () => {
           if (!id) return
@@ -407,7 +407,7 @@ const menus = {
       }
       const same = ex.items.length === m.items.length && m.items.every(([t, u], i) => ex.items[i].title === t && norm(ex.items[i].url) === norm(u))
       if (same) { st.unchanged++; continue }
-      report(ctx, `menu ${m.handle} exists with different items (${ex.items.map((i) => i.title).join(", ") || "empty"} vs desired ${m.items.map((i) => i[0]).join(", ")}) — not modified (create-only; menuUpdate is never called)`)
+      report(ctx, `menu ${m.handle} exists with different items (${ex.items.map((i) => i.title).join(", ") || "empty"} vs desired ${m.items.map((i) => i[0]).join(", ")}), not modified (create-only; menuUpdate is never called)`)
       st.unchanged++
     }
     return st
@@ -432,7 +432,7 @@ const pages = {
         continue
       }
       if ((ex.templateSuffix ?? "") === p.templateSuffix && ex.title === p.title) { st.unchanged++; continue }
-      report(ctx, `page ${p.handle} exists with template suffix "${ex.templateSuffix ?? ""}" and title "${ex.title}" (desired suffix "${p.templateSuffix}", title "${p.title}"${ex.isPublished ? "" : "; also unpublished"}) — not modified (create-only; pageUpdate is never called)`)
+      report(ctx, `page ${p.handle} exists with template suffix "${ex.templateSuffix ?? ""}" and title "${ex.title}" (desired suffix "${p.templateSuffix}", title "${p.title}"${ex.isPublished ? "" : "; also unpublished"}), not modified (create-only; pageUpdate is never called)`)
       st.unchanged++
     }
     return st
@@ -455,7 +455,7 @@ const redirects = {
           { step: "redirects", op: "urlRedirectCreate", target: path, before: null,
             after: (p) => ({ after: { id: p.urlRedirect.id, target }, createdIds: [p.urlRedirect.id], undo: { mutation: "urlRedirectDelete", variables: { id: p.urlRedirect.id } } }) })
       } else if (norm(e.target) !== norm(target)) {
-        report(ctx, `${path} already redirects to "${e.target}" (desired "${target}") — report only, never updated`)
+        report(ctx, `${path} already redirects to "${e.target}" (desired "${target}"), report only, never updated`)
         st.unchanged++
       } else st.unchanged++
     }

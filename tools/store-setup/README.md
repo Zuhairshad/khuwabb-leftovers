@@ -15,13 +15,13 @@ data, or is customer-visible on the live theme, needs `--go-live` (and some thin
 | Step | Default `--apply` (additive only) | With `--go-live` | Admin API calls |
 |---|---|---|---|
 | `definitions` | Create missing `custom.*` definitions (pinned, storefront `PUBLIC_READ`) | On an **existing** definition: set storefront `PUBLIC_READ` + pin (default mode only reports it). Type mismatch is always an error, never auto-fixed | `metafieldDefinitions`, `metafieldDefinitionCreate`, `metafieldDefinitionUpdate`, `metafieldDefinitionPin` |
-| `products` | Write `custom.tint` / `category_line` / `fabric` / `care` / `size_guide` only for keys **currently unset** on the product. An existing *different* value is reported `[skip] differs` and never overwritten — not even with `--go-live`. Also: for products that exist in Shopify but have **no** `data/products.json` entry, write `custom.tint` (unset-only, same rule) from a 5-colour rotation — see "Tints for Shopify-only products" below | `productType` changes to match the catalog; `--descriptions` fills `descriptionHtml` only where Shopify's is empty | `products`, `productUpdate` |
+| `products` | Write `custom.tint` / `category_line` / `fabric` / `care` / `size_guide` only for keys **currently unset** on the product. An existing *different* value is reported `[skip] differs` and never overwritten, not even with `--go-live`. Also: for products that exist in Shopify but have **no** `data/products.json` entry, write `custom.tint` (unset-only, same rule) from a 5-colour rotation, see "Tints for Shopify-only products" below | `productType` changes to match the catalog; `--descriptions` fills `descriptionHtml` only where Shopify's is empty | `products`, `productUpdate` |
 | `media` | Reports only (nothing uploaded, nothing linked) | Uploads each colour × view photo and sets variant media to the colour's front image. A variant that already has a **different** media attached is skipped and reported, never detached | `stagedUploadsCreate`, `productUpdate(product, media)`, `productVariantAppendMedia` |
-| `collections` | Creates a collection **only if its handle doesn't exist**, **UNPUBLISHED**. If the handle exists: reports only — never adds products, never publishes, never changes rules/sort order. `new-in` is an **automated** collection (rule `TAG equals "new-in"`, disjunctive, `sortOrder CREATED_DESC`) — see "The `new-in` collection" below. Additively tags every `newIn:true` product `new-in` via `tagsAdd` (independent of whether the collection itself exists yet) | Also publishes collections this script created | `publications`, `collectionByIdentifier`, `collectionCreate`, `tagsAdd` |
-| `menus` | Create-only, by handle. If the handle already exists: reports differences, does nothing (`menuUpdate` is never called). Main menu handle is `khuwabb-main` ("Main menu") — the store's own `main-menu` is never read for writing or modified | — (menus has no go-live-only ops) | `menus`, `menuCreate` |
-| `pages` | Create-only, by handle: `size-guide` ("Size guide", template suffix `size-guide`) and `exchange` ("7-day exchange", template suffix `exchange`), both **published** with an **empty body** (the theme's `page.size-guide.json` / `page.exchange.json` templates render all content). If the handle already exists: reports a different template suffix/title, does nothing (`pageUpdate` is never called). Runs right after `menus` | — (pages has no go-live-only ops) | `pages`, `pageCreate` |
+| `collections` | Creates a collection **only if its handle doesn't exist**, **UNPUBLISHED**. If the handle exists: reports only, never adds products, never publishes, never changes rules/sort order. `new-in` is an **automated** collection (rule `TAG equals "new-in"`, disjunctive, `sortOrder CREATED_DESC`), see "The `new-in` collection" below. Additively tags every `newIn:true` product `new-in` via `tagsAdd` (independent of whether the collection itself exists yet) | Also publishes collections this script created | `publications`, `collectionByIdentifier`, `collectionCreate`, `tagsAdd` |
+| `menus` | Create-only, by handle. If the handle already exists: reports differences, does nothing (`menuUpdate` is never called). Main menu handle is `khuwabb-main` ("Main menu"); the store's own `main-menu` is never read for writing or modified | - (menus has no go-live-only ops) | `menus`, `menuCreate` |
+| `pages` | Create-only, by handle: `size-guide` ("Size guide", template suffix `size-guide`) and `exchange` ("7-day exchange", template suffix `exchange`), both **published** with an **empty body** (the theme's `page.size-guide.json` / `page.exchange.json` templates render all content). If the handle already exists: reports a different template suffix/title, does nothing (`pageUpdate` is never called). Runs right after `menus` | - (pages has no go-live-only ops) | `pages`, `pageCreate` |
 | `redirects` | Reports only | Creates a redirect only if the path has none yet. An existing path with a different target is reported, never updated (`urlRedirectUpdate` is never called) | `urlRedirects`, `urlRedirectCreate` |
-| `files` (only with `--files`) | Uploads brand images not already present (optional; the theme has asset fallbacks) | — | `files`, `stagedUploadsCreate`, `fileCreate` |
+| `files` (only with `--files`) | Uploads brand images not already present (optional; the theme has asset fallbacks) | - | `files`, `stagedUploadsCreate`, `fileCreate` |
 
 Class of every operation, as shown in `--plan`: `[additive]`, `[go-live]`, `[publish-new-collections]`, or `[report-only]`.
 
@@ -37,7 +37,7 @@ As of 2026-11, `new-in` (handle) / "New arrivals" (title) is defined in `lib/dat
   and stays correct on its own as new products are tagged, instead of needing a script run every
   time a product should join or leave it.
 - **How `products.json`'s `newIn: true` products stay in it**: the `collections` step
-  additively tags every such product `new-in` via `tagsAdd` (which only *adds* a tag — it never
+  additively tags every such product `new-in` via `tagsAdd` (which only *adds* a tag, it never
   touches the product's other tags), every run, regardless of whether this step created the
   collection itself. `tagsAdd` is not denylisted (it's purely additive); its reverse, `tagsRemove`,
   **is** denylisted (added to `lib/api.mjs`'s `DENYLIST`) and is only ever called by `undo.mjs`.
@@ -48,12 +48,12 @@ As of 2026-11, `new-in` (handle) / "New arrivals" (title) is defined in `lib/dat
   shape is deprecated but **still functional** in 2026-10 ("a `ruleSet` rule maps to an equivalent
   source condition"). This script **keeps the legacy `ruleSet` shape**, the same one already used
   (untouched) for the `jackets`/`trousers`/`dresses`/`gym-wear`/`co-ord-sets` TYPE collections,
-  rather than switching to the new `sources` input — the new shape's exact field names could only
+  rather than switching to the new `sources` input, as the new shape's exact field names could only
   be confirmed via Shopify's public docs (not this repo) and not against a real `collectionCreate`
   call on this store, so it's treated as unverified. If `ruleSet` is ever retired for real,
   migrate `ruleSetFor()` in `lib/steps.mjs` and the `collectionCreate` mutation body in the
   `collections` step to `collection:`/`sources`.
-- **Pre-existing `new-in` collection (the common case — it was manual before this change)**: per
+- **Pre-existing `new-in` collection (the common case, it was manual before this change)**: per
   the "never modify an existing collection" rule, the script **never** converts it automatically.
   It is only **reported**: `--dry-run`/`--apply` print exactly what differs (current rule/manual,
   current `sortOrder`, vs. the wanted automated TAG rule + `CREATED_DESC`) so the owner can decide
@@ -67,20 +67,20 @@ As of 2026-11, `new-in` (handle) / "New arrivals" (title) is defined in `lib/dat
 pastel `tint` from a fixed 5-colour rotation (`TINTS`, by index `i % 5`), computed over
 `Object.entries(data/shopify.json.products)` **after** removing handles covered by
 `data/products.json` (via `SHOPIFY_HANDLES`). Those tints only exist in the frontend bundle's
-memory, not in Shopify — new in 2026-11, the `products` step also writes them to Shopify as the
+memory, not in Shopify. New in 2026-11, the `products` step also writes them to Shopify as the
 `custom.tint` metafield (unset-only, exactly like the other per-product fields in this step), so
 they're visible to anything else reading the Admin API and so a value, once set, won't silently
 drift if the rotation changes later. Order: `SHOPIFY_ONLY_TINTS` in `lib/data.mjs` is the same 5
 `rgb(...)` strings as `lib/catalog.ts`'s `TINTS`, converted to hex (`custom.tint` is a `color`
-metafield); kept in sync by hand — if either list changes, change the other. The rotation index
+metafield); kept in sync by hand, if either list changes, change the other. The rotation index
 is assigned by walking the **live Admin API product list**, in the order
 `shopProducts()`/`products(first:50,after:...)` returns it (no explicit `sortKey`), skipping any
 handle that's in `ctx.local.items` (i.e. covered by `products.json`). This mirrors
 `scripts/sync-shopify.mjs`, which also queries `products(first:100,after:...)` with no explicit
 `sortKey` to build `data/shopify.json`, and `lib/catalog.ts`, which walks that file's insertion
-order — so the assumption is that the Admin and Storefront `products` queries use the same
+order, so the assumption is that the Admin and Storefront `products` queries use the same
 default order (documented as `ID` ascending for both). **This is unverified against the live
-store** — if the real two orders ever disagree, the Shopify-only tint rotation here will not
+store**: if the real two orders ever disagree, the Shopify-only tint rotation here will not
 match the one the storefront computes at build time for the same products. Treat this the same
 as the other "Known API-shape risks" below: check it against a real `--dry-run` before trusting
 `--apply --go-live` for this part, and note that a value already set is never changed even if
@@ -120,12 +120,12 @@ with `--no-backup-check`.
 
 ## Pre-write guard (denylist)
 
-A fixed list of mutations that change or remove existing/customer-visible data —
+A fixed list of mutations that change or remove existing/customer-visible data:
 `menuUpdate`, `menuDelete`, `pageUpdate`, `pageDelete`, `urlRedirectUpdate`, `urlRedirectDelete`, `productDelete`,
 `collectionDelete`, `productVariantDetachMedia`, `metafieldsDelete`, `fileDelete`,
-`productDeleteMedia`, `collectionUpdate`, `publishableUnpublish`, `tagsRemove` — throws if
+`productDeleteMedia`, `collectionUpdate`, `publishableUnpublish`, `tagsRemove`. Throws if
 called without an explicit `allow:true`. `setup.mjs` never passes it; only `undo.mjs` does.
-(`tagsAdd` is **not** denylisted — it only adds a tag, never removes one, so it's additive like
+(`tagsAdd` is **not** denylisted, it only adds a tag, never removes one, so it's additive like
 everything else `setup.mjs` calls directly.)
 
 ## Backup (`--backup`, read-only)
@@ -149,9 +149,9 @@ a `pending` line before the mutation and a `done` or `failed` line after, sharin
 `{mutation, variables}` or, where more than one reversing op is needed, a **list** of them in
 the order they'd need undoing (run in reverse by `undo.mjs`). Mappings: created media →
 `fileDelete` on those media ids (or `productDeleteMedia(productId, mediaIds)` if that stops
-working on a future API version — noted in a comment where it's used); appended variant media
+working on a future API version, noted in a comment where it's used); appended variant media
 → `productVariantDetachMedia`; metafields that had no prior value → one `metafieldsDelete` per
-key (there's nothing to "restore" — it didn't exist); `productType` changed → a trailing
+key (there's nothing to "restore", it didn't exist); `productType` changed → a trailing
 `productUpdate` restoring the previous value, only present when it actually changed (so a
 products entry can be `[metafieldsDelete]`, `[metafieldsDelete, metafieldsDelete, ...]`, or
 `[...metafieldsDelete, productUpdate]`); created definition →
@@ -171,7 +171,7 @@ Dry-run (default) prints each undo, in reverse order (and, within a multi-op ent
 entry's own ops in reverse too), without writing. `failed` entries are never replayed and are
 always printed prominently. A `pending` entry is only flagged as a problem if no later
 `done`/`failed` line closes it out (paired by `id`, or by step+op+target for older logs without
-one) — that's the sign the process died mid-mutation and it needs a manual check; a normal,
+one): that's the sign the process died mid-mutation and it needs a manual check; a normal,
 successful run's paired pending/done lines are not flagged.
 
 ## Access scopes (custom app)
@@ -184,14 +184,14 @@ successful run's paired pending/done lines are not flagged.
 - `pages`: `read_content`, `write_content`
 - `redirects`: `read_online_store_navigation`, `write_online_store_navigation`
 - `files`: `read_files`, `write_files`
-- `--backup` additionally benefits from `read_themes` (optional, read-only — to inspect the
+- `--backup` additionally benefits from `read_themes` (optional, read-only, to inspect the
   live theme's config/settings by hand; not called by this script)
 
 All at once: `read_products,write_products,read_publications,write_publications,read_online_store_navigation,write_online_store_navigation,read_content,write_content,read_files,write_files,read_themes`.
 
 ## Create the token
 
-**Admin-created ("legacy") custom apps may no longer be creatable on some stores in 2026** —
+**Admin-created ("legacy") custom apps may no longer be creatable on some stores in 2026**:
 Shopify has been moving app creation to the Partner/Dev Dashboard. Try the admin route first;
 if "Develop apps" isn't offered, use the Dev Dashboard instead:
 
@@ -207,7 +207,7 @@ Dev Dashboard route (2026):
 2. Install the app on the store from the dashboard.
 3. Use a client-credentials grant to exchange the app's client id/secret for a short-lived
    Admin API access token (per Shopify's current docs for that flow).
-4. Put that token in `SHOPIFY_ADMIN_TOKEN` — same variable either way. It will need
+4. Put that token in `SHOPIFY_ADMIN_TOKEN`, same variable either way. It will need
    re-exchanging once it expires.
 
 ```
@@ -217,7 +217,7 @@ export SHOPIFY_ADMIN_TOKEN=shpat_xxx           # or a Dev Dashboard client-crede
 
 ## Typical sequences
 
-Live store, now (additive-only — safe before the new theme launches):
+Live store, now (additive-only, safe before the new theme launches):
 ```
 node tools/store-setup/setup.mjs --backup --store-check citbkj-yj
 node tools/store-setup/setup.mjs --dry-run
@@ -278,7 +278,7 @@ Run order matters only a little: `definitions` before `products`; `products` bef
 ## Known API-shape risks (2026-10 shapes written from memory; **untested** against a real store)
 
 - `publications{nodes{id name}}`: if `name` ever fails, the fallback is `catalog{title}` or
-  matching by `app{title}` instead — not implemented, since it hasn't been needed yet; if the
+  matching by `app{title}` instead (not implemented, since it hasn't been needed yet); if the
   publications query errors, the `collections` step aborts before any write (reads are done
   before writes in every step).
 - Menu items: `HTTP` + `url` for links, `FRONTPAGE` for `/`. `--plan`/dry-run output flags this
@@ -289,11 +289,11 @@ Run order matters only a little: `definitions` before `products`; `products` bef
 - `new-in` collection's `ruleSet` with `column: TAG` (and `CollectionInput.sortOrder`): the shape
   (`{appliedDisjunctively, rules:[{column:"TAG", relation:"EQUALS", condition:"new-in"}]}`) mirrors
   the already-used `TYPE` rule shape and Shopify's docs confirm `TAG` is a valid `column` and that
-  legacy `ruleSet` still works in 2026-10 — but it hasn't been run against this store. See "The
+  legacy `ruleSet` still works in 2026-10, but it hasn't been run against this store. See "The
   `new-in` collection" above for why the new `sources`/`CollectionCreateInput` shape was not used
   instead.
 - `tagsAdd(id, tags)` / `tagsRemove(id, tags)`: standard, stable Admin API mutations, but also
   unverified against this store (no network calls were made while building this feature).
 - Shopify-only `custom.tint` rotation order (`products` step, live `products(first:50,after:...)`
   with no explicit `sortKey`, assumed to default to `ID` ascending, same as the Storefront query
-  `scripts/sync-shopify.mjs` uses): unverified — see "Tints for Shopify-only products" above.
+  `scripts/sync-shopify.mjs` uses): unverified, see "Tints for Shopify-only products" above.
