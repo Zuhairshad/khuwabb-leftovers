@@ -107,7 +107,8 @@
       assign ci_wi = ci_w | strip | plus: 0
       if ci_wi <= ci_pw
         if ci_widths == ''
-          assign ci_widths = ci_wi
+          # widths: must be a string; ci_wi is an Integer, so append '' to coerce it.
+          assign ci_widths = ci_wi | append: ''
         else
           assign ci_widths = ci_widths | append: ', ' | append: ci_wi
         endif
@@ -116,7 +117,8 @@
     endfor
     if ci_top == 0
       assign ci_top = ci_pw
-      assign ci_widths = ci_pw
+      # widths: must be a string; ci_pw is an Integer, so append '' to coerce it.
+      assign ci_widths = ci_pw | append: ''
     endif
     assign ci_h = ci_top | times: ci_ph | plus: 0.0 | divided_by: ci_pw | round
 

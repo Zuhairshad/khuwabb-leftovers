@@ -113,8 +113,14 @@
                     assign piece_href = cur_p.url | append: '?colour=' | append: piece_colour_enc
                   endif
                   # Lowest-priced variant's compare-at (lib/catalog.ts shopifyPrices).
-                  assign piece_compare_variant = cur_p.variants | where: 'price', cur_p.price_min | first
-                  assign piece_compare_at = piece_compare_variant.compare_at_price
+                  # (Liquid's `where` compares price as text and never matches, so loop instead.)
+                  assign piece_compare_at = nil
+                  for piece_v in cur_p.variants
+                    if piece_v.price == cur_p.price_min
+                      assign piece_compare_at = piece_v.compare_at_price
+                      break
+                    endif
+                  endfor
                 -%}
                 <a href="{{ piece_href }}" class="shop-the-look__piece">
                   <div class="shop-the-look__thumb">

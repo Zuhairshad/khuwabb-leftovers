@@ -33,8 +33,14 @@
   assign pc_loading = loading | default: 'lazy'
 
   # Lowest-priced variant's compare-at (lib/catalog.ts shopifyPrices picks the lowest-priced variant's compareAt).
-  assign pc_compare_variant = product.variants | where: 'price', product.price_min | first
-  assign pc_compare_at = pc_compare_variant.compare_at_price
+  # (Liquid's `where` compares price as text and never matches, so loop instead.)
+  assign pc_compare_at = nil
+  for pc_v in product.variants
+    if pc_v.price == product.price_min
+      assign pc_compare_at = pc_v.compare_at_price
+      break
+    endif
+  endfor
 -%}
 <a
   href="{{ product.url }}"

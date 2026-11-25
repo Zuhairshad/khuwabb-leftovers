@@ -93,8 +93,14 @@
 
   # Sale price (components/product/ProductDetail.tsx): compare-at of the lowest-priced variant
   # (same variant product.price already reflects), shown struck through only when it's higher.
-  assign mp_compare_variant = product.variants | where: 'price', product.price_min | first
-  assign mp_compare_at = mp_compare_variant.compare_at_price
+  # (Liquid's `where` compares price as text and never matches, so loop instead.)
+  assign mp_compare_at = nil
+  for mp_v in product.variants
+    if mp_v.price == product.price_min
+      assign mp_compare_at = mp_v.compare_at_price
+      break
+    endif
+  endfor
 -%}
 
 {%- capture mp_img -%}

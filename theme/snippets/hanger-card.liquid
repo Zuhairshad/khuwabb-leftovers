@@ -55,8 +55,14 @@
   endif
 
   # Lowest-priced variant's compare-at (lib/catalog.ts shopifyPrices picks the lowest-priced variant's compareAt).
-  assign hc_compare_variant = product.variants | where: 'price', product.price_min | first
-  assign hc_compare_at = hc_compare_variant.compare_at_price
+  # (Liquid's `where` compares price as text and never matches, so loop instead.)
+  assign hc_compare_at = nil
+  for hc_v in product.variants
+    if hc_v.price == product.price_min
+      assign hc_compare_at = hc_v.compare_at_price
+      break
+    endif
+  endfor
 -%}
 <a
   href="{{ product.url }}"
