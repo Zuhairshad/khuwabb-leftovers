@@ -382,8 +382,9 @@
           {%- assign hr_park = 0 | minus: hr_park -%}
         {%- endif -%}
         {%- comment -%}
-          fetchpriority="high" goes on the one photo that is the biggest thing painted first: the centre of the
-          parked spot while the intro plays (the row spins in from there), else piece 0.
+          fetchpriority="high" goes on ONE image per page: the tops row's first-loaded photo (the parked spot
+          while the intro plays, since the row spins in from there, else piece 0). The bottoms row's matching
+          photo still loads eagerly but without the priority hint.
         {%- endcomment -%}
         {%- assign hr_first_idx = 0 -%}
         {%- if hr_intro and hr_n > 0 -%}
@@ -405,7 +406,7 @@
             {%- assign hr_load = true -%}
           {%- endif -%}
           {%- assign hr_fp = '' -%}
-          {%- if hr_idx == hr_first_idx -%}
+          {%- if hr_idx == hr_first_idx and hr_row == 'tops' -%}
             {%- assign hr_fp = 'high' -%}
           {%- endif -%}
           {%- if hr_intro and hr_load == false -%}
@@ -435,7 +436,7 @@
                 alt="{{ hr_f[2] | escape }}"
                 draggable="false"
                 decoding="async"
-                {% if hr_fp != blank %}fetchpriority="high" loading="eager"{% endif %}
+                {% if hr_fp != blank %}fetchpriority="high" loading="eager"{% elsif hr_idx == hr_first_idx %}loading="eager"{% endif %}
               >
             {%- else -%}
               <img
