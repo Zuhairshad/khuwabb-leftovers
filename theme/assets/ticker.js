@@ -6,7 +6,35 @@
  * The original <li> is cloned ceil(rootWidth / (setLength + gap)) times (aria-hidden, links tabindex -1).
  */
 class MarqueeTicker extends HTMLElement {
+  // Defer all setup (measuring, cloning, listeners, rAF) until the ticker is near the viewport.
   connectedCallback() {
+    if (this._ready || this._gate) return;
+    if (!('IntersectionObserver' in window)) { this.start(); return; }
+    this._onGateFocus = (e) => {
+      this.stopGate();
+      this.start();
+      if (this._ready && e.target.matches && e.target.matches(':focus-visible')) {
+        this.focusPaused = true;
+        this.reveal(e.target);
+      }
+    };
+    this._gate = new IntersectionObserver((entries) => {
+      if (entries.some((en) => en.isIntersecting)) {
+        this.stopGate();
+        this.start();
+      }
+    }, { rootMargin: '300px 0px' });
+    this._gate.observe(this);
+    this.addEventListener('focusin', this._onGateFocus);
+  }
+
+  stopGate() {
+    if (this._gate) this._gate.disconnect();
+    this._gate = null;
+    this.removeEventListener('focusin', this._onGateFocus);
+  }
+
+  start() {
     if (this._ready) return;
     this.track = this.querySelector('[data-ticker-track]');
     this.set = this.querySelector('[data-ticker-set]');
@@ -104,6 +132,7 @@ class MarqueeTicker extends HTMLElement {
   }
 
   disconnectedCallback() {
+    this.stopGate();
     if (!this._ready) return;
     this._ready = false;
     cancelAnimationFrame(this.raf);

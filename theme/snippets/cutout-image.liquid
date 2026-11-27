@@ -38,7 +38,9 @@
   assign ci_norm = ci_colour | strip | downcase
 
   assign ci_media = nil
+  assign ci_front = nil
   if ci_colour != blank
+    # One pass: exact colour+view wins; remember the colour's front photo as the fallback.
     for ci_m in product.media
       if ci_m.media_type != 'image'
         continue
@@ -48,33 +50,21 @@
         continue
       endif
       assign ci_a = ci_parts[0] | strip | downcase
+      if ci_a != ci_norm
+        continue
+      endif
       assign ci_b = ci_parts[1] | strip | downcase
-      if ci_a == ci_norm and ci_b == ci_view
+      if ci_b == ci_view
         assign ci_media = ci_m
         break
+      elsif ci_b == 'front' and ci_front == nil
+        assign ci_front = ci_m
       endif
     endfor
   endif
 
-  if ci_media == nil and ci_fallback
-    if ci_view != 'front' and ci_colour != blank
-      # colour front
-      for ci_m in product.media
-        if ci_m.media_type != 'image'
-          continue
-        endif
-        assign ci_parts = ci_m.alt | split: '|'
-        if ci_parts.size < 2
-          continue
-        endif
-        assign ci_a = ci_parts[0] | strip | downcase
-        assign ci_b = ci_parts[1] | strip | downcase
-        if ci_a == ci_norm and ci_b == 'front'
-          assign ci_media = ci_m
-          break
-        endif
-      endfor
-    endif
+  if ci_media == nil and ci_fallback and ci_view != 'front' and ci_colour != blank
+    assign ci_media = ci_front
   endif
 
   if ci_media == nil and ci_fallback

@@ -9,7 +9,23 @@
   const PHONE = '(max-width: 809.98px)'; // lib/useMedia.ts PHONE
 
   class CampaignMoods extends HTMLElement {
+    // Defer setup (measure, layout, listeners, rAF) until the section is near the viewport.
     connectedCallback() {
+      if (this._started || this._gate) return;
+      if (!('IntersectionObserver' in window) || (window.Shopify && window.Shopify.designMode)) { this.start(); return; }
+      this._gate = new IntersectionObserver((entries) => {
+        if (entries.some((en) => en.isIntersecting)) {
+          this._gate.disconnect();
+          this._gate = null;
+          this.start();
+        }
+      }, { rootMargin: '300px 0px' });
+      this._gate.observe(this);
+    }
+
+    start() {
+      if (this._started) return;
+      this._started = true;
       this.frame = this.querySelector('[data-frame]');
       this.clip = this.querySelector('[data-clip]');
       this.photo = this.querySelector('.campaign-moods__photo');
@@ -139,6 +155,9 @@
     }
 
     disconnectedCallback() {
+      if (this._gate) this._gate.disconnect();
+      this._gate = null;
+      this._started = false;
       this.stopLoop();
       clearInterval(this.timer);
       this.timer = 0;
