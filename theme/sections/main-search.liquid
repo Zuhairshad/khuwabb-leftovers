@@ -37,7 +37,9 @@
         {%- if sp_products.size > 0 -%}
           <ul class="sp-grid">
             {%- for item in sp_products -%}
-              <li>{% render 'product-card', product: item, loading: 'lazy' %}</li>
+              {%- assign sp_loading = 'lazy' -%}
+              {%- if forloop.index0 < 2 -%}{%- assign sp_loading = 'eager' -%}{%- endif -%}
+              <li>{% render 'product-card', product: item, loading: sp_loading %}</li>
             {%- endfor -%}
           </ul>
         {%- endif -%}

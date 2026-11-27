@@ -12,7 +12,7 @@
           <li class="sp-article">
             {%- if article.image -%}
               <a class="sp-article__media" href="{{ article.url }}" tabindex="-1" aria-hidden="true">
-                {{ article.image | image_url: width: 800 | image_tag: widths: '400, 600, 800', sizes: '(max-width: 809.98px) 100vw, (max-width: 1199.98px) 50vw, 400px', loading: 'lazy', alt: article.image.alt | default: article.title }}
+                {{ article.image | image_url: width: 800 | image_tag: widths: '400, 600, 800', sizes: '(max-width: 809.98px) 100vw, (max-width: 1199.98px) 50vw, 400px', loading: 'lazy', decoding: 'async', alt: article.image.alt | default: article.title }}
               </a>
             {%- endif -%}
             {%- if section.settings.show_date -%}

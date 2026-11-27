@@ -35,7 +35,7 @@
             <td>
               <div class="order__product">
                 {%- if line_item.image != blank -%}
-                  {{ line_item.image | image_url: width: 160 | image_tag: class: 'order__thumb', width: 72, height: 90, alt: line_item.image.alt, loading: 'lazy' }}
+                  {{ line_item.image | image_url: width: 160 | image_tag: class: 'order__thumb', width: 72, height: 90, alt: line_item.image.alt, loading: 'lazy', decoding: 'async' }}
                 {%- endif -%}
                 <div>
                   {%- if line_item.url != blank -%}

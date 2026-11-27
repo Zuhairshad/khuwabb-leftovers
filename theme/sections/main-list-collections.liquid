@@ -11,17 +11,21 @@
         {%- liquid
           assign lc_image = collection.image
           assign lc_first = collection.products.first
+          assign lc_loading = 'lazy'
+          if forloop.index0 < 2
+            assign lc_loading = 'eager'
+          endif
         -%}
         <li>
           <a class="sp-tile" href="{{ collection.url }}">
             {%- if lc_image -%}
               <div class="sp-tile__card sp-tile__card--cover">
-                {{ lc_image | image_url: width: 640 | image_tag: widths: '360, 480, 640', sizes: '(max-width: 809.98px) 45vw, 290px', loading: 'lazy', alt: '' }}
+                {{ lc_image | image_url: width: 640 | image_tag: widths: '360, 480, 640', sizes: '(max-width: 809.98px) 45vw, 290px', loading: lc_loading, decoding: 'async', alt: '' }}
               </div>
             {%- else -%}
               <div class="sp-tile__card"{% if lc_first.metafields.custom.tint.value != blank %} style="background: {{ lc_first.metafields.custom.tint.value | escape }}"{% endif %}>
                 {%- if lc_first -%}
-                  {% render 'cutout-image', product: lc_first, view: 'front', widths: '360,480,640', sizes: '(max-width: 809.98px) 45vw, 290px', loading: 'lazy', decorative: true %}
+                  {% render 'cutout-image', product: lc_first, view: 'front', widths: '360,480,640', sizes: '(max-width: 809.98px) 45vw, 290px', loading: lc_loading, decorative: true %}
                 {%- endif -%}
               </div>
             {%- endif -%}

@@ -122,9 +122,9 @@
   {%- for mp_vn in mp_view_names -%}
     {%- capture mp_t -%}
       {%- if mp_vn == 'front' -%}
-        {%- render 'cutout-image', product: product, colour: mp_colour, view: mp_vn, widths: '360', sizes: '56px', decorative: true -%}
+        {%- render 'cutout-image', product: product, colour: mp_colour, view: mp_vn, widths: '168, 336', sizes: '56px', decorative: true -%}
       {%- else -%}
-        {%- render 'cutout-image', product: product, colour: mp_colour, view: mp_vn, widths: '360', sizes: '56px', decorative: true, fallback: false -%}
+        {%- render 'cutout-image', product: product, colour: mp_colour, view: mp_vn, widths: '168, 336', sizes: '56px', decorative: true, fallback: false -%}
       {%- endif -%}
     {%- endcapture -%}
     {%- assign mp_t = mp_t | strip -%}
