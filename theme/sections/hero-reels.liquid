@@ -6,7 +6,7 @@
   Parity table: docs/parity/hero-reels.md.
 
   Piece records are strings while building (fields joined by ~~, records by ^^):
-  id ~~ handle ~~ name ~~ price ~~ src ~~ srcset ~~ width ~~ height ~~ fit
+  id ~~ handle ~~ name ~~ price ~~ src ~~ srcset ~~ width ~~ height ~~ fit ~~ media id
 
   Garment fit (ScoopReels.tsx:14, 207-212, 218-246, 257-269): the reference carries a per-piece
   `fit: "any" | "men" | "women"` used by the look's drag/shuffle "pull the other rows onto a
@@ -147,7 +147,7 @@
           endif
           assign hr_th = hr_top_w | times: hr_ph | plus: 0.0 | divided_by: hr_pw | round
 
-          assign hr_rec = hr_p.handle | append: '#' | append: hr_name | append: '~~' | append: hr_p.handle | append: '~~' | append: hr_p.title | append: '~~' | append: hr_p.price | append: '~~' | append: hr_top_u | append: '~~' | append: hr_srcset | append: '~~' | append: hr_top_w | append: '~~' | append: hr_th | append: '~~' | append: hr_fit
+          assign hr_rec = hr_p.handle | append: '#' | append: hr_name | append: '~~' | append: hr_p.handle | append: '~~' | append: hr_p.title | append: '~~' | append: hr_p.price | append: '~~' | append: hr_top_u | append: '~~' | append: hr_srcset | append: '~~' | append: hr_top_w | append: '~~' | append: hr_th | append: '~~' | append: hr_fit | append: '~~' | append: hr_media.id
           assign hr_group = hr_group | append: hr_rec | append: '^^'
           assign hr_group_size = hr_group_size | plus: 1
 
@@ -427,6 +427,45 @@
           {%- endunless -%}
           <div class="hero-reels__piece" data-row="{{ hr_row }}" data-idx="{{ hr_idx }}">
             {%- if hr_load -%}
+              {%- if hr_fp != blank -%}
+                {%- comment -%}
+                  LCP preload. Shopify turns image_tag's preload: true into an HTTP `Link: <url>; rel=preload; as=image`
+                  header (with imagesrcset / imagesizes), sent before the HTML so the browser starts the download
+                  early. A <link rel=preload> in the body would gain nothing (the scanner already finds the <img>),
+                  and layout/theme.liquid can't see these variables. The output is discarded on purpose: the visible
+                  <img> below stays hand-built. Widths = exactly the srcset widths above; once per page (tops row only).
+                {%- endcomment -%}
+                {%- assign hr_pre_prod = hr_set -%}
+                {%- if hr_set.handle != hr_f[1] -%}
+                  {%- assign hr_pre_prod = section.settings.tops_collection.products | where: 'handle', hr_f[1] | first -%}
+                {%- endif -%}
+                {%- assign hr_pre_media = nil -%}
+                {%- for hr_pm in hr_pre_prod.media -%}
+                  {%- assign hr_pm_id = hr_pm.id | append: '' -%}
+                  {%- if hr_pm_id == hr_f[9] and hr_pm.media_type == 'image' -%}
+                    {%- assign hr_pre_media = hr_pm -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if hr_pre_media != nil -%}
+                  {%- assign hr_pre_widths = '' -%}
+                  {%- for hr_w in hr_widths -%}
+                    {%- assign hr_wi = hr_w | strip | plus: 0 -%}
+                    {%- if hr_wi <= hr_pre_media.preview_image.width -%}
+                      {%- if hr_pre_widths != '' -%}{%- assign hr_pre_widths = hr_pre_widths | append: ',' -%}{%- endif -%}
+                      {%- assign hr_pre_widths = hr_pre_widths | append: hr_wi -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- if hr_pre_widths == '' -%}
+                    {%- assign hr_pre_widths = hr_pre_media.preview_image.width -%}
+                  {%- endif -%}
+                  {%- assign hr_pre_top = hr_f[6] | plus: 0 -%}
+                  {%- # theme-check-disable-next-line UnusedAssign -%}
+                  {%- capture hr_preload -%}
+                    {{- hr_pre_media | image_url: width: hr_pre_top | image_tag: widths: hr_pre_widths, sizes: hr_sizes, preload: true -}}
+                  {%- endcapture -%}
+                {%- endif -%}
+              {%- endif -%}
               <img
                 src="{{ hr_f[4] }}"
                 srcset="{{ hr_f[5] }}"
