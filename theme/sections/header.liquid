@@ -32,14 +32,20 @@
       <div class="site-header__bar">
         <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ section.settings.logo_aria | escape }}">
           {%- if logo != blank -%}
+            {%- comment -%} Rendered 54px tall (CSS); 1x/2x/3x candidates instead of one 365px file. Eager, default priority so the hero wins. {%- endcomment -%}
+            {%- assign logo_w1 = logo.width | times: 54 | divided_by: logo.height -%}
+            {%- assign logo_w2 = logo_w1 | times: 2 -%}
+            {%- assign logo_w3 = logo_w1 | times: 3 -%}
             <img
-              src="{{ logo | image_url: width: 365 }}"
+              src="{{ logo | image_url: width: logo_w3 }}"
+              srcset="{{ logo | image_url: width: logo_w1 }} 1x, {{ logo | image_url: width: logo_w2 }} 2x, {{ logo | image_url: width: logo_w3 }} 3x"
               alt=""
               width="{{ logo.width }}"
               height="{{ logo.height }}"
+              decoding="async"
             >
           {%- else -%}
-            <img src="{{ 'logo-162h.webp' | asset_url }}" alt="" width="231" height="162">
+            <img src="{{ 'logo-162h.webp' | asset_url }}" alt="" width="231" height="162" decoding="async">
           {%- endif -%}
           <span>{{ section.settings.logo_label | escape }}</span>
         </a>

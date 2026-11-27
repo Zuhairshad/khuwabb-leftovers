@@ -411,3 +411,19 @@
     transform: none;
   }
 }
+
+/*
+ * Perf: while the drawer is closed (and not pre-warmed by hover/focus on the bag button),
+ * skip rendering its contents so the translated-off-screen images (empty-bag.webp, line
+ * thumbs) are never fetched at page load. allow-discrete keeps the content painted for the
+ * whole slide-out, so closing looks the same. Browsers without content-visibility just
+ * render it as before.
+ */
+.cart-drawer__layer:not([data-open]):not([data-warm]) .cart-drawer__inner {
+  content-visibility: hidden;
+}
+@supports (transition-behavior: allow-discrete) {
+  .cart-drawer__inner {
+    transition: content-visibility 0.9s allow-discrete;
+  }
+}

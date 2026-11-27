@@ -36,6 +36,45 @@ class CartDrawer extends HTMLElement {
     document.addEventListener('shopify:section:deselect', this.onDeselect)
     this.addEventListener('click', this.onClick)
     this.setOpen(false)
+    this.armWarmup()
+  }
+
+  // The closed drawer's contents are not rendered (content-visibility, section-cart-drawer.css), so its
+  // images don't load at page load. Hover / focus / touch on the bag button un-hides them just before
+  // the click so the open animation has its images ready.
+  armWarmup() {
+    const warm = () => {
+      this.layer.setAttribute('data-warm', '')
+      if (this.disarmWarmup) this.disarmWarmup()
+    }
+    // Theme editor: show the contents immediately when the section is selected / rendered.
+    if (window.Shopify && window.Shopify.designMode) {
+      warm()
+      return
+    }
+    const buttons = Array.from(document.querySelectorAll('[data-bag-button]'))
+    const opts = { passive: true }
+    const events = ['pointerenter', 'focusin', 'touchstart']
+    buttons.forEach((b) => events.forEach((ev) => b.addEventListener(ev, warm, opts)))
+    // Also warm once the page is done loading and the browser is idle (keeps the images out of the LCP window).
+    const idle = () => {
+      if ('requestIdleCallback' in window) this.idleId = window.requestIdleCallback(warm, { timeout: 3000 })
+      else this.idleTimer = setTimeout(warm, 2000)
+    }
+    if (document.readyState === 'complete') idle()
+    else {
+      this.onLoad = idle
+      window.addEventListener('load', this.onLoad, { once: true })
+    }
+    this.disarmWarmup = () => {
+      buttons.forEach((b) => events.forEach((ev) => b.removeEventListener(ev, warm, opts)))
+      if (this.onLoad) window.removeEventListener('load', this.onLoad)
+      if (this.idleId !== undefined && window.cancelIdleCallback) window.cancelIdleCallback(this.idleId)
+      clearTimeout(this.idleTimer)
+      this.onLoad = null
+      this.idleId = undefined
+      this.disarmWarmup = () => {}
+    }
   }
 
   disconnectedCallback() {
@@ -47,6 +86,7 @@ class CartDrawer extends HTMLElement {
     document.removeEventListener('shopify:section:deselect', this.onDeselect)
     this.removeEventListener('click', this.onClick)
     clearTimeout(this.bumpTimer)
+    if (this.disarmWarmup) this.disarmWarmup()
     this.unlock()
   }
 
@@ -55,6 +95,7 @@ class CartDrawer extends HTMLElement {
   }
 
   setOpen(open) {
+    if (open) this.layer.setAttribute('data-warm', '')
     this.layer.toggleAttribute('data-open', open)
     this.panel.toggleAttribute('data-open', open)
     this.layer.inert = !open
