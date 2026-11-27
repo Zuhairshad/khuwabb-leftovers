@@ -16,7 +16,7 @@
   reference. `hr_fit` reads an optional `fit:men` / `fit:women` product tag so the mechanism is
   live the moment such a tag exists; no product has one today, so output is unchanged (parity).
 {%- endcomment -%}
-{{ 'section-hero-reels.css' | asset_url | stylesheet_tag }}
+{%- render 'section-hero-reels-styles' -%}
 <script src="{{ 'hero-reels.js' | asset_url }}" defer></script>
 
 {%- liquid

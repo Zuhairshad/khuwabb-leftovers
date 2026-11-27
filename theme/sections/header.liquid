@@ -1,4 +1,4 @@
-{{ 'section-header.css' | asset_url | stylesheet_tag }}
+{%- render 'section-header-styles' -%}
 <script src="{{ 'header.js' | asset_url }}" defer></script>
 
 {%- liquid

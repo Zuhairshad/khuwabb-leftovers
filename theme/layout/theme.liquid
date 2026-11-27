@@ -6,10 +6,6 @@
     {%- render 'head-fonts' -%}
     {%- render 'head-styles' -%}
     {%- render 'scoop-intro-styles' -%}
-    {{ 'section-header.css' | asset_url | preload_tag: as: 'style' }}
-    {%- if template.name == 'index' -%}
-      {{ 'section-hero-reels.css' | asset_url | preload_tag: as: 'style' }}
-    {%- endif -%}
     <script src="{{ 'money.js' | asset_url }}" defer></script>
     <script src="{{ 'cart.js' | asset_url }}" defer></script>
     <script src="{{ 'appear.js' | asset_url }}" defer></script>
