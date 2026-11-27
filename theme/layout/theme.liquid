@@ -5,6 +5,7 @@
     {%- render 'head-config' -%}
     {%- render 'head-fonts' -%}
     {%- render 'head-styles' -%}
+    {%- render 'scoop-intro-styles' -%}
     {{ 'section-header.css' | asset_url | preload_tag: as: 'style' }}
     {%- if template.name == 'index' -%}
       {{ 'section-hero-reels.css' | asset_url | preload_tag: as: 'style' }}
@@ -16,6 +17,12 @@
   </head>
 
   <body class="template-{{ template.name | handle }}{% if template.suffix %} template-{{ template.name | handle }}--{{ template.suffix | handle }}{% endif %}">
+    {%- comment -%}
+      Intro overlay first, so it is in the first chunk of HTML the browser paints
+      (it used to be last, and the hero showed for seconds before the intro).
+      It is aria-hidden with nothing focusable, so the skip link is still the first tab stop.
+    {%- endcomment -%}
+    {% sections 'overlay-group' %}
     <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
 
     {% sections 'header-group' %}
@@ -27,6 +34,5 @@
     {% sections 'footer-group' %}
     {%- comment -%} Static so the Section Rendering API can return it by id 'cart-drawer'. {%- endcomment -%}
     {% section 'cart-drawer' %}
-    {% sections 'overlay-group' %}
   </body>
 </html>

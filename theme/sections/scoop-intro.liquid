@@ -1,12 +1,11 @@
 {%- comment -%}
   Slot-machine intro overlay (components/ScoopIntro.tsx). Fully server-rendered.
   Shown only under html[data-intro-playing] (set by snippets/head-config.liquid
-  from the global settings intro_enabled / intro_play_on); see section-scoop-intro.css.
+  from the global settings intro_enabled / intro_play_on); see snippets/scoop-intro-styles.liquid.
 
   Image index: IMAGES[(i*3 + a*5) % 8] -> the 8-entry list in data/scoop-intro.json, so
   entry j is intro-(j + 1).webp (product photos, same order as the list).
 {%- endcomment -%}
-{{ 'section-scoop-intro.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
   assign brand = section.settings.brand | default: 'khuwabb' | slice: 0, 8

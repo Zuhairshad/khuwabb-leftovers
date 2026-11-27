@@ -1,3 +1,10 @@
+{%- comment -%}
+  Scoop intro overlay CSS (components/ScoopIntro.module.css + app/globals.css si* keyframes).
+  Inlined in <head> so the intro overlay is styled before first paint (no flash of
+  the page under it). Rendered from layout/theme.liquid right after head-styles.
+  Used by sections/scoop-intro.liquid. Contains no Liquid and no url() references.
+{%- endcomment -%}
+<style>
 /* Scoop intro (components/ScoopIntro.module.css + app/globals.css si* keyframes).
    Hidden unless head-config set html[data-intro-playing]. */
 .scoop-intro {
@@ -145,3 +152,4 @@ html[data-intro-playing] .scoop-intro {
     filter: none !important;
   }
 }
+</style>
