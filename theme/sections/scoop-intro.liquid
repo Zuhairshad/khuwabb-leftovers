@@ -38,6 +38,10 @@
     strip above each letter.
   endcomment
   assign last_a = spins | minus: 1
+  comment
+    Intrinsic heights of assets/intro-1..8.webp (all 300px wide), index = file number - 1.
+  endcomment
+  assign img_heights = '506,714,623,358,400,587,656,308' | split: ','
 -%}
 
 {%- if n > 0 -%}
@@ -81,8 +85,10 @@
                     assign cell_ci = i | plus: a | plus: 1 | modulo: 5
                     assign cell_color = colors[cell_ci]
                     assign img_file = 'intro-' | append: img_j | append: '.webp'
+                    assign img_idx = img_j | minus: 1
+                    assign img_h = img_heights[img_idx]
                   -%}
-                  <div class="scoop-intro__cell" style="background: {{ cell_color }};"><div class="scoop-intro__frame" style="background-image: url({{ img_file | asset_url }});"></div></div>
+                  <div class="scoop-intro__cell" style="background: {{ cell_color }};"><img class="scoop-intro__frame" src="{{ img_file | asset_url }}" alt="" width="300" height="{{ img_h }}" fetchpriority="low" decoding="async" draggable="false"></div>
                 {%- endif -%}
               {%- endfor -%}
             </div>

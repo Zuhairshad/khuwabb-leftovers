@@ -2,7 +2,7 @@
   Scoop intro overlay CSS (components/ScoopIntro.module.css + app/globals.css si* keyframes).
   Inlined in <head> so the intro overlay is styled before first paint (no flash of
   the page under it). Rendered from layout/theme.liquid right after head-styles.
-  Used by sections/scoop-intro.liquid. Contains no Liquid and no url() references.
+  Used by sections/scoop-intro.liquid. Contains no Liquid and no url() references. Frames are <img> (fetchpriority=low), not backgrounds.
 {%- endcomment -%}
 <style>
 /* Scoop intro (components/ScoopIntro.module.css + app/globals.css si* keyframes).
@@ -65,7 +65,12 @@ html[data-intro-playing] .scoop-intro {
 .scoop-intro__frame {
   width: 78%;
   height: 78%;
-  background: center / contain no-repeat;
+  display: block;
+  max-width: none;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
 }
 
 .scoop-intro__letter {
