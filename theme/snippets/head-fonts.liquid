@@ -7,13 +7,14 @@
   Hand-written preloads (not preload_tag): font preloads must carry crossorigin
   + type or the browser can't reuse them for the CORS @font-face fetch and
   downloads every face twice (Stage B L4: 7 font requests vs the reference's 4).
-  All four faces are preloaded, as next/font does in the reference.
+  Only clash-display-600 is preloaded: it is the face of the intro letters and the
+  hero word, the text painted first. The other three faces still load through
+  @font-face as soon as text uses them (the header is invisible during the intro,
+  and the metric-matched fallbacks keep layout stable), so they no longer compete
+  with the hero image for bandwidth on mobile.
 {%- endcomment -%}
 {% # theme-check-disable AssetPreload %}
 <link rel="preload" href="{{ 'clash-display-600.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ 'clash-display-700.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ 'satoshi-400.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ 'satoshi-500.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
 {% # theme-check-enable AssetPreload %}
 <style>
   @font-face {
