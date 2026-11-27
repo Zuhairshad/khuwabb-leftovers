@@ -188,13 +188,25 @@
 
       // ---- images: centre and one either side first, the rest of the ring when idle (:141-160, 479-496)
       var loaded = { tops: new Set(), bottoms: new Set() }
-      function loadImg(row, i) {
+      // The server sends src (at the widest width) and w; the srcset is the shared widths list up to w.
+      var widths = cfg.widths || []
+      function srcsetFor(p) {
+        if (p.srcset) return p.srcset
+        if (!p.w || !/([?&])width=\d+/.test(p.src)) return ''
+        var list = widths.filter(function (x) { return x <= p.w })
+        if (!list.length) list = [p.w]
+        return list.map(function (x) { return p.src.replace(/([?&]width=)\d+/, '$1' + x) + ' ' + x + 'w' }).join(', ')
+      }
+      function loadImg(row, i, prio) {
         var node = pieceEls[row][i]
         var p = pieces[row][i]
         var img = node && node.querySelector('img')
         if (!img || !p || img.getAttribute('src')) return
         if (!p.src) return
-        if (p.srcset) img.setAttribute('srcset', p.srcset)
+        // Photos added here are never the first-viewport ones (those are in the server HTML): low priority.
+        img.setAttribute('fetchpriority', prio || 'low')
+        var set = srcsetFor(p)
+        if (set) img.setAttribute('srcset', set)
         img.setAttribute('src', p.src)
         img.setAttribute('alt', p.name)
         loaded[row].add(i)
@@ -273,6 +285,7 @@
       }
       var ro = new ResizeObserver(function () {
         measure()
+        wake()
       })
       function measure() {
         var r = el.getBoundingClientRect()
@@ -283,9 +296,22 @@
       measure()
 
       // ---- engine (:192-516)
+      var last = performance.now()
       var frame = 0
       var disposed = false
       var visible = true
+      // The loop sleeps once everything has been still for a few frames (the last frames let the motion blur
+      // and tag positions settle) and wakes on any input, resize, shuffle or font load.
+      var idleFrames = 0
+      var inTick = false
+      function wake() {
+        idleFrames = 0
+        if (inTick) return // tick reschedules itself
+        if (!frame && visible && !document.hidden && !disposed) {
+          last = performance.now()
+          frame = requestAnimationFrame(tick)
+        }
+      }
 
       function tweenTo(row, to, dur, back, delay) {
         var s = st[row]
@@ -351,6 +377,7 @@
         tweenTo(row, nearest(row) + by, reduced ? 1 : 650 + Math.abs(by) * 90, false)
         settled[row] = false
         ui()
+        wake()
       }
 
       function shuffle(intro) {
@@ -391,15 +418,16 @@
         spinning = true
         settled = { tops: false, bottoms: false }
         ui()
+        wake()
       }
 
-      var last = performance.now()
       var shownIndex = { tops: -1, bottoms: -1 }
       var shownSettled = { tops: false, bottoms: false }
 
       function tick(now) {
         frame = 0
         if (disposed) return
+        inTick = true
         var dt = Math.min(0.05, (now - last) / 1000)
         last = now
         var c = cfg
@@ -410,6 +438,11 @@
         var moving = false
         var nextIndex = Object.assign({}, shownIndex)
         var nextSettled = Object.assign({}, shownSettled)
+        // Batch the layout reads (tag widths) before any style write below.
+        var tagW = {}
+        ROWS.forEach(function (row) {
+          if (tagSlots[row]) tagW[row] = tagSlots[row].offsetWidth || 160
+        })
 
         ROWS.forEach(function (row) {
           var s = st[row]
@@ -454,13 +487,18 @@
               if (node.style.visibility !== 'hidden') node.style.visibility = 'hidden'
               continue
             }
+            var blur = Math.round(ps.blur * 2) / 2
+            var key =
+              layout.w + '|' + layout.h + '|' + (cx + ps.x - layout.w / 2).toFixed(2) + '|' + (layout.cy - layout.h / 2).toFixed(2) + '|' + ps.rotate.toFixed(2) + '|' + ps.scale.toFixed(4) + '|' + ps.opacity.toFixed(3) + '|' + blur + '|' + ps.z
+            // A still piece produces the same key every frame: no style writes, no style recalc.
+            if (node._key === key && node.style.visibility === 'visible') continue
+            node._key = key
             node.style.visibility = 'visible'
             node.style.width = layout.w + 'px'
             node.style.height = layout.h + 'px'
             node.style.transform =
               'translate3d(' + (cx + ps.x - layout.w / 2).toFixed(2) + 'px, ' + (layout.cy - layout.h / 2).toFixed(2) + 'px, 0) perspective(900px) rotateY(' + ps.rotate.toFixed(2) + 'deg) scale(' + ps.scale.toFixed(4) + ')'
             node.style.opacity = ps.opacity.toFixed(3)
-            var blur = Math.round(ps.blur * 2) / 2
             var filter = blur > 0.25 ? 'blur(' + blur + 'px)' : 'none'
             if (node.style.filter !== filter) node.style.filter = filter
             node.style.zIndex = String(row === 'tops' ? ps.z + 200 : ps.z)
@@ -469,13 +507,17 @@
           var tagEl = tagSlots[row]
           if (tagEl) {
             var mobile = width < MOBILE
-            var tw = tagEl.offsetWidth || 160
+            var tw = tagW[row]
             var x = Math.min(mobile ? cx + layout.w * 0.3 : cx + layout.w * 0.52 + 14, width - tw - 12)
             var y = layout.cy - layout.h * 0.12
             // Phones hug the right edge. Placed with a transform from the left (not `right:`), so a name
             // changing length never moves the box's origin: no layout shift while the reels spin.
             var tx = mobile ? width - tw - 14 : x
-            tagEl.style.transform = 'translate3d(' + tx.toFixed(1) + 'px, ' + y.toFixed(1) + 'px, 0)'
+            var tagT = 'translate3d(' + tx.toFixed(1) + 'px, ' + y.toFixed(1) + 'px, 0)'
+            if (tagEl._t !== tagT) {
+              tagEl._t = tagT
+              tagEl.style.transform = tagT
+            }
           }
         })
 
@@ -502,7 +544,9 @@
           lastInteraction = now
           shuffle(false)
         }
-        if (visible && !document.hidden) frame = requestAnimationFrame(tick)
+        idleFrames = moving ? 0 : idleFrames + 1
+        inTick = false
+        if (!frame && visible && !document.hidden && (idleFrames < 4 || auto > 0)) frame = requestAnimationFrame(tick)
       }
 
       var onDown = function (e) {
@@ -517,7 +561,11 @@
         lastInteraction = performance.now()
         settled[row] = false
         ui()
-        if (!frame) frame = requestAnimationFrame(tick)
+        // Move/up listeners only exist while a drag is in progress.
+        window.addEventListener('pointermove', onMove, { passive: false })
+        window.addEventListener('pointerup', onUp)
+        window.addEventListener('pointercancel', onUp)
+        wake()
       }
       var onMove = function (e) {
         ROWS.forEach(function (row) {
@@ -557,32 +605,29 @@
           }
           s.spring = Math.round(s.off + clamp(s.vel, -30, 30) * 0.22)
         })
+        if (ROWS.every(function (r) { return !st[r].drag })) {
+          window.removeEventListener('pointermove', onMove)
+          window.removeEventListener('pointerup', onUp)
+          window.removeEventListener('pointercancel', onUp)
+        }
+        wake()
       }
       el.addEventListener('pointerdown', onDown)
-      window.addEventListener('pointermove', onMove, { passive: false })
-      window.addEventListener('pointerup', onUp)
-      window.addEventListener('pointercancel', onUp)
 
       var io = new IntersectionObserver(function (entries) {
         visible = entries[0] ? entries[0].isIntersecting : true
-        if (visible && !frame) {
-          last = performance.now()
-          frame = requestAnimationFrame(tick)
-        }
+        if (visible) wake()
       })
       io.observe(el)
       var onVisibility = function () {
-        if (!document.hidden && visible && !frame) {
-          last = performance.now()
-          frame = requestAnimationFrame(tick)
-        }
+        if (!document.hidden && visible) wake()
       }
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(wake)
       document.addEventListener('visibilitychange', onVisibility)
 
       // ---- controls
       var onShuffleClick = function () {
         shuffle(false)
-        if (!frame) frame = requestAnimationFrame(tick)
       }
       if (shuffleBtn) shuffleBtn.addEventListener('click', onShuffleClick)
 
@@ -630,12 +675,18 @@
       if (cfg.intro && !reduced && canShuffle) shuffle(true)
       // The intro parks each row at its own start offset: load what's shown there.
       var reach = el.clientWidth < MOBILE ? 1 : 2
+      // When the reels won't really spin in (reduced motion, nothing to shuffle, intro not playing) the centre
+      // photos are what the visitor sees first: load them now at normal priority, the tops centre as high.
+      var noSpin = reduced || !canShuffle || !introPlaying
       ROWS.forEach(function (r) {
         var n = pieces[r].length
         var want = new Set()
         near(Math.round(st[r].off), n, reach).forEach(function (i) { want.add(i) })
         near(0, n, reach).forEach(function (i) { want.add(i) })
-        want.forEach(function (i) { loadImg(r, i) })
+        var centre = near(0, n, 1)
+        want.forEach(function (i) {
+          loadImg(r, i, noSpin && centre.has(i) ? (r === 'tops' && i === 0 ? 'high' : 'auto') : 'low')
+        })
       })
       var idle = 0
       var whenIdle = function () {
@@ -649,7 +700,7 @@
       if (document.readyState === 'complete') whenIdle()
       else window.addEventListener('load', whenIdle, { once: true })
       ui()
-      frame = requestAnimationFrame(tick)
+      if (!frame) frame = requestAnimationFrame(tick)
 
       return function () {
         disposed = true

@@ -21,7 +21,7 @@
 
 {%- liquid
   assign hr_set = section.settings.set_product
-  assign hr_widths = '360,480,640' | split: ','
+  assign hr_widths = '300,360,420,480,540,640' | split: ','
   assign hr_rows = 'tops,bottoms' | split: ','
   assign hr_rendered = '|'
   assign hr_need = '|'
@@ -316,6 +316,16 @@
   endif
 
   assign hr_intro = section.settings.intro
+
+  comment
+    Desktop piece widths are height-bound, not just 30vw / 26vw (hero-reels.js rowLayout): tops w = 0.92 * 0.44 * look,
+    bottoms w = 0.7 * 0.51 * look, look = (hero height - top space - 112px bar) * look_scale. The hero is
+    max(100vh, 720px) tall, and top = max(11% of height, top_space) >= top_space, so this never underestimates.
+    The 0.46 / 0.36 vw phone widths are width-bound (the height cap is larger there), so those stay.
+  endcomment
+  assign hr_desk_top = section.settings.top_space | plus: 112
+  assign hr_f_tops = section.settings.look_scale | times: 0.4048 | round: 4
+  assign hr_f_bottoms = section.settings.look_scale | times: 0.357 | round: 4
   assign hr_flavours = section.blocks | where: 'type', 'flavour'
   assign hr_first = hr_flavours.first
   assign hr_bg = 'var(--pistachio)'
@@ -363,15 +373,18 @@
       {%- for hr_row in hr_rows -%}
         {%- if hr_row == 'tops' -%}
           {%- assign hr_arr = hr_tops_arr -%}
-          {%- assign hr_sizes = '(max-width: 639px) 46vw, 30vw' -%}
+          {%- assign hr_sizes = '(max-width: 639px) 46vw, min(30vw, calc((max(100vh, 720px) - ' | append: hr_desk_top | append: 'px) * ' | append: hr_f_tops | append: '))' -%}
         {%- else -%}
           {%- assign hr_arr = hr_bottoms_arr -%}
-          {%- assign hr_sizes = '(max-width: 639px) 36vw, 26vw' -%}
+          {%- assign hr_sizes = '(max-width: 639px) 36vw, min(26vw, calc((max(100vh, 720px) - ' | append: hr_desk_top | append: 'px) * ' | append: hr_f_bottoms | append: '))' -%}
         {%- endif -%}
         {%- assign hr_n = hr_arr.size -%}
         {%- comment -%}
-          Photos that load first: the centre and one either side; with the intro also the spot the row is parked at
-          (parked = -dir * (max(8, n) + 3), dir tops +1, bottoms -1).
+          Photos in the server HTML (src set): what is on screen when the row first shows. With the intro that is the
+          spot the row is parked at (parked = -dir * (max(8, n) + 3), dir tops +1, bottoms -1) and one either side, since
+          the row spins in from there; without it, the centre and one either side. Everything else (the centre once the
+          intro lands, the rest of the ring) gets its src from hero-reels.js, low priority, so it never competes with the
+          first photo (see the JSON note below).
         {%- endcomment -%}
         {%- assign hr_park = 8 -%}
         {%- if hr_n > 8 -%}
@@ -380,6 +393,10 @@
         {%- assign hr_park = hr_park | plus: 3 -%}
         {%- if hr_row == 'tops' -%}
           {%- assign hr_park = 0 | minus: hr_park -%}
+        {%- endif -%}
+        {%- assign hr_ref = 0 -%}
+        {%- if hr_intro -%}
+          {%- assign hr_ref = hr_park -%}
         {%- endif -%}
         {%- comment -%}
           fetchpriority="high" goes on ONE image per page: the tops row's first-loaded photo (the parked spot
@@ -393,34 +410,21 @@
         {%- for hr_rec in hr_arr -%}
           {%- assign hr_f = hr_rec | split: '~~' -%}
           {%- assign hr_idx = forloop.index0 -%}
-          {%- assign hr_d0 = hr_idx | modulo: hr_n -%}
-          {%- assign hr_r0 = hr_d0 | times: 2 -%}
-          {%- if hr_r0 >= hr_n -%}
-            {%- assign hr_d0 = hr_d0 | minus: hr_n -%}
+          {%- assign hr_d1 = hr_idx | minus: hr_ref | modulo: hr_n | plus: hr_n | modulo: hr_n -%}
+          {%- assign hr_r1 = hr_d1 | times: 2 -%}
+          {%- if hr_r1 >= hr_n -%}
+            {%- assign hr_d1 = hr_d1 | minus: hr_n -%}
           {%- endif -%}
-          {%- if hr_d0 < 0 -%}
-            {%- assign hr_d0 = hr_d0 | times: -1 -%}
+          {%- if hr_d1 < 0 -%}
+            {%- assign hr_d1 = hr_d1 | times: -1 -%}
           {%- endif -%}
           {%- assign hr_load = false -%}
-          {%- if hr_d0 <= 1 -%}
+          {%- if hr_d1 <= 1 -%}
             {%- assign hr_load = true -%}
           {%- endif -%}
           {%- assign hr_fp = '' -%}
           {%- if hr_idx == hr_first_idx and hr_row == 'tops' -%}
             {%- assign hr_fp = 'high' -%}
-          {%- endif -%}
-          {%- if hr_intro and hr_load == false -%}
-            {%- assign hr_d1 = hr_idx | minus: hr_park | modulo: hr_n | plus: hr_n | modulo: hr_n -%}
-            {%- assign hr_r1 = hr_d1 | times: 2 -%}
-            {%- if hr_r1 >= hr_n -%}
-              {%- assign hr_d1 = hr_d1 | minus: hr_n -%}
-            {%- endif -%}
-            {%- if hr_d1 < 0 -%}
-              {%- assign hr_d1 = hr_d1 | times: -1 -%}
-            {%- endif -%}
-            {%- if hr_d1 <= 1 -%}
-              {%- assign hr_load = true -%}
-            {%- endif -%}
           {%- endif -%}
           {%- unless hr_load -%}
             {%- assign hr_need = hr_need | append: hr_row | append: '~' | append: hr_f[0] | append: '|' -%}
@@ -475,7 +479,7 @@
                 alt="{{ hr_f[2] | escape }}"
                 draggable="false"
                 decoding="async"
-                {% if hr_fp != blank %}fetchpriority="high" loading="eager"{% elsif hr_idx == hr_first_idx %}loading="eager"{% endif %}
+                {% if hr_fp != blank %}fetchpriority="high" loading="eager"{% elsif hr_idx == hr_first_idx %}loading="eager"{% else %}fetchpriority="low"{% endif %}
               >
             {%- else -%}
               <img
@@ -485,6 +489,7 @@
                 alt=""
                 draggable="false"
                 decoding="async"
+                fetchpriority="low"
               >
             {%- endif -%}
           </div>
@@ -550,8 +555,9 @@
     </div>
 
     {%- comment -%}
-      Row JSON: "order" is the ring of piece ids; "pieces" holds each id once. src / srcset are only included for
-      ids that have a slot rendered without an image (JS fills those from here); name and price drive tags and total.
+      Row JSON: "order" is the ring of piece ids; "pieces" holds each id once. src and w (the widest srcset width) are only
+      included for ids that have a slot rendered without an image; JS rebuilds the srcset from them and "widths" (same list as
+      the server srcset, <= w) and fills those slots, low priority; name and price drive tags and total.
     {%- endcomment -%}
     {%- for hr_row in hr_rows -%}
       {%- if hr_row == 'tops' -%}
@@ -576,10 +582,12 @@
               {%- assign hr_nkey = '|' | append: hr_row | append: '~' | append: hr_f[0] | append: '|' -%}
               {%- unless hr_first_piece -%},{%- endunless -%}
               {%- assign hr_first_piece = false -%}
-              {%- assign hr_pfit = hr_f[8] | default: 'any' -%}
-              {{ hr_f[0] | json }}: {"name": {{ hr_f[2] | json }}, "price": {{ hr_f[3] }}, "fit": {{ hr_pfit | json }}
+              {{ hr_f[0] | json }}: {"name": {{ hr_f[2] | json }}, "price": {{ hr_f[3] }}
+              {%- if hr_f[8] != 'any' -%}
+                , "fit": {{ hr_f[8] | json }}
+              {%- endif -%}
               {%- if hr_need contains hr_nkey -%}
-                , "src": {{ hr_f[4] | json }}, "srcset": {{ hr_f[5] | json }}
+                , "src": {{ hr_f[4] | json }}, "w": {{ hr_f[6] }}
               {%- endif -%}
               }
             {%- endunless -%}
@@ -605,11 +613,12 @@
           "spacing": {{ section.settings.spacing | json }},
           "topInset": {{ section.settings.top_inset | divided_by: 100.0 | json }},
           "topSpace": {{ section.settings.top_space | json }},
-          "topSpaceMobile": {{ section.settings.top_space_mobile | json }}
+          "topSpaceMobile": {{ section.settings.top_space_mobile | json }},
+          "widths": [{{ hr_widths | join: ',' }}]
         },
         "flavours": [
           {%- for block in hr_flavours -%}
-            {"name": {{ block.settings.name | json }}, "color": {{ block.settings.color | append: '' | json }}}{% unless forloop.last %},{% endunless %}
+            {"color": {{ block.settings.color | append: '' | json }}}{% unless forloop.last %},{% endunless %}
           {%- endfor -%}
         ],
         "tops": {{ hr_tops_json }},
