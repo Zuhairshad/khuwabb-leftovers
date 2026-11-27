@@ -108,12 +108,31 @@
 
   // ---- <hero-reels> --------------------------------------------------------
   class HeroReels extends HTMLElement {
+    // The script is loaded async, so it can run (and this callback can fire) while the parser is still
+    // inside the element: its children and the JSON payload may not exist yet. While the document is
+    // still loading, wait (once) for readyState to leave 'loading' (parsing finished, whole DOM present,
+    // before deferred scripts run); otherwise (script arrived late) init at once.
     connectedCallback() {
-      if (this._disposer) return
+      if (this._disposer || this._pending) return
+      if (document.readyState === 'loading') {
+        var self = this
+        this._pending = function () {
+          if (document.readyState === 'loading') return
+          document.removeEventListener('readystatechange', self._pending)
+          self._pending = null
+          if (self.isConnected && !self._disposer) self._disposer = self._init()
+        }
+        document.addEventListener('readystatechange', this._pending)
+        return
+      }
       this._disposer = this._init()
     }
 
     disconnectedCallback() {
+      if (this._pending) {
+        document.removeEventListener('readystatechange', this._pending)
+        this._pending = null
+      }
       if (this._disposer) this._disposer()
       this._disposer = null
     }

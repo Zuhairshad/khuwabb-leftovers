@@ -17,7 +17,7 @@
   live the moment such a tag exists; no product has one today, so output is unchanged (parity).
 {%- endcomment -%}
 {%- render 'section-hero-reels-styles' -%}
-<script src="{{ 'hero-reels.js' | asset_url }}" defer></script>
+<script src="{{ 'hero-reels.js' | asset_url }}" async fetchpriority="high"></script>
 
 {%- liquid
   assign hr_set = section.settings.set_product
