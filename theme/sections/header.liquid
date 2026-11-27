@@ -45,7 +45,16 @@
               decoding="async"
             >
           {%- else -%}
-            <img src="{{ 'logo-162h.webp' | asset_url }}" alt="" width="231" height="162" decoding="async">
+            {%- comment -%} Rendered 54px tall (CSS) = 77px wide; 1x/2x/3x = 54h/108h/162h. {%- endcomment -%}
+            <img
+              src="{{ 'logo-162h.webp' | asset_url }}"
+              srcset="{{ 'logo-54h.webp' | asset_url }} 77w, {{ 'logo-108h.webp' | asset_url }} 154w, {{ 'logo-162h.webp' | asset_url }} 231w"
+              sizes="77px"
+              alt=""
+              width="231"
+              height="162"
+              decoding="async"
+            >
           {%- endif -%}
           <span>{{ section.settings.logo_label | escape }}</span>
         </a>
